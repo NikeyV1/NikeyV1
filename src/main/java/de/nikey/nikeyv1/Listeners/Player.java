@@ -33,11 +33,22 @@ import java.util.Random;
 
 @SuppressWarnings("deprecation")
 public class Player implements Listener {
-    public static Inventory inv = Bukkit.createInventory(null, 9, "Enchanted Anvil");
+    public static Inventory inv = Bukkit.createInventory(null, 27, "Enchanted Anvil");
     @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
         org.bukkit.entity.Player player = event.getPlayer();
         new ServerScoreboard(player);
+        FileConfiguration config = NikeyV1.plugin.getConfig();
+        if (!config.contains(player.getName())){
+            Random random = new Random();
+            int i = random.nextInt(7);
+            if (i == 0){
+                Items.Firestone(player,1);
+                config.set(player.getName()+".stone","Fire");
+            }
+        }else{
+            player.sendMessage("Wilkommen");
+        }
     }
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
@@ -82,32 +93,6 @@ public class Player implements Listener {
 
             }
 
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    public void onEntityPickupItem(EntityPickupItemEvent event) {
-        if (event.getEntity() instanceof org.bukkit.entity.Player){
-            org.bukkit.entity.Player p = (org.bukkit.entity.Player) event.getEntity();
-            ItemStack item = event.getItem().getItemStack();
-            if (item.getLore().get(1).contains(ChatColor.of("#00FFAA")+"Level:")){
-                FileConfiguration config = NikeyV1.plugin.getConfig();
-                config.set(p.getName()+".Name",item.getItemMeta().getDisplayName());
-                NikeyV1.plugin.saveConfig();
-                p.sendMessage("Your stone got registered!");
-                for (ItemStack contents : p.getInventory().getContents()){
-                    if(contents == null || contents.getType() == Material.AIR) continue;
-                    String[] arr = contents.getLore().get(1).split(":");
-                    String s = arr[0];
-                    if(contents.getLore().get(1).contains(s)){
-                        event.setCancelled(true);
-                        if (contents.getAmount() != 1){
-                            p.sendMessage("g");
-                            contents.setAmount(1);
-                        }
-                    }
-                }
-            }
         }
     }
 
