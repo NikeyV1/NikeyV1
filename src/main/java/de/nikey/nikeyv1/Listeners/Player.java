@@ -111,29 +111,7 @@ public class Player implements Listener {
         }
     }
 
-    @EventHandler
-    public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
-        event.getPlayer().sendMessage("ff");
-        String[] arr = event.getOffHandItem().getLore().get(1).split(":");
-        String[] split = event.getMainHandItem().getLore().get(1).split(":");
-        String s = arr[0];
-        String s2 = split[0];
-        event.getPlayer().sendMessage(s2);
-        if (event.getOffHandItem().getLore().get(1).contains(s)){
-            ItemStack item = event.getOffHandItem();
-            event.getPlayer().sendMessage("dd");
-            if (item.getAmount() != 1){
-                item.setAmount(1);
-            }
-        }
-        if (event.getMainHandItem().getLore().get(1).contains(s2)){
-            ItemStack item = event.getMainHandItem();
-            event.getPlayer().sendMessage("dd");
-            if (item.getAmount() != 1){
-                item.setAmount(1);
-            }
-        }
-    }
+
     @EventHandler
     public void onEnchantItem(EnchantItemEvent event) {
         int expLevelCost = event.getExpLevelCost();
