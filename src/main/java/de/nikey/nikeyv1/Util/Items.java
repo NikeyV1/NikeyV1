@@ -19,11 +19,9 @@ import java.util.ArrayList;
 public class Items {
     public static void Firestone(Player player , Integer level){
         ItemStack lavastein = new ItemStack(Material.FIREWORK_STAR);
-        FireworkMeta meta = (FireworkMeta) lavastein.getItemMeta();
+        ItemMeta meta =  lavastein.getItemMeta();
         meta.setDisplayName(ChatColor.of("#e66b63")+"Lava Stein");
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        FireworkEffect aa = FireworkEffect.builder().withColor(Color.RED).build();
-        meta.addEffect(aa);
         lavastein.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         ArrayList<String> lore = new ArrayList<>();
         lore.add("§7As hot as §clava");
