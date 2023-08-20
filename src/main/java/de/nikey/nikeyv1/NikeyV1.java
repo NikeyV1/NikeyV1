@@ -9,24 +9,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class NikeyV1 extends JavaPlugin {
     public static NikeyV1 plugin;
-    private Timer timer;
-
-
-    public Timer getTimer() {
-        return timer;
-    }
 
     @Override
     public void onEnable() {
         plugin = this;
-        saveDefaultConfig();
         reloadConfig();
+        saveDefaultConfig();
         Items.EnchantedAnvil();
         PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents(new Player(),this);
-
-        timer = new Timer(false,0);
-        //Config
 
     }
 

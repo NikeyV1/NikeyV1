@@ -9,12 +9,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Timer {
+
+    //This class is discontinued!
+
     private boolean running;
     private int time;
+    private Player player;
 
-    public Timer(boolean running,int time) {
+    public Timer(boolean running,int time,Player player) {
         this.running = running;
         this.time = time;
+        this.player = player;
 
         run();
     }
@@ -45,11 +50,20 @@ public class Timer {
         new BukkitRunnable() {
             @Override
             public void run() {
+                sendActionBar(player);
                 if (!isRunning()){
                     return;
                 }
                 setTime(getTime() +1);
             }
         }.runTaskTimer(NikeyV1.plugin,20,20);
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

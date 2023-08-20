@@ -1,4 +1,4 @@
 name: NikeyV1
-version: '${project.version}'
+version: '1.0'
 main: de.nikey.nikeyv1.NikeyV1
 api-version: '1.20'

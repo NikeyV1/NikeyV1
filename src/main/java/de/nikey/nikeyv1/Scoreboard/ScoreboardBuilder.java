@@ -7,6 +7,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+@SuppressWarnings("ALL")
 public abstract class ScoreboardBuilder {
     protected final Scoreboard scoreboard;
     protected final Objective objective;
@@ -46,7 +47,6 @@ public abstract class ScoreboardBuilder {
         showScore(score);
     }
     public void removeScore(int score){
-
         hideScore(score);
     }
     private EntryName getEntryNameByScore(int score){

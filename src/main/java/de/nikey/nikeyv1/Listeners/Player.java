@@ -3,11 +3,9 @@ package de.nikey.nikeyv1.Listeners;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
 import de.nikey.nikeyv1.Timer.Timer;
+import de.nikey.nikeyv1.Timer.TimerBuild;
 import de.nikey.nikeyv1.Util.Items;
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -30,6 +28,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.eclipse.aether.impl.RepositoryEventDispatcher;
 
 import java.util.Random;
 
@@ -37,12 +37,9 @@ import java.util.Random;
 public class Player implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
+        NikeyV1.getPlugin().reloadConfig();
+        TimerBuild timerBuild = new TimerBuild();
         org.bukkit.entity.Player p = event.getPlayer();
-        if (NikeyV1.getPlugin().getTimer().isRunning()){
-            NikeyV1.getPlugin().getTimer().setRunning(false);
-            NikeyV1.plugin.getConfig().set(p.getName()+"timer", NikeyV1.getPlugin().getTimer().getTime());
-            NikeyV1.plugin.saveConfig();
-        }
     }
 
     public static Inventory inv = Bukkit.createInventory(null, 27, "Enchanted Anvil");
@@ -50,37 +47,37 @@ public class Player implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         org.bukkit.entity.Player player = event.getPlayer();
         new ServerScoreboard(player);
+        NikeyV1.getPlugin().reloadConfig();
         FileConfiguration config = NikeyV1.plugin.getConfig();
-        if (!config.contains(player.getName())){
+        if (config.contains(player.getName())){
+            TimerBuild timerBuild = new TimerBuild();
+            if (config.getBoolean(player.getName()+".time")){
+                BukkitRunnable runnable = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        config.set(player.getName()+".time",false);
+                        if (!config.getBoolean(player.getName()+".time")){
+                            timerBuild.setLevel(config.getInt(player.getName()+".level"));
+                            timerBuild.setTime(config.getInt(player.getName()+".timer"));
+                            timerBuild.setStopTime(config.getInt(player.getName()+".stoptime"));
+                            timerBuild.start(player);
+                            player.sendMessage("§aYour upgrade continues!");
+                        }else {
+                            player.sendMessage("§cPlugin Error: Join_Event");
+                        }
+                    }
+                };
+                runnable.runTaskLater(NikeyV1.getPlugin(),20);
+            }
+        }else {
             Random random = new Random();
             int i = random.nextInt(2);
-            if (i == 0){
-                Items.Firestone(player,1);
-                player.sendMessage("You got Firestone");
-                config.set(player.getName()+".stone","Fire");
-                config.set(player.getName()+".level",1);
-                NikeyV1.plugin.saveConfig();
-            }
-        }else{
-            if (config.getInt(player.getName()+".time") != 0){
-                int time = config.getInt(player.getName() + ".time");
-                NikeyV1.getPlugin().getTimer().setTime(time);
-                NikeyV1.getPlugin().getTimer().setRunning(true);
-            }
-        }
-    }
-    @EventHandler
-    public void onEntityDeath(EntityDeathEvent event) {
-        LivingEntity entity = event.getEntity();
-        org.bukkit.entity.Player p = entity.getKiller();
-        if (entity.getType() == EntityType.MAGMA_CUBE && entity.getKiller() != null){
-            Random rand = new Random();
-            int upperbound = 10;
-            int ende = rand.nextInt(upperbound);
-            if (ende == 5){
-                p.sendTitle("§d§kR§r§cLava Stone!§r§d§kR","");
-                Items.Firestone(p, 1);
-            }
+            Items.Firestone(player,1);
+            player.sendTitle("§d§kR§r§cLava Stone§r§d§kR","");
+            config.set(player.getName()+".stone", ChatColor.RED +"Fire");
+            config.set(player.getName()+".level",1);
+            config.set(player.getName()+".time",false);
+            NikeyV1.plugin.saveConfig();
         }
     }
     @EventHandler(ignoreCancelled = true)
@@ -134,25 +131,62 @@ public class Player implements Listener {
         if (event.getWhoClicked() instanceof org.bukkit.entity.Player && event.getInventory() == inv){
             org.bukkit.entity.Player p = (org.bukkit.entity.Player) event.getWhoClicked();
             Inventory inventory = event.getInventory();
-            if (event.getSlot() == 15 && event.getCurrentItem().getType() == Material.ANVIL || event.getCurrentItem().getType() == Material.PURPLE_STAINED_GLASS_PANE){
+            if (event.getCurrentItem() == null){
+
+            }
+            else if (event.getSlot() == 15 && event.getCurrentItem().getType() == Material.ANVIL || event.getCurrentItem().getType() == Material.PURPLE_STAINED_GLASS_PANE){
                 event.setCancelled(true);
-                if (inventory.getItem(14).getLore().get(1).contains(ChatColor.of("#00FFAA")+"Level:")){
-                    String s = inventory.getItem(14).getLore().get(1);
-                    ItemStack item = inventory.getItem(14);
-                    String[] arr = s.split(":");
-                    int num = Integer.parseInt(arr[1]);
-                    NikeyV1.plugin.getConfig().set(p.getName()+"level",num);
-                    NikeyV1.plugin.saveConfig();
-                    if (num <= 3){
+                if (inventory.getItem(13).getLore() != null){
+                    ItemStack item = inventory.getItem(13);
+                    String[] arr = item.getLore().get(1).split(":");
+                    String a = arr[0];
+                    if (inventory.getItem(13).getLore().get(1).contains(a)){
+                        int num = Integer.parseInt(arr[1]);
+                        FileConfiguration config = NikeyV1.plugin.getConfig();
+                        config.set(p.getName()+".level",num+1);
+                        NikeyV1.plugin.saveConfig();
+                        TimerBuild timerBuild = new TimerBuild();
+                        if (num <= 2){
+                            if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
+                                if (p.getLevel() > 30 || p.getGameMode() == GameMode.CREATIVE){
+                                    inventory.setItem(13,null);
+                                    p.closeInventory();
+                                    timerBuild.setLevel(num+1);
+                                    timerBuild.setStopTime(60*30);
+                                    timerBuild.setTime(1);
+                                    timerBuild.start(p);
+                                    p.sendMessage("§aUpgrading!");
+                                    if (p.getGameMode() != GameMode.CREATIVE){
+                                        p.setLevel(p.getLevel()-30);
+                                    }
+                                }else {
+                                    p.sendMessage("You dont have 30 levels!");
+                                }
+                            }
+                        }else if (num <= 4){
+                            if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
+                                if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
+                                    inventory.setItem(13,null);
+                                    p.closeInventory();
+                                    timerBuild.setLevel(num+1);
+                                    timerBuild.setStopTime(60*60);
+                                    timerBuild.setTime(1);
+                                    timerBuild.start(p);
+                                    if (p.getGameMode() != GameMode.CREATIVE){
+                                        p.setLevel(p.getLevel()-50);
+                                    }
+                                    p.sendMessage("§aUpgrading!");
+                                }else {
+                                    p.sendMessage("You dont have 50 levels!");
+                                }
+                            }
+                        }else if (num <= 9){
 
-                    }else if (num <= 5){
+                        }else if (num <= 14){
 
-                    }else if (num <= 10){
+                        }else if (num <= 19){
 
-                    }else if (num <= 15){
-
-                    }else if (num <= 20){
-
+                        }
                     }
                 }
             }
