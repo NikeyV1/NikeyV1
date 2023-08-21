@@ -3,6 +3,7 @@ package de.nikey.nikeyv1.Stones;
 import de.nikey.nikeyv1.NikeyV1;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -10,7 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -19,7 +19,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Firestone implements Listener {
-    int timer;
+    private int timer;
 
     @EventHandler
     public void onPlayerToggleSprint(PlayerToggleSprintEvent event) {
@@ -41,37 +41,44 @@ public class Firestone implements Listener {
             ItemMeta meta = item.getItemMeta();
             String[] arr = item.getLore().get(1).split(":");
             int i = Integer.parseInt(arr[1]);
-
+            FileConfiguration config = NikeyV1.plugin.getConfig();
+            config.set(p.getName()+".fire",null);
+            NikeyV1.plugin.saveConfig();
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
-                if (i <= 4) {
-                    for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(),20,10,20)){
-                        e.setVisualFire(true);
-                        if (e instanceof LivingEntity){
-                            LivingEntity entity = (LivingEntity) e;
-                            timer = 0;
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    if (timer == 15){
-                                        p.sendMessage("Gay");
-                                        e.setVisualFire(false);
-                                        cancel();
-                                    } else if (timer < 15) {
-                                        p.sendMessage("TT");
-                                        e.setVisualFire(true);
-                                        timer++;
-                                        entity.damage(2);
-                                    }
+                switch (i){
+                    case 5:
+                        StoneCooldown1 stoneCooldows = new StoneCooldown1();
+                        stoneCooldows.setTime(1);
+                        stoneCooldows.setStopTime(60);
+                        stoneCooldows.start(p);
+                        String stone = config.getString(p.getName() + ".stone");
+                        if (!config.getBoolean(p.getName()+"."+stone+".cooldown1"+".timer")){
+                            for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(),20,10,20)){
+                                e.setVisualFire(true);
+                                if (e instanceof LivingEntity){
+                                    LivingEntity entity = (LivingEntity) e;
+                                    timer = 15;
+                                    BukkitRunnable runnable = new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            if (timer == 0){
+                                                entity.setVisualFire(false);
+                                                cancel();
+                                                return;
+                                            }
+                                            if (entity != p){
+                                                e.setVisualFire(true);
+                                                entity.damage(2);
+                                            }
+                                            timer--;
+                                            p.sendMessage(String.valueOf(timer));
+                                        }
+                                    };
+                                    runnable.runTaskTimer(NikeyV1.getPlugin(),0,20);
                                 }
-                            }.runTaskTimer(NikeyV1.getPlugin(),20,20);
+                            }
                         }
-                    }
-                }else if (i <= 9){
-
-                }else if (i <= 14){
-
-                }else if (i <= 19){
-
+                        break;
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
                 if (i <= 4) {

@@ -83,9 +83,6 @@ public class TimerBuild  {
             }
         }
     }
-    public void stop(){
-        task.cancel();
-    }
 
     public boolean isRunning() {
         return running;
