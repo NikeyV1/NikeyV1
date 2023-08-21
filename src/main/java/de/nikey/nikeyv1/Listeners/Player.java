@@ -2,6 +2,7 @@ package de.nikey.nikeyv1.Listeners;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
+import de.nikey.nikeyv1.Stones.StoneCooldown1;
 import de.nikey.nikeyv1.Timer.Timer;
 import de.nikey.nikeyv1.Timer.TimerBuild;
 import de.nikey.nikeyv1.Util.Items;
@@ -21,9 +22,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -50,6 +49,25 @@ public class Player implements Listener {
         NikeyV1.getPlugin().reloadConfig();
         FileConfiguration config = NikeyV1.plugin.getConfig();
         if (config.contains(player.getName())){
+            String stone = config.getString(player.getName() + ".stone");
+            if (config.getBoolean(player.getName()+"."+stone+".cooldown1"+".timer")){
+                BukkitRunnable runnable = new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+                        config.set(player.getName()+"."+stone+".cooldown1"+".timer",false);
+                        if (!config.getBoolean(player.getName()+"."+stone+".cooldown1"+".timer")){
+                            StoneCooldown1 stoneCooldown1 = new StoneCooldown1();
+                            stoneCooldown1.setTime(config.getInt(player.getName()+"."+stone+".cooldown1"+".time"));
+                            stoneCooldown1.setStopTime(config.getInt(player.getName()+"."+stone+".cooldown1"+".stoptime"));
+                            stoneCooldown1.start(player);
+                        }else {
+                            player.sendMessage("§cPlugin Error: "+event.getEventName()+".continue.cooldown");
+                        }
+                    }
+                };
+                runnable.runTaskLater(NikeyV1.getPlugin(),20);
+            }
             TimerBuild timerBuild = new TimerBuild();
             if (config.getBoolean(player.getName()+".time")){
                 BukkitRunnable runnable = new BukkitRunnable() {
@@ -63,7 +81,7 @@ public class Player implements Listener {
                             timerBuild.start(player);
                             player.sendMessage("§aYour upgrade continues!");
                         }else {
-                            player.sendMessage("§cPlugin Error: Join_Event");
+                            player.sendMessage("§cPlugin Error: "+event.getEventName()+".continue.upgrade");
                         }
                     }
                 };
@@ -191,5 +209,10 @@ public class Player implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onPlayerChangeWorld(PlayerChangedWorldEvent event) {
+        org.bukkit.entity.Player player = event.getPlayer();new ServerScoreboard(player);
     }
 }
