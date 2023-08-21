@@ -55,6 +55,10 @@
 
     <repositories>
         <repository>
+            <id>Maven Central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
             <id>papermc-repo</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
@@ -65,6 +69,12 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>com.elmakers.mine.bukkit</groupId>
+            <artifactId>EffectLib</artifactId>
+            <version>9.4</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
