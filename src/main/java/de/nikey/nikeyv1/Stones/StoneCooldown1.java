@@ -49,7 +49,7 @@ public class StoneCooldown1 {
                         }
                     }else {
                         cancel();
-                        NikeyV1.getPlugin().getLogger().info(player.getName()+"left while cooldown");
+                        NikeyV1.getPlugin().getLogger().info(player.getName()+" left while cooldown");
                     }
                 }
             };

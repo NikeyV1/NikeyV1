@@ -20,7 +20,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+
 public class Firestone implements Listener {
+    private final ArrayList<Entity> entities = new ArrayList<>();
     private int timer;
 
 
@@ -41,6 +44,9 @@ public class Firestone implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
+        if (event.getItem() == null){
+            return;
+        }
         if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#e66b63")+"Lava Stein")&&
         event.getItem().getType() == Material.FIREWORK_STAR){
             Player p = event.getPlayer();
@@ -54,8 +60,6 @@ public class Firestone implements Listener {
                 StoneCooldown1 stoneCooldows = new StoneCooldown1();
                 String stone = config.getString(p.getName() + ".stone");
                 switch (i){
-                    case 1:
-                    case 2:
                     case 3:
                         p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0,true,false));
                         break;
@@ -78,12 +82,17 @@ public class Firestone implements Listener {
                                     for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(),20,20,20)){
                                         if (e instanceof LivingEntity){
                                             LivingEntity entity = (LivingEntity) e;
+                                            entities.add(entity);
                                             if (entity != p){
-                                                e.setVisualFire(true);
+                                                entity.setVisualFire(true);
                                                 entity.damage(2);
                                             }
                                             if (timer == 0){
                                                 entity.setVisualFire(false);
+                                                for (Entity entities : entities){
+                                                    entities.setVisualFire(false);
+                                                }
+                                                entities.clear();
                                                 cancel();
                                                 return;
                                             }
@@ -104,7 +113,7 @@ public class Firestone implements Listener {
                             SphereEffect effect = new SphereEffect(NikeyV1.em);
                             effect.setEntity(p);
                             effect.duration = 20000;
-                            effect.particles = 120;
+                            effect.particles = 140;
                             effect.particle = Particle.FLAME;
                             effect.radius = 30.0;
                             effect.start();
