@@ -30,7 +30,11 @@ public class Firestone implements Listener {
         for (ItemStack contents : player.getInventory().getContents()){
             if(contents == null || contents.getType() == Material.AIR) continue;
             if (contents.getType() == Material.FIREWORK_STAR && contents.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#e66b63")+"Lava Stein")){
-                player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,Integer.MAX_VALUE,1,true,false));
+                String[] arr = contents.getLore().get(1).split(":");
+                int a = Integer.parseInt(arr[1]);
+                if (a > 2){
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,Integer.MAX_VALUE,1,true,false));
+                }
             }
         }
     }
@@ -47,13 +51,18 @@ public class Firestone implements Listener {
             config.set(p.getName()+".fire",null);
             NikeyV1.plugin.saveConfig();
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
+                StoneCooldown1 stoneCooldows = new StoneCooldown1();
+                String stone = config.getString(p.getName() + ".stone");
                 switch (i){
+                    case 1:
+                    case 2:
+                    case 3:
+                        p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0,true,false));
+                        break;
                     case 5:
-                        StoneCooldown1 stoneCooldows = new StoneCooldown1();
                         stoneCooldows.setTime(1);
                         stoneCooldows.setStopTime(100);
                         stoneCooldows.start(p);
-                        String stone = config.getString(p.getName() + ".stone");
                         if (!config.getBoolean(p.getName()+"."+stone+".cooldown1"+".timer")){
                             timer = 20;
                             SphereEffect effect = new SphereEffect(NikeyV1.em);
@@ -80,13 +89,48 @@ public class Firestone implements Listener {
                                             }
                                         }
                                     }
-
                                     timer--;
                                 }
                             };
                             runnable.runTaskTimer(NikeyV1.getPlugin(),0,20);
                         }
                         break;
+                    case 10:
+                        stoneCooldows.setTime(1);
+                        stoneCooldows.setStopTime(100);
+                        stoneCooldows.start(p);
+                        if (!config.getBoolean(p.getName()+"."+stone+".cooldown1"+".timer")){
+                            timer = 20;
+                            SphereEffect effect = new SphereEffect(NikeyV1.em);
+                            effect.setEntity(p);
+                            effect.duration = 20000;
+                            effect.particles = 120;
+                            effect.particle = Particle.FLAME;
+                            effect.radius = 30.0;
+                            effect.start();
+                            BukkitRunnable runnable = new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(),30,30,30)){
+                                        if (e instanceof LivingEntity){
+                                            LivingEntity entity = (LivingEntity) e;
+                                            if (entity != p){
+                                                e.setVisualFire(true);
+                                                entity.damage(3);
+                                            }
+                                            if (timer == 0){
+                                                entity.setVisualFire(false);
+                                                cancel();
+                                                return;
+                                            }
+                                        }
+                                    }
+                                    timer--;
+                                }
+                            };
+                            runnable.runTaskTimer(NikeyV1.getPlugin(),0,20);
+                        }
+
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
                 if (i <= 4) {

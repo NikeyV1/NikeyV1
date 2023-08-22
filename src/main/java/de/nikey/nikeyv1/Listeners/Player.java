@@ -20,6 +20,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.*;
@@ -27,9 +28,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.eclipse.aether.impl.RepositoryEventDispatcher;
 
+import java.util.Collection;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
@@ -48,6 +52,9 @@ public class Player implements Listener {
         new ServerScoreboard(player);
         NikeyV1.getPlugin().reloadConfig();
         FileConfiguration config = NikeyV1.plugin.getConfig();
+        if (!(config.getInt(player.getName()+".level") >= 3) ||!config.getString(player.getName() +".stone").equalsIgnoreCase("Fire")){
+            if (player.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE); player.sendMessage("You flagged!");
+        }
         if (config.contains(player.getName())){
             String stone = config.getString(player.getName() + ".stone");
             if (config.getBoolean(player.getName()+"."+stone+".cooldown1"+".timer")){
@@ -144,6 +151,11 @@ public class Player implements Listener {
         }
     }
 
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        org.bukkit.entity.Player player = event.getPlayer();
+    }
+
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getWhoClicked() instanceof org.bukkit.entity.Player && event.getInventory() == inv){
@@ -199,7 +211,22 @@ public class Player implements Listener {
                                 }
                             }
                         }else if (num <= 9){
-
+                            if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
+                                if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
+                                    inventory.setItem(13,null);
+                                    p.closeInventory();
+                                    timerBuild.setLevel(num+1);
+                                    timerBuild.setStopTime(60*120);
+                                    timerBuild.setTime(1);
+                                    timerBuild.start(p);
+                                    if (p.getGameMode() != GameMode.CREATIVE){
+                                        p.setLevel(p.getLevel()-50);
+                                    }
+                                    p.sendMessage("§aUpgrading!");
+                                }else {
+                                    p.sendMessage("You dont have 50 levels!");
+                                }
+                            }
                         }else if (num <= 14){
 
                         }else if (num <= 19){
