@@ -154,7 +154,7 @@ public class Player implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         org.bukkit.entity.Player player = event.getPlayer();
-        //was war hier nochmal?
+        //Wenn spieler gekillt dann gebe SoulofStrenght
     }
 
     @EventHandler(ignoreCancelled = true)
