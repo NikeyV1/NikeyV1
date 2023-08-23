@@ -1,6 +1,7 @@
 package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
+import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
 import de.slikey.effectlib.effect.*;
 import de.slikey.effectlib.util.ParticleEffect;
 import net.md_5.bungee.api.ChatColor;
@@ -40,11 +41,17 @@ public class Firestone implements Listener {
             int i = Integer.parseInt(arr[1]);
             FileConfiguration config = NikeyV1.plugin.getConfig();
             config.set(p.getName()+".fire",null);
+            config.set(p.getName()+".level",i);
             NikeyV1.plugin.saveConfig();
+            String stone = config.getString(p.getName() + ".stone");
+            if (!config.getBoolean(p.getName()+"."+stone+".cooldown1"+".timer")){
+                new ServerScoreboard(p);
+            }
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
                 StoneCooldown1 stoneCooldows = new StoneCooldown1();
-                String stone = config.getString(p.getName() + ".stone");
                 switch (i){
+                    case 1:
+                    case 2:
                     case 3:
                         p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0,true,false));
                         break;

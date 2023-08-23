@@ -45,6 +45,6 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 }
                 setScore("§7Ping: "+ChatColor.DARK_PURPLE+ player.getPing(),1);
             }
-        }.runTaskTimer(NikeyV1.plugin,20,20);
+        }.runTaskTimer(NikeyV1.plugin,15,15);
     }
 }

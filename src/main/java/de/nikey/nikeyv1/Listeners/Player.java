@@ -24,6 +24,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
@@ -47,15 +48,20 @@ public class Player implements Listener {
         }
         if (config.contains(player.getName())){
             //checking for stone
-            for (ItemStack contents : player.getInventory().getContents()){
-                if(contents == null || contents.getType() == Material.AIR)continue;
-                if (contents.getType() == Material.FIREWORK_STAR && contents.containsEnchantment(Enchantment.CHANNELING)){
-                    String[] arr = contents.getLore().get(1).split(":");
-                    int a = Integer.parseInt(arr[1]);
-                    config.set(player.getName()+".level",a);
-                    player.sendMessage("Your stone level was loaded");
+            BukkitRunnable run = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    for (ItemStack contents : player.getInventory().getContents()){
+                        if(contents == null || contents.getType() == Material.AIR)continue;
+                        if (contents.hasItemFlag(ItemFlag.HIDE_ENCHANTS)&& contents.getType() == Material.FIREWORK_STAR){
+                            String[] arr = contents.getLore().get(1).split(":");
+                            int a = Integer.parseInt(arr[1]);
+                            config.set(player.getName()+".level",a);
+                        }
+                    }
                 }
-            }
+            };
+            run.runTaskLater(NikeyV1.getPlugin(),20);
             //
             String stone = config.getString(player.getName() + ".stone");
             if (config.getBoolean(player.getName()+"."+stone+".cooldown1"+".timer")){
@@ -187,9 +193,11 @@ public class Player implements Listener {
                     }
                 }
             }else {
+                Date date = new Date(System.currentTimeMillis()+1440*60*1000);
+                Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), "§cYour stone is out of strength!",date,"Game");
+                player.kickPlayer("§cYour stone is out of strength!");
             }
         }
-
         //Wenn spieler gekillt dann gebe SoulofStrenght
     }
 

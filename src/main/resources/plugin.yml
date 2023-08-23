@@ -5,6 +5,6 @@ website: https://github.com/NikeyV1
 main: de.nikey.nikeyv1.NikeyV1
 api-version: '1.20'
 commands:
-  reload:
-    description: Reload the server
-    aliases: [ rl ]
+  stone:
+    description: gives you a stone
+    usage: </stone [stone] [level]>
