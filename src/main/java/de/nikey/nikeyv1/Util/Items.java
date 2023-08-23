@@ -27,15 +27,33 @@ public class Items {
         meta.setLore(lore);
         soul.setItemMeta(meta);
         player.getInventory().addItem(soul);
+        
+    }
+    public static void Soulrecepie(){
+        ItemStack soul = new ItemStack(Material.SOUL_LANTERN);
+        ItemMeta meta = soul.getItemMeta();
+        meta.setDisplayName("§3Soul of Strenght");
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add("§7A §3Soul §7 that contains the §cStrenght §7of 1000 Players")
+        meta.setLore(lore);
+        soul.setItemMeta(meta);
+
+        //Needed
+        ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
+        ItemMeta meta = essence.getItemMeta();
+        meta.setDisplayName("§dEnchanted Essence");
+        essence.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        essence.setItemMeta(meta);
+        //
 
         ShapedRecipe soulrecipe = new ShapedRecipe(soul);
-        recipe.shape("ENE","IWI","EIE");
-        recipe.setIngredient('I',Material.IRON_BLOCK);
+        recipe.shape("ENE","IWI","ENE");
+        recipe.setIngredient('I',Material.DIAMOND_BLOCK);
         recipe.setIngredient('N',Material.NETHERITE_BLOCK);
         recipe.setIngredient('W',Material.NETHER_STAR);
         recipe.setIngredient('E', new RecipeChoice.ExactChoice(essence));
-        NikeyV1.plugin.getServer().addRecipe(recipe);
-        
+        NikeyV1.plugin.getServer().addRecipe(soulrecipe);
     }
     
     public static void Firestone(Player player , Integer level){
