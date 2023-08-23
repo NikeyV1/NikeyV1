@@ -28,21 +28,6 @@ public class Firestone implements Listener {
 
 
     @EventHandler
-    public void onPlayerToggleSprint(PlayerToggleSprintEvent event) {
-        Player player = event.getPlayer();
-        for (ItemStack contents : player.getInventory().getContents()){
-            if(contents == null || contents.getType() == Material.AIR) continue;
-            if (contents.getType() == Material.FIREWORK_STAR && contents.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#e66b63")+"Lava Stein")){
-                String[] arr = contents.getLore().get(1).split(":");
-                int a = Integer.parseInt(arr[1]);
-                if (a > 2){
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,Integer.MAX_VALUE,1,true,false));
-                }
-            }
-        }
-    }
-
-    @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getItem() == null){
             return;
