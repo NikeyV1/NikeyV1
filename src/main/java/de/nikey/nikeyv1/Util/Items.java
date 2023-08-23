@@ -17,6 +17,27 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 
 public class Items {
+
+    public static void SoulofStrenght(Player player) {
+        ItemStack soul = new ItemStack(Material.SOUL_LANTERN);
+        ItemMeta meta = soul.getItemMeta();
+        meta.setDisplayName("§3Soul of Strenght");
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add("§7A §3Soul §7 that contains the §cStrenght §7of 1000 Players")
+        meta.setLore(lore);
+        soul.setItemMeta(meta);
+        player.getInventory().addItem(soul);
+
+        ShapedRecipe soulrecipe = new ShapedRecipe(soul);
+        recipe.shape("ENE","IWI","EIE");
+        recipe.setIngredient('I',Material.IRON_BLOCK);
+        recipe.setIngredient('N',Material.NETHERITE_BLOCK);
+        recipe.setIngredient('W',Material.NETHER_STAR);
+        recipe.setIngredient('E', new RecipeChoice.ExactChoice(essence));
+        NikeyV1.plugin.getServer().addRecipe(recipe);
+        
+    }
+    
     public static void Firestone(Player player , Integer level){
         ItemStack lavastein = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  lavastein.getItemMeta();
