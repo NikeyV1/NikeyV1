@@ -23,7 +23,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 
 public class Firestone implements Listener {
-    private final ArrayList<Entity> entities = new ArrayList<>();
+    private ArrayList<Entity> entities = new ArrayList<>();
     private int timer;
 
 
@@ -69,14 +69,12 @@ public class Firestone implements Listener {
                                             LivingEntity entity = (LivingEntity) e;
                                             entities.add(entity);
                                             if (entity != p){
-                                                entity.setVisualFire(true);
+                                                e.setVisualFire(true);
                                                 entity.damage(2);
                                             }
                                             if (timer == 0){
                                                 entity.setVisualFire(false);
-                                                for (Entity entities : entities){
-                                                    entities.setVisualFire(false);
-                                                }
+                                                entities.forEach(entity1 -> entity1.setVisualFire(false));
                                                 entities.clear();
                                                 cancel();
                                                 return;
@@ -98,7 +96,7 @@ public class Firestone implements Listener {
                             SphereEffect effect = new SphereEffect(NikeyV1.em);
                             effect.setEntity(p);
                             effect.duration = 20000;
-                            effect.particles = 140;
+                            effect.particles = 200;
                             effect.particle = Particle.FLAME;
                             effect.radius = 30.0;
                             effect.start();
@@ -108,12 +106,15 @@ public class Firestone implements Listener {
                                     for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(),30,30,30)){
                                         if (e instanceof LivingEntity){
                                             LivingEntity entity = (LivingEntity) e;
+                                            entities.add(entity);
                                             if (entity != p){
                                                 e.setVisualFire(true);
                                                 entity.damage(3);
                                             }
                                             if (timer == 0){
                                                 entity.setVisualFire(false);
+                                                entities.forEach(entity1 -> entity1.setVisualFire(false));
+                                                entities.clear();
                                                 cancel();
                                                 return;
                                             }

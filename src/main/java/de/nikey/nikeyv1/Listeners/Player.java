@@ -3,23 +3,15 @@ package de.nikey.nikeyv1.Listeners;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
 import de.nikey.nikeyv1.Stones.StoneCooldown1;
-import de.nikey.nikeyv1.Timer.Timer;
 import de.nikey.nikeyv1.Timer.TimerBuild;
 import de.nikey.nikeyv1.Util.Items;
 import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -28,12 +20,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.eclipse.aether.impl.RepositoryEventDispatcher;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
@@ -56,6 +46,17 @@ public class Player implements Listener {
             if (player.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE); player.sendMessage("You flagged!");
         }
         if (config.contains(player.getName())){
+            //checking for stone
+            for (ItemStack contents : player.getInventory().getContents()){
+                if(contents == null || contents.getType() == Material.AIR)continue;
+                if (contents.getType() == Material.FIREWORK_STAR && contents.containsEnchantment(Enchantment.CHANNELING)){
+                    String[] arr = contents.getLore().get(1).split(":");
+                    int a = Integer.parseInt(arr[1]);
+                    config.set(player.getName()+".level",a);
+                    player.sendMessage("Your stone level was loaded");
+                }
+            }
+            //
             String stone = config.getString(player.getName() + ".stone");
             if (config.getBoolean(player.getName()+"."+stone+".cooldown1"+".timer")){
                 BukkitRunnable runnable = new BukkitRunnable() {
@@ -113,6 +114,8 @@ public class Player implements Listener {
             event.setCancelled(true);
             de.nikey.nikeyv1.Util.Inventory.anvilinv(inv);
             p.openInventory(inv);
+        }else if (meta.getDisplayName().equalsIgnoreCase("§3Soul of Strenght")){
+            event.setCancelled(true);
         }
     }
 
@@ -154,6 +157,39 @@ public class Player implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         org.bukkit.entity.Player player = event.getPlayer();
+        if (player.getKiller() != null){
+            org.bukkit.entity.Player killer = player.getKiller();
+            FileConfiguration config = NikeyV1.plugin.getConfig();
+            int i = config.getInt(player.getName() + ".level");
+            if (i > 1){
+                config.set(player.getName() +".level",i-1);
+                String stone = config.getString(player.getName() + ".stone");
+                assert stone != null;
+                if (stone.equals("Fire")) {
+                    for (ItemStack contents : player.getInventory().getContents()) {
+                        if (contents == null || contents.getType() == Material.AIR) continue;
+                        if (contents.getItemMeta().getDisplayName().equalsIgnoreCase(net.md_5.bungee.api.ChatColor.of("#e66b63") + "Lava Stein")) {
+                            String[] arr = contents.getLore().get(1).split(":");
+                            String a = arr[1];
+                            if (a.equalsIgnoreCase(String.valueOf(i))) {
+                                int l = Integer.parseInt(a);
+                                l = l - 1;
+                                ArrayList<String> lore = new ArrayList<>();
+                                lore.add("§7As hot as §clava");
+                                lore.add(net.md_5.bungee.api.ChatColor.of("#00FFAA") + "Level:" + l);
+                                contents.setLore(lore);
+                                new ServerScoreboard(player);
+                                Items.SoulofStrenght(killer);
+                            } else {
+                                config.set(player.getName() + ".level", Integer.parseInt(a));
+                            }
+                        }
+                    }
+                }
+            }else {
+            }
+        }
+
         //Wenn spieler gekillt dann gebe SoulofStrenght
     }
 
@@ -229,9 +265,56 @@ public class Player implements Listener {
                                 }
                             }
                         }else if (num <= 14){
-
+                            if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
+                                if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
+                                    inventory.setItem(13,null);
+                                    p.closeInventory();
+                                    timerBuild.setLevel(num+1);
+                                    timerBuild.setStopTime(60*120);
+                                    timerBuild.setTime(1);
+                                    timerBuild.start(p);
+                                    if (p.getGameMode() != GameMode.CREATIVE){
+                                        p.setLevel(p.getLevel()-50);
+                                    }
+                                    p.sendMessage("§aUpgrading!");
+                                }else {
+                                    p.sendMessage("You dont have 50 levels!");
+                                }
+                            }
                         }else if (num <= 19){
-
+                            if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
+                                if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
+                                    inventory.setItem(13,null);
+                                    p.closeInventory();
+                                    timerBuild.setLevel(num+1);
+                                    timerBuild.setStopTime(60*120);
+                                    timerBuild.setTime(1);
+                                    timerBuild.start(p);
+                                    if (p.getGameMode() != GameMode.CREATIVE){
+                                        p.setLevel(p.getLevel()-50);
+                                    }
+                                    p.sendMessage("§aUpgrading!");
+                                }else {
+                                    p.sendMessage("You dont have 50 levels!");
+                                }
+                            }
+                        } else if (num == 20) {
+                            if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
+                                if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
+                                    inventory.setItem(13,null);
+                                    p.closeInventory();
+                                    timerBuild.setLevel(num+1);
+                                    timerBuild.setStopTime(60*120);
+                                    timerBuild.setTime(1);
+                                    timerBuild.start(p);
+                                    if (p.getGameMode() != GameMode.CREATIVE){
+                                        p.setLevel(p.getLevel()-50);
+                                    }
+                                    p.sendMessage("§aUpgrading!");
+                                }else {
+                                    p.sendMessage("You dont have 50 levels!");
+                                }
+                            }
                         }
                     }
                 }

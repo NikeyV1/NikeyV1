@@ -6,6 +6,7 @@ import de.nikey.nikeyv1.Util.Items;
 import de.slikey.effectlib.EffectLib;
 import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Item;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,6 +20,7 @@ public final class NikeyV1 extends JavaPlugin {
         reloadConfig();
         saveDefaultConfig();
         Items.EnchantedAnvil();
+        Items.Soulrecepie();
         PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents(new Player(),this);
         manager.registerEvents(new Firestone(),this);

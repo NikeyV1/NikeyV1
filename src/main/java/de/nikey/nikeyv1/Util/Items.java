@@ -23,7 +23,7 @@ public class Items {
         ItemMeta meta = soul.getItemMeta();
         meta.setDisplayName("§3Soul of Strenght");
         ArrayList<String> lore = new ArrayList<>();
-        lore.add("§7A §3Soul §7 that contains the §cStrenght §7of 1000 Players")
+        lore.add("§7A §3Soul §7that contains the §cStrenght §7of 1000 Players");
         meta.setLore(lore);
         soul.setItemMeta(meta);
         player.getInventory().addItem(soul);
@@ -34,25 +34,25 @@ public class Items {
         ItemMeta meta = soul.getItemMeta();
         meta.setDisplayName("§3Soul of Strenght");
         ArrayList<String> lore = new ArrayList<>();
-        lore.add("§7A §3Soul §7 that contains the §cStrenght §7of 1000 Players")
+        lore.add("§7A §3Soul §7that contains the §cStrenght §7of 1000 Players");
         meta.setLore(lore);
         soul.setItemMeta(meta);
 
         //Needed
         ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
-        ItemMeta meta = essence.getItemMeta();
-        meta.setDisplayName("§dEnchanted Essence");
+        ItemMeta smeta = essence.getItemMeta();
+        smeta.setDisplayName("§dEnchanted Essence");
         essence.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        essence.setItemMeta(meta);
+        smeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        essence.setItemMeta(smeta);
         //
 
         ShapedRecipe soulrecipe = new ShapedRecipe(soul);
-        recipe.shape("ENE","IWI","ENE");
-        recipe.setIngredient('I',Material.DIAMOND_BLOCK);
-        recipe.setIngredient('N',Material.NETHERITE_BLOCK);
-        recipe.setIngredient('W',Material.NETHER_STAR);
-        recipe.setIngredient('E', new RecipeChoice.ExactChoice(essence));
+        soulrecipe.shape("ENE","IWI","ENE");
+        soulrecipe.setIngredient('I',Material.DIAMOND_BLOCK);
+        soulrecipe.setIngredient('N',Material.NETHERITE_BLOCK);
+        soulrecipe.setIngredient('W',Material.NETHER_STAR);
+        soulrecipe.setIngredient('E', new RecipeChoice.ExactChoice(essence));
         NikeyV1.plugin.getServer().addRecipe(soulrecipe);
     }
     
