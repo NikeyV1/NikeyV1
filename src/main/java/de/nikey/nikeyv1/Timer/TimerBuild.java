@@ -8,10 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 public class TimerBuild  {
     private int time;
@@ -43,6 +41,11 @@ public class TimerBuild  {
         this.stopTime = stopTime;
     }
 
+    private String getStone(Player player) {
+        String string = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
+        return string;
+    }
+
     private BukkitRunnable task;
     public void start(Player player){
         FileConfiguration config = NikeyV1.plugin.getConfig();
@@ -67,8 +70,12 @@ public class TimerBuild  {
                                 setRunning(false);
                                 cancel();
                                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent(ChatColor.RED+"Time is up!"));
-                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,1,1);
-                                Items.Firestone(player,getLevel());
+                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,2,1);
+                                if (getStone(player).equalsIgnoreCase("Fire")){
+                                    Items.Firestone(player,getLevel());
+                                }else if (getStone(player).equalsIgnoreCase("Elektro")){
+                                    Items.Electrostone(player,getLevel());
+                                }
                             }
                         }else {
                             cancel();

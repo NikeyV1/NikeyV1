@@ -13,6 +13,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
     public ServerScoreboard(Player player) {
         super(player, "  §8>> §6§l§nNikey§r §8<<  ");
         run();
+        stone();
     }
 
 
@@ -25,7 +26,6 @@ public class ServerScoreboard extends ScoreboardBuilder {
     public void createScoreboard() {
         FileConfiguration config = NikeyV1.plugin.getConfig();
         String stone = config.getString(player.getName() + ".stone");
-        setScore("§7Stone: "+ChatColor.RED +config.getString(player.getName()+".stone"),6);
         setScore("§7Level: "+ChatColor.AQUA+config.getString(player.getName()+".level"),5);
         setScore("§7Ability 1:"+config.getInt(player.getName()+"."+stone+".cooldown1"+".time") +"/"+config.getInt(player.getName()+"."+stone+".cooldown1"+".stoptime"),4);
         setScore("§7Ability 2:",3);
@@ -46,5 +46,14 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 setScore("§7Ping: "+ChatColor.DARK_PURPLE+ player.getPing(),1);
             }
         }.runTaskTimer(NikeyV1.plugin,15,15);
+    }
+    private void stone() {
+        FileConfiguration config = NikeyV1.plugin.getConfig();
+        String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
+        if (stone.equalsIgnoreCase("Fire")){
+            setScore("§7Stone: "+ChatColor.RED +config.getString(player.getName()+".stone"),6);
+        }else if (stone.equalsIgnoreCase("Elektro")){
+            setScore("§7Stone: "+ChatColor.YELLOW +config.getString(player.getName()+".stone"),6);
+        }
     }
 }

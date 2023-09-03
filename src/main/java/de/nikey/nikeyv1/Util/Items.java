@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("deprecation")
 public class Items {
 
     public static void SoulofStrenght(Player player) {
@@ -68,6 +69,19 @@ public class Items {
         meta.setLore(lore);
         lavastein.setItemMeta(meta);
         player.getInventory().addItem(lavastein);
+    }
+    public static void Electrostone(Player player , Integer level){
+        ItemStack elektrostein = new ItemStack(Material.FIREWORK_STAR);
+        ItemMeta meta =  elektrostein.getItemMeta();
+        meta.setDisplayName("§eElektro Stein");
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        elektrostein.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add(ChatColor.of("#B1A012")+ "Überladen mit elektrizität");
+        lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
+        meta.setLore(lore);
+        elektrostein.setItemMeta(meta);
+        player.getInventory().addItem(elektrostein);
     }
     public static void EnchantedAnvil(){
         ItemStack essence = new ItemStack(Material.DRAGON_BREATH);

@@ -43,9 +43,6 @@ public class Player implements Listener {
         new ServerScoreboard(player);
         NikeyV1.getPlugin().reloadConfig();
         FileConfiguration config = NikeyV1.plugin.getConfig();
-        if (!(config.getInt(player.getName()+".level") >= 3) ||!config.getString(player.getName() +".stone").equalsIgnoreCase("Fire")){
-            if (player.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE); player.sendMessage("You flagged!");
-        }
         if (config.contains(player.getName())){
             //checking for stone
             BukkitRunnable run = new BukkitRunnable() {
@@ -103,13 +100,25 @@ public class Player implements Listener {
             }
         }else {
             Random random = new Random();
-            int i = random.nextInt(2);
-            Items.Firestone(player,1);
-            player.sendTitle("§d§kR§r§cLava Stone§r§d§kR","");
-            config.set(player.getName()+".stone", ChatColor.RED +"Fire");
-            config.set(player.getName()+".level",1);
-            config.set(player.getName()+".time",false);
-            NikeyV1.plugin.saveConfig();
+            int i = random.nextInt(3);
+            if (i == 0){
+                Items.Firestone(player,1);
+                player.sendTitle("§d§kR§r§cLava Stone§r§d§kR","");
+                config.set(player.getName()+".stone", "Fire");
+                config.set(player.getName()+".level",1);
+                config.set(player.getName()+".time",false);
+                NikeyV1.plugin.saveConfig();
+            }else if (i == 1){
+                Items.Electrostone(player,1);
+                player.sendTitle("§d§kR§r§eElektro Stone§r§d§kR","");
+                config.set(player.getName()+".stone", "Elektro");
+                config.set(player.getName()+".level",1);
+                config.set(player.getName()+".time",false);
+                NikeyV1.plugin.saveConfig();
+            }
+        }
+        if (!(config.getInt(player.getName()+".level") >= 3) ||!config.getString(player.getName() +".stone").equalsIgnoreCase("Fire")){
+            if (player.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE); player.sendMessage("You flagged!");
         }
     }
     @EventHandler(ignoreCancelled = true)
