@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+@SuppressWarnings("ALL")
 public class Timer {
 
     //This class is discontinued!

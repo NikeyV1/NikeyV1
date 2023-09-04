@@ -1,8 +1,10 @@
 package de.nikey.nikeyv1;
 
+import de.nikey.nikeyv1.Commands.EffectCMD;
 import de.nikey.nikeyv1.Commands.stone;
 import de.nikey.nikeyv1.Listeners.Player;
 import de.nikey.nikeyv1.Listeners.ReloadCommand;
+import de.nikey.nikeyv1.Stones.Electrostone;
 import de.nikey.nikeyv1.Stones.Firestone;
 import de.nikey.nikeyv1.Util.Items;
 import de.slikey.effectlib.EffectLib;
@@ -26,9 +28,11 @@ public final class NikeyV1 extends JavaPlugin {
         PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents(new Player(),this);
         manager.registerEvents(new Firestone(),this);
+        manager.registerEvents(new Electrostone(),this);
         manager.registerEvents(new ReloadCommand(),this);
         //Command
         getCommand("stone").setExecutor(new stone());
+        getCommand("effect").setExecutor(new EffectCMD());
 
     }
 

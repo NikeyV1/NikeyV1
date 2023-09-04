@@ -23,8 +23,9 @@ public class ReloadCommand implements Listener {
                 if (args[1].equalsIgnoreCase("scoreboard")) {
                     event.setCancelled(true);
                     player.sendMessage("§aYou reloaded your scoreboard");
-                    new ServerScoreboard(player);
                     FileConfiguration config = NikeyV1.plugin.getConfig();
+                    NikeyV1.getPlugin().reloadConfig();
+                    new ServerScoreboard(player);
                     String stone = config.getString(player.getName() + ".stone");
                     TimerBuild timerBuild = new TimerBuild();
                     if (config.getBoolean(player.getName()+".time")){
