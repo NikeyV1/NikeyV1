@@ -22,7 +22,7 @@ public class stone implements CommandExecutor {
                     }catch (NumberFormatException e){
                         p.sendMessage("§cTake a Number");
                     }
-                }else if (stone.equalsIgnoreCase("Electro")){
+                }else if (stone.equalsIgnoreCase("Electro") ||stone.equalsIgnoreCase("Elektro")){
                     try {
                         int level = Integer.parseInt(args[1]);
                         Items.Electrostone(p,level);

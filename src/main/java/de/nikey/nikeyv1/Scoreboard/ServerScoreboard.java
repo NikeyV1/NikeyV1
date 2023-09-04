@@ -47,6 +47,8 @@ public class ServerScoreboard extends ScoreboardBuilder {
             }
         }.runTaskTimer(NikeyV1.plugin,15,15);
     }
+
+
     private void stone() {
         FileConfiguration config = NikeyV1.plugin.getConfig();
         String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
