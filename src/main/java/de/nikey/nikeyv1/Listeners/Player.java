@@ -3,6 +3,7 @@ package de.nikey.nikeyv1.Listeners;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
 import de.nikey.nikeyv1.Stones.StoneCooldown1;
+import de.nikey.nikeyv1.Stones.StoneCooldown2;
 import de.nikey.nikeyv1.Timer.TimerBuild;
 import de.nikey.nikeyv1.Util.Items;
 import org.bukkit.*;
@@ -79,6 +80,24 @@ public class Player implements Listener {
                 };
                 runnable.runTaskLater(NikeyV1.getPlugin(),20);
             }
+            if (config.getBoolean(player.getName()+"."+stone+".cooldown2"+".timer")){
+                BukkitRunnable runnable = new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+                        config.set(player.getName()+"."+stone+".cooldown2"+".timer",false);
+                        if (!config.getBoolean(player.getName()+"."+stone+".cooldown2"+".timer")){
+                            StoneCooldown2 stoneCooldown2 = new StoneCooldown2();
+                            stoneCooldown2.setTime(config.getInt(player.getName()+"."+stone+".cooldown2"+".time"));
+                            stoneCooldown2.setStopTime(config.getInt(player.getName()+"."+stone+".cooldown2"+".stoptime"));
+                            stoneCooldown2.start(player);
+                        }else {
+                            player.sendMessage("§cPlugin Error: "+event.getEventName()+".continue.cooldown");
+                        }
+                    }
+                };
+                runnable.runTaskLater(NikeyV1.getPlugin(),20);
+            }
             TimerBuild timerBuild = new TimerBuild();
             if (config.getBoolean(player.getName()+".time")){
                 BukkitRunnable runnable = new BukkitRunnable() {
@@ -116,9 +135,6 @@ public class Player implements Listener {
                 config.set(player.getName()+".time",false);
                 NikeyV1.plugin.saveConfig();
             }
-        }
-        if (!(config.getInt(player.getName()+".level") >= 3) ||!config.getString(player.getName() +".stone").equalsIgnoreCase("Fire")){
-            if (player.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE); player.sendMessage("You flagged!");
         }
     }
     @EventHandler(ignoreCancelled = true)
@@ -343,4 +359,5 @@ public class Player implements Listener {
     public void onPlayerChangeWorld(PlayerChangedWorldEvent event) {
         org.bukkit.entity.Player player = event.getPlayer();new ServerScoreboard(player);
     }
+
 }

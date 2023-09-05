@@ -19,7 +19,8 @@ public class ServerScoreboard extends ScoreboardBuilder {
 
     @Override
     public void update() {
-
+        FileConfiguration config = NikeyV1.plugin.getConfig();
+        setScore("§7Level: "+ChatColor.AQUA+config.getString(player.getName()+".level"),5);
     }
 
     @Override
@@ -28,7 +29,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
         String stone = config.getString(player.getName() + ".stone");
         setScore("§7Level: "+ChatColor.AQUA+config.getString(player.getName()+".level"),5);
         setScore("§7Ability 1:"+config.getInt(player.getName()+"."+stone+".cooldown1"+".time") +"/"+config.getInt(player.getName()+"."+stone+".cooldown1"+".stoptime"),4);
-        setScore("§7Ability 2:",3);
+        setScore("§7Ability 2:"+config.getInt(player.getName()+"."+stone+".cooldown2"+".time") +"/"+config.getInt(player.getName()+"."+stone+".cooldown2"+".stoptime"),3);
         setScore("----------",2);
         setScore("§7Ping: "+ChatColor.DARK_PURPLE+ player.getPing(),1);
         setScore("§7Online Players: "+ChatColor.DARK_PURPLE+ Bukkit.getOnlinePlayers().size(),0);
@@ -43,9 +44,14 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 }else {
                     setScore("§7Ability 1: §c"+NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown1"+".time") +"/"+NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown1"+".stoptime"),4);
                 }
+                if (NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown2"+".time") == 0 &&NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown2"+".stoptime") == 0){
+                    setScore("§7Ability 2: §aReady",3);
+                }else {
+                    setScore("§7Ability 2: §c"+NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown2"+".time") +"/"+NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown2"+".stoptime"),3);
+                }
                 setScore("§7Ping: "+ChatColor.DARK_PURPLE+ player.getPing(),1);
             }
-        }.runTaskTimer(NikeyV1.plugin,15,15);
+        }.runTaskTimer(NikeyV1.plugin,18,18);
     }
 
 
