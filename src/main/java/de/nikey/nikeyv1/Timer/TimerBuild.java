@@ -85,8 +85,6 @@ public class TimerBuild  {
                     }
                 };
                 task.runTaskTimer(NikeyV1.getPlugin(),20,20);
-            }else {
-                player.sendMessage("§cYou cant do that twice!");
             }
         }
     }

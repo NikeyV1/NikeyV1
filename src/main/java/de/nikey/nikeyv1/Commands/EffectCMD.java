@@ -68,7 +68,7 @@ public class EffectCMD implements CommandExecutor {
                     p.sendMessage("Started");
                 }else if (args[0].equalsIgnoreCase("Cylinder")){
                     CylinderEffect effect = new CylinderEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
+                    effect.setEntity(p);
                     effect.start();
                     p.sendMessage("Started");
                 }else if (args[0].equalsIgnoreCase("Earth")){

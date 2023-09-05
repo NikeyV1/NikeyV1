@@ -40,99 +40,101 @@ public class Player implements Listener {
     public static Inventory inv = Bukkit.createInventory(null, 27, "Enchanted Anvil");
     @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        org.bukkit.entity.Player player = event.getPlayer();
-        new ServerScoreboard(player);
+        org.bukkit.entity.Player p = event.getPlayer();
+        new ServerScoreboard(p);
         NikeyV1.getPlugin().reloadConfig();
         FileConfiguration config = NikeyV1.plugin.getConfig();
-        if (config.contains(player.getName())){
+        if (config.contains(p.getName())){
             //checking for stone
             BukkitRunnable run = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    for (ItemStack contents : player.getInventory().getContents()){
+                    for (ItemStack contents : p.getInventory().getContents()){
                         if(contents == null || contents.getType() == Material.AIR)continue;
                         if (contents.hasItemFlag(ItemFlag.HIDE_ENCHANTS)&& contents.getType() == Material.FIREWORK_STAR){
                             String[] arr = contents.getLore().get(1).split(":");
                             int a = Integer.parseInt(arr[1]);
-                            config.set(player.getName()+".level",a);
+                            config.set(p.getName()+".level",a);
                         }
                     }
                 }
             };
             run.runTaskLater(NikeyV1.getPlugin(),20);
             //
-            String stone = config.getString(player.getName() + ".stone");
-            if (config.getBoolean(player.getName()+"."+stone+".cooldown1"+".timer")){
-                BukkitRunnable runnable = new BukkitRunnable() {
+            String stone = config.getString(p.getName() + ".stone");
+            for (org.bukkit.entity.Player player : Bukkit.getOnlinePlayers()){
+                if (config.getBoolean(player.getName()+"."+stone+".cooldown1"+".timer")){
+                    BukkitRunnable runnable = new BukkitRunnable() {
 
-                    @Override
-                    public void run() {
-                        config.set(player.getName()+"."+stone+".cooldown1"+".timer",false);
-                        if (!config.getBoolean(player.getName()+"."+stone+".cooldown1"+".timer")){
-                            StoneCooldown1 stoneCooldown1 = new StoneCooldown1();
-                            stoneCooldown1.setTime(config.getInt(player.getName()+"."+stone+".cooldown1"+".time"));
-                            stoneCooldown1.setStopTime(config.getInt(player.getName()+"."+stone+".cooldown1"+".stoptime"));
-                            stoneCooldown1.start(player);
-                        }else {
-                            player.sendMessage("§cPlugin Error: "+event.getEventName()+".continue.cooldown");
+                        @Override
+                        public void run() {
+                            config.set(player.getName()+"."+stone+".cooldown1"+".timer",false);
+                            if (!config.getBoolean(player.getName()+"."+stone+".cooldown1"+".timer")){
+                                StoneCooldown1 stoneCooldown1 = new StoneCooldown1();
+                                stoneCooldown1.setTime(config.getInt(player.getName()+"."+stone+".cooldown1"+".time"));
+                                stoneCooldown1.setStopTime(config.getInt(player.getName()+"."+stone+".cooldown1"+".stoptime"));
+                                stoneCooldown1.start(player);
+                            }else {
+                                player.sendMessage("§cPlugin Error: "+event.getEventName()+".continue.cooldown");
+                            }
                         }
-                    }
-                };
-                runnable.runTaskLater(NikeyV1.getPlugin(),20);
-            }
-            if (config.getBoolean(player.getName()+"."+stone+".cooldown2"+".timer")){
-                BukkitRunnable runnable = new BukkitRunnable() {
+                    };
+                    runnable.runTaskLater(NikeyV1.getPlugin(),20);
+                }
+                if (config.getBoolean(player.getName()+"."+stone+".cooldown2"+".timer")){
+                    BukkitRunnable runnable = new BukkitRunnable() {
 
-                    @Override
-                    public void run() {
-                        config.set(player.getName()+"."+stone+".cooldown2"+".timer",false);
-                        if (!config.getBoolean(player.getName()+"."+stone+".cooldown2"+".timer")){
-                            StoneCooldown2 stoneCooldown2 = new StoneCooldown2();
-                            stoneCooldown2.setTime(config.getInt(player.getName()+"."+stone+".cooldown2"+".time"));
-                            stoneCooldown2.setStopTime(config.getInt(player.getName()+"."+stone+".cooldown2"+".stoptime"));
-                            stoneCooldown2.start(player);
-                        }else {
-                            player.sendMessage("§cPlugin Error: "+event.getEventName()+".continue.cooldown");
+                        @Override
+                        public void run() {
+                            config.set(player.getName()+"."+stone+".cooldown2"+".timer",false);
+                            if (!config.getBoolean(player.getName()+"."+stone+".cooldown2"+".timer")){
+                                StoneCooldown2 stoneCooldown2 = new StoneCooldown2();
+                                stoneCooldown2.setTime(config.getInt(player.getName()+"."+stone+".cooldown2"+".time"));
+                                stoneCooldown2.setStopTime(config.getInt(player.getName()+"."+stone+".cooldown2"+".stoptime"));
+                                stoneCooldown2.start(player);
+                            }else {
+                                player.sendMessage("§cPlugin Error: "+event.getEventName()+".continue.cooldown");
+                            }
                         }
-                    }
-                };
-                runnable.runTaskLater(NikeyV1.getPlugin(),20);
-            }
-            TimerBuild timerBuild = new TimerBuild();
-            if (config.getBoolean(player.getName()+".time")){
-                BukkitRunnable runnable = new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        config.set(player.getName()+".time",false);
-                        if (!config.getBoolean(player.getName()+".time")){
-                            timerBuild.setLevel(config.getInt(player.getName()+".level"));
-                            timerBuild.setTime(config.getInt(player.getName()+".timer"));
-                            timerBuild.setStopTime(config.getInt(player.getName()+".stoptime"));
-                            timerBuild.start(player);
-                            player.sendMessage("§aYour upgrade continues!");
-                        }else {
-                            player.sendMessage("§cPlugin Error: "+event.getEventName()+".continue.upgrade");
+                    };
+                    runnable.runTaskLater(NikeyV1.getPlugin(),20);
+                }
+                TimerBuild timerBuild = new TimerBuild();
+                if (config.getBoolean(player.getName()+".time")){
+                    BukkitRunnable runnable = new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            config.set(player.getName()+".time",false);
+                            if (!config.getBoolean(player.getName()+".time")){
+                                timerBuild.setLevel(config.getInt(player.getName()+".level"));
+                                timerBuild.setTime(config.getInt(player.getName()+".timer"));
+                                timerBuild.setStopTime(config.getInt(player.getName()+".stoptime"));
+                                timerBuild.start(player);
+                                player.sendMessage("§aYour upgrade continues!");
+                            }else {
+                                player.sendMessage("§cPlugin Error: "+event.getEventName()+".continue.upgrade");
+                            }
                         }
-                    }
-                };
-                runnable.runTaskLater(NikeyV1.getPlugin(),20);
+                    };
+                    runnable.runTaskLater(NikeyV1.getPlugin(),20);
+                }
             }
         }else {
             Random random = new Random();
             int i = random.nextInt(3);
             if (i == 0){
-                Items.Firestone(player,1);
-                player.sendTitle("§d§kR§r§cLava Stone§r§d§kR","");
-                config.set(player.getName()+".stone", "Fire");
-                config.set(player.getName()+".level",1);
-                config.set(player.getName()+".time",false);
+                Items.Firestone(p,1);
+                p.sendTitle("§d§kR§r§cLava Stone§r§d§kR","");
+                config.set(p.getName()+".stone", "Fire");
+                config.set(p.getName()+".level",1);
+                config.set(p.getName()+".time",false);
                 NikeyV1.plugin.saveConfig();
             }else if (i == 1){
-                Items.Electrostone(player,1);
-                player.sendTitle("§d§kR§r§eElektro Stone§r§d§kR","");
-                config.set(player.getName()+".stone", "Elektro");
-                config.set(player.getName()+".level",1);
-                config.set(player.getName()+".time",false);
+                Items.Electrostone(p,1);
+                p.sendTitle("§d§kR§r§eElektro Stone§r§d§kR","");
+                config.set(p.getName()+".stone", "Elektro");
+                config.set(p.getName()+".level",1);
+                config.set(p.getName()+".time",false);
                 NikeyV1.plugin.saveConfig();
             }
         }

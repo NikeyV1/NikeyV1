@@ -7,17 +7,25 @@ import de.nikey.nikeyv1.Listeners.ReloadCommand;
 import de.nikey.nikeyv1.Listeners.ReloadModifyer;
 import de.nikey.nikeyv1.Stones.Electrostone;
 import de.nikey.nikeyv1.Stones.Firestone;
+import de.nikey.nikeyv1.Stones.StoneCooldown1;
+import de.nikey.nikeyv1.Stones.StoneCooldown2;
+import de.nikey.nikeyv1.Timer.TimerBuild;
 import de.nikey.nikeyv1.Util.Items;
 import de.slikey.effectlib.EffectLib;
 import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Item;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.HashMap;
 
 public final class NikeyV1 extends JavaPlugin {
     public static NikeyV1 plugin;
     public static EffectManager em;
+    private final HashMap<org.bukkit.entity.Player, Integer> time = new HashMap<>();
     @Override
     public void onEnable() {
         em = new EffectManager(EffectLib.instance());
@@ -36,10 +44,9 @@ public final class NikeyV1 extends JavaPlugin {
         getCommand("stone").setExecutor(new stone());
         getCommand("effect").setExecutor(new EffectCMD());
 
-    }
+        //Stuff
 
-    @Override
-    public void onDisable() {
+
 
     }
 

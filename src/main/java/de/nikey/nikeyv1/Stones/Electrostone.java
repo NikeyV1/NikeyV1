@@ -1,6 +1,7 @@
 package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
+import de.slikey.effectlib.effect.CylinderEffect;
 import de.slikey.effectlib.effect.TornadoEffect;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import org.bukkit.Location;
@@ -20,6 +21,7 @@ import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -144,6 +146,7 @@ public class Electrostone implements Listener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player){
             Player p = (Player) event.getDamager();
+            if (p.getInventory().getItemInMainHand().getItemMeta() == null)return;
             if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase("§eElektro Stein")){
                 Entity entity = event.getEntity();
                 String[] arr = p.getInventory().getItemInMainHand().getLore().get(1).split(":");
@@ -153,20 +156,24 @@ public class Electrostone implements Listener {
                     String stone = config.getString(p.getName() + ".stone");
                     if (!config.getBoolean(p.getName()+"."+stone+".cooldown2"+".timer")){
                         stunned.add(entity);
+                        entity.getWorld().strikeLightning(entity.getLocation());
+                        CylinderEffect effect = new CylinderEffect(NikeyV1.em);
+                        effect.setEntity(entity);
+                        effect.duration = 5000;
+                        effect.particles = 80;
+                        effect.particle = Particle.FLASH;
+                        effect.start();
                         StoneCooldown2 stoneCooldown = new StoneCooldown2();
                         stoneCooldown.setTime(1);
                         stoneCooldown.setStopTime(180);
                         stoneCooldown.start(p);
                         for (Entity e : entity.getNearbyEntities(1,1,1)){
                             e.getWorld().strikeLightning(e.getLocation());
-                            entity.getWorld().strikeLightning(entity.getLocation());
                             stunned.add(e);
                             BukkitRunnable runnable = new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    p.sendMessage(String.valueOf(stunned));
-                                    stunned.remove(e);
-                                    stunned.remove(entity);
+                                    stunned.clear();
                                 }
                             };
                             runnable.runTaskLater(NikeyV1.getPlugin(),20*5);
@@ -189,14 +196,28 @@ public class Electrostone implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         Player entity = event.getPlayer();
         if (stunned.contains(entity)){
-            event.setCancelled(true);
-            entity.sendMessage("FGay");
+            Location from = event.getFrom();
+            Location to = event.getTo();
+            double x = from.getX();
+            double z = from.getZ();
+            double xx = to.getX();
+            double zz = to.getZ();
+            if (x != xx||z !=zz){
+                event.setCancelled(true);
+            }
         }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityTeleport(EntityTeleportEvent event) {
         if (stunned.contains(event.getEntity())){
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        if (stunned.contains(event.getPlayer())){
             event.setCancelled(true);
         }
     }

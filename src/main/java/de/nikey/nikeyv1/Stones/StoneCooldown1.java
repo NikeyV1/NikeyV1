@@ -26,6 +26,7 @@ public class StoneCooldown1 {
         this.time = time;
     }
     public void start(Player player){
+        player.sendMessage("0");
         FileConfiguration config = NikeyV1.plugin.getConfig();
         String stone = config.getString(player.getName() + ".stone");
         if (!config.getBoolean(player.getName()+"."+stone+".cooldown1.timer")){
@@ -46,6 +47,7 @@ public class StoneCooldown1 {
                             config.set(player.getName()+"."+stone+".cooldown1"+".stoptime",0);
                             NikeyV1.getPlugin().saveConfig();
                             cancel();
+                            return;
                         }
                     }else {
                         cancel();
@@ -53,7 +55,7 @@ public class StoneCooldown1 {
                     }
                 }
             };
-            runnable.runTaskTimer(NikeyV1.getPlugin(),20,20);
+            runnable.runTaskTimer(NikeyV1.getPlugin(),0,20);
         }else {
             player.sendMessage("§cYou are on cooldown");
         }
