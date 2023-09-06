@@ -25,6 +25,7 @@ public class StoneCooldown1 {
     public void setTime(int time) {
         this.time = time;
     }
+    private BukkitRunnable task;
     public void start(Player player){
         player.sendMessage("0");
         FileConfiguration config = NikeyV1.plugin.getConfig();
