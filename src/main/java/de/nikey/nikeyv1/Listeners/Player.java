@@ -234,7 +234,7 @@ public class Player implements Listener {
             org.bukkit.entity.Player p = (org.bukkit.entity.Player) event.getWhoClicked();
             Inventory inventory = event.getInventory();
             if (event.getCurrentItem() == null){
-
+                return;
             }
             else if (event.getSlot() == 15 && event.getCurrentItem().getType() == Material.ANVIL || event.getCurrentItem().getType() == Material.PURPLE_STAINED_GLASS_PANE){
                 event.setCancelled(true);
