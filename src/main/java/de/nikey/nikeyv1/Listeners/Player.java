@@ -45,42 +45,20 @@ public class Player implements Listener {
         NikeyV1.getPlugin().reloadConfig();
         FileConfiguration config = NikeyV1.plugin.getConfig();
         if (config.contains(p.getName())){
-            //checking for stone
-            BukkitRunnable run = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    for (ItemStack contents : p.getInventory().getContents()){
-                        if(contents == null || contents.getType() == Material.AIR)continue;
-                        if (contents.hasItemFlag(ItemFlag.HIDE_ENCHANTS)&& contents.getType() == Material.FIREWORK_STAR){
-                            String[] arr = contents.getLore().get(1).split(":");
-                            int a = Integer.parseInt(arr[1]);
-                            config.set(p.getName()+".level",a);
-                        }
-                    }
-                }
-            };
-            run.runTaskLater(NikeyV1.getPlugin(),20);
-            //
             String stone = config.getString(p.getName() + ".stone");
             for (org.bukkit.entity.Player player : Bukkit.getOnlinePlayers()){
+                StoneCooldown1 stoneCooldown1 = new StoneCooldown1();
                 if (config.getBoolean(player.getName()+"."+stone+".cooldown1"+".timer")){
-                    BukkitRunnable runnable = new BukkitRunnable() {
-
-                        @Override
-                        public void run() {
-                            config.set(player.getName()+"."+stone+".cooldown1"+".timer",false);
+                    config.set(player.getName()+"."+stone+".cooldown1"+".timer",false);
                             if (!config.getBoolean(player.getName()+"."+stone+".cooldown1"+".timer")){
-                                StoneCooldown1 stoneCooldown1 = new StoneCooldown1();
                                 stoneCooldown1.setTime(config.getInt(player.getName()+"."+stone+".cooldown1"+".time"));
                                 stoneCooldown1.setStopTime(config.getInt(player.getName()+"."+stone+".cooldown1"+".stoptime"));
                                 stoneCooldown1.start(player);
                             }else {
                                 player.sendMessage("§cPlugin Error: "+event.getEventName()+".continue.cooldown");
                             }
-                        }
-                    };
-                    runnable.runTaskLater(NikeyV1.getPlugin(),20);
                 }
+                StoneCooldown2 stoneCooldown2 = new StoneCooldown2();
                 if (config.getBoolean(player.getName()+"."+stone+".cooldown2"+".timer")){
                     BukkitRunnable runnable = new BukkitRunnable() {
 
@@ -88,7 +66,6 @@ public class Player implements Listener {
                         public void run() {
                             config.set(player.getName()+"."+stone+".cooldown2"+".timer",false);
                             if (!config.getBoolean(player.getName()+"."+stone+".cooldown2"+".timer")){
-                                StoneCooldown2 stoneCooldown2 = new StoneCooldown2();
                                 stoneCooldown2.setTime(config.getInt(player.getName()+"."+stone+".cooldown2"+".time"));
                                 stoneCooldown2.setStopTime(config.getInt(player.getName()+"."+stone+".cooldown2"+".stoptime"));
                                 stoneCooldown2.start(player);
@@ -171,8 +148,7 @@ public class Player implements Listener {
         int expLevelCost = event.getExpLevelCost();
         if (expLevelCost >8 ){
             Random rand = new Random();
-            int upperbound = 25;
-            int nextInt = rand.nextInt(upperbound);
+            int nextInt = rand.nextInt(25);
             if (nextInt == 20){
                 org.bukkit.entity.Player p = event.getEnchanter();
                 ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
@@ -215,6 +191,28 @@ public class Player implements Listener {
                                 Items.SoulofStrenght(killer);
                             } else {
                                 config.set(player.getName() + ".level", Integer.parseInt(a));
+                            }
+                        }
+                    }
+                }else {
+                    if (stone.equals("Fire")) {
+                        for (ItemStack contents : player.getInventory().getContents()) {
+                            if (contents == null || contents.getType() == Material.AIR) continue;
+                            if (contents.getItemMeta().getDisplayName().equalsIgnoreCase(net.md_5.bungee.api.ChatColor.of("#e66b63") + "Lava Stein")) {
+                                String[] arr = contents.getLore().get(1).split(":");
+                                String a = arr[1];
+                                if (a.equalsIgnoreCase(String.valueOf(i))) {
+                                    int l = Integer.parseInt(a);
+                                    l = l - 1;
+                                    ArrayList<String> lore = new ArrayList<>();
+                                    lore.add(ChatColor.of("#B1A012")+ "Überladen mit elektrizität");
+                                    lore.add(ChatColor.of("#00FFAA")+"Level:"+l);
+                                    contents.setLore(lore);
+                                    new ServerScoreboard(player);
+                                    Items.SoulofStrenght(killer);
+                                } else {
+                                    config.set(player.getName() + ".level", Integer.parseInt(a));
+                                }
                             }
                         }
                     }

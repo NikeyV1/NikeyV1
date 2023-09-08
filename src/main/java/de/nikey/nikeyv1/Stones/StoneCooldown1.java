@@ -33,7 +33,7 @@ public class StoneCooldown1 {
         if (!config.getBoolean(player.getName()+"."+stone+".cooldown1.timer")){
             config.set(player.getName()+"."+stone+".cooldown1"+".stoptime",getStopTime());
             NikeyV1.plugin.saveConfig();
-            BukkitRunnable runnable = new BukkitRunnable() {
+            task = new BukkitRunnable() {
                 @Override
                 public void run() {
                     if (Bukkit.getOnlinePlayers().contains(player)){
@@ -56,7 +56,7 @@ public class StoneCooldown1 {
                     }
                 }
             };
-            runnable.runTaskTimer(NikeyV1.getPlugin(),0,20);
+            task.runTaskTimer(NikeyV1.getPlugin(),0,20);
         }else {
             player.sendMessage("§cYou are on cooldown");
         }
