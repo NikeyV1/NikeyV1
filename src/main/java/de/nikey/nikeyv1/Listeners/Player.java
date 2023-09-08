@@ -195,7 +195,7 @@ public class Player implements Listener {
                         }
                     }
                 }else {
-                    if (stone.equals("Fire")) {
+                    if (stone.equals("elektro")) {
                         for (ItemStack contents : player.getInventory().getContents()) {
                             if (contents == null || contents.getType() == Material.AIR) continue;
                             if (contents.getItemMeta().getDisplayName().equalsIgnoreCase(net.md_5.bungee.api.ChatColor.of("#e66b63") + "Lava Stein")) {
