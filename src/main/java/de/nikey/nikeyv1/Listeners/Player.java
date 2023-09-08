@@ -205,8 +205,8 @@ public class Player implements Listener {
                                     int l = Integer.parseInt(a);
                                     l = l - 1;
                                     ArrayList<String> lore = new ArrayList<>();
-                                    lore.add(ChatColor.of("#B1A012")+ "Überladen mit elektrizität");
-                                    lore.add(ChatColor.of("#00FFAA")+"Level:"+l);
+                                    lore.add(net.md_5.bungee.api.ChatColor.of("#B1A012")+ "Überladen mit elektrizität");
+                                    lore.add(net.md_5.bungee.api.ChatColor.of("#00FFAA")+"Level:"+l);
                                     contents.setLore(lore);
                                     new ServerScoreboard(player);
                                     Items.SoulofStrenght(killer);
