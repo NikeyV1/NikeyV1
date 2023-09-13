@@ -23,47 +23,7 @@ public class ReloadCommand implements Listener {
                 if (args[1].equalsIgnoreCase("scoreboard")) {
                     event.setCancelled(true);
                     player.sendMessage("§aYou reloaded your scoreboard");
-                    FileConfiguration config = NikeyV1.plugin.getConfig();
-                    NikeyV1.getPlugin().reloadConfig();
                     new ServerScoreboard(player);
-                    String stone = config.getString(player.getName() + ".stone");
-                    TimerBuild timerBuild = new TimerBuild();
-                    if (config.getBoolean(player.getName()+".time")){
-                        BukkitRunnable runnable = new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                config.set(player.getName()+".time",false);
-                                if (!config.getBoolean(player.getName()+".time")){
-                                    timerBuild.setLevel(config.getInt(player.getName()+".level"));
-                                    timerBuild.setTime(config.getInt(player.getName()+".timer"));
-                                    timerBuild.setStopTime(config.getInt(player.getName()+".stoptime"));
-                                    timerBuild.start(player);
-                                    player.sendMessage("§aYour upgrade continues!");
-                                }else {
-                                    player.sendMessage("§cPlugin Error: "+event.getEventName()+".continue.upgrade");
-                                }
-                            }
-                        };
-                        runnable.runTaskLater(NikeyV1.getPlugin(),20);
-                    }
-                    if (config.getBoolean(player.getName()+"."+stone+".cooldown1"+".timer")){
-                        BukkitRunnable runnable = new BukkitRunnable() {
-
-                            @Override
-                            public void run() {
-                                config.set(player.getName()+"."+stone+".cooldown1"+".timer",false);
-                                if (!config.getBoolean(player.getName()+"."+stone+".cooldown1"+".timer")){
-                                    StoneCooldown1 stoneCooldown1 = new StoneCooldown1();
-                                    stoneCooldown1.setTime(config.getInt(player.getName()+"."+stone+".cooldown1"+".time"));
-                                    stoneCooldown1.setStopTime(config.getInt(player.getName()+"."+stone+".cooldown1"+".stoptime"));
-                                    stoneCooldown1.start(player);
-                                }else {
-                                    player.sendMessage("§cPlugin Error: "+event.getEventName()+".continue.cooldown");
-                                }
-                            }
-                        };
-                        runnable.runTaskLater(NikeyV1.getPlugin(),20);
-                    }
                 }
             }
         }

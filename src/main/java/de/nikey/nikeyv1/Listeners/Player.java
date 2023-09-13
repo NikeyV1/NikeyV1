@@ -28,12 +28,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings("ALL")
 public class Player implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        NikeyV1.getPlugin().reloadConfig();
-        TimerBuild timerBuild = new TimerBuild();
         org.bukkit.entity.Player p = event.getPlayer();
     }
 

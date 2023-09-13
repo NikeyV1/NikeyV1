@@ -34,19 +34,17 @@ public class Firestone implements Listener {
             return;
         }
         if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#e66b63")+"Lava Stein")&&
-        event.getItem().getType() == Material.FIREWORK_STAR){
+                event.getItem().getType() == Material.FIREWORK_STAR){
             Player p = event.getPlayer();
             ItemStack item = event.getItem();
             String[] arr = item.getLore().get(1).split(":");
             int i = Integer.parseInt(arr[1]);
             FileConfiguration config = NikeyV1.plugin.getConfig();
+            config.set(p.getName()+".stone","Fire");
             config.set(p.getName()+".fire",null);
             config.set(p.getName()+".level",i);
             NikeyV1.plugin.saveConfig();
             String stone = config.getString(p.getName() + ".stone");
-            if (!config.getBoolean(p.getName()+"."+stone+".cooldown1"+".timer")){
-                new ServerScoreboard(p);
-            }
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
                 StoneCooldown1 stoneCooldows = new StoneCooldown1();
                 switch (i){

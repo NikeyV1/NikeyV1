@@ -18,7 +18,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -47,6 +46,7 @@ public class Electrostone implements Listener {
             int i = Integer.parseInt(arr[1]);
             FileConfiguration config = NikeyV1.plugin.getConfig();
             config.set(p.getName()+".elektro",null);
+            config.set(p.getName()+".stone","Elektro");
             config.set(p.getName()+".level",i);
             NikeyV1.plugin.saveConfig();
             String stone = config.getString(p.getName() + ".stone");
@@ -168,17 +168,15 @@ public class Electrostone implements Listener {
                         stoneCooldown.setStopTime(180);
                         stoneCooldown.start(p);
                         for (Entity e : entity.getNearbyEntities(1,1,1)){
-                            if (e != p){
-                                e.getWorld().strikeLightning(e.getLocation());
-                                stunned.add(e);
-                                BukkitRunnable runnable = new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        stunned.clear();
-                                    }
-                                };
-                                runnable.runTaskLater(NikeyV1.getPlugin(),20*5);
-                            }
+                            e.getWorld().strikeLightning(e.getLocation());
+                            stunned.add(e);
+                            BukkitRunnable runnable = new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    stunned.clear();
+                                }
+                            };
+                            runnable.runTaskLater(NikeyV1.getPlugin(),20*5);
                         }
                     }
                 }

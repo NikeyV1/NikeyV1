@@ -35,17 +35,18 @@ public class StoneCooldown2 {
             task = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    NikeyV1.getPlugin().reloadConfig();
                     if (Bukkit.getOnlinePlayers().contains(player)){
                         if (getStopTime() > getTime()){
                             config.set(player.getName()+"."+stone+".cooldown2"+".time",getTime());
                             config.set(player.getName()+"."+stone+".cooldown2"+".timer",true);
+                            NikeyV1.getPlugin().reloadConfig();
                             NikeyV1.getPlugin().saveConfig();
                             setTime(getTime()+1);
                         }else {
                             config.set(player.getName()+"."+stone+".cooldown2"+".timer",false);
                             config.set(player.getName()+"."+stone+".cooldown2"+".time",0);
                             config.set(player.getName()+"."+stone+".cooldown2"+".stoptime",0);
+                            NikeyV1.getPlugin().reloadConfig();
                             NikeyV1.getPlugin().saveConfig();
                             this.cancel();
                         }

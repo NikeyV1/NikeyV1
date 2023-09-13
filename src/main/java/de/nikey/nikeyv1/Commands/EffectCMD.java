@@ -125,6 +125,9 @@ public class EffectCMD implements CommandExecutor {
                     effect.tornadoParticle = Particle.ELECTRIC_SPARK;
                     effect.start();
                     p.sendMessage("Started");
+                }else if (args[0].equalsIgnoreCase("Test")){
+                    String stone = NikeyV1.getPlugin().getConfig().getString(p.getName() + ".stone");
+                    p.sendMessage(String.valueOf(NikeyV1.getPlugin().getConfig().getInt(p.getName()+"."+stone+".cooldown1"+".time")));
                 }
             }else {
                 p.sendMessage("That doesnt work like so");

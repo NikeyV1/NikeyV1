@@ -20,8 +20,14 @@ public class ServerScoreboard extends ScoreboardBuilder {
 
     @Override
     public void update() {
-        FileConfiguration config = NikeyV1.plugin.getConfig();
-        setScore("§7Level: "+ChatColor.AQUA+config.getString(player.getName()+".level"),5);
+        BukkitRunnable runnable = new BukkitRunnable() {
+            @Override
+            public void run() {
+                FileConfiguration config = NikeyV1.plugin.getConfig();
+                setScore("§7Level: "+ChatColor.AQUA+config.getString(player.getName()+".level"),5);
+            }
+        };
+        runnable.runTaskTimer(NikeyV1.getPlugin(),60,60);
     }
 
     @Override
@@ -44,7 +50,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 if (NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown1"+".time") == 0 &&NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown1"+".stoptime") == 0){
                     setScore("§7Ability 1: §aReady",4);
                 }else {
-                    setScore("§7Ability 1: §c"+ stoneCooldown1.getTime(),4);
+                    setScore("§7Ability 1: §c"+ NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown1"+".time")+"/"+NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown1"+".stoptime"),4);
                 }
                 if (NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown2"+".time") == 0 &&NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown2"+".stoptime") == 0){
                     setScore("§7Ability 2: §aReady",3);
