@@ -35,6 +35,7 @@ public class StoneCooldown2 {
             task = new BukkitRunnable() {
                 @Override
                 public void run() {
+                    NikeyV1.getPlugin().reloadConfig();
                     if (Bukkit.getOnlinePlayers().contains(player)){
                         if (getStopTime() > getTime()){
                             config.set(player.getName()+"."+stone+".cooldown2"+".time",getTime());
@@ -46,10 +47,10 @@ public class StoneCooldown2 {
                             config.set(player.getName()+"."+stone+".cooldown2"+".time",0);
                             config.set(player.getName()+"."+stone+".cooldown2"+".stoptime",0);
                             NikeyV1.getPlugin().saveConfig();
-                            cancel();
+                            this.cancel();
                         }
                     }else {
-                        cancel();
+                        this.cancel();
                         NikeyV1.getPlugin().getLogger().info(player.getName()+" left while cooldown");
                     }
                 }
@@ -58,5 +59,5 @@ public class StoneCooldown2 {
         }else {
             player.sendMessage("§cYou are on cooldown");
         }
-    }    
+    }
 }

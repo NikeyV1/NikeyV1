@@ -1,5 +1,6 @@
 package de.nikey.nikeyv1;
 
+import com.tchristofferson.configupdater.ConfigUpdater;
 import de.nikey.nikeyv1.Commands.EffectCMD;
 import de.nikey.nikeyv1.Commands.stone;
 import de.nikey.nikeyv1.Listeners.Player;
@@ -20,8 +21,12 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 
+@SuppressWarnings("ALL")
 public final class NikeyV1 extends JavaPlugin {
     public static NikeyV1 plugin;
     public static EffectManager em;
@@ -32,6 +37,13 @@ public final class NikeyV1 extends JavaPlugin {
         plugin = this;
         reloadConfig();
         saveDefaultConfig();
+        File configFile = new File(getDataFolder(), "config.yml");
+        try {
+            ConfigUpdater.update(plugin, "config.yml", configFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         Items.EnchantedAnvil();
         Items.Soulrecepie();
         PluginManager manager = Bukkit.getPluginManager();

@@ -168,15 +168,17 @@ public class Electrostone implements Listener {
                         stoneCooldown.setStopTime(180);
                         stoneCooldown.start(p);
                         for (Entity e : entity.getNearbyEntities(1,1,1)){
-                            e.getWorld().strikeLightning(e.getLocation());
-                            stunned.add(e);
-                            BukkitRunnable runnable = new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    stunned.clear();
-                                }
-                            };
-                            runnable.runTaskLater(NikeyV1.getPlugin(),20*5);
+                            if (e != p){
+                                e.getWorld().strikeLightning(e.getLocation());
+                                stunned.add(e);
+                                BukkitRunnable runnable = new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        stunned.clear();
+                                    }
+                                };
+                                runnable.runTaskLater(NikeyV1.getPlugin(),20*5);
+                            }
                         }
                     }
                 }

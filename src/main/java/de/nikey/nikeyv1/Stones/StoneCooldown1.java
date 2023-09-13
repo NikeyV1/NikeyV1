@@ -25,9 +25,8 @@ public class StoneCooldown1 {
     public void setTime(int time) {
         this.time = time;
     }
-    private BukkitRunnable task;
+    protected BukkitRunnable task;
     public void start(Player player){
-        player.sendMessage("0");
         FileConfiguration config = NikeyV1.plugin.getConfig();
         String stone = config.getString(player.getName() + ".stone");
         if (!config.getBoolean(player.getName()+"."+stone+".cooldown1.timer")){
@@ -36,22 +35,26 @@ public class StoneCooldown1 {
             task = new BukkitRunnable() {
                 @Override
                 public void run() {
+                    NikeyV1.getPlugin().reloadConfig();
                     if (Bukkit.getOnlinePlayers().contains(player)){
                         if (getStopTime() > getTime()){
                             config.set(player.getName()+"."+stone+".cooldown1"+".time",getTime());
                             config.set(player.getName()+"."+stone+".cooldown1"+".timer",true);
                             NikeyV1.getPlugin().saveConfig();
                             setTime(getTime()+1);
+                            if(config.getInt(player.getName()+"."+stone+".cooldown1"+time) != getTime()){
+                                player.sendMessage("Error: config != time");
+                            }
                         }else {
                             config.set(player.getName()+"."+stone+".cooldown1"+".timer",false);
                             config.set(player.getName()+"."+stone+".cooldown1"+".time",0);
                             config.set(player.getName()+"."+stone+".cooldown1"+".stoptime",0);
                             NikeyV1.getPlugin().saveConfig();
-                            cancel();
+                            this.cancel();
                             return;
                         }
                     }else {
-                        cancel();
+                        this.cancel();
                         NikeyV1.getPlugin().getLogger().info(player.getName()+" left while cooldown");
                     }
                 }
