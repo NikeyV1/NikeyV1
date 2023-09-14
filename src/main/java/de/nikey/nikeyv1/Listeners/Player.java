@@ -47,11 +47,12 @@ public class Player implements Listener {
             for (org.bukkit.entity.Player player : Bukkit.getOnlinePlayers()){
                 StoneCooldown1 stoneCooldown1 = new StoneCooldown1();
                 if (config.getBoolean(player.getName()+"."+stone+".cooldown1"+".timer")){
-                    config.set(player.getName()+"."+stone+".cooldown1"+".timer",false);
-                            if (!config.getBoolean(player.getName()+"."+stone+".cooldown1"+".timer")){
-                                stoneCooldown1.setTime(config.getInt(player.getName()+"."+stone+".cooldown1"+".time"));
-                                stoneCooldown1.setStopTime(config.getInt(player.getName()+"."+stone+".cooldown1"+".stoptime"));
-                                stoneCooldown1.start(player);
+                    config.set(p.getName()+"."+stone+".cooldown1"+".timer",false);
+                            if (!config.getBoolean(p.getName()+"."+stone+".cooldown1"+".timer")){
+                                stoneCooldown1.setCoolDown(config.getInt(p.getName()+"."+stone+".cooldown1"+".time"));
+                                stoneCooldown1.setStopTime(config.getInt(p.getName()+"."+stone+".cooldown1"+".stoptime"));
+                                stoneCooldown1.setPlayer(p);
+                                stoneCooldown1.start();
                             }else {
                                 player.sendMessage("§cPlugin Error: "+event.getEventName()+".continue.cooldown");
                             }

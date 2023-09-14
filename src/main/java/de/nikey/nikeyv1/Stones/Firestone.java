@@ -44,7 +44,6 @@ public class Firestone implements Listener {
             config.set(p.getName()+".fire",null);
             config.set(p.getName()+".level",i);
             NikeyV1.plugin.saveConfig();
-            String stone = config.getString(p.getName() + ".stone");
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
                 StoneCooldown1 stoneCooldows = new StoneCooldown1();
                 switch (i){
@@ -54,10 +53,11 @@ public class Firestone implements Listener {
                         p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0,true,false));
                         break;
                     case 5:
-                        stoneCooldows.setTime(1);
+                        stoneCooldows.setCoolDown(1);
                         stoneCooldows.setStopTime(100);
-                        stoneCooldows.start(p);
-                        if (!config.getBoolean(p.getName()+"."+stone+".cooldown1"+".timer")){
+                        stoneCooldows.setPlayer(p);
+                        stoneCooldows.start();
+                        if (!stoneCooldows.getTask().contains(p.getUniqueId())){
                             timer = 20;
                             SphereEffect effect = new SphereEffect(NikeyV1.em);
                             effect.setEntity(p);
@@ -93,10 +93,11 @@ public class Firestone implements Listener {
                         }
                         break;
                     case 10:
-                        stoneCooldows.setTime(1);
+                        stoneCooldows.setCoolDown(1);
                         stoneCooldows.setStopTime(100);
-                        stoneCooldows.start(p);
-                        if (!config.getBoolean(p.getName()+"."+stone+".cooldown1"+".timer")){
+                        stoneCooldows.setPlayer(p);
+                        stoneCooldows.start();
+                        if (!stoneCooldows.getTask().contains(p.getUniqueId())){
                             timer = 20;
                             SphereEffect effect = new SphereEffect(NikeyV1.em);
                             effect.setEntity(p);

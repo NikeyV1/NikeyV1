@@ -6,9 +6,23 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
+
 public class StoneCooldown1 {
-    private int time;
+    private int coolDown;
     private int stopTime;
+    private int taskId;
+    private Player player;
+
+
+    public ArrayList<UUID> getTask() {
+        return task;
+    }
+
+
+    public ArrayList<UUID> task = new ArrayList<>();
 
     public int getStopTime() {
         return stopTime;
@@ -18,44 +32,62 @@ public class StoneCooldown1 {
         this.stopTime = stopTime;
     }
 
-    public int getTime() {
-        return time;
+    public int getCoolDown() {
+        return coolDown;
     }
 
-    public void setTime(int time) {
-        this.time = time;
-    }
-    public void start(Player player){
-        FileConfiguration config = NikeyV1.plugin.getConfig();
-        String stone = config.getString(player.getName() + ".stone");
-        if (!config.getBoolean(player.getName()+"."+stone+".cooldown1.timer")){
-            config.set(player.getName()+"."+stone+".cooldown1"+".stoptime",getStopTime());
-            NikeyV1.plugin.saveConfig();
+    public void start(){
+        if (!task.contains(player.getUniqueId())) {
+            FileConfiguration config = NikeyV1.getPlugin().getConfig();
+            String stone = config.getString(player.getName() + ".stone");
             BukkitRunnable runnable = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (Bukkit.getOnlinePlayers().contains(player)){
-                        if (getStopTime() > getTime()){
-                            config.set(player.getName()+"."+stone+".cooldown1"+".time",getTime());
-                            config.set(player.getName()+"."+stone+".cooldown1"+".timer",true);
-                            NikeyV1.getPlugin().saveConfig();
-                            setTime(getTime()+1);
-                        }else {
-                            config.set(player.getName()+"."+stone+".cooldown1"+".timer",false);
-                            config.set(player.getName()+"."+stone+".cooldown1"+".time",0);
-                            config.set(player.getName()+"."+stone+".cooldown1"+".stoptime",0);
-                            NikeyV1.getPlugin().saveConfig();
-                            cancel();
-                        }
-                    }else {
+                    if (!player.isOnline()){
+                        NikeyV1.getPlugin().getLogger().info(player.getName()+" left while cooldown 1 with time "+getCoolDown());
+                        config.set(player.getName()+"."+stone+".cooldown1"+".timer",true);
+                        config.set(player.getName()+"."+stone+".cooldown1"+".time",getCoolDown());
+                        config.set(player.getName()+"."+stone+".cooldown1"+".stoptime",getStopTime());
+                        NikeyV1.getPlugin().saveConfig();
                         cancel();
-                        NikeyV1.getPlugin().getLogger().info(player.getName()+" left while cooldown");
+                        return;
+                    }else {
+                        player.sendMessage(String.valueOf(getCoolDown()));
                     }
+                    if (getCoolDown() == getStopTime()) {
+                        player.sendMessage("Cooldown is done!, you can use it now!");
+                        task.remove(player.getUniqueId());
+                        config.set(player.getName()+"."+stone+".cooldown1"+".timer",false);
+                        config.set(player.getName()+"."+stone+".cooldown1"+".time",0);
+                        config.set(player.getName()+"."+stone+".cooldown1"+".stoptime",0);
+                        NikeyV1.getPlugin().saveConfig();
+                        cancel();
+                    };
+                    setCoolDown(getCoolDown()+1);
                 }
             };
-            runnable.runTaskTimer(NikeyV1.getPlugin(),0,20);
-        }else {
-            player.sendMessage("§cYou are on cooldown");
+            runnable.runTaskTimer(NikeyV1.getPlugin(),20,20);
+            setTaskId(runnable.getTaskId());
         }
+    }
+
+    public int getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public void setCoolDown(int coolDown) {
+        this.coolDown = coolDown;
     }
 }

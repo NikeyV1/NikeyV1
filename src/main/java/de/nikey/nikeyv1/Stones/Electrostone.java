@@ -53,10 +53,11 @@ public class Electrostone implements Listener {
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
                 StoneCooldown1 stoneCooldows = new StoneCooldown1();
                 if (i ==10 || i == 11){
-                    stoneCooldows.setTime(1);
+                    stoneCooldows.setCoolDown(1);
                     stoneCooldows.setStopTime(100);
-                    stoneCooldows.start(p);
-                    if (!config.getBoolean(p.getName()+"."+stone+".cooldown1"+".timer")){
+                    stoneCooldows.setPlayer(p);
+                    stoneCooldows.start();
+                    if (!stoneCooldows.getTask().contains(p.getUniqueId())){
                         timer = 20;
                         World world = p.getWorld();
                         BukkitRunnable runnable = new BukkitRunnable() {
@@ -96,10 +97,12 @@ public class Electrostone implements Listener {
                     }
 
                 } else if (i >= 12) {
-                    stoneCooldows.setTime(1);
-                    stoneCooldows.setStopTime(100);
-                    stoneCooldows.start(p);
-                    if (!config.getBoolean(p.getName()+"."+stone+".cooldown1"+".timer")){
+                    if (!stoneCooldows.getTask().contains(p.getUniqueId())){
+                        stoneCooldows.task.add(p.getUniqueId());
+                        stoneCooldows.setCoolDown(1);
+                        stoneCooldows.setStopTime(100);
+                        stoneCooldows.setPlayer(p);
+                        stoneCooldows.start();
                         timer = 20;
                         World world = p.getWorld();
                         BukkitRunnable runnable = new BukkitRunnable() {

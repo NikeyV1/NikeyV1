@@ -1,6 +1,7 @@
 package de.nikey.nikeyv1.Commands;
 
 import de.nikey.nikeyv1.NikeyV1;
+import de.nikey.nikeyv1.Stones.StoneCooldown1;
 import de.slikey.effectlib.effect.*;
 import org.bukkit.Particle;
 import org.bukkit.command.Command;
@@ -128,6 +129,10 @@ public class EffectCMD implements CommandExecutor {
                 }else if (args[0].equalsIgnoreCase("Test")){
                     String stone = NikeyV1.getPlugin().getConfig().getString(p.getName() + ".stone");
                     p.sendMessage(String.valueOf(NikeyV1.getPlugin().getConfig().getInt(p.getName()+"."+stone+".cooldown1"+".time")));
+                }else if (args[0].equalsIgnoreCase("clear")){
+                    StoneCooldown1 stoneCooldown1 = new StoneCooldown1();
+                    stoneCooldown1.getTask().clear();
+                    p.sendMessage("Done cleared:"+ stoneCooldown1.getTask());
                 }
             }else {
                 p.sendMessage("That doesnt work like so");

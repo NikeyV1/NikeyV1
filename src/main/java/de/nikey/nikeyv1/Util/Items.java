@@ -16,7 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings("ALL")
 public class Items {
 
     public static void SoulofStrenght(Player player) {
