@@ -2,7 +2,8 @@ package de.nikey.nikeyv1.Listeners;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
-import de.nikey.nikeyv1.Stones.StoneCooldown1;
+import de.nikey.nikeyv1.Stones.Electrostone;
+import de.nikey.nikeyv1.Stones.Firestone;
 import de.nikey.nikeyv1.Stones.StoneCooldown2;
 import de.nikey.nikeyv1.Timer.TimerBuild;
 import de.nikey.nikeyv1.Util.Items;
@@ -21,7 +22,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -30,6 +30,7 @@ import java.util.Random;
 
 @SuppressWarnings("ALL")
 public class Player implements Listener {
+    int a;
     @EventHandler(ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
         org.bukkit.entity.Player p = event.getPlayer();
@@ -44,18 +45,57 @@ public class Player implements Listener {
         FileConfiguration config = NikeyV1.plugin.getConfig();
         if (config.contains(p.getName())){
             String stone = config.getString(p.getName() + ".stone");
-            for (org.bukkit.entity.Player player : Bukkit.getOnlinePlayers()){
-                StoneCooldown1 stoneCooldown1 = new StoneCooldown1();
-                if (config.getBoolean(player.getName()+"."+stone+".cooldown1"+".timer")){
-                    config.set(p.getName()+"."+stone+".cooldown1"+".timer",false);
-                            if (!config.getBoolean(p.getName()+"."+stone+".cooldown1"+".timer")){
-                                stoneCooldown1.setTime(config.getInt(p.getName()+"."+stone+".cooldown1"+".time"));
-                                stoneCooldown1.setStopTime(config.getInt(p.getName()+"."+stone+".cooldown1"+".stoptime"));
-                                stoneCooldown1.start(p);
-                            }else {
-                                player.sendMessage("§cPlugin Error: "+event.getEventName()+".continue.cooldown");
+            if (config.getBoolean(p.getName()+"."+stone+".cooldown1.timer")){
+                config.set(p.getName()+"."+stone+".cooldown1.timer",false);
+                NikeyV1.plugin.saveConfig();
+                if (stone.equalsIgnoreCase("Fire")){
+                    a = config.getInt(p.getName() + "." + stone + ".cooldown1.time");
+                    Firestone.cooldown.put(p,a);
+                    new BukkitRunnable(){
+                        @Override
+                        public void run() {
+                            a++;
+                            if (!p.isOnline()){
+                                config.set(p.getName()+"."+stone+"."+"cooldown1.time",a);
+                                config.set(p.getName()+"."+stone+"."+"cooldown1.timer",true);
+                                NikeyV1.getPlugin().saveConfig();
+                                cancel();
                             }
+                            if (a < 100){
+                            Firestone.cooldown.replace(p,a);
+                            }else {
+                                a=0;
+                                Firestone.cooldown.remove(p);
+                                cancel();
+                            }
+                        }
+                    }.runTaskTimer(NikeyV1.getPlugin(),0L,20);
+                }else if (stone.equalsIgnoreCase("Elektro")){
+                    a = config.getInt(p.getName() + "." + stone + ".cooldown1.time");
+                    Electrostone.cooldown.put(p,a);
+                    new BukkitRunnable(){
+                        @Override
+                        public void run() {
+                            a++;
+                            if (!p.isOnline()){
+                                config.set(p.getName()+"."+stone+"."+"cooldown1.time",a);
+                                config.set(p.getName()+"."+stone+"."+"cooldown1.timer",true);
+                                NikeyV1.getPlugin().saveConfig();
+                                cancel();
+                            }
+                            if (a < 100){
+                                Electrostone.cooldown.replace(p,a);
+                            }else {
+                                a=0;
+                                Electrostone.cooldown.remove(p);
+                                cancel();
+                            }
+                        }
+                    }.runTaskTimer(NikeyV1.getPlugin(),0L,20);
                 }
+            }
+            for (org.bukkit.entity.Player player : Bukkit.getOnlinePlayers()){
+
                 StoneCooldown2 stoneCooldown2 = new StoneCooldown2();
                 if (config.getBoolean(player.getName()+"."+stone+".cooldown2"+".timer")){
                     BukkitRunnable runnable = new BukkitRunnable() {

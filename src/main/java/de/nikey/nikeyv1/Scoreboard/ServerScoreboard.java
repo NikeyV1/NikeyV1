@@ -2,13 +2,12 @@ package de.nikey.nikeyv1.Scoreboard;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Stones.Electrostone;
-import de.nikey.nikeyv1.Stones.StoneCooldown1;
+import de.nikey.nikeyv1.Stones.Firestone;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.eclipse.aether.impl.RepositoryEventDispatcher;
 
 @SuppressWarnings("ALL")
 public class ServerScoreboard extends ScoreboardBuilder {
@@ -52,6 +51,12 @@ public class ServerScoreboard extends ScoreboardBuilder {
                         setScore("§7Ability 1: §aReady",4);
                     }else {
                         setScore("§7Ability 1: §c"+ Electrostone.cooldown.get(player) +"/100",4);
+                    }
+                }else if (stone.equalsIgnoreCase("Fire")){
+                    if (!Firestone.cooldown.containsKey(player)){
+                        setScore("§7Ability 1: §aReady",4);
+                    }else {
+                        setScore("§7Ability 1: §c"+ Firestone.cooldown.get(player) +"/100",4);
                     }
                 }
                 if (NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown2"+".time") == 0 &&NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown2"+".stoptime") == 0){

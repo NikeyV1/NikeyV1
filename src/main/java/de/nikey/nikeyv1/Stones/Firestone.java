@@ -22,10 +22,13 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Firestone implements Listener {
     private ArrayList<Entity> entities = new ArrayList<>();
     private int timer;
+    public static HashMap<Player, Integer> cooldown = new HashMap<>();
+    int c;
 
 
     @EventHandler
@@ -43,93 +46,123 @@ public class Firestone implements Listener {
             config.set(p.getName()+".stone","Fire");
             config.set(p.getName()+".fire",null);
             config.set(p.getName()+".level",i);
+            String stone = NikeyV1.getPlugin().getConfig().getString(p.getName() + ".stone");
             NikeyV1.plugin.saveConfig();
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
-                StoneCooldown1 stoneCooldows = new StoneCooldown1();
-                switch (i){
-                    case 1:
-                    case 2:
-                    case 3:
-                        p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0,true,false));
-                        break;
-                    case 5:
-                        if (!stoneCooldows.cooldown.containsKey(p.getName())){
-                            stoneCooldows.setTime(1);
-                            stoneCooldows.setStopTime(100);
-                            stoneCooldows.start(p);
-                            timer = 20;
-                            SphereEffect effect = new SphereEffect(NikeyV1.em);
-                            effect.setEntity(p);
-                            effect.duration = 20000;
-                            effect.particles = 120;
-                            effect.particle = Particle.FLAME;
-                            effect.radius = 20.0;
-                            effect.start();
-                            BukkitRunnable runnable = new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(),20,20,20)){
-                                        if (e instanceof LivingEntity){
-                                            LivingEntity entity = (LivingEntity) e;
-                                            entities.add(entity);
-                                            if (entity != p){
-                                                e.setVisualFire(true);
-                                                entity.damage(2);
-                                            }
-                                            if (timer == 0){
-                                                entity.setVisualFire(false);
-                                                entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                entities.clear();
-                                                cancel();
-                                                return;
-                                            }
+                if (i == 3){
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0,true,false));
+                } else if (i == 10 || i == 11) {
+                    if (!cooldown.containsKey(p)){
+                        cooldown.put(p,0);
+                        c = 0;
+                        new BukkitRunnable(){
+                            @Override
+                            public void run() {
+                                c++;
+                                if (!p.isOnline()){
+                                    config.set(p.getName()+"."+stone+"."+"cooldown1.time",c);
+                                    config.set(p.getName()+"."+stone+"."+"cooldown1.timer",true);
+                                    NikeyV1.getPlugin().saveConfig();
+                                    cancel();
+                                }
+                                if (cooldown.get(p) < 100){
+                                    cooldown.replace(p,c);
+                                }else {
+                                    c=0;
+                                    cooldown.remove(p);
+                                    cancel();
+                                }
+                            }
+                        }.runTaskTimer(NikeyV1.getPlugin(),0L,20);
+                        timer = 20;
+                        SphereEffect effect = new SphereEffect(NikeyV1.em);
+                        effect.setEntity(p);
+                        effect.duration = 20000;
+                        effect.particles = 120;
+                        effect.particle = Particle.FLAME;
+                        effect.radius = 20.0;
+                        effect.start();
+                        BukkitRunnable runnable = new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(),20,20,20)){
+                                    if (e instanceof LivingEntity){
+                                        LivingEntity entity = (LivingEntity) e;
+                                        entities.add(entity);
+                                        if (entity != p){
+                                            e.setVisualFire(true);
+                                            entity.damage(2);
+                                        }
+                                        if (timer == 0){
+                                            entity.setVisualFire(false);
+                                            entities.forEach(entity1 -> entity1.setVisualFire(false));
+                                            entities.clear();
+                                            cancel();
+                                            return;
                                         }
                                     }
-                                    timer--;
                                 }
-                            };
-                            runnable.runTaskTimer(NikeyV1.getPlugin(),0,20);
-                        }
-                        break;
-                    case 10:
-                        stoneCooldows.setTime(1);
-                        stoneCooldows.setStopTime(100);
-                        stoneCooldows.start(p);
-                        if (!stoneCooldows.cooldown.containsKey(p.getName())){
-                            timer = 20;
-                            SphereEffect effect = new SphereEffect(NikeyV1.em);
-                            effect.setEntity(p);
-                            effect.duration = 20000;
-                            effect.particles = 200;
-                            effect.particle = Particle.FLAME;
-                            effect.radius = 30.0;
-                            effect.start();
-                            BukkitRunnable runnable = new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(),30,30,30)){
-                                        if (e instanceof LivingEntity){
-                                            LivingEntity entity = (LivingEntity) e;
-                                            entities.add(entity);
-                                            if (entity != p){
-                                                e.setVisualFire(true);
-                                                entity.damage(3);
-                                            }
-                                            if (timer == 0){
-                                                entity.setVisualFire(false);
-                                                entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                entities.clear();
-                                                cancel();
-                                                return;
-                                            }
+                                timer--;
+                            }
+                        };
+                        runnable.runTaskTimer(NikeyV1.getPlugin(),0,20);
+                    }
+                }else if (i >= 12) {
+                    if (!cooldown.containsKey(p)){
+                        cooldown.put(p,0);
+                        c = 0;
+                        new BukkitRunnable(){
+                            @Override
+                            public void run() {
+                                c++;
+                                if (!p.isOnline()){
+                                    config.set(p.getName()+"."+stone+"."+"cooldown1.time",c);
+                                    config.set(p.getName()+"."+stone+"."+"cooldown1.timer",true);
+                                    NikeyV1.getPlugin().saveConfig();
+                                    cancel();
+                                }
+                                if (cooldown.get(p) < 100){
+                                    cooldown.replace(p,c);
+                                }else {
+                                    c=0;
+                                    cooldown.remove(p);
+                                    cancel();
+                                }
+                            }
+                        }.runTaskTimer(NikeyV1.getPlugin(),0L,20);
+                        timer = 20;
+                        SphereEffect effect = new SphereEffect(NikeyV1.em);
+                        effect.setEntity(p);
+                        effect.duration = 20000;
+                        effect.particles = 200;
+                        effect.particle = Particle.FLAME;
+                        effect.radius = 30.0;
+                        effect.start();
+                        BukkitRunnable runnable = new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(),30,30,30)){
+                                    if (e instanceof LivingEntity){
+                                        LivingEntity entity = (LivingEntity) e;
+                                        entities.add(entity);
+                                        if (entity != p){
+                                            e.setVisualFire(true);
+                                            entity.damage(3);
+                                        }
+                                        if (timer == 0){
+                                            entity.setVisualFire(false);
+                                            entities.forEach(entity1 -> entity1.setVisualFire(false));
+                                            entities.clear();
+                                            cancel();
+                                            return;
                                         }
                                     }
-                                    timer--;
                                 }
-                            };
-                            runnable.runTaskTimer(NikeyV1.getPlugin(),0,20);
-                        }
-
+                                timer--;
+                            }
+                        };
+                        runnable.runTaskTimer(NikeyV1.getPlugin(),0,20);
+                    }
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
                 if (i <= 4) {

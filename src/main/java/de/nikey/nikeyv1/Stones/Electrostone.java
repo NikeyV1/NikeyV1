@@ -62,6 +62,12 @@ public class Electrostone implements Listener {
                             @Override
                             public void run() {
                                 c++;
+                                if (!p.isOnline()){
+                                    config.set(p.getName()+"."+stone+"."+"cooldown1.time",c);
+                                    config.set(p.getName()+"."+stone+"."+"cooldown1.timer",true);
+                                    NikeyV1.getPlugin().saveConfig();
+                                    cancel();
+                                }
                                 if (cooldown.get(p) < 100){
                                     cooldown.replace(p,c);
                                 }else {
@@ -110,12 +116,28 @@ public class Electrostone implements Listener {
                     }
 
                 } else if (i >= 12) {
-                    StoneCooldown1 stoneCooldows = new StoneCooldown1();
-                    if (!stoneCooldows.cooldown.containsKey(p.getName())){
-                        p.sendMessage(String.valueOf(stoneCooldows.cooldown.get(p.getName())));
-                        stoneCooldows.setTime(1);
-                        stoneCooldows.setStopTime(100);
-                        stoneCooldows.start(p);
+                    if (!cooldown.containsKey(p)){
+                        cooldown.put(p,0);
+                        c = 0;
+                        new BukkitRunnable(){
+                            @Override
+                            public void run() {
+                                c++;
+                                if (!p.isOnline()){
+                                    config.set(p.getName()+"."+stone+"."+"cooldown1.time",c);
+                                    config.set(p.getName()+"."+stone+"."+"cooldown1.timer",true);
+                                    NikeyV1.getPlugin().saveConfig();
+                                    cancel();
+                                }
+                                if (cooldown.get(p) < 100){
+                                    cooldown.replace(p,c);
+                                }else {
+                                    c=0;
+                                    cooldown.remove(p);
+                                    cancel();
+                                }
+                            }
+                        }.runTaskTimer(NikeyV1.getPlugin(),0L,20);
                         timer = 20;
                         World world = p.getWorld();
                         BukkitRunnable runnable = new BukkitRunnable() {
