@@ -27,12 +27,15 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("ALL")
 public class Electrostone implements Listener {
     private static ArrayList<Entity> stunned = new ArrayList<>();
+    public static HashMap<Player, Integer> cooldown = new HashMap<>();
     private int timer;
+    int c;
 
 
     @EventHandler
@@ -51,13 +54,23 @@ public class Electrostone implements Listener {
             NikeyV1.plugin.saveConfig();
             String stone = config.getString(p.getName() + ".stone");
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
-                StoneCooldown1 stoneCooldows = new StoneCooldown1();
                 if (i ==10 || i == 11){
-                    stoneCooldows.setCoolDown(1);
-                    stoneCooldows.setStopTime(100);
-                    stoneCooldows.setPlayer(p);
-                    stoneCooldows.start();
-                    if (!stoneCooldows.getTask().contains(p.getUniqueId())){
+                    if (!cooldown.containsKey(p)){
+                        cooldown.put(p,0);
+                        c = 0;
+                        new BukkitRunnable(){
+                            @Override
+                            public void run() {
+                                c++;
+                                if (cooldown.get(p) < 100){
+                                    cooldown.replace(p,c);
+                                }else {
+                                    c=0;
+                                    cooldown.remove(p);
+                                    cancel();
+                                }
+                            }
+                        }.runTaskTimer(NikeyV1.getPlugin(),0L,20);
                         timer = 20;
                         World world = p.getWorld();
                         BukkitRunnable runnable = new BukkitRunnable() {
@@ -97,12 +110,12 @@ public class Electrostone implements Listener {
                     }
 
                 } else if (i >= 12) {
-                    if (!stoneCooldows.getTask().contains(p.getUniqueId())){
-                        stoneCooldows.task.add(p.getUniqueId());
-                        stoneCooldows.setCoolDown(1);
+                    StoneCooldown1 stoneCooldows = new StoneCooldown1();
+                    if (!stoneCooldows.cooldown.containsKey(p.getName())){
+                        p.sendMessage(String.valueOf(stoneCooldows.cooldown.get(p.getName())));
+                        stoneCooldows.setTime(1);
                         stoneCooldows.setStopTime(100);
-                        stoneCooldows.setPlayer(p);
-                        stoneCooldows.start();
+                        stoneCooldows.start(p);
                         timer = 20;
                         World world = p.getWorld();
                         BukkitRunnable runnable = new BukkitRunnable() {

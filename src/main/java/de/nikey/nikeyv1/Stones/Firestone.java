@@ -53,11 +53,10 @@ public class Firestone implements Listener {
                         p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0,true,false));
                         break;
                     case 5:
-                        stoneCooldows.setCoolDown(1);
-                        stoneCooldows.setStopTime(100);
-                        stoneCooldows.setPlayer(p);
-                        stoneCooldows.start();
-                        if (!stoneCooldows.getTask().contains(p.getUniqueId())){
+                        if (!stoneCooldows.cooldown.containsKey(p.getName())){
+                            stoneCooldows.setTime(1);
+                            stoneCooldows.setStopTime(100);
+                            stoneCooldows.start(p);
                             timer = 20;
                             SphereEffect effect = new SphereEffect(NikeyV1.em);
                             effect.setEntity(p);
@@ -93,11 +92,10 @@ public class Firestone implements Listener {
                         }
                         break;
                     case 10:
-                        stoneCooldows.setCoolDown(1);
+                        stoneCooldows.setTime(1);
                         stoneCooldows.setStopTime(100);
-                        stoneCooldows.setPlayer(p);
-                        stoneCooldows.start();
-                        if (!stoneCooldows.getTask().contains(p.getUniqueId())){
+                        stoneCooldows.start(p);
+                        if (!stoneCooldows.cooldown.containsKey(p.getName())){
                             timer = 20;
                             SphereEffect effect = new SphereEffect(NikeyV1.em);
                             effect.setEntity(p);

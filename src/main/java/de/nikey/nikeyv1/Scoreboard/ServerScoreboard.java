@@ -1,6 +1,7 @@
 package de.nikey.nikeyv1.Scoreboard;
 
 import de.nikey.nikeyv1.NikeyV1;
+import de.nikey.nikeyv1.Stones.Electrostone;
 import de.nikey.nikeyv1.Stones.StoneCooldown1;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,11 +47,12 @@ public class ServerScoreboard extends ScoreboardBuilder {
             @Override
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
-                StoneCooldown1 stoneCooldown1= new StoneCooldown1();
-                if (!stoneCooldown1.getTask().contains(player.getUniqueId()) ){
-                    setScore("§7Ability 1: §aReady",4);
-                }else {
-                    setScore("§7Ability 1: §c"+ stoneCooldown1.getCoolDown()+"/"+stoneCooldown1.getStopTime(),4);
+                if (stone.equalsIgnoreCase("Elektro")){
+                    if (!Electrostone.cooldown.containsKey(player)){
+                        setScore("§7Ability 1: §aReady",4);
+                    }else {
+                        setScore("§7Ability 1: §c"+ Electrostone.cooldown.get(player) +"/100",4);
+                    }
                 }
                 if (NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown2"+".time") == 0 &&NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown2"+".stoptime") == 0){
                     setScore("§7Ability 2: §aReady",3);

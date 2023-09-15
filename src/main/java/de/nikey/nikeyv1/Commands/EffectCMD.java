@@ -131,8 +131,8 @@ public class EffectCMD implements CommandExecutor {
                     p.sendMessage(String.valueOf(NikeyV1.getPlugin().getConfig().getInt(p.getName()+"."+stone+".cooldown1"+".time")));
                 }else if (args[0].equalsIgnoreCase("clear")){
                     StoneCooldown1 stoneCooldown1 = new StoneCooldown1();
-                    stoneCooldown1.getTask().clear();
-                    p.sendMessage("Done cleared:"+ stoneCooldown1.getTask());
+                    stoneCooldown1.cooldown.clear();
+                    p.sendMessage("§aDone cleared!");
                 }
             }else {
                 p.sendMessage("That doesnt work like so");

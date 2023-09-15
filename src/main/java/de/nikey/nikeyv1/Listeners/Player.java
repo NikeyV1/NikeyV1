@@ -49,10 +49,9 @@ public class Player implements Listener {
                 if (config.getBoolean(player.getName()+"."+stone+".cooldown1"+".timer")){
                     config.set(p.getName()+"."+stone+".cooldown1"+".timer",false);
                             if (!config.getBoolean(p.getName()+"."+stone+".cooldown1"+".timer")){
-                                stoneCooldown1.setCoolDown(config.getInt(p.getName()+"."+stone+".cooldown1"+".time"));
+                                stoneCooldown1.setTime(config.getInt(p.getName()+"."+stone+".cooldown1"+".time"));
                                 stoneCooldown1.setStopTime(config.getInt(p.getName()+"."+stone+".cooldown1"+".stoptime"));
-                                stoneCooldown1.setPlayer(p);
-                                stoneCooldown1.start();
+                                stoneCooldown1.start(p);
                             }else {
                                 player.sendMessage("§cPlugin Error: "+event.getEventName()+".continue.cooldown");
                             }
