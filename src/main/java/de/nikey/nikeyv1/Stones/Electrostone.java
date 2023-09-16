@@ -4,10 +4,7 @@ import de.nikey.nikeyv1.NikeyV1;
 import de.slikey.effectlib.effect.CylinderEffect;
 import de.slikey.effectlib.effect.TornadoEffect;
 import io.papermc.paper.event.entity.EntityMoveEvent;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LightningStrike;
@@ -34,8 +31,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Electrostone implements Listener {
     private static ArrayList<Entity> stunned = new ArrayList<>();
     public static HashMap<Player, Integer> cooldown = new HashMap<>();
+    public static HashMap<Player, Integer> ability = new HashMap<>();
     private int timer;
     int c;
+    int a;
 
 
     @EventHandler
@@ -192,7 +191,28 @@ public class Electrostone implements Listener {
                 FileConfiguration config = NikeyV1.plugin.getConfig();
                 if (i >= 15){
                     String stone = config.getString(p.getName() + ".stone");
-                    if (!config.getBoolean(p.getName()+"."+stone+".cooldown2"+".timer")){
+                    if (!ability.containsKey(p)){
+                        ability.put(p,0);
+                        a = 0;
+                        new BukkitRunnable(){
+                            @Override
+                            public void run() {
+                                a++;
+                                if (!p.isOnline()){
+                                    config.set(p.getName()+"."+stone+"."+"cooldown2.time",a);
+                                    config.set(p.getName()+"."+stone+"."+"cooldown2.timer",true);
+                                    NikeyV1.getPlugin().saveConfig();
+                                    cancel();
+                                }
+                                if (ability.get(p) < 180){
+                                    ability.replace(p,a);
+                                }else {
+                                    a=0;
+                                    ability.remove(p);
+                                    cancel();
+                                }
+                            }
+                        }.runTaskTimer(NikeyV1.getPlugin(),0L,20);
                         stunned.add(entity);
                         entity.getWorld().strikeLightning(entity.getLocation());
                         CylinderEffect effect = new CylinderEffect(NikeyV1.em);
@@ -201,20 +221,21 @@ public class Electrostone implements Listener {
                         effect.particles = 80;
                         effect.particle = Particle.FLASH;
                         effect.start();
-                        StoneCooldown2 stoneCooldown = new StoneCooldown2();
-                        stoneCooldown.setTime(1);
-                        stoneCooldown.setStopTime(180);
-                        stoneCooldown.start(p);
                         for (Entity e : entity.getNearbyEntities(1,1,1)){
-                            e.getWorld().strikeLightning(e.getLocation());
-                            stunned.add(e);
-                            BukkitRunnable runnable = new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    stunned.clear();
+                            if (e != p){
+                                e.getWorld().strikeLightningEffect(e.getLocation());
+                                stunned.add(e);
+                                if (entity instanceof LivingEntity) {
+                                    ((org.bukkit.entity.LivingEntity)entity).damage(5,p);
                                 }
-                            };
-                            runnable.runTaskLater(NikeyV1.getPlugin(),20*5);
+                                BukkitRunnable runnable = new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        stunned.clear();
+                                    }
+                                };
+                                runnable.runTaskLater(NikeyV1.getPlugin(),20*5);
+                            }
                         }
                     }
                 }

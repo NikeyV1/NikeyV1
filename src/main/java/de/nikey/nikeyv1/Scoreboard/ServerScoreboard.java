@@ -52,6 +52,11 @@ public class ServerScoreboard extends ScoreboardBuilder {
                     }else {
                         setScore("§7Ability 1: §c"+ Electrostone.cooldown.get(player) +"/100",4);
                     }
+                    if (!Electrostone.ability.containsKey(player)){
+                        setScore("§7Ability 2: §aReady",3);
+                    }else {
+                        setScore("§7Ability 2: §c"+ Electrostone.ability.get(player) +"/180",3);
+                    }
                 }else if (stone.equalsIgnoreCase("Fire")){
                     if (!Firestone.cooldown.containsKey(player)){
                         setScore("§7Ability 1: §aReady",4);
@@ -59,14 +64,9 @@ public class ServerScoreboard extends ScoreboardBuilder {
                         setScore("§7Ability 1: §c"+ Firestone.cooldown.get(player) +"/100",4);
                     }
                 }
-                if (NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown2"+".time") == 0 &&NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown2"+".stoptime") == 0){
-                    setScore("§7Ability 2: §aReady",3);
-                }else {
-                    setScore("§7Ability 2: §c"+NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown2"+".time") +"/"+NikeyV1.getPlugin().getConfig().getInt(player.getName()+"."+stone+".cooldown2"+".stoptime"),3);
-                }
                 setScore("§7Ping: "+ChatColor.DARK_PURPLE+ player.getPing(),1);
             }
-        }.runTaskTimer(NikeyV1.plugin,18,18);
+        }.runTaskTimer(NikeyV1.plugin,20,20);
     }
 
 
