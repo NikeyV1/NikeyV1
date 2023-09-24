@@ -72,7 +72,7 @@ public class Player implements Listener {
                     }.runTaskTimer(NikeyV1.getPlugin(),0L,20);
                 }else if (stone.equalsIgnoreCase("Elektro")){
                     a = config.getInt(p.getName() + "." + stone + ".cooldown1.time");
-                    Electrostone.cooldown.put(p,a);
+                    Electrostone.cooldown.put(p.getUniqueId(), (long) a);
                     new BukkitRunnable(){
                         @Override
                         public void run() {
@@ -84,7 +84,7 @@ public class Player implements Listener {
                                 cancel();
                             }
                             if (a < 100){
-                                Electrostone.cooldown.replace(p,a);
+                                Electrostone.cooldown.replace(p.getUniqueId(), (long) a);
                             }else {
                                 a=0;
                                 Electrostone.cooldown.remove(p);

@@ -35,7 +35,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
         FileConfiguration config = NikeyV1.plugin.getConfig();
         String stone = config.getString(player.getName() + ".stone");
         setScore("§7Level: "+ChatColor.AQUA+config.getString(player.getName()+".level"),5);
-        setScore("§7Ability 1:"+config.getInt(player.getName()+"."+stone+".cooldown1"+".time") +"/"+config.getInt(player.getName()+"."+stone+".cooldown1"+".stoptime"),4);
+        setScore("§7Ability 1: §aReady",4);
         setScore("§7Ability 2:"+config.getInt(player.getName()+"."+stone+".cooldown2"+".time") +"/"+config.getInt(player.getName()+"."+stone+".cooldown2"+".stoptime"),3);
         setScore("----------",2);
         setScore("§7Ping: "+ChatColor.DARK_PURPLE+ player.getPing(),1);
@@ -47,10 +47,12 @@ public class ServerScoreboard extends ScoreboardBuilder {
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
                 if (stone.equalsIgnoreCase("Elektro")){
-                    if (!Electrostone.cooldown.containsKey(player)){
+                    long remainingTime = Electrostone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int i = (int) (remainingTime/1000);
+                    if (i == 0){
                         setScore("§7Ability 1: §aReady",4);
                     }else {
-                        setScore("§7Ability 1: §c"+ Electrostone.cooldown.get(player) +"/100",4);
+                        setScore("§7Ability 1: §c"+ i+"/100",4);
                     }
                     if (!Electrostone.ability.containsKey(player)){
                         setScore("§7Ability 2: §aReady",3);

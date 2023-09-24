@@ -1,6 +1,7 @@
 package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
+import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
 import de.slikey.effectlib.effect.CylinderEffect;
 import de.slikey.effectlib.effect.TornadoEffect;
 import io.papermc.paper.event.entity.EntityMoveEvent;
@@ -25,16 +26,15 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("ALL")
 public class Electrostone implements Listener {
     private static ArrayList<Entity> stunned = new ArrayList<>();
-    public static HashMap<Player, Integer> cooldown = new HashMap<>();
+    public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<Player, Integer> ability = new HashMap<>();
     private int timer;
-    int c;
-    int a;
 
 
     @EventHandler
@@ -53,29 +53,21 @@ public class Electrostone implements Listener {
             NikeyV1.plugin.saveConfig();
             String stone = config.getString(p.getName() + ".stone");
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
-                if (i ==10 || i == 11){
-                    if (!cooldown.containsKey(p)){
-                        cooldown.put(p,0);
-                        c = 0;
-                        new BukkitRunnable(){
-                            @Override
-                            public void run() {
-                                c++;
-                                if (!p.isOnline()){
-                                    config.set(p.getName()+"."+stone+"."+"cooldown1.time",c);
-                                    config.set(p.getName()+"."+stone+"."+"cooldown1.timer",true);
-                                    NikeyV1.getPlugin().saveConfig();
-                                    cancel();
-                                }
-                                if (cooldown.get(p) < 100){
-                                    cooldown.replace(p,c);
-                                }else {
-                                    c=0;
-                                    cooldown.remove(p);
-                                    cancel();
-                                }
-                            }
-                        }.runTaskTimer(NikeyV1.getPlugin(),0L,20);
+                if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
+                    event.setCancelled(true);
+                    p.updateInventory();
+                    long remainingTime = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
+                }else {
+                    cooldown.put(p.getUniqueId(),System.currentTimeMillis() + (100*1000));
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            cooldown.remove(p.getUniqueId());
+                            cancel();
+                            return;
+                        }
+                    }.runTaskLater(NikeyV1.getPlugin(),20*100);
+                    if (i ==10 || i == 11){
                         timer = 20;
                         World world = p.getWorld();
                         BukkitRunnable runnable = new BukkitRunnable() {
@@ -112,31 +104,9 @@ public class Electrostone implements Listener {
                             }
                         };
                         runnable.runTaskTimer(NikeyV1.getPlugin(),20,20);
-                    }
 
-                } else if (i >= 12) {
-                    if (!cooldown.containsKey(p)){
-                        cooldown.put(p,0);
-                        c = 0;
-                        new BukkitRunnable(){
-                            @Override
-                            public void run() {
-                                c++;
-                                if (!p.isOnline()){
-                                    config.set(p.getName()+"."+stone+"."+"cooldown1.time",c);
-                                    config.set(p.getName()+"."+stone+"."+"cooldown1.timer",true);
-                                    NikeyV1.getPlugin().saveConfig();
-                                    cancel();
-                                }
-                                if (cooldown.get(p) < 100){
-                                    cooldown.replace(p,c);
-                                }else {
-                                    c=0;
-                                    cooldown.remove(p);
-                                    cancel();
-                                }
-                            }
-                        }.runTaskTimer(NikeyV1.getPlugin(),0L,20);
+
+                    } else if (i >= 12) {
                         timer = 20;
                         World world = p.getWorld();
                         BukkitRunnable runnable = new BukkitRunnable() {
@@ -192,27 +162,13 @@ public class Electrostone implements Listener {
                 if (i >= 15){
                     String stone = config.getString(p.getName() + ".stone");
                     if (!ability.containsKey(p)){
-                        ability.put(p,0);
-                        a = 0;
-                        new BukkitRunnable(){
-                            @Override
-                            public void run() {
-                                a++;
-                                if (!p.isOnline()){
-                                    config.set(p.getName()+"."+stone+"."+"cooldown2.time",a);
-                                    config.set(p.getName()+"."+stone+"."+"cooldown2.timer",true);
-                                    NikeyV1.getPlugin().saveConfig();
-                                    cancel();
-                                }
-                                if (ability.get(p) < 180){
-                                    ability.replace(p,a);
-                                }else {
-                                    a=0;
-                                    ability.remove(p);
-                                    cancel();
-                                }
-                            }
-                        }.runTaskTimer(NikeyV1.getPlugin(),0L,20);
+                        ability.put(p, (int) System.currentTimeMillis());
+                        long diff = (System.currentTimeMillis() - ability.get(p.getName())) / 1000;
+                        if (diff < ability.get(p))
+                        {
+                            p.sendMessage(ChatColor.DARK_AQUA+ "You must wait seconds before you can do that again!");
+                            return;
+                        }
                         stunned.add(entity);
                         entity.getWorld().strikeLightning(entity.getLocation());
                         CylinderEffect effect = new CylinderEffect(NikeyV1.em);
