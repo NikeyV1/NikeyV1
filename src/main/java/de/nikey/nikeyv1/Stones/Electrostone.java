@@ -33,7 +33,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Electrostone implements Listener {
     private static ArrayList<Entity> stunned = new ArrayList<>();
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
-    public static HashMap<Player, Integer> ability = new HashMap<>();
+    public static HashMap<UUID, Long> ability = new HashMap<>();
     private int timer;
 
 
@@ -161,14 +161,16 @@ public class Electrostone implements Listener {
                 FileConfiguration config = NikeyV1.plugin.getConfig();
                 if (i >= 15){
                     String stone = config.getString(p.getName() + ".stone");
-                    if (!ability.containsKey(p)){
-                        ability.put(p, (int) System.currentTimeMillis());
-                        long diff = (System.currentTimeMillis() - ability.get(p.getName())) / 1000;
-                        if (diff < ability.get(p))
-                        {
-                            p.sendMessage(ChatColor.DARK_AQUA+ "You must wait seconds before you can do that again!");
-                            return;
-                        }
+                    if (!ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis())){
+                        ability.put(p.getUniqueId(),System.currentTimeMillis() + (100*1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                ability.remove(p.getUniqueId());
+                                cancel();
+                                return;
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(),20*100);
                         stunned.add(entity);
                         entity.getWorld().strikeLightning(entity.getLocation());
                         CylinderEffect effect = new CylinderEffect(NikeyV1.em);
@@ -193,6 +195,10 @@ public class Electrostone implements Listener {
                                 runnable.runTaskLater(NikeyV1.getPlugin(),20*5);
                             }
                         }
+                    }else {
+                        event.setCancelled(true);
+                        p.updateInventory();
+                        long remainingTime2 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
                     }
                 }
             }
