@@ -1,7 +1,6 @@
 package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
-import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
 import de.slikey.effectlib.effect.CylinderEffect;
 import de.slikey.effectlib.effect.TornadoEffect;
 import io.papermc.paper.event.entity.EntityMoveEvent;
@@ -35,6 +34,8 @@ public class Electrostone implements Listener {
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> ability = new HashMap<>();
     private int timer;
+    public static long remainingTime1;
+    public static long remainingTime2;
 
 
     @EventHandler
@@ -56,7 +57,7 @@ public class Electrostone implements Listener {
                 if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
                     event.setCancelled(true);
                     p.updateInventory();
-                    long remainingTime = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
+                    remainingTime1 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
                 }else {
                     cooldown.put(p.getUniqueId(),System.currentTimeMillis() + (100*1000));
                     new BukkitRunnable() {
@@ -97,6 +98,7 @@ public class Electrostone implements Listener {
                                     TornadoEffect effect = new TornadoEffect(NikeyV1.em);
                                     effect.setLocation(location);
                                     effect.maxTornadoRadius = 3F;
+                                    effect.visibleRange = 100;
                                     effect.tornadoParticle = Particle.ELECTRIC_SPARK;
                                     effect.start();
                                 }
@@ -136,6 +138,7 @@ public class Electrostone implements Listener {
                                     TornadoEffect effect = new TornadoEffect(NikeyV1.em);
                                     effect.setLocation(location);
                                     effect.maxTornadoRadius = 3F;
+                                    effect.visibleRange = 100;
                                     effect.tornadoParticle = Particle.ELECTRIC_SPARK;
                                     effect.start();
                                 }
@@ -159,10 +162,13 @@ public class Electrostone implements Listener {
                 String[] arr = p.getInventory().getItemInMainHand().getLore().get(1).split(":");
                 int i = Integer.parseInt(arr[1]);
                 FileConfiguration config = NikeyV1.plugin.getConfig();
-                if (i >= 15){
-                    String stone = config.getString(p.getName() + ".stone");
-                    if (!ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis())){
-                        ability.put(p.getUniqueId(),System.currentTimeMillis() + (100*1000));
+                if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                    event.setCancelled(true);
+                    p.updateInventory();
+                    remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                }else {
+                    if (i >= 15){
+                        ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
                         new BukkitRunnable() {
                             @Override
                             public void run() {
@@ -170,7 +176,9 @@ public class Electrostone implements Listener {
                                 cancel();
                                 return;
                             }
-                        }.runTaskLater(NikeyV1.getPlugin(),20*100);
+                        }.runTaskLater(NikeyV1.getPlugin(),20*180);
+
+                        String stone = config.getString(p.getName() + ".stone");
                         stunned.add(entity);
                         entity.getWorld().strikeLightning(entity.getLocation());
                         CylinderEffect effect = new CylinderEffect(NikeyV1.em);
@@ -178,6 +186,7 @@ public class Electrostone implements Listener {
                         effect.duration = 5000;
                         effect.particles = 80;
                         effect.particle = Particle.FLASH;
+                        effect.visibleRange = 100;
                         effect.start();
                         for (Entity e : entity.getNearbyEntities(1,1,1)){
                             if (e != p){
@@ -195,10 +204,6 @@ public class Electrostone implements Listener {
                                 runnable.runTaskLater(NikeyV1.getPlugin(),20*5);
                             }
                         }
-                    }else {
-                        event.setCancelled(true);
-                        p.updateInventory();
-                        long remainingTime2 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
                     }
                 }
             }

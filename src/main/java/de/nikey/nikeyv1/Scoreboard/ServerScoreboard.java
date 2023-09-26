@@ -15,6 +15,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
         super(player, "  §8>> §6§l§nNikey§r §8<<  ");
         run();
         stone();
+        ability2();
     }
 
 
@@ -36,10 +37,30 @@ public class ServerScoreboard extends ScoreboardBuilder {
         String stone = config.getString(player.getName() + ".stone");
         setScore("§7Level: "+ChatColor.AQUA+config.getString(player.getName()+".level"),5);
         setScore("§7Ability 1: §aReady",4);
-        setScore("§7Ability 2:"+config.getInt(player.getName()+"."+stone+".cooldown2"+".time") +"/"+config.getInt(player.getName()+"."+stone+".cooldown2"+".stoptime"),3);
-        setScore("----------",2);
+        setScore("§7Ability 2: §aReady",3);
+        setScore("--------------",2);
         setScore("§7Ping: "+ChatColor.DARK_PURPLE+ player.getPing(),1);
         setScore("§7Online Players: "+ChatColor.DARK_PURPLE+ Bukkit.getOnlinePlayers().size(),0);
+    }
+
+    private void ability2() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
+                if (stone.equalsIgnoreCase("Elektro")){
+                    //Ability 2
+                    long remainingTime2 = Electrostone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remainingTime2/1000);
+                    //
+                    if (a == 0){
+                        setScore("§7Ability 2: §aReady",3);
+                    }else {
+                        setScore("§7Ability 2: §c"+a +"/180",3);
+                    }
+                }
+            }
+        }.runTaskTimer(NikeyV1.getPlugin(),20,20);
     }
     private void run() {
         new BukkitRunnable() {
@@ -47,19 +68,12 @@ public class ServerScoreboard extends ScoreboardBuilder {
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
                 if (stone.equalsIgnoreCase("Elektro")){
-                    long remainingTime2 = Electrostone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
                     long remainingTime = Electrostone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
                     int i = (int) (remainingTime/1000);
-                    int a = (int) (remainingTime2/1000);
                     if (i == 0){
                         setScore("§7Ability 1: §aReady",4);
                     }else {
                         setScore("§7Ability 1: §c"+ i+"/100",4);
-                    }
-                    if (a == 180){
-                        setScore("§7Ability 2: §aReady",3);
-                    }else {
-                        setScore("§7Ability 2: §c"+ a +"/180",3);
                     }
                 }else if (stone.equalsIgnoreCase("Fire")){
                     if (!Firestone.cooldown.containsKey(player)){

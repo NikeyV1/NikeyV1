@@ -62,7 +62,7 @@ public class Player implements Listener {
                                 cancel();
                             }
                             if (a < 100){
-                            Firestone.cooldown.replace(p,a);
+                                Firestone.cooldown.replace(p,a);
                             }else {
                                 a=0;
                                 Firestone.cooldown.remove(p);
@@ -99,7 +99,7 @@ public class Player implements Listener {
                 NikeyV1.plugin.saveConfig();
                 if (stone.equalsIgnoreCase("Elektro")){
                     b = config.getInt(p.getName() + "." + stone + ".cooldown1.time");
-                    Electrostone.ability.put(p,b);
+                    //Electrostone.ability.put(p,b);
                     new BukkitRunnable(){
                         @Override
                         public void run() {
@@ -111,10 +111,10 @@ public class Player implements Listener {
                                 cancel();
                             }
                             if (b < 180){
-                                Electrostone.ability.replace(p,b);
+                                //Electrostone.ability.replace(p,b);
                             }else {
                                 b=0;
-                                Electrostone.ability.remove(b);
+                                //Electrostone.ability.remove(b);
                                 cancel();
                             }
                         }
