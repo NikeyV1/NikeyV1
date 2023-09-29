@@ -6,9 +6,11 @@ import de.nikey.nikeyv1.Stones.Electrostone;
 import de.nikey.nikeyv1.Stones.Firestone;
 import de.nikey.nikeyv1.Timer.TimerBuild;
 import de.nikey.nikeyv1.Util.Items;
+import io.papermc.paper.event.entity.EntityMoveEvent;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -50,7 +52,7 @@ public class Player implements Listener {
                 NikeyV1.plugin.saveConfig();
                 if (stone.equalsIgnoreCase("Fire")){
                     a = config.getInt(p.getName() + "." + stone + ".cooldown1.time");
-                    Firestone.cooldown.put(p,a);
+                    //Firestone.cooldown.put(p,a);
                     new BukkitRunnable(){
                         @Override
                         public void run() {
@@ -62,7 +64,7 @@ public class Player implements Listener {
                                 cancel();
                             }
                             if (a < 100){
-                                Firestone.cooldown.replace(p,a);
+                                //Firestone.cooldown.replace(p,a);
                             }else {
                                 a=0;
                                 Firestone.cooldown.remove(p);
@@ -407,4 +409,11 @@ public class Player implements Listener {
         org.bukkit.entity.Player player = event.getPlayer();new ServerScoreboard(player);
     }
 
+    @EventHandler
+    public void onEntityMove(EntityMoveEvent event) {
+        LivingEntity entity = event.getEntity();
+        if (entity.isInWaterOrRain()){
+            entity.setVisualFire(false);
+        }
+    }
 }

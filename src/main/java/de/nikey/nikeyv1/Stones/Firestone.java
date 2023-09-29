@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.ItemStack;
@@ -23,21 +24,23 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class Firestone implements Listener {
     private ArrayList<Entity> entities = new ArrayList<>();
+    private ArrayList<Entity> player = new ArrayList<>();
     private int timer;
-    public static HashMap<Player, Integer> cooldown = new HashMap<>();
-    int c;
+    private int time;
+    public static HashMap<UUID, Long> cooldown = new HashMap<>();
+    public static HashMap<UUID, Long> ability = new HashMap<>();
+    public static long remainingTime1;
+    public static long remainingTime2;
 
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getItem() == null){
-            return;
-        }
-        if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#e66b63")+"Lava Stein")&&
-                event.getItem().getType() == Material.FIREWORK_STAR){
+        if (event.getItem() == null)return;
+        if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#e66b63")+"Lava Stein")&& event.getItem().getType() == Material.FIREWORK_STAR){
             Player p = event.getPlayer();
             ItemStack item = event.getItem();
             String[] arr = item.getLore().get(1).split(":");
@@ -49,31 +52,23 @@ public class Firestone implements Listener {
             String stone = NikeyV1.getPlugin().getConfig().getString(p.getName() + ".stone");
             NikeyV1.plugin.saveConfig();
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
-                if (i == 3){
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0,true,false));
-                } else if (i == 10 || i == 11) {
-                    if (!cooldown.containsKey(p)){
-                        cooldown.put(p,0);
-                        c = 0;
-                        new BukkitRunnable(){
-                            @Override
-                            public void run() {
-                                c++;
-                                if (!p.isOnline()){
-                                    config.set(p.getName()+"."+stone+"."+"cooldown1.time",c);
-                                    config.set(p.getName()+"."+stone+"."+"cooldown1.timer",true);
-                                    NikeyV1.getPlugin().saveConfig();
-                                    cancel();
-                                }
-                                if (cooldown.get(p) < 100){
-                                    cooldown.replace(p,c);
-                                }else {
-                                    c=0;
-                                    cooldown.remove(p);
-                                    cancel();
-                                }
-                            }
-                        }.runTaskTimer(NikeyV1.getPlugin(),0L,20);
+                if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
+                    event.setCancelled(true);
+                    p.updateInventory();
+                    remainingTime1 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
+                }else {
+                    cooldown.put(p.getUniqueId(),System.currentTimeMillis() + (100*1000));
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            cooldown.remove(p.getUniqueId());
+                            cancel();
+                            return;
+                        }
+                    }.runTaskLater(NikeyV1.getPlugin(),20*100);
+                    if (i == 3){
+                        p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0,true,false));
+                    } else if (i == 10 || i == 11) {
                         timer = 20;
                         SphereEffect effect = new SphereEffect(NikeyV1.em);
                         effect.setEntity(p);
@@ -106,30 +101,7 @@ public class Firestone implements Listener {
                             }
                         };
                         runnable.runTaskTimer(NikeyV1.getPlugin(),0,20);
-                    }
-                }else if (i >= 12) {
-                    if (!cooldown.containsKey(p)){
-                        cooldown.put(p,0);
-                        c = 0;
-                        new BukkitRunnable(){
-                            @Override
-                            public void run() {
-                                c++;
-                                if (!p.isOnline()){
-                                    config.set(p.getName()+"."+stone+"."+"cooldown1.time",c);
-                                    config.set(p.getName()+"."+stone+"."+"cooldown1.timer",true);
-                                    NikeyV1.getPlugin().saveConfig();
-                                    cancel();
-                                }
-                                if (cooldown.get(p) < 100){
-                                    cooldown.replace(p,c);
-                                }else {
-                                    c=0;
-                                    cooldown.remove(p);
-                                    cancel();
-                                }
-                            }
-                        }.runTaskTimer(NikeyV1.getPlugin(),0L,20);
+                    } else if (i >= 12) {
                         timer = 20;
                         SphereEffect effect = new SphereEffect(NikeyV1.em);
                         effect.setEntity(p);
@@ -141,15 +113,15 @@ public class Firestone implements Listener {
                         BukkitRunnable runnable = new BukkitRunnable() {
                             @Override
                             public void run() {
-                                for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(),30,30,30)){
-                                    if (e instanceof LivingEntity){
+                                for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(), 30, 30, 30)) {
+                                    if (e instanceof LivingEntity) {
                                         LivingEntity entity = (LivingEntity) e;
                                         entities.add(entity);
-                                        if (entity != p){
+                                        if (entity != p) {
                                             e.setVisualFire(true);
                                             entity.damage(3);
                                         }
-                                        if (timer == 0){
+                                        if (timer == 0) {
                                             entity.setVisualFire(false);
                                             entities.forEach(entity1 -> entity1.setVisualFire(false));
                                             entities.clear();
@@ -161,21 +133,67 @@ public class Firestone implements Listener {
                                 timer--;
                             }
                         };
-                        runnable.runTaskTimer(NikeyV1.getPlugin(),0,20);
+                        runnable.runTaskTimer(NikeyV1.getPlugin(), 0, 20);
                     }
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
-                if (i <= 4) {
+                if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                    event.setCancelled(true);
+                    p.updateInventory();
+                    remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                }else {
 
-                }else if (i <= 9){
-
-                }else if (i <= 14){
-
-                }else if (i <= 19){
-
+                    ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            ability.remove(p.getUniqueId());
+                            cancel();
+                            return;
+                        }
+                    }.runTaskLater(NikeyV1.getPlugin(),20*180);
+                    //Cooldown-Ability
+                    time = 10;
+                    AnimatedBallEffect effect = new AnimatedBallEffect(NikeyV1.em);
+                    effect.setEntity(p);
+                    effect.particle = Particle.FLAME;
+                    effect.duration = 20000;
+                    effect.visibleRange = 100;
+                    effect.start();
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (timer == 0){
+                                cancel();
+                                return;
+                            }else {
+                                double health = p.getHealth();
+                                p.setHealth(health+1);
+                            }
+                            time--;
+                        }
+                    }.runTaskTimer(NikeyV1.getPlugin(),40,40);
                 }
             }
+        }
+    }
 
+    @EventHandler
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        Entity d = event.getDamager();
+        Entity entity = event.getEntity();
+        if (entity instanceof Player && d instanceof LivingEntity){
+            Player p = (Player) entity;
+            LivingEntity damager = (LivingEntity) d;
+            if (ability.containsKey(p.getUniqueId())){
+                long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                int a = (int) (remain/1000);
+                if (a >160){
+                    double damage = event.getDamage();
+                    event.setDamage(damage*0.5);
+                    damager.damage(damage*0.4,entity);
+                }
+            }
         }
     }
 }

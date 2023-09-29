@@ -58,6 +58,16 @@ public class ServerScoreboard extends ScoreboardBuilder {
                     }else {
                         setScore("§7Ability 2: §c"+a +"/180",3);
                     }
+                }else if (stone.equalsIgnoreCase("Fire")){
+                    //Ability 2
+                    long remainingTime2 = Firestone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remainingTime2/1000);
+                    //
+                    if (a == 0){
+                        setScore("§7Ability 2: §aReady",3);
+                    }else {
+                        setScore("§7Ability 2: §c"+a +"/180",3);
+                    }
                 }
             }
         }.runTaskTimer(NikeyV1.getPlugin(),20,20);
@@ -76,10 +86,12 @@ public class ServerScoreboard extends ScoreboardBuilder {
                         setScore("§7Ability 1: §c"+ i+"/100",4);
                     }
                 }else if (stone.equalsIgnoreCase("Fire")){
-                    if (!Firestone.cooldown.containsKey(player)){
+                    long remainingTime = Firestone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int i = (int) (remainingTime/1000);
+                    if (i == 0){
                         setScore("§7Ability 1: §aReady",4);
                     }else {
-                        setScore("§7Ability 1: §c"+ Firestone.cooldown.get(player) +"/100",4);
+                        setScore("§7Ability 1: §c"+ i+"/100",4);
                     }
                 }
                 setScore("§7Ping: "+ChatColor.DARK_PURPLE+ player.getPing(),1);

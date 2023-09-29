@@ -177,7 +177,6 @@ public class Electrostone implements Listener {
                                 return;
                             }
                         }.runTaskLater(NikeyV1.getPlugin(),20*180);
-
                         String stone = config.getString(p.getName() + ".stone");
                         stunned.add(entity);
                         entity.getWorld().strikeLightning(entity.getLocation());
