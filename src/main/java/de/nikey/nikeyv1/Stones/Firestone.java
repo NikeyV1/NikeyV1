@@ -137,42 +137,44 @@ public class Firestone implements Listener {
                     }
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
-                if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                    event.setCancelled(true);
-                    p.updateInventory();
-                    remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                }else {
+                if (i >=15){
+                    if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                        event.setCancelled(true);
+                        p.updateInventory();
+                        remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                    }else {
 
-                    ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            ability.remove(p.getUniqueId());
-                            cancel();
-                            return;
-                        }
-                    }.runTaskLater(NikeyV1.getPlugin(),20*180);
-                    //Cooldown-Ability
-                    time = 10;
-                    AnimatedBallEffect effect = new AnimatedBallEffect(NikeyV1.em);
-                    effect.setEntity(p);
-                    effect.particle = Particle.FLAME;
-                    effect.duration = 20000;
-                    effect.visibleRange = 100;
-                    effect.start();
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if (timer == 0){
+                        ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                ability.remove(p.getUniqueId());
                                 cancel();
                                 return;
-                            }else {
-                                double health = p.getHealth();
-                                p.setHealth(health+1);
                             }
-                            time--;
-                        }
-                    }.runTaskTimer(NikeyV1.getPlugin(),40,40);
+                        }.runTaskLater(NikeyV1.getPlugin(),20*180);
+                        //Cooldown-Ability
+                        time = 10;
+                        AnimatedBallEffect effect = new AnimatedBallEffect(NikeyV1.em);
+                        effect.setEntity(p);
+                        effect.particle = Particle.FLAME;
+                        effect.duration = 20000;
+                        effect.visibleRange = 100;
+                        effect.start();
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                if (timer == 0){
+                                    cancel();
+                                    return;
+                                }else {
+                                    double health = p.getHealth();
+                                    p.setHealth(health+1);
+                                }
+                                time--;
+                            }
+                        }.runTaskTimer(NikeyV1.getPlugin(),40,40);
+                    }
                 }
             }
         }

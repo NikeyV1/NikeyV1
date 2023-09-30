@@ -1,11 +1,16 @@
 package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
+import de.nikey.nikeyv1.Util.HelpUtil;
+import de.slikey.effectlib.effect.AnimatedBallEffect;
+import de.slikey.effectlib.effect.EquationEffect;
 import de.slikey.effectlib.effect.FountainEffect;
 import de.slikey.effectlib.effect.SphereEffect;
+import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -19,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -124,6 +130,45 @@ public class Waterstone implements Listener {
                                 }
                             }
                         }.runTaskTimer(NikeyV1.getPlugin(), 20,20);
+                    }
+                }
+            }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
+                if (i >=15){
+                    if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                        event.setCancelled(true);
+                        p.updateInventory();
+                        remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                    }else {
+
+                        ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                ability.remove(p.getUniqueId());
+                                cancel();
+                                return;
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                        //Cooldown-Ability
+                        EquationEffect effect = new EquationEffect(NikeyV1.em);
+                        effect.setEntity(p);
+                        effect.particle = Particle.BUBBLE_COLUMN_UP;
+                        effect.particles = 5;
+                        effect.visibleRange = 100;
+                        effect.start();
+
+                        Entity e = HelpUtil.getNearestEntityInSight(p, 40);
+                        e.getLocation().getWorld().createExplosion(e.getLocation(),2F);
+                        if (e instanceof LivingEntity){
+                            LivingEntity entity = (LivingEntity) e;
+                            double armor = p.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                            if (armor >16){
+                                entity.damage(28,p);
+                            }else {
+                                entity.damage(18,p);
+                            }
+                            entity.setVisualFire(false);
+                        }
                     }
                 }
             }
