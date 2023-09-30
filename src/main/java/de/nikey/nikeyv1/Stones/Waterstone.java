@@ -46,7 +46,7 @@ public class Waterstone implements Listener {
         Player p = event.getPlayer();
         ItemStack item = event.getItem();
         if (item == null) return;
-        if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§9Elektro Stein")&& event.getItem().getType() == Material.FIREWORK_STAR){
+        if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§9Wasser Stein")&& event.getItem().getType() == Material.FIREWORK_STAR){
             String[] arr = item.getLore().get(1).split(":");
             int i = Integer.parseInt(arr[1]);
             FileConfiguration config = NikeyV1.plugin.getConfig();
@@ -113,9 +113,7 @@ public class Waterstone implements Listener {
                                     for (Entity e : location.getNearbyEntities(10,8,10)){
                                         if (e == p){
                                             p.setHealth(p.getHealth()+2);
-                                            if (p.getAbsorptionAmount() <4){
-                                                p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
-                                            }
+                                            p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
                                         } else {
                                             if (e instanceof LivingEntity){
                                                 LivingEntity entity = (LivingEntity) e;

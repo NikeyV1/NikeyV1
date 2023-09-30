@@ -86,7 +86,7 @@ public class Items {
     public static void Waterstone(Player player , Integer level){
         ItemStack waterstone = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  waterstone.getItemMeta();
-        meta.setDisplayName("§9Water Stein");
+        meta.setDisplayName("§9Wasser Stein");
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         waterstone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         ArrayList<String> lore = new ArrayList<>();
