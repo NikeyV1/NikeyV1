@@ -3,6 +3,7 @@ package de.nikey.nikeyv1.Scoreboard;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Stones.Electrostone;
 import de.nikey.nikeyv1.Stones.Firestone;
+import de.nikey.nikeyv1.Stones.Waterstone;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -68,6 +69,16 @@ public class ServerScoreboard extends ScoreboardBuilder {
                     }else {
                         setScore("§7Ability 2: §c"+a +"/180",3);
                     }
+                }else if (stone.equalsIgnoreCase("Water")){
+                    //Ability 2
+                    long remainingTime2 = Waterstone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remainingTime2/1000);
+                    //
+                    if (a == 0){
+                        setScore("§7Ability 2: §aReady",3);
+                    }else {
+                        setScore("§7Ability 2: §c"+a +"/180",3);
+                    }
                 }
             }
         }.runTaskTimer(NikeyV1.getPlugin(),20,20);
@@ -93,6 +104,14 @@ public class ServerScoreboard extends ScoreboardBuilder {
                     }else {
                         setScore("§7Ability 1: §c"+ i+"/100",4);
                     }
+                }else if (stone.equalsIgnoreCase("Water")){
+                    long remainingTime = Waterstone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int i = (int) (remainingTime/1000);
+                    if (i == 0){
+                        setScore("§7Ability 1: §aReady",4);
+                    }else {
+                        setScore("§7Ability 1: §c"+ i+"/100",4);
+                    }
                 }
                 setScore("§7Ping: "+ChatColor.DARK_PURPLE+ player.getPing(),1);
             }
@@ -107,6 +126,8 @@ public class ServerScoreboard extends ScoreboardBuilder {
             setScore("§7Stone: "+ChatColor.RED +config.getString(player.getName()+".stone"),6);
         }else if (stone.equalsIgnoreCase("Elektro")){
             setScore("§7Stone: "+ChatColor.YELLOW +config.getString(player.getName()+".stone"),6);
+        }else if (stone.equalsIgnoreCase("Water")){
+            setScore("§7Stone: "+ChatColor.BLUE +config.getString(player.getName()+".stone"),6);
         }
     }
 }

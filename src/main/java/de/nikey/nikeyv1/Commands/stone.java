@@ -29,6 +29,13 @@ public class stone implements CommandExecutor {
                     }catch (NumberFormatException e){
                         p.sendMessage("§cTake a Number");
                     }
+                }else if (stone.equalsIgnoreCase("Water")){
+                    try {
+                        int level = Integer.parseInt(args[1]);
+                        Items.Waterstone(p,level);
+                    }catch (NumberFormatException e){
+                        p.sendMessage("§cTake a Number");
+                    }
                 }
             }else {
                 p.sendMessage("§cThat doesnt work like so!");

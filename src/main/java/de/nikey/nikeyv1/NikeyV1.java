@@ -7,6 +7,7 @@ import de.nikey.nikeyv1.Listeners.ReloadCommand;
 import de.nikey.nikeyv1.Listeners.ReloadModifyer;
 import de.nikey.nikeyv1.Stones.Electrostone;
 import de.nikey.nikeyv1.Stones.Firestone;
+import de.nikey.nikeyv1.Stones.Waterstone;
 import de.nikey.nikeyv1.Util.Items;
 import de.slikey.effectlib.EffectLib;
 import de.slikey.effectlib.EffectManager;
@@ -34,6 +35,7 @@ public final class NikeyV1 extends JavaPlugin {
         manager.registerEvents(new Player(),this);
         manager.registerEvents(new Firestone(),this);
         manager.registerEvents(new Electrostone(),this);
+        manager.registerEvents(new Waterstone(),this);
         manager.registerEvents(new ReloadCommand(),this);
         manager.registerEvents(new ReloadModifyer(),this);
         //Command

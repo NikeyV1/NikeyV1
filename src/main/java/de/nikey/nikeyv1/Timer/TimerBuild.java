@@ -75,6 +75,8 @@ public class TimerBuild  {
                                     Items.Firestone(player,getLevel());
                                 }else if (getStone(player).equalsIgnoreCase("Elektro")){
                                     Items.Electrostone(player,getLevel());
+                                }else if (getStone(player).equalsIgnoreCase("Water")){
+                                    Items.Waterstone(player,getLevel());
                                 }
                             }
                         }else {

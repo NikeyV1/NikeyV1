@@ -83,6 +83,19 @@ public class Items {
         elektrostein.setItemMeta(meta);
         player.getInventory().addItem(elektrostein);
     }
+    public static void Waterstone(Player player , Integer level){
+        ItemStack waterstone = new ItemStack(Material.FIREWORK_STAR);
+        ItemMeta meta =  waterstone.getItemMeta();
+        meta.setDisplayName("§9Water Stein");
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        waterstone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add("§1A storm rages in this stone");
+        lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
+        meta.setLore(lore);
+        waterstone.setItemMeta(meta);
+        player.getInventory().addItem(waterstone);
+    }
     public static void EnchantedAnvil(){
         ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
         ItemMeta emeta = essence.getItemMeta();

@@ -30,7 +30,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("ALL")
 public class Electrostone implements Listener {
-    private static ArrayList<Entity> stunned = new ArrayList<>();
+    public static ArrayList<Entity> stunned = new ArrayList<>();
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> ability = new HashMap<>();
     private int timer;
@@ -43,12 +43,10 @@ public class Electrostone implements Listener {
         Player p = event.getPlayer();
         ItemStack item = event.getItem();
         if (item == null) return;
-        if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§eElektro Stein")&&
-                event.getItem().getType() == Material.FIREWORK_STAR){
+        if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§eElektro Stein")&& event.getItem().getType() == Material.FIREWORK_STAR){
             String[] arr = item.getLore().get(1).split(":");
             int i = Integer.parseInt(arr[1]);
             FileConfiguration config = NikeyV1.plugin.getConfig();
-            config.set(p.getName()+".elektro",null);
             config.set(p.getName()+".stone","Elektro");
             config.set(p.getName()+".level",i);
             NikeyV1.plugin.saveConfig();

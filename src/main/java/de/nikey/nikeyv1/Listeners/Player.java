@@ -4,17 +4,20 @@ import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
 import de.nikey.nikeyv1.Stones.Electrostone;
 import de.nikey.nikeyv1.Stones.Firestone;
+import de.nikey.nikeyv1.Stones.Waterstone;
 import de.nikey.nikeyv1.Timer.TimerBuild;
 import de.nikey.nikeyv1.Util.Items;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -162,9 +165,27 @@ public class Player implements Listener {
                 config.set(p.getName()+".level",1);
                 config.set(p.getName()+".time",false);
                 NikeyV1.plugin.saveConfig();
+            }else if (i == 2){
+                Items.Waterstone(p,1);
+                p.sendTitle("§d§kR§r§9Water Stone§r§d§kR","");
+                config.set(p.getName()+".stone", "Water");
+                config.set(p.getName()+".level",1);
+                config.set(p.getName()+".time",false);
+                NikeyV1.plugin.saveConfig();
             }
         }
     }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        Entity damager = event.getDamager();
+        Entity entity = event.getEntity();
+        if (Electrostone.stunned.contains(entity)){
+            int damg = (int) (event.getDamage() + (event.getDamage() * (20 / 100)));
+            event.setDamage(damg);
+        }
+    }
+
     @EventHandler(ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
         org.bukkit.entity.Player p = event.getPlayer();
