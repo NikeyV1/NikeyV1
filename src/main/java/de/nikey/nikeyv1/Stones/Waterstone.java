@@ -162,6 +162,7 @@ public class Waterstone implements Listener {
                         if (e instanceof LivingEntity){
                             LivingEntity entity = (LivingEntity) e;
                             double armor = p.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                            entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,20*20,0));
                             if (armor >16){
                                 entity.damage(28,p);
                             }else {
