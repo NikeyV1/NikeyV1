@@ -10,6 +10,7 @@ import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
@@ -146,7 +147,6 @@ public class Waterstone implements Listener {
                             public void run() {
                                 ability.remove(p.getUniqueId());
                                 cancel();
-                                return;
                             }
                         }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                         //Cooldown-Ability
@@ -156,13 +156,13 @@ public class Waterstone implements Listener {
                         effect.particles = 5;
                         effect.visibleRange = 100;
                         effect.start();
-
+                        p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH,1,1);
                         Entity e = HelpUtil.getNearestEntityInSight(p, 40);
                         e.getLocation().getWorld().createExplosion(e.getLocation(),2F);
                         if (e instanceof LivingEntity){
                             LivingEntity entity = (LivingEntity) e;
+                            entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 400,0));
                             double armor = p.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                            entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,20*20,0));
                             if (armor >16){
                                 entity.damage(28,p);
                             }else {
