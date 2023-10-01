@@ -116,16 +116,16 @@ public class Waterstone implements Listener {
                                 timer--;
                                 if (timer == 0){
                                     cancel();
-                                }else {
-                                    for (Entity e : location.getNearbyEntities(10,8,10)){
-                                        if (e == p){
-                                            p.setHealth(p.getHealth()+2);
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
-                                        } else {
-                                            if (e instanceof LivingEntity){
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entity.damage(3);
-                                            }
+                                    return;
+                                }
+                                for (Entity e : location.getNearbyEntities(10,8,10)){
+                                    if (e == p){
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
+                                        p.setHealth(p.getHealth()+2);
+                                    } else {
+                                        if (e instanceof LivingEntity){
+                                            LivingEntity entity = (LivingEntity) e;
+                                            entity.damage(3);
                                         }
                                     }
                                 }

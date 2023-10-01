@@ -84,7 +84,6 @@ public class EffectCMD implements CommandExecutor {
                     effect.setLocation(p.getLocation());
                     effect.amount = 100;
                     effect.start();
-
                     p.sendMessage("Started");
                 }else if (args[0].equalsIgnoreCase("Fountain")){
                     FountainEffect effect = new FountainEffect(NikeyV1.em);
@@ -126,6 +125,36 @@ public class EffectCMD implements CommandExecutor {
                 }else if (args[0].equalsIgnoreCase("Test")){
                     String stone = NikeyV1.getPlugin().getConfig().getString(p.getName() + ".stone");
                     p.sendMessage(String.valueOf(NikeyV1.getPlugin().getConfig().getInt(p.getName()+"."+stone+".cooldown1"+".time")));
+                } else if (args[0].equalsIgnoreCase("Wave")) {
+                    WaveEffect effect = new WaveEffect(NikeyV1.em);
+                    effect.setLocation(p.getLocation());
+                    effect.start();
+                    p.sendMessage("Started");
+                }else if (args[0].equalsIgnoreCase("Smoke")) {
+                    SmokeEffect effect = new SmokeEffect(NikeyV1.em);
+                    effect.setLocation(p.getLocation());
+                    effect.start();
+                    p.sendMessage("Started");
+                }else if (args[0].equalsIgnoreCase("Flame")) {
+                    FlameEffect effect = new FlameEffect(NikeyV1.em);
+                    effect.setLocation(p.getLocation());
+                    effect.start();
+                    p.sendMessage("Started");
+                }else if (args[0].equalsIgnoreCase("Shield")) {
+                    ShieldEffect effect = new ShieldEffect(NikeyV1.em);
+                    effect.setLocation(p.getLocation());
+                    effect.start();
+                    p.sendMessage("Started");
+                }else if (args[0].equalsIgnoreCase("Musik")) {
+                    MusicEffect effect = new MusicEffect(NikeyV1.em);
+                    effect.setLocation(p.getLocation());
+                    effect.start();
+                    p.sendMessage("Started");
+                }else if (args[0].equalsIgnoreCase("Line")) {
+                    LineEffect effect = new LineEffect(NikeyV1.em);
+                    effect.setLocation(p.getLocation());
+                    effect.start();
+                    p.sendMessage("Started");
                 }
             }else {
                 p.sendMessage("That doesnt work like so");

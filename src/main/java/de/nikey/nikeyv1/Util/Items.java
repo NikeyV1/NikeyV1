@@ -96,6 +96,19 @@ public class Items {
         waterstone.setItemMeta(meta);
         player.getInventory().addItem(waterstone);
     }
+    public static void Frozenstone(Player player , Integer level){
+        ItemStack frozenstone = new ItemStack(Material.FIREWORK_STAR);
+        ItemMeta meta =  frozenstone.getItemMeta();
+        meta.setDisplayName("§3Eis Stein");
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        frozenstone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add("§bCold enough to freeze fire");
+        lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
+        meta.setLore(lore);
+        frozenstone.setItemMeta(meta);
+        player.getInventory().addItem(frozenstone);
+    }
     public static void EnchantedAnvil(){
         ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
         ItemMeta emeta = essence.getItemMeta();
