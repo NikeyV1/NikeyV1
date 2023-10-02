@@ -148,6 +148,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
                     }
                 }
                 setScore("§7Ping: "+ChatColor.DARK_PURPLE+ player.getPing(),1);
+                setScore("§7Online Players: "+ChatColor.DARK_PURPLE+ Bukkit.getOnlinePlayers().size(),0);
             }
         }.runTaskTimer(NikeyV1.plugin,20,20);
     }

@@ -3,6 +3,7 @@ package de.nikey.nikeyv1.Stones;
 import com.sun.java.accessibility.util.internal.CheckboxTranslator;
 import de.nikey.nikeyv1.NikeyV1;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -17,11 +18,15 @@ import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("ALL")
 public class Undeadstone implements Listener {
@@ -31,6 +36,7 @@ public class Undeadstone implements Listener {
     private int timer;
     public static long remainingTime1;
     public static long remainingTime2;
+    private Player player;
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -48,18 +54,183 @@ public class Undeadstone implements Listener {
             if (event.getAction() == Action.RIGHT_CLICK_AIR||event.getAction() == Action.RIGHT_CLICK_BLOCK){
                 if (!Soul.isEmpty()){
                     EntityType type = Soul.get(0).getType();
-                    if (!type.getName().equalsIgnoreCase("Wither")||!type.getName().equalsIgnoreCase("Ender_dragon")||!type.getName().equalsIgnoreCase("Evoker")){
-                        LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
-                        summoned.setCustomName(p.getDisplayName()+"'s "+type.getName());
-                        Soul.clear();
-                        p.getWorld().playSound(p.getLocation(),Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
-                        ItemStack hand = p.getInventory().getItemInMainHand();
-                        ItemMeta meta = hand.getItemMeta();
-                        ArrayList<String> list = new ArrayList<>();
-                        list.add(ChatColor.of("#221726")+"Souls wander around in this stone");
-                        list.add(ChatColor.of("#00FFAA")+"Level:"+i);
-                        meta.setLore(list);
-                        hand.setItemMeta(meta);
+                    if (type.equals(EntityType.WITHER)||type.equals(EntityType.ENDER_DRAGON)||type.equals(EntityType.EVOKER)){
+                    }else {
+                        if (i == 10||i == 11){
+                            LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
+                            summoned.setCustomName(p.getDisplayName()+"'s "+type.getName());
+                            Soul.clear();
+                            p.getWorld().playSound(p.getLocation(),Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
+                            ItemStack hand = p.getInventory().getItemInMainHand();
+                            ItemMeta meta = hand.getItemMeta();
+                            ArrayList<String> list = new ArrayList<>();
+                            list.add(ChatColor.of("#221726")+"Souls wander around in this stone");
+                            list.add(ChatColor.of("#00FFAA")+"Level:"+i);
+                            meta.setLore(list);
+                            hand.setItemMeta(meta);
+                        }else if (i >= 12){
+                            LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
+                            summoned.setCustomName(p.getDisplayName()+"'s "+type.getName());
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,0));
+                            Soul.clear();
+                            p.getWorld().playSound(p.getLocation(),Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
+                            ItemStack hand = p.getInventory().getItemInMainHand();
+                            ItemMeta meta = hand.getItemMeta();
+                            ArrayList<String> list = new ArrayList<>();
+                            list.add(ChatColor.of("#221726")+"Souls wander around in this stone");
+                            list.add(ChatColor.of("#00FFAA")+"Level:"+i);
+                            meta.setLore(list);
+                            hand.setItemMeta(meta);
+                        }
+                    }
+                }
+            }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
+                if (i == 15||i == 16||i == 17){
+                    if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                        event.setCancelled(true);
+                        p.updateInventory();
+                        remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                    }else {
+                        ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                ability.remove(p.getUniqueId());
+                                cancel();
+                                return;
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                        //cooldown-ability
+                        timer = 40;
+                        player = p;
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                timer--;
+                                if (timer == 0){
+                                    cancel();
+                                    return;
+                                }else {
+                                    int x = (int) (p.getLocation().getX());
+                                    int z = (int) (p.getLocation().getZ());
+                                    int randomX = ThreadLocalRandom.current().nextInt(x-6, x+6);
+                                    int randomZ = ThreadLocalRandom.current().nextInt(z-6, z+6);
+                                    int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
+                                    Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
+                                    Random random = new Random();
+                                    int r = random.nextInt(3);
+                                    if (r ==0){
+                                        Zombie zombie = location.getWorld().spawn(location, Zombie.class);
+                                        zombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                        zombie.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
+                                        zombie.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                        zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
+                                        zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
+                                        zombie.setCustomName(p.getDisplayName()+"'s "+zombie.getType().getName());
+                                    }else if (r ==1){
+                                        ZombieVillager spawn = location.getWorld().spawn(location, ZombieVillager.class);
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
+                                        spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
+                                        spawn.setArmsRaised(true);
+                                    }else if (r == 2){
+                                        WitherSkeleton spawn = location.getWorld().spawn(location, WitherSkeleton.class);
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
+                                        spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
+                                    }else{
+                                        Zombie spawn = location.getWorld().spawn(location, Zombie.class);
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
+                                        spawn.setArmsRaised(true);
+                                        spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
+                                    }
+                                }
+                            }
+                        }.runTaskTimer(NikeyV1.getPlugin(),10,10);
+                    }
+                }else if (i >=18){
+                    if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                        event.setCancelled(true);
+                        p.updateInventory();
+                        remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                    }else {
+                        ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                ability.remove(p.getUniqueId());
+                                cancel();
+                                return;
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                        //cooldown-ability
+                        timer = 60;
+                        player = p;
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                timer--;
+                                if (timer == 0){
+                                    cancel();
+                                    return;
+                                }else {
+                                    int x = (int) (p.getLocation().getX());
+                                    int z = (int) (p.getLocation().getZ());
+                                    int randomX = ThreadLocalRandom.current().nextInt(x-6, x+6);
+                                    int randomZ = ThreadLocalRandom.current().nextInt(z-6, z+6);
+                                    int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
+                                    Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
+                                    Random random = new Random();
+                                    int r = random.nextInt(3);
+                                    if (r ==0){
+                                        Zombie zombie = location.getWorld().spawn(location, Zombie.class);
+                                        zombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                        zombie.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
+                                        zombie.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                        zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
+                                        zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
+                                        zombie.setCustomName(p.getDisplayName()+"'s "+zombie.getType().getName());
+                                    }else if (r ==1){
+                                        ZombieVillager spawn = location.getWorld().spawn(location, ZombieVillager.class);
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
+                                        spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
+                                        spawn.setArmsRaised(true);
+                                    }else if (r == 2){
+                                        WitherSkeleton spawn = location.getWorld().spawn(location, WitherSkeleton.class);
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
+                                        spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
+                                    }else{
+                                        Zombie spawn = location.getWorld().spawn(location, Zombie.class);
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
+                                        spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
+                                        spawn.setArmsRaised(true);
+                                        spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
+                                    }
+                                }
+                            }
+                        }.runTaskTimer(NikeyV1.getPlugin(),10,10);
                     }
                 }
             }
@@ -74,33 +245,31 @@ public class Undeadstone implements Listener {
             if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#100613")+"Undead Stein")){
                 String[] arr = p.getItemInHand().getLore().get(1).split(":");
                 int i = Integer.parseInt(arr[1]);
-                if (i == 10||i == 11) {
-                    if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
-                        p.updateInventory();
-                        remainingTime1 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
-                    }else {
-                        cooldown.put(p.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                cooldown.remove(p.getUniqueId());
-                                cancel();
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
-                        //cooldown-ability
-                        ItemStack hand = p.getInventory().getItemInMainHand();
-                        ItemMeta meta = hand.getItemMeta();
-                        ArrayList<String> list = new ArrayList<>();
-                        list.add(ChatColor.of("#221726")+"Souls wander around in this stone");
-                        list.add(ChatColor.of("#00FFAA")+"Level:"+i);
-                        list.add("§e");
-                        list.add("§7Absorbed Soul:§3 "+entity.getType());
-                        meta.setLore(list);
-                        hand.setItemMeta(meta);
-                        Soul.clear();
-                        Soul.add(entity);
-                        p.getWorld().playSound(p.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
-                    }
+                if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
+                    p.updateInventory();
+                    remainingTime1 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
+                }else {
+                    cooldown.put(p.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            cooldown.remove(p.getUniqueId());
+                            cancel();
+                        }
+                    }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
+                    //cooldown-ability
+                    ItemStack hand = p.getInventory().getItemInMainHand();
+                    ItemMeta meta = hand.getItemMeta();
+                    ArrayList<String> list = new ArrayList<>();
+                    list.add(ChatColor.of("#221726")+"Souls wander around in this stone");
+                    list.add(ChatColor.of("#00FFAA")+"Level:"+i);
+                    list.add("§e");
+                    list.add("§7Absorbed Soul:§3 "+entity.getType());
+                    meta.setLore(list);
+                    hand.setItemMeta(meta);
+                    Soul.clear();
+                    Soul.add(entity);
+                    p.getWorld().playSound(p.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
                 }
             }
         }
@@ -115,7 +284,7 @@ public class Undeadstone implements Listener {
                 if (cooldown.containsKey(p.getUniqueId())&& cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
                     event.setCancelled(true);
                 }else {
-                    event.setDamage(5);
+                    event.setDamage(4);
                 }
             }
         }
@@ -124,10 +293,9 @@ public class Undeadstone implements Listener {
     @EventHandler
     public void onEntityTarget(EntityTargetEvent event){
         if (event.getTarget() instanceof Player){
-            if (event.getEntity() instanceof Monster || event.getEntity() instanceof IronGolem){
+            if (event.getEntity() instanceof Monster || event.getEntity() instanceof IronGolem || event.getEntity() instanceof Warden){
                 if (event.getEntity().getCustomName().equalsIgnoreCase(((Player) event.getTarget()).getDisplayName()+"'s "+event.getEntityType().getName())){
                     event.setCancelled(true);
-                    return;
                 }
             }
         }
