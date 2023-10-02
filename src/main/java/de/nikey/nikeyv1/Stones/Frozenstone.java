@@ -3,32 +3,37 @@ package de.nikey.nikeyv1.Stones;
 import com.destroystokyo.paper.event.entity.EntityJumpEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import de.nikey.nikeyv1.NikeyV1;
-import de.slikey.effectlib.effect.FountainEffect;
-import org.bukkit.Location;
+import de.slikey.effectlib.effect.SmokeEffect;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static de.nikey.nikeyv1.Util.HelpUtil.getNearbyBlocks;
+
+@SuppressWarnings("ALL")
 public class Frozenstone implements Listener {
     private ArrayList<LivingEntity> entities = new ArrayList<>();
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> ability = new HashMap<>();
+    public static ArrayList<LivingEntity> notp = new ArrayList<>();
     private int timer;
     public static long remainingTime1;
     public static long remainingTime2;
@@ -61,50 +66,83 @@ public class Frozenstone implements Listener {
                     }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
                     //cooldown-ability
                     if (i ==10 || i == 11){
-                        timer = 20;
-                        float accuracy = 0.2F;
-                        Snowball snowball = p.launchProjectile(Snowball.class);
-                        snowball.setVelocity(p.getLocation().getDirection().multiply(1.6));
-                        snowball.setShooter(p);
-                        snowball.setCustomName("B");
-                        Snowball snowball1 = p.launchProjectile(Snowball.class);
-                        snowball1.setCustomName("B");
-                        snowball1.setVelocity(p.getLocation().getDirection().multiply(1.6));
-                        snowball1.setShooter(p);
-                        Snowball snowball2 = p.launchProjectile(Snowball.class);
-                        snowball2.setVelocity(p.getLocation().getDirection().multiply(1.6));
-                        snowball2.setShooter(p);
-                        snowball2.setCustomName("B");
-                        new BukkitRunnable(){
+                        timer = 4;
+                        new BukkitRunnable() {
                             @Override
                             public void run() {
-                                if (!snowball.isDead()){
-                                    snowball.getWorld().spawnParticle(Particle.SNOWFLAKE,snowball.getLocation(),3);
-                                }else {
+                                timer--;
+                                p.sendMessage(String.valueOf(timer));
+                                if (timer ==0){
                                     cancel();
+                                }else {
+                                    Snowball snowball = p.launchProjectile(Snowball.class);
+                                    snowball.setVelocity(p.getLocation().getDirection().multiply(2));
+                                    snowball.setShooter(p);
+                                    snowball.setCustomName("B");
                                 }
                             }
-                        }.runTaskTimer(NikeyV1.getPlugin(),0L,2L);
-                        new BukkitRunnable(){
+                        }.runTaskTimer(NikeyV1.getPlugin(),15,15);
+                    }else if (i >= 12) {
+                        timer = 4;
+                        new BukkitRunnable() {
                             @Override
                             public void run() {
-                                if (!snowball2.isDead()){
-                                    snowball2.getWorld().spawnParticle(Particle.SNOWFLAKE,snowball2.getLocation(),3);
-                                }else {
+                                timer--;
+                                if (timer ==0){
                                     cancel();
+                                }else {
+                                    Snowball snowball = p.launchProjectile(Snowball.class);
+                                    snowball.setVelocity(p.getLocation().getDirection().multiply(2));
+                                    snowball.setShooter(p);
+                                    snowball.setCustomName("B");
                                 }
                             }
-                        }.runTaskTimer(NikeyV1.getPlugin(),0L,2L);
-                        new BukkitRunnable(){
+                        }.runTaskTimer(NikeyV1.getPlugin(),15,15);
+                    }
+                }
+            }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
+                if (i >=15){
+                    if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                        event.setCancelled(true);
+                        p.updateInventory();
+                        remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                    }else {
+                        ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                        new BukkitRunnable() {
                             @Override
                             public void run() {
-                                if (!snowball1.isDead()){
-                                    snowball1.getWorld().spawnParticle(Particle.SNOWFLAKE,snowball1.getLocation(),3);
-                                }else {
-                                    cancel();
-                                }
+                                ability.remove(p.getUniqueId());
+                                cancel();
                             }
-                        }.runTaskTimer(NikeyV1.getPlugin(),0L,2L);
+                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                        //Cooldown-Ability
+                        for(Block b : getNearbyBlocks(p.getLocation(), 50)) {
+                            if (b.getType().equals(Material.WATER)){
+                                b.setType(Material.FROSTED_ICE);
+                            }
+                        }
+                        for (Entity e : p.getNearbyEntities(50,50,50)){
+                            if (e instanceof LivingEntity){
+                                LivingEntity entity = (LivingEntity) e;
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,3,false));
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
+                                notp.add(entity);
+                                entity.damage(18,p);
+                                entity.setFreezeTicks(700);
+                                SmokeEffect effect = new SmokeEffect(NikeyV1.em);
+                                effect.setEntity(entity);
+                                effect.particle = Particle.SNOWFLAKE;
+                                effect.duration = 20000;
+                                effect.particles = 2;
+                                effect.start();
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        notp.remove(entity);
+                                    }
+                                }.runTaskLater(NikeyV1.getPlugin(),400);
+                            }
+                        }
                     }
                 }
             }
@@ -112,17 +150,33 @@ public class Frozenstone implements Listener {
     }
 
     @EventHandler
+    public void onEntityTeleport(EntityTeleportEvent event) {
+        Entity entity = event.getEntity();
+        if (notp.contains(entity)) event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        Player player = event.getPlayer();
+        if (notp.contains(player)) event.setCancelled(true);
+    }
+
+    @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
         Projectile entity = event.getEntity();
         Entity hitEntity = event.getHitEntity();
         ProjectileSource shooter = entity.getShooter();
-        if (entity instanceof Snowball && entity.getCustomName().equalsIgnoreCase("B") && shooter instanceof Player){
+        if ((entity instanceof Snowball) && entity.getCustomName().equalsIgnoreCase("B") && (shooter instanceof Player)){
             Player p = (Player) shooter;
-            p.sendMessage("H");
             LivingEntity e = (LivingEntity) hitEntity;
+            int i = NikeyV1.getPlugin().getConfig().getInt(p.getName() + ".level");
             assert e != null;
-            e.damage(8,p);
-            e.setFreezeTicks(700);
+            if (i >=12){
+                e.damage(18,p);
+            }else {
+                e.damage(8,p);
+            }
+            e.setFreezeTicks(800);
             e.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*20,3,false));
             e.setVisualFire(false);
             entities.add(e);
@@ -138,16 +192,12 @@ public class Frozenstone implements Listener {
     @EventHandler
     public void onEntityJump(EntityJumpEvent event) {
         LivingEntity entity = event.getEntity();
-        if (entities.contains(entity)){
-            event.setCancelled(true);
-        }
+        if (entities.contains(entity)) event.setCancelled(true);
     }
 
     @EventHandler
     public void onPlayerJump(PlayerJumpEvent event) {
         Player player = event.getPlayer();
-        if (entities.contains(player)){
-            event.setCancelled(true);
-        }
+        if (entities.contains(player)) event.setCancelled(true);
     }
 }
