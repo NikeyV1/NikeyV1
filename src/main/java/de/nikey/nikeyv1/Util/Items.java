@@ -106,6 +106,19 @@ public class Items {
         frozenstone.setItemMeta(meta);
         player.getInventory().addItem(frozenstone);
     }
+    public static void Undeadstone(Player player , Integer level){
+        ItemStack undeadstone = new ItemStack(Material.FIREWORK_STAR);
+        ItemMeta meta =  undeadstone.getItemMeta();
+        meta.setDisplayName(ChatColor.of("#100613")+"Undead Stein");
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        undeadstone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add(ChatColor.of("#221726")+"Souls wander around in this stone");
+        lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
+        meta.setLore(lore);
+        undeadstone.setItemMeta(meta);
+        player.getInventory().addItem(undeadstone);
+    }
     public static void EnchantedAnvil(){
         ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
         ItemMeta emeta = essence.getItemMeta();
