@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -192,6 +193,22 @@ public class Firestone implements Listener {
                     double damage = event.getDamage();
                     event.setDamage(damage*0.5);
                     damager.damage(damage*0.4,entity);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        Entity entity = event.getEntity();
+        if (entity instanceof Player) {
+            Player p = (Player) entity;
+            if (ability.containsKey(p.getUniqueId())){
+                long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                int a = (int) (remain/1000);
+                if (a >160){
+                    double damage = event.getDamage();
+                    event.setDamage(damage*0.5);
                 }
             }
         }

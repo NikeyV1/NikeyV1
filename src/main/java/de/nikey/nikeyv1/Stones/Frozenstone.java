@@ -15,6 +15,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -37,6 +38,7 @@ public class Frozenstone implements Listener {
     private int timer;
     public static long remainingTime1;
     public static long remainingTime2;
+
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player p = event.getPlayer();

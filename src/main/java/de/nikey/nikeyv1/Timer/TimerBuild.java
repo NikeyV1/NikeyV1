@@ -77,6 +77,10 @@ public class TimerBuild  {
                                     Items.Electrostone(player,getLevel());
                                 }else if (getStone(player).equalsIgnoreCase("Water")){
                                     Items.Waterstone(player,getLevel());
+                                }else if (getStone(player).equalsIgnoreCase("Frozen")){
+                                    Items.Frozenstone(player,getLevel());
+                                }else if (getStone(player).equalsIgnoreCase("Undead")){
+                                    Items.Undeadstone(player,getLevel());
                                 }
                             }
                         }else {
