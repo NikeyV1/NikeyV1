@@ -120,17 +120,17 @@ public class Items {
         player.getInventory().addItem(undeadstone);
     }
     public static void Holystone(Player player , Integer level){
-        ItemStack undeadstone = new ItemStack(Material.FIREWORK_STAR);
-        ItemMeta meta =  undeadstone.getItemMeta();
+        ItemStack holystone = new ItemStack(Material.FIREWORK_STAR);
+        ItemMeta meta =  holystone.getItemMeta();
         meta.setDisplayName(ChatColor.of("#47d147")+"Holy Stein");
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        undeadstone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        holystone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         ArrayList<String> lore = new ArrayList<>();
-        lore.add(ChatColor.of("#221726")+"Souls wander around in this stone");
+        lore.add(ChatColor.of("#221726")+"Forged fron Farys");
         lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
         meta.setLore(lore);
-        undeadstone.setItemMeta(meta);
-        player.getInventory().addItem(undeadstone);
+        holystone.setItemMeta(meta);
+        player.getInventory().addItem(holystone);
     }
     public static void EnchantedAnvil(){
         ItemStack essence = new ItemStack(Material.DRAGON_BREATH);

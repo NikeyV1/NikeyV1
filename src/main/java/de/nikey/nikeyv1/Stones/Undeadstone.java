@@ -198,7 +198,8 @@ public class Undeadstone implements Listener {
                                         if (r ==0){
                                             Zombie zombie = location.getWorld().spawn(location, Zombie.class);
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
+                                            zombie.addPotionEffect(new Po
+                                            tionEffect(PotionEffectType.REGENERATION,400,1));
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
