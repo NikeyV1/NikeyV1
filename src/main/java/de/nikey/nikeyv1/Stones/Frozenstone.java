@@ -39,6 +39,23 @@ public class Frozenstone implements Listener {
     public static long remainingTime1;
     public static long remainingTime2;
 
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        FileConfiguration config = NikeyV1.plugin.getConfig();
+        String stone = config.getString(player.getName() + ".stone");
+        if (stone.equalsIgnoreCase("Frozen") && config.getInt(player.getName()+".level") >4){
+            if (player.getLocation().getBlock().getType() == Material.POWDER_SNOW) {
+                player.setAllowFlight(true);
+                player.setFlying(true);
+            } else {
+                player.setAllowFlight(false);
+                player.setFlying(false);
+            }
+        }
+    }
+
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player p = event.getPlayer();

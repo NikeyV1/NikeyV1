@@ -51,6 +51,9 @@ public class Player implements Listener {
         FileConfiguration config = NikeyV1.plugin.getConfig();
         if (config.contains(p.getName())){
             String stone = config.getString(p.getName() + ".stone");
+            if (stone.equalsIgnoreCase("Holy")&&p.getMaxHealth() >20){
+                p.setMaxHealth(20);
+            }
             if (config.getBoolean(p.getName()+"."+stone+".cooldown1.timer")){
                 config.set(p.getName()+"."+stone+".cooldown1.timer",false);
                 NikeyV1.plugin.saveConfig();

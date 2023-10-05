@@ -198,8 +198,7 @@ public class Undeadstone implements Listener {
                                         if (r ==0){
                                             Zombie zombie = location.getWorld().spawn(location, Zombie.class);
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
-                                            zombie.addPotionEffect(new Po
-                                            tionEffect(PotionEffectType.REGENERATION,400,1));
+                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
@@ -283,6 +282,14 @@ public class Undeadstone implements Listener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player){
             Player p = (Player) event.getDamager();
+            if (event.getEntity() instanceof LivingEntity){
+                LivingEntity entity = (LivingEntity) event.getEntity();
+                FileConfiguration config = NikeyV1.plugin.getConfig();
+                String stone = config.getString(p.getName() + ".stone");
+                if (entity.getCategory() == EntityCategory.UNDEAD && stone.equalsIgnoreCase("Undead")&&config.getInt(p.getName()+".level")>5){
+                    event.setDamage(event.getDamage()+1);
+                }
+            }
             if (p.getInventory().getItemInMainHand().getItemMeta() == null)return;
             if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#100613")+"Undead Stein")){
                 if (cooldown.containsKey(p.getUniqueId())&& cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){

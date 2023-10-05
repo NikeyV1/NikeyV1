@@ -88,10 +88,17 @@ public class ServerScoreboard extends ScoreboardBuilder {
                         setScore("§7Ability 2: §c"+a +"/180",3);
                     }
                 }else if (stone.equalsIgnoreCase("Undead")){
-                    //Ability 2
                     long remainingTime2 = Undeadstone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
                     int a = (int) (remainingTime2/1000);
                     //
+                    if (a == 0){
+                        setScore("§7Ability 2: §aReady",3);
+                    }else {
+                        setScore("§7Ability 2: §c"+a +"/180",3);
+                    }
+                }else if (stone.equalsIgnoreCase("Holy")){
+                    long remainingTime2 = Holystone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remainingTime2/1000);
                     if (a == 0){
                         setScore("§7Ability 2: §aReady",3);
                     }else {
@@ -146,6 +153,14 @@ public class ServerScoreboard extends ScoreboardBuilder {
                     }else {
                         setScore("§7Ability 1: §c"+ i+"/100",4);
                     }
+                }else if (stone.equalsIgnoreCase("Holy")){
+                    long remainingTime = Holystone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int i = (int) (remainingTime/1000);
+                    if (i == 0){
+                        setScore("§7Ability 1: §aReady",4);
+                    }else {
+                        setScore("§7Ability 1: §c"+ i+"/100",4);
+                    }
                 }
                 setScore("§7Ping: "+ChatColor.DARK_PURPLE+ player.getPing(),1);
                 setScore("§7Online Players: "+ChatColor.DARK_PURPLE+ Bukkit.getOnlinePlayers().size(),0);
@@ -167,6 +182,8 @@ public class ServerScoreboard extends ScoreboardBuilder {
             setScore("§7Stone: "+ChatColor.DARK_AQUA +config.getString(player.getName()+".stone"),6);
         }else if (stone.equalsIgnoreCase("Undead")){
             setScore("§7Stone: "+ net.md_5.bungee.api.ChatColor.of("#100613")+config.getString(player.getName()+".stone"),6);
+        }else if (stone.equalsIgnoreCase("Holy")){
+            setScore("§7Stone: "+ net.md_5.bungee.api.ChatColor.of("#47d147")+config.getString(player.getName()+".stone"),6);
         }
     }
 }

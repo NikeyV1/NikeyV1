@@ -126,7 +126,7 @@ public class Items {
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         holystone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         ArrayList<String> lore = new ArrayList<>();
-        lore.add(ChatColor.of("#221726")+"Forged fron Farys");
+        lore.add(ChatColor.of("#221726")+"Forged by Farys");
         lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
         meta.setLore(lore);
         holystone.setItemMeta(meta);

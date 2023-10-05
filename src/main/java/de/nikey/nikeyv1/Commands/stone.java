@@ -50,6 +50,13 @@ public class stone implements CommandExecutor {
                     }catch (NumberFormatException e){
                         p.sendMessage("§cTake a Number");
                     }
+                }else if (stone.equalsIgnoreCase("Holy")){
+                    try {
+                        int level = Integer.parseInt(args[1]);
+                        Items.Holystone(p,level);
+                    }catch (NumberFormatException e){
+                        p.sendMessage("§cTake a Number");
+                    }
                 }
             }else {
                 p.sendMessage("§cThat doesnt work like so!");

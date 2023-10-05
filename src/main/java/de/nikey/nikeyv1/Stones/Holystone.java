@@ -1,5 +1,32 @@
 package de.nikey.nikeyv1.Stones;
 
+import de.nikey.nikeyv1.NikeyV1;
+import de.slikey.effectlib.effect.CircleEffect;
+import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
+
+@SuppressWarnings("ALL")
 public class Holystone implements Listener {
     public static ArrayList<Entity> stunned = new ArrayList<>();
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
@@ -8,16 +35,33 @@ public class Holystone implements Listener {
     public static long remainingTime1;
     public static long remainingTime2;
 
+
+    @EventHandler
+    public void onEntityRegainHealth(EntityRegainHealthEvent event) {
+        FileConfiguration config = NikeyV1.plugin.getConfig();
+        if (event.getEntity() instanceof Player){
+            Player p = (Player) event.getEntity();
+            String stone = config.getString(p.getName() + ".stone");
+            if (stone.equalsIgnoreCase("Holy")){
+                if (config.getInt(p.getName()+".level") == 3||config.getInt(p.getName()+".level") == 4){
+                    event.setAmount(event.getAmount()+0.4);
+                }else if (config.getInt(p.getName()+".level") >= 5){
+                    event.setAmount(event.getAmount()+0.6);
+                }
+            }
+        }
+    }
+
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player p = event.getPlayer();
         ItemStack item = event.getItem();
         if (item == null) return;
-        if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§eElektro Stein")&& event.getItem().getType() == Material.FIREWORK_STAR){
+        if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#47d147")+"Holy Stein")&& event.getItem().getType() == Material.FIREWORK_STAR){
             String[] arr = item.getLore().get(1).split(":");
             int i = Integer.parseInt(arr[1]);
             FileConfiguration config = NikeyV1.plugin.getConfig();
-            config.set(p.getName()+".stone","Elektro");
+            config.set(p.getName()+".stone","Holy");
             config.set(p.getName()+".level",i);
             NikeyV1.plugin.saveConfig();
             String stone = config.getString(p.getName() + ".stone");
@@ -38,24 +82,88 @@ public class Holystone implements Listener {
                             }
                         }.runTaskLater(NikeyV1.getPlugin(),20*100);
                         if (i ==10 || i == 11){
-                            timer = 20;
                             World world = p.getWorld();
+                            int players = p.getNearbyEntities(20, 20, 20).size();
+                            if (players >18){
+                                players = 18;
+                            }
+                            p.setMaxHealth(21+players);
+                            p.setHealth(20);
+                            Location location = p.getLocation().add(0,1,0);
+                            p.spawnParticle(Particle.HEART,location,3);
+                            CircleEffect effect = new CircleEffect(NikeyV1.em);
+                            effect.setEntity(p);
+                            effect.start();
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    timer--;
-                                    if(timer == 0){
-                                        cancel();
-                                        return;
-                                    }
-                                    for(Player player :p.getNearbyEntities(world,4,4,4)){
-                                    }
+                                    p.setMaxHealth(20);
                                 }
-                            }.runTaskTimer(NikeyV1.getPlugin(),20,20);
+                            }.runTaskLater(NikeyV1.getPlugin(),20*40);
+                        }else if (i >= 12) {
+                            World world = p.getWorld();
+                            int players = p.getNearbyEntities(20, 20, 20).size();
+                            if (players >18)players = 18;
+                            p.removePotionEffect(PotionEffectType.WEAKNESS);
+                            p.removePotionEffect(PotionEffectType.POISON);
+                            p.removePotionEffect(PotionEffectType.DARKNESS);
+                            p.removePotionEffect(PotionEffectType.LEVITATION);
+                            p.setMaxHealth(21+players);
+                            p.setHealth(20);
+                            Location location = p.getLocation().add(0,2,0);
+                            CircleEffect effect = new CircleEffect(NikeyV1.em);
+                            effect.setEntity(p);
+                            effect.start();
+                            p.spawnParticle(Particle.HEART,location,3);
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    p.setMaxHealth(20);
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(),20*40);
                         }
                     }            
                 }
-            }    
+            }else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR){
+                if (i >=15){
+                    if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                        p.updateInventory();
+                        remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                    }else {
+                        ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                ability.remove(p.getUniqueId());
+                                cancel();
+                                return;
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(),20*180);
+                        //Cooldown-Ability
+                       for (Entity e : p.getNearbyEntities(20,20,20)){
+                           if (e instanceof Player) {
+                               Player player =(Player) e;
+                               double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                               armor = armor*1.6;
+
+                               int players = p.getNearbyEntities(20, 20, 20).size();
+                               if (players < 3){
+                                   p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                               } else if (players < 6) {
+                                   p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                               }else {
+                                   p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                               }
+                               player.damage(armor+10,p);
+                           }
+                           if (e instanceof LivingEntity){
+                               LivingEntity entity = (LivingEntity) e;
+                               entity.damage(10,p);
+                           }
+                       }
+                    }
+                }
+            }
         }    
     }    
 }

@@ -81,6 +81,8 @@ public class TimerBuild  {
                                     Items.Frozenstone(player,getLevel());
                                 }else if (getStone(player).equalsIgnoreCase("Undead")){
                                     Items.Undeadstone(player,getLevel());
+                                }else if (getStone(player).equalsIgnoreCase("Holy")){
+                                    Items.Holystone(player,getLevel());
                                 }
                             }
                         }else {
