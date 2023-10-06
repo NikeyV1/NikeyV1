@@ -88,8 +88,8 @@ public class TimerBuild  {
                             }
                         }else {
                             cancel();
-                            NikeyV1.getPlugin().getLogger().info(player.getName()+" left while upgrading!");
-                            NikeyV1.getPlugin().getLogger().info("Was eine bitch");
+                            System.out.println(player.getName()+" left while upgrading!");
+                            System.out.println("Was eine bitch");
                         }
                     }
                 };
