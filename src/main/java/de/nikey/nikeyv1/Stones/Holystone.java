@@ -3,10 +3,7 @@ package de.nikey.nikeyv1.Stones;
 import de.nikey.nikeyv1.NikeyV1;
 import de.slikey.effectlib.effect.CircleEffect;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
@@ -140,6 +137,7 @@ public class Holystone implements Listener {
                             }
                         }.runTaskLater(NikeyV1.getPlugin(),20*180);
                         //Cooldown-Ability
+                        p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
                        for (Entity e : p.getNearbyEntities(20,20,20)){
                            if (e instanceof Player) {
                                Player player =(Player) e;
