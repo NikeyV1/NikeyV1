@@ -50,7 +50,7 @@ public class Waterstone implements Listener {
         Player p = event.getPlayer();
         ItemStack item = event.getItem();
         if (item == null) return;
-        if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§9Wasser Stein")&& event.getItem().getType() == Material.FIREWORK_STAR){
+        if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§9Water Stone")&& event.getItem().getType() == Material.FIREWORK_STAR){
             String[] arr = item.getLore().get(1).split(":");
             int i = Integer.parseInt(arr[1]);
             FileConfiguration config = NikeyV1.plugin.getConfig();

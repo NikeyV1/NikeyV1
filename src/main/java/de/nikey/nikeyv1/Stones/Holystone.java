@@ -57,7 +57,7 @@ public class Holystone implements Listener {
         Player p = event.getPlayer();
         ItemStack item = event.getItem();
         if (item == null) return;
-        if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#47d147")+"Holy Stein")&& event.getItem().getType() == Material.FIREWORK_STAR){
+        if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§aHoly Stone")&& event.getItem().getType() == Material.FIREWORK_STAR){
             String[] arr = item.getLore().get(1).split(":");
             int i = Integer.parseInt(arr[1]);
             FileConfiguration config = NikeyV1.plugin.getConfig();
@@ -145,7 +145,6 @@ public class Holystone implements Listener {
                                Player player =(Player) e;
                                double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                armor = armor*1.6;
-
                                int players = p.getNearbyEntities(20, 20, 20).size();
                                if (players < 3){
                                    p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));

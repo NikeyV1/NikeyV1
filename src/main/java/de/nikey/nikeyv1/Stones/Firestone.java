@@ -39,7 +39,7 @@ public class Firestone implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getItem() == null)return;
-        if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#e66b63")+"Lava Stein")&& event.getItem().getType() == Material.FIREWORK_STAR){
+        if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#e66b63")+"Lava Stone")&& event.getItem().getType() == Material.FIREWORK_STAR){
             Player p = event.getPlayer();
             ItemStack item = event.getItem();
             String[] arr = item.getLore().get(1).split(":");
@@ -65,9 +65,7 @@ public class Firestone implements Listener {
                             return;
                         }
                     }.runTaskLater(NikeyV1.getPlugin(),20*100);
-                    if (i == 3){
-                        p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0,true,false));
-                    } else if (i == 10 || i == 11) {
+                    if (i == 10 || i == 11) {
                         timer = 20;
                         SphereEffect effect = new SphereEffect(NikeyV1.em);
                         effect.setEntity(p);

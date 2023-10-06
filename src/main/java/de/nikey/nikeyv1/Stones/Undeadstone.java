@@ -44,7 +44,7 @@ public class Undeadstone implements Listener {
         Player p = event.getPlayer();
         ItemStack item = event.getItem();
         if (item == null) return;
-        if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#100613")+"Undead Stein")&& event.getItem().getType() == Material.FIREWORK_STAR){
+        if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#100613")+"Undead Stone")&& event.getItem().getType() == Material.FIREWORK_STAR){
             String[] arr = item.getLore().get(1).split(":");
             int i = Integer.parseInt(arr[1]);
             FileConfiguration config = NikeyV1.plugin.getConfig();
@@ -245,7 +245,7 @@ public class Undeadstone implements Listener {
         if (entity.getKiller() instanceof Player && !(entity instanceof Player)){
             Player p = (Player) entity.getKiller();
             if (p.getInventory().getItemInMainHand().getItemMeta() == null)return;
-            if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#100613")+"Undead Stein")){
+            if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#100613")+"Undead Stone")){
                 String[] arr = p.getItemInHand().getLore().get(1).split(":");
                 int i = Integer.parseInt(arr[1]);
                 if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
@@ -291,7 +291,7 @@ public class Undeadstone implements Listener {
                 }
             }
             if (p.getInventory().getItemInMainHand().getItemMeta() == null)return;
-            if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#100613")+"Undead Stein")){
+            if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#100613")+"Undead Stone")){
                 if (cooldown.containsKey(p.getUniqueId())&& cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
                     event.setCancelled(true);
                 }else {

@@ -8,6 +8,7 @@ import de.nikey.nikeyv1.Stones.Waterstone;
 import de.nikey.nikeyv1.Timer.TimerBuild;
 import de.nikey.nikeyv1.Util.Items;
 import io.papermc.paper.event.entity.EntityMoveEvent;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -54,82 +55,6 @@ public class Player implements Listener {
             if (stone.equalsIgnoreCase("Holy")&&p.getMaxHealth() >20){
                 p.setMaxHealth(20);
             }
-            if (config.getBoolean(p.getName()+"."+stone+".cooldown1.timer")){
-                config.set(p.getName()+"."+stone+".cooldown1.timer",false);
-                NikeyV1.plugin.saveConfig();
-                if (stone.equalsIgnoreCase("Fire")){
-                    a = config.getInt(p.getName() + "." + stone + ".cooldown1.time");
-                    //Firestone.cooldown.put(p,a);
-                    new BukkitRunnable(){
-                        @Override
-                        public void run() {
-                            a++;
-                            if (!p.isOnline()){
-                                config.set(p.getName()+"."+stone+"."+"cooldown1.time",a);
-                                config.set(p.getName()+"."+stone+"."+"cooldown1.timer",true);
-                                NikeyV1.getPlugin().saveConfig();
-                                cancel();
-                            }
-                            if (a < 100){
-                                //Firestone.cooldown.replace(p,a);
-                            }else {
-                                a=0;
-                                Firestone.cooldown.remove(p);
-                                cancel();
-                            }
-                        }
-                    }.runTaskTimer(NikeyV1.getPlugin(),0L,20);
-                }else if (stone.equalsIgnoreCase("Elektro")){
-                    a = config.getInt(p.getName() + "." + stone + ".cooldown1.time");
-                    Electrostone.cooldown.put(p.getUniqueId(), (long) a);
-                    new BukkitRunnable(){
-                        @Override
-                        public void run() {
-                            a++;
-                            if (!p.isOnline()){
-                                config.set(p.getName()+"."+stone+"."+"cooldown1.time",a);
-                                config.set(p.getName()+"."+stone+"."+"cooldown1.timer",true);
-                                NikeyV1.getPlugin().saveConfig();
-                                cancel();
-                            }
-                            if (a < 100){
-                                Electrostone.cooldown.replace(p.getUniqueId(), (long) a);
-                            }else {
-                                a=0;
-                                Electrostone.cooldown.remove(p);
-                                cancel();
-                            }
-                        }
-                    }.runTaskTimer(NikeyV1.getPlugin(),0L,20);
-                }
-            }
-            if (config.getBoolean(p.getName()+"."+stone+".cooldown2.timer")){
-                config.set(p.getName()+"."+stone+".cooldown2.timer",false);
-                NikeyV1.plugin.saveConfig();
-                if (stone.equalsIgnoreCase("Elektro")){
-                    b = config.getInt(p.getName() + "." + stone + ".cooldown1.time");
-                    //Electrostone.ability.put(p,b);
-                    new BukkitRunnable(){
-                        @Override
-                        public void run() {
-                            b++;
-                            if (!p.isOnline()){
-                                config.set(p.getName()+"."+stone+"."+"cooldown1.time",b);
-                                config.set(p.getName()+"."+stone+"."+"cooldown1.timer",true);
-                                NikeyV1.getPlugin().saveConfig();
-                                cancel();
-                            }
-                            if (b < 180){
-                                //Electrostone.ability.replace(p,b);
-                            }else {
-                                b=0;
-                                //Electrostone.ability.remove(b);
-                                cancel();
-                            }
-                        }
-                    }.runTaskTimer(NikeyV1.getPlugin(),0L,20);
-                }
-            }
             for (org.bukkit.entity.Player player : Bukkit.getOnlinePlayers()){
 
                 TimerBuild timerBuild = new TimerBuild();
@@ -154,27 +79,42 @@ public class Player implements Listener {
             }
         }else {
             Random random = new Random();
-            int i = random.nextInt(3);
+            int i = random.nextInt(6);
             if (i == 0){
                 Items.Firestone(p,1);
                 p.sendTitle("§d§kR§r§cLava Stone§r§d§kR","");
                 config.set(p.getName()+".stone", "Fire");
                 config.set(p.getName()+".level",1);
-                config.set(p.getName()+".time",false);
                 NikeyV1.plugin.saveConfig();
             }else if (i == 1){
                 Items.Electrostone(p,1);
-                p.sendTitle("§d§kR§r§eElektro Stone§r§d§kR","");
-                config.set(p.getName()+".stone", "Elektro");
+                p.sendTitle("§d§kR§r§eElectric Stone§r§d§kR","");
+                config.set(p.getName()+".stone", "Electric");
                 config.set(p.getName()+".level",1);
-                config.set(p.getName()+".time",false);
                 NikeyV1.plugin.saveConfig();
             }else if (i == 2){
                 Items.Waterstone(p,1);
                 p.sendTitle("§d§kR§r§9Water Stone§r§d§kR","");
                 config.set(p.getName()+".stone", "Water");
                 config.set(p.getName()+".level",1);
-                config.set(p.getName()+".time",false);
+                NikeyV1.plugin.saveConfig();
+            }else if (i == 3){
+                Items.Frozenstone(p,1);
+                p.sendTitle("§d§kR§r§3Frozen Stone§r§d§kR","");
+                config.set(p.getName()+".stone", "Frozen");
+                config.set(p.getName()+".level",1);
+                NikeyV1.plugin.saveConfig();
+            }else if (i == 4){
+                Items.Undeadstone(p,1);
+                p.sendTitle("§d§kR§r§0Undead Stone§r§d§kR","");
+                config.set(p.getName()+".stone", "Undead");
+                config.set(p.getName()+".level",1);
+                NikeyV1.plugin.saveConfig();
+            }else if (i == 5){
+                Items.Holystone(p,1);
+                p.sendTitle("§d§kR§r§aHoly Stone§r§d§kR","");
+                config.set(p.getName()+".stone", "Holy");
+                config.set(p.getName()+".level",1);
                 NikeyV1.plugin.saveConfig();
             }
         }
@@ -252,10 +192,10 @@ public class Player implements Listener {
                 config.set(player.getName() +".level",i-1);
                 String stone = config.getString(player.getName() + ".stone");
                 assert stone != null;
-                if (stone.equals("Fire")) {
+                if (stone.equalsIgnoreCase("Fire")) {
                     for (ItemStack contents : player.getInventory().getContents()) {
                         if (contents == null || contents.getType() == Material.AIR) continue;
-                        if (contents.getItemMeta().getDisplayName().equalsIgnoreCase(net.md_5.bungee.api.ChatColor.of("#e66b63") + "Lava Stein")) {
+                        if (contents.getItemMeta().getDisplayName().equalsIgnoreCase(net.md_5.bungee.api.ChatColor.of("#e66b63") + "Lava Stone")) {
                             String[] arr = contents.getLore().get(1).split(":");
                             String a = arr[1];
                             if (a.equalsIgnoreCase(String.valueOf(i))) {
@@ -272,25 +212,103 @@ public class Player implements Listener {
                             }
                         }
                     }
-                }else {
-                    if (stone.equals("elektro")) {
-                        for (ItemStack contents : player.getInventory().getContents()) {
-                            if (contents == null || contents.getType() == Material.AIR) continue;
-                            if (contents.getItemMeta().getDisplayName().equalsIgnoreCase(net.md_5.bungee.api.ChatColor.of("#e66b63") + "Lava Stein")) {
-                                String[] arr = contents.getLore().get(1).split(":");
-                                String a = arr[1];
-                                if (a.equalsIgnoreCase(String.valueOf(i))) {
-                                    int l = Integer.parseInt(a);
-                                    l = l - 1;
-                                    ArrayList<String> lore = new ArrayList<>();
-                                    lore.add(net.md_5.bungee.api.ChatColor.of("#B1A012")+ "Überladen mit elektrizität");
-                                    lore.add(net.md_5.bungee.api.ChatColor.of("#00FFAA")+"Level:"+l);
-                                    contents.setLore(lore);
-                                    new ServerScoreboard(player);
-                                    Items.SoulofStrenght(killer);
-                                } else {
-                                    config.set(player.getName() + ".level", Integer.parseInt(a));
-                                }
+                }else if (stone.equalsIgnoreCase("Electric")) {
+                    for (ItemStack contents : player.getInventory().getContents()) {
+                        if (contents == null || contents.getType() == Material.AIR) continue;
+                        if (contents.getItemMeta().getDisplayName().equalsIgnoreCase("§eElectric Stone")) {
+                            String[] arr = contents.getLore().get(1).split(":");
+                            String a = arr[1];
+                            if (a.equalsIgnoreCase(String.valueOf(i))) {
+                                int l = Integer.parseInt(a);
+                                l = l - 1;
+                                ArrayList<String> lore = new ArrayList<>();
+                                lore.add(net.md_5.bungee.api.ChatColor.of("#B1A012")+ "Overloaded with electricity");
+                                lore.add(ChatColor.of("#00FFAA")+"Level:"+l);
+                                contents.setLore(lore);
+                                new ServerScoreboard(player);
+                                Items.SoulofStrenght(killer);
+                            } else {
+                                config.set(player.getName() + ".level", Integer.parseInt(a));
+                            }
+                        }
+                    }
+                }else if (stone.equalsIgnoreCase("Water")) {
+                    for (ItemStack contents : player.getInventory().getContents()) {
+                        if (contents == null || contents.getType() == Material.AIR) continue;
+                        if (contents.getItemMeta().getDisplayName().equalsIgnoreCase("§9Water Stone")) {
+                            String[] arr = contents.getLore().get(1).split(":");
+                            String a = arr[1];
+                            if (a.equalsIgnoreCase(String.valueOf(i))) {
+                                int l = Integer.parseInt(a);
+                                l = l - 1;
+                                ArrayList<String> lore = new ArrayList<>();
+                                lore.add("§1A storm rages in this stone");
+                                lore.add(ChatColor.of("#00FFAA")+"Level:"+l);
+                                contents.setLore(lore);
+                                new ServerScoreboard(player);
+                                Items.SoulofStrenght(killer);
+                            } else {
+                                config.set(player.getName() + ".level", Integer.parseInt(a));
+                            }
+                        }
+                    }
+                }else if (stone.equalsIgnoreCase("Frozen")) {
+                    for (ItemStack contents : player.getInventory().getContents()) {
+                        if (contents == null || contents.getType() == Material.AIR) continue;
+                        if (contents.getItemMeta().getDisplayName().equalsIgnoreCase("§3Frozen Stone")) {
+                            String[] arr = contents.getLore().get(1).split(":");
+                            String a = arr[1];
+                            if (a.equalsIgnoreCase(String.valueOf(i))) {
+                                int l = Integer.parseInt(a);
+                                l = l - 1;
+                                ArrayList<String> lore = new ArrayList<>();
+                                lore.add("§bCold enough to freeze fire");
+                                lore.add(ChatColor.of("#00FFAA")+"Level:"+l);
+                                contents.setLore(lore);
+                                new ServerScoreboard(player);
+                                Items.SoulofStrenght(killer);
+                            } else {
+                                config.set(player.getName() + ".level", Integer.parseInt(a));
+                            }
+                        }
+                    }
+                }else if (stone.equalsIgnoreCase("Undead")) {
+                    for (ItemStack contents : player.getInventory().getContents()) {
+                        if (contents == null || contents.getType() == Material.AIR) continue;
+                        if (contents.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#100613")+"Undead Stone")) {
+                            String[] arr = contents.getLore().get(1).split(":");
+                            String a = arr[1];
+                            if (a.equalsIgnoreCase(String.valueOf(i))) {
+                                int l = Integer.parseInt(a);
+                                l = l - 1;
+                                ArrayList<String> lore = new ArrayList<>();
+                                lore.add(ChatColor.of("#221726")+"Souls wander around in this stone");
+                                lore.add(ChatColor.of("#00FFAA")+"Level:"+l);
+                                contents.setLore(lore);
+                                new ServerScoreboard(player);
+                                Items.SoulofStrenght(killer);
+                            } else {
+                                config.set(player.getName() + ".level", Integer.parseInt(a));
+                            }
+                        }
+                    }
+                }else if (stone.equalsIgnoreCase("Holy")) {
+                    for (ItemStack contents : player.getInventory().getContents()) {
+                        if (contents == null || contents.getType() == Material.AIR) continue;
+                        if (contents.getItemMeta().getDisplayName().equalsIgnoreCase("§aHoly Stone")) {
+                            String[] arr = contents.getLore().get(1).split(":");
+                            String a = arr[1];
+                            if (a.equalsIgnoreCase(String.valueOf(i))) {
+                                int l = Integer.parseInt(a);
+                                l = l - 1;
+                                ArrayList<String> lore = new ArrayList<>();
+                                lore.add("§2Forged by Farys");
+                                lore.add(ChatColor.of("#00FFAA")+"Level:"+l);
+                                contents.setLore(lore);
+                                new ServerScoreboard(player);
+                                Items.SoulofStrenght(killer);
+                            } else {
+                                config.set(player.getName() + ".level", Integer.parseInt(a));
                             }
                         }
                     }
@@ -441,8 +459,6 @@ public class Player implements Listener {
     @EventHandler
     public void onEntityMove(EntityMoveEvent event) {
         LivingEntity entity = event.getEntity();
-        if (entity.isInWaterOrRain()){
-            entity.setVisualFire(false);
-        }
+        if (entity.isInWaterOrRain())entity.setVisualFire(false);
     }
 }

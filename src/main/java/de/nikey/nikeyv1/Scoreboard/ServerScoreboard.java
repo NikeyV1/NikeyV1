@@ -47,7 +47,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
             @Override
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
-                if (stone.equalsIgnoreCase("Elektro")){
+                if (stone.equalsIgnoreCase("Electric")){
                     //Ability 2
                     long remainingTime2 = Electrostone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
                     int a = (int) (remainingTime2/1000);
@@ -113,7 +113,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
             @Override
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
-                if (stone.equalsIgnoreCase("Elektro")){
+                if (stone.equalsIgnoreCase("Electric")){
                     long remainingTime = Electrostone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
                     int i = (int) (remainingTime/1000);
                     if (i == 0){
@@ -174,7 +174,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
         String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
         if (stone.equalsIgnoreCase("Fire")){
             setScore("§7Stone: "+ChatColor.RED +config.getString(player.getName()+".stone"),6);
-        }else if (stone.equalsIgnoreCase("Elektro")){
+        }else if (stone.equalsIgnoreCase("Electric")){
             setScore("§7Stone: "+ChatColor.YELLOW +config.getString(player.getName()+".stone"),6);
         }else if (stone.equalsIgnoreCase("Water")){
             setScore("§7Stone: "+ChatColor.BLUE +config.getString(player.getName()+".stone"),6);

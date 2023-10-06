@@ -11,6 +11,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+@SuppressWarnings("ALL")
 public class TimerBuild  {
     private int time;
     private int stopTime;

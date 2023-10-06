@@ -57,7 +57,7 @@ public class Items {
     public static void Firestone(Player player , Integer level){
         ItemStack lavastein = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  lavastein.getItemMeta();
-        meta.setDisplayName(ChatColor.of("#e66b63")+"Lava Stein");
+        meta.setDisplayName(ChatColor.of("#e66b63")+"Lava Stone");
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         lavastein.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         ArrayList<String> lore = new ArrayList<>();
@@ -70,7 +70,7 @@ public class Items {
     public static void Electrostone(Player player , Integer level){
         ItemStack elektrostein = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  elektrostein.getItemMeta();
-        meta.setDisplayName("§eElektro Stein");
+        meta.setDisplayName("§eElectric Stone");
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         elektrostein.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         ArrayList<String> lore = new ArrayList<>();
@@ -83,7 +83,7 @@ public class Items {
     public static void Waterstone(Player player , Integer level){
         ItemStack waterstone = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  waterstone.getItemMeta();
-        meta.setDisplayName("§9Wasser Stein");
+        meta.setDisplayName("§9Water Stone");
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         waterstone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         ArrayList<String> lore = new ArrayList<>();
@@ -96,7 +96,7 @@ public class Items {
     public static void Frozenstone(Player player , Integer level){
         ItemStack frozenstone = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  frozenstone.getItemMeta();
-        meta.setDisplayName("§3Eis Stein");
+        meta.setDisplayName("§3Frozen Stone");
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         frozenstone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         ArrayList<String> lore = new ArrayList<>();
@@ -109,7 +109,7 @@ public class Items {
     public static void Undeadstone(Player player , Integer level){
         ItemStack undeadstone = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  undeadstone.getItemMeta();
-        meta.setDisplayName(ChatColor.of("#100613")+"Undead Stein");
+        meta.setDisplayName(ChatColor.of("#100613")+"Undead Stone");
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         undeadstone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         ArrayList<String> lore = new ArrayList<>();
@@ -122,11 +122,11 @@ public class Items {
     public static void Holystone(Player player , Integer level){
         ItemStack holystone = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  holystone.getItemMeta();
-        meta.setDisplayName(ChatColor.of("#47d147")+"Holy Stein");
+        meta.setDisplayName("§aHoly Stone");
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         holystone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         ArrayList<String> lore = new ArrayList<>();
-        lore.add(ChatColor.of("#221726")+"Forged by Farys");
+        lore.add("§2Forged by Farys");
         lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
         meta.setLore(lore);
         holystone.setItemMeta(meta);
