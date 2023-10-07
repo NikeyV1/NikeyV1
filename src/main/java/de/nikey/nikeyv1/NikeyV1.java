@@ -16,18 +16,14 @@ import java.util.HashMap;
 
 @SuppressWarnings("ALL")
 public final class NikeyV1 extends JavaPlugin {
-    public static NikeyV1 plugin;
     public static EffectManager em;
+    public static NikeyV1 plugin;
     private final HashMap<org.bukkit.entity.Player, Integer> time = new HashMap<>();
     @Override
     public void onEnable() {
-        em = new EffectManager(EffectLib.instance());
         plugin = this;
-        reloadConfig();
         saveDefaultConfig();
 
-        Items.EnchantedAnvil();
-        Items.Soulrecepie();
         PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents(new Player(),this);
         manager.registerEvents(new Firestone(),this);
@@ -41,11 +37,11 @@ public final class NikeyV1 extends JavaPlugin {
         //Command
         getCommand("stone").setExecutor(new stone());
         getCommand("effect").setExecutor(new EffectCMD());
-
-        //Stuff
-
-
-
+        //resipes
+        Items.EnchantedAnvil();
+        Items.Soulrecepie();
+        //Effect manager
+        em = new EffectManager(EffectLib.instance());
     }
 
     public static NikeyV1 getPlugin() {

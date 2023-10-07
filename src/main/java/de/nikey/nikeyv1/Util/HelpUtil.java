@@ -15,8 +15,7 @@ public class HelpUtil {
         ArrayList<Entity> entities = (ArrayList<Entity>) player.getNearbyEntities(range, range, range);
         ArrayList<Block> sightBlock = (ArrayList<Block>) player.getLineOfSight( (Set<Material>) null, range);
         ArrayList<Location> sight = new ArrayList<Location>();
-        for (int i = 0;i<sightBlock.size();i++)
-            sight.add(sightBlock.get(i).getLocation());
+        for (Block block : sightBlock) sight.add(block.getLocation());
         for (int i = 0;i<sight.size();i++) {
             for (int k = 0;k<entities.size();k++) {
                 if (Math.abs(entities.get(k).getLocation().getX()-sight.get(i).getX())<1.3) {

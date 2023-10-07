@@ -106,7 +106,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
                     }
                 }
             }
-        }.runTaskTimer(NikeyV1.getPlugin(),20,20);
+        }.runTaskTimer(NikeyV1.getPlugin(),10,10);
     }
     private void run() {
         new BukkitRunnable() {
@@ -165,7 +165,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 setScore("§7Ping: "+ChatColor.DARK_PURPLE+ player.getPing(),1);
                 setScore("§7Online Players: "+ChatColor.DARK_PURPLE+ Bukkit.getOnlinePlayers().size(),0);
             }
-        }.runTaskTimer(NikeyV1.plugin,20,20);
+        }.runTaskTimer(NikeyV1.plugin,10,10);
     }
 
 

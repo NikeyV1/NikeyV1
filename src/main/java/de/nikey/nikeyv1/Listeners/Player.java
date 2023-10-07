@@ -3,8 +3,6 @@ package de.nikey.nikeyv1.Listeners;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
 import de.nikey.nikeyv1.Stones.Electrostone;
-import de.nikey.nikeyv1.Stones.Firestone;
-import de.nikey.nikeyv1.Stones.Waterstone;
 import de.nikey.nikeyv1.Timer.TimerBuild;
 import de.nikey.nikeyv1.Util.Items;
 import io.papermc.paper.event.entity.EntityMoveEvent;
@@ -12,21 +10,24 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -44,78 +45,80 @@ public class Player implements Listener {
     }
 
     public static Inventory inv = Bukkit.createInventory(null, 27, "Enchanted Anvil");
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         org.bukkit.entity.Player p = event.getPlayer();
         new ServerScoreboard(p);
-        NikeyV1.getPlugin().reloadConfig();
-        FileConfiguration config = NikeyV1.plugin.getConfig();
-        if (config.contains(p.getName())){
-            String stone = config.getString(p.getName() + ".stone");
-            if (stone.equalsIgnoreCase("Holy")&&p.getMaxHealth() >20){
-                p.setMaxHealth(20);
-            }
-            for (org.bukkit.entity.Player player : Bukkit.getOnlinePlayers()){
-
-                TimerBuild timerBuild = new TimerBuild();
-                if (config.getBoolean(player.getName()+".time")){
-                    BukkitRunnable runnable = new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            config.set(player.getName()+".time",false);
-                            if (!config.getBoolean(player.getName()+".time")){
-                                timerBuild.setLevel(config.getInt(player.getName()+".level"));
-                                timerBuild.setTime(config.getInt(player.getName()+".timer"));
-                                timerBuild.setStopTime(config.getInt(player.getName()+".stoptime"));
-                                timerBuild.start(player);
-                                player.sendMessage("§aYour upgrade continues!");
-                            }else {
-                                player.sendMessage("§cPlugin Error: "+event.getEventName()+".continue.upgrade");
-                            }
-                        }
-                    };
-                    runnable.runTaskLater(NikeyV1.getPlugin(),20);
+        FileConfiguration config = NikeyV1.getPlugin().getConfig();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                System.out.println(config.getString(p.getName()+".level"));
+                if (config.getString(p.getName()+".level") == null){
+                    p.sendMessage("GG");
+                    Random random = new Random();
+                    int i = random.nextInt(6);
+                    if (i == 0){
+                        Items.Firestone(p,1);
+                        p.sendTitle("§d§kR§r§cLava Stone§r§d§kR","");
+                        config.set(p.getName()+".stone", "Fire");
+                        config.set(p.getName()+".level",1);
+                        NikeyV1.plugin.saveConfig();
+                    }else if (i == 1){
+                        Items.Electrostone(p,1);
+                        p.sendTitle("§d§kR§r§eElectric Stone§r§d§kR","");
+                        config.set(p.getName()+".stone", "Electric");
+                        config.set(p.getName()+".level",1);
+                        NikeyV1.plugin.saveConfig();
+                    }else if (i == 2){
+                        Items.Waterstone(p,1);
+                        p.sendTitle("§d§kR§r§9Water Stone§r§d§kR","");
+                        config.set(p.getName()+".stone", "Water");
+                        config.set(p.getName()+".level",1);
+                        NikeyV1.plugin.saveConfig();
+                    }else if (i == 3){
+                        Items.Frozenstone(p,1);
+                        p.sendTitle("§d§kR§r§3Frozen Stone§r§d§kR","");
+                        config.set(p.getName()+".stone", "Frozen");
+                        config.set(p.getName()+".level",1);
+                        NikeyV1.plugin.saveConfig();
+                    }else if (i == 4){
+                        Items.Undeadstone(p,1);
+                        p.sendTitle("§d§kR§r§0Undead Stone§r§d§kR","");
+                        config.set(p.getName()+".stone", "Undead");
+                        config.set(p.getName()+".level",1);
+                        NikeyV1.plugin.saveConfig();
+                    }else if (i == 5){
+                        Items.Holystone(p,1);
+                        p.sendTitle("§d§kR§r§aHoly Stone§r§d§kR","");
+                        config.set(p.getName()+".stone", "Holy");
+                        config.set(p.getName()+".level",1);
+                        NikeyV1.plugin.saveConfig();
+                    }
                 }
             }
-        }else {
-            Random random = new Random();
-            int i = random.nextInt(6);
-            if (i == 0){
-                Items.Firestone(p,1);
-                p.sendTitle("§d§kR§r§cLava Stone§r§d§kR","");
-                config.set(p.getName()+".stone", "Fire");
-                config.set(p.getName()+".level",1);
-                NikeyV1.plugin.saveConfig();
-            }else if (i == 1){
-                Items.Electrostone(p,1);
-                p.sendTitle("§d§kR§r§eElectric Stone§r§d§kR","");
-                config.set(p.getName()+".stone", "Electric");
-                config.set(p.getName()+".level",1);
-                NikeyV1.plugin.saveConfig();
-            }else if (i == 2){
-                Items.Waterstone(p,1);
-                p.sendTitle("§d§kR§r§9Water Stone§r§d§kR","");
-                config.set(p.getName()+".stone", "Water");
-                config.set(p.getName()+".level",1);
-                NikeyV1.plugin.saveConfig();
-            }else if (i == 3){
-                Items.Frozenstone(p,1);
-                p.sendTitle("§d§kR§r§3Frozen Stone§r§d§kR","");
-                config.set(p.getName()+".stone", "Frozen");
-                config.set(p.getName()+".level",1);
-                NikeyV1.plugin.saveConfig();
-            }else if (i == 4){
-                Items.Undeadstone(p,1);
-                p.sendTitle("§d§kR§r§0Undead Stone§r§d§kR","");
-                config.set(p.getName()+".stone", "Undead");
-                config.set(p.getName()+".level",1);
-                NikeyV1.plugin.saveConfig();
-            }else if (i == 5){
-                Items.Holystone(p,1);
-                p.sendTitle("§d§kR§r§aHoly Stone§r§d§kR","");
-                config.set(p.getName()+".stone", "Holy");
-                config.set(p.getName()+".level",1);
-                NikeyV1.plugin.saveConfig();
+        }.runTaskLater(NikeyV1.getPlugin(),10);
+        if (config.contains(p.getName())){
+            String stone = config.getString(p.getName() + ".stone");
+            if (stone.equalsIgnoreCase("Holy")&&p.getMaxHealth() >20)p.setMaxHealth(20);
+            TimerBuild timerBuild = new TimerBuild();
+            if (config.getBoolean(p.getName()+".time")){
+                BukkitRunnable runnable = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        config.set(p.getName()+".time",false);
+                        if (!config.getBoolean(p.getName()+".time")){
+                            timerBuild.setLevel(config.getInt(p.getName()+".level"));
+                            timerBuild.setTime(config.getInt(p.getName()+".timer"));
+                            timerBuild.setStopTime(config.getInt(p.getName()+".stoptime"));
+                            timerBuild.start(p);
+                            p.sendMessage("§aYour upgrade continues!");
+                        }else {
+                            p.sendMessage("§cPlugin Error: "+event.getEventName()+".continue.upgrade");
+                        }
+                    }
+                };
+                runnable.runTaskLater(NikeyV1.getPlugin(),20);
             }
         }
     }
@@ -131,6 +134,20 @@ public class Player implements Listener {
         if (Electrostone.stunned.contains(entity)){
             int damg = (int) (event.getDamage() + (event.getDamage() * (20 / 100)));
             event.setDamage(damg);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        Item itemDrop = event.getItemDrop();
+        org.bukkit.entity.Player player = event.getPlayer();
+        PlayerInventory inventory = player.getInventory();
+        if (itemDrop.getItemStack().getType() == Material.FIREWORK_STAR||itemDrop.getItemStack().getItemMeta().hasLore()){
+            String[] arr = itemDrop.getItemStack().getLore().get(1).split(":");
+            String a = arr[0];
+            if (a.equalsIgnoreCase(ChatColor.of("#00FFAA")+"Level")){
+               event.setCancelled(true);
+            }
         }
     }
 
@@ -319,11 +336,26 @@ public class Player implements Listener {
                 player.kickPlayer("§cYour stone is out of strength!");
             }
         }
-        //Wenn spieler gekillt dann gebe SoulofStrenght
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
+        Inventory top = event.getView().getTopInventory();
+        Inventory bottom = event.getView().getBottomInventory();
+        InventoryAction action = event.getAction();
+        if (action ==InventoryAction.HOTBAR_SWAP||action == InventoryAction.HOTBAR_MOVE_AND_READD ) {
+            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR)event.setCancelled(true);
+        }
+        if (event.getCurrentItem().getType() == Material.FIREWORK_STAR && event.getCurrentItem().getItemMeta().hasLore()) {
+            String[] arr = event.getCurrentItem().getLore().get(1).split(":");
+            String a = arr[0];
+            if (a.equalsIgnoreCase(ChatColor.of("#00FFAA")+"Level") && !(top.getType() == InventoryType.CRAFTING)){
+                event.setCancelled(true);
+                if (event.getInventory().getType() == InventoryType.ENDER_CHEST) {
+                    event.getCurrentItem().setAmount(0);
+                }
+            }
+        }
         if (event.getWhoClicked() instanceof org.bukkit.entity.Player && event.getInventory() == inv){
             org.bukkit.entity.Player p = (org.bukkit.entity.Player) event.getWhoClicked();
             Inventory inventory = event.getInventory();
@@ -447,6 +479,29 @@ public class Player implements Listener {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
+        if (event.getRightClicked() != null && event.getRightClicked().getType() == EntityType.ITEM_FRAME) {
+            if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() == Material.FIREWORK_STAR && event.getPlayer().getItemInHand().getItemMeta().hasLore()) {
+                event.setCancelled(true);
+                event.getRightClicked().remove();
+                event.getPlayer().sendMessage("Du kannst kein Holz in einen Item Frame legen!");
+            }
+        }
+    }
+
+    @EventHandler
+    public void onEntityPickupItem(EntityPickupItemEvent event) {
+        if (event.getEntity() instanceof org.bukkit.entity.Player) {
+            org.bukkit.entity.Player p = (org.bukkit.entity.Player) event.getEntity();
+            Item item = event.getItem();
+            if (item.getItemStack().getType() == Material.FIREWORK_STAR && item.getItemStack().getItemMeta().hasLore()) {
+                event.setCancelled(true);
+                item.remove();
             }
         }
     }
