@@ -57,7 +57,7 @@ public class Items {
     public static void Firestone(Player player , Integer level){
         ItemStack lavastein = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  lavastein.getItemMeta();
-        meta.setDisplayName(ChatColor.of("#e66b63")+"Lava Stone");
+        meta.setDisplayName(ChatColor.of("#e66b63")+"Fire Stone");
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         lavastein.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         ArrayList<String> lore = new ArrayList<>();

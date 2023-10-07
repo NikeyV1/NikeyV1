@@ -59,75 +59,76 @@ public class Waterstone implements Listener {
             NikeyV1.plugin.saveConfig();
             String stone = config.getString(p.getName() + ".stone");
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
-                if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
-                    event.setCancelled(true);
-                    p.updateInventory();
-                    remainingTime1 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
-                }else {
-                    cooldown.put(p.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            cooldown.remove(p.getUniqueId());
-                            cancel();
-                        }
-                    }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
-                    //cooldown-ability
-                    if (i ==10 || i == 11){
-                        timer = 20;
-                        Location location = p.getLocation();
-                        FountainEffect effect = new FountainEffect(NikeyV1.em);
-                        effect.setLocation(location);
-                        effect.duration = 20000;
-                        effect.start();
-                        //Ability
+                if (i >= 10) {
+                    if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
+                        p.updateInventory();
+                        remainingTime1 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
+                    }else {
+                        cooldown.put(p.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                timer--;
-                                if (timer == 0){
-                                    cancel();
-                                }else {
-                                    for (Entity e : location.getNearbyEntities(10,8,10)){
-                                        if (e instanceof Player && e == p){
-                                            p.setHealth(p.getHealth()+2);
-                                            if (p.getAbsorptionAmount() <4){
-                                                p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
+                                cooldown.remove(p.getUniqueId());
+                                cancel();
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
+                        //cooldown-ability
+                        if (i ==10 || i == 11){
+                            timer = 20;
+                            Location location = p.getLocation();
+                            FountainEffect effect = new FountainEffect(NikeyV1.em);
+                            effect.setLocation(location);
+                            effect.duration = 20000;
+                            effect.start();
+                            //Ability
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    timer--;
+                                    if (timer == 0){
+                                        cancel();
+                                    }else {
+                                        for (Entity e : location.getNearbyEntities(10,8,10)){
+                                            if (e instanceof Player && e == p){
+                                                p.setHealth(p.getHealth()+2);
+                                                if (p.getAbsorptionAmount() <4){
+                                                    p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
-                        }.runTaskTimer(NikeyV1.getPlugin(), 20,20);
-                    }else if (i >= 12) {
-                        timer = 20;
-                        Location location = p.getLocation();
-                        FountainEffect effect = new FountainEffect(NikeyV1.em);
-                        effect.setLocation(location);
-                        effect.duration = 20000;
-                        effect.start();
-                        //Ability
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                timer--;
-                                if (timer == 0){
-                                    cancel();
-                                    return;
-                                }
-                                for (Entity e : location.getNearbyEntities(10,8,10)){
-                                    if (e == p){
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
-                                        p.setHealth(p.getHealth()+2);
-                                    } else {
-                                        if (e instanceof LivingEntity){
-                                            LivingEntity entity = (LivingEntity) e;
-                                            entity.damage(3);
+                            }.runTaskTimer(NikeyV1.getPlugin(), 20,20);
+                        }else if (i >= 12) {
+                            timer = 20;
+                            Location location = p.getLocation();
+                            FountainEffect effect = new FountainEffect(NikeyV1.em);
+                            effect.setLocation(location);
+                            effect.duration = 20000;
+                            effect.start();
+                            //Ability
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    timer--;
+                                    if (timer == 0){
+                                        cancel();
+                                        return;
+                                    }
+                                    for (Entity e : location.getNearbyEntities(10,8,10)){
+                                        if (e == p){
+                                            p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
+                                            p.setHealth(p.getHealth()+2);
+                                        } else {
+                                            if (e instanceof LivingEntity){
+                                                LivingEntity entity = (LivingEntity) e;
+                                                entity.damage(3);
+                                            }
                                         }
                                     }
                                 }
-                            }
-                        }.runTaskTimer(NikeyV1.getPlugin(), 20,20);
+                            }.runTaskTimer(NikeyV1.getPlugin(), 20,20);
+                        }
                     }
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){

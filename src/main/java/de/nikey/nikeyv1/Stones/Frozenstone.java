@@ -70,53 +70,55 @@ public class Frozenstone implements Listener {
             NikeyV1.plugin.saveConfig();
             String stone = config.getString(p.getName() + ".stone");
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
-                if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
-                    event.setCancelled(true);
-                    p.updateInventory();
-                    remainingTime1 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
-                }else {
-                    cooldown.put(p.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            cooldown.remove(p.getUniqueId());
-                            cancel();
+                if (i >= 10) {
+                    if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
+                        event.setCancelled(true);
+                        p.updateInventory();
+                        remainingTime1 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
+                    }else {
+                        cooldown.put(p.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                cooldown.remove(p.getUniqueId());
+                                cancel();
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
+                        //cooldown-ability
+                        if (i ==10 || i == 11){
+                            timer = 4;
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    timer--;
+                                    p.sendMessage(String.valueOf(timer));
+                                    if (timer ==0){
+                                        cancel();
+                                    }else {
+                                        Snowball snowball = p.launchProjectile(Snowball.class);
+                                        snowball.setVelocity(p.getLocation().getDirection().multiply(2));
+                                        snowball.setShooter(p);
+                                        snowball.setCustomName("B");
+                                    }
+                                }
+                            }.runTaskTimer(NikeyV1.getPlugin(),15,15);
+                        }else if (i >= 12) {
+                            timer = 4;
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    timer--;
+                                    if (timer ==0){
+                                        cancel();
+                                    }else {
+                                        Snowball snowball = p.launchProjectile(Snowball.class);
+                                        snowball.setVelocity(p.getLocation().getDirection().multiply(2));
+                                        snowball.setShooter(p);
+                                        snowball.setCustomName("B");
+                                    }
+                                }
+                            }.runTaskTimer(NikeyV1.getPlugin(),15,15);
                         }
-                    }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
-                    //cooldown-ability
-                    if (i ==10 || i == 11){
-                        timer = 4;
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                timer--;
-                                p.sendMessage(String.valueOf(timer));
-                                if (timer ==0){
-                                    cancel();
-                                }else {
-                                    Snowball snowball = p.launchProjectile(Snowball.class);
-                                    snowball.setVelocity(p.getLocation().getDirection().multiply(2));
-                                    snowball.setShooter(p);
-                                    snowball.setCustomName("B");
-                                }
-                            }
-                        }.runTaskTimer(NikeyV1.getPlugin(),15,15);
-                    }else if (i >= 12) {
-                        timer = 4;
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                timer--;
-                                if (timer ==0){
-                                    cancel();
-                                }else {
-                                    Snowball snowball = p.launchProjectile(Snowball.class);
-                                    snowball.setVelocity(p.getLocation().getDirection().multiply(2));
-                                    snowball.setShooter(p);
-                                    snowball.setCustomName("B");
-                                }
-                            }
-                        }.runTaskTimer(NikeyV1.getPlugin(),15,15);
                     }
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){

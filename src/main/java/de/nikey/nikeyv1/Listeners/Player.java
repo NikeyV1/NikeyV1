@@ -45,59 +45,11 @@ public class Player implements Listener {
     }
 
     public static Inventory inv = Bukkit.createInventory(null, 27, "Enchanted Anvil");
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        org.bukkit.entity.Player p = event.getPlayer();
-        new ServerScoreboard(p);
         FileConfiguration config = NikeyV1.getPlugin().getConfig();
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                System.out.println(config.getString(p.getName()+".level"));
-                if (config.getString(p.getName()+".level") == null){
-                    p.sendMessage("GG");
-                    Random random = new Random();
-                    int i = random.nextInt(6);
-                    if (i == 0){
-                        Items.Firestone(p,1);
-                        p.sendTitle("§d§kR§r§cLava Stone§r§d§kR","");
-                        config.set(p.getName()+".stone", "Fire");
-                        config.set(p.getName()+".level",1);
-                        NikeyV1.plugin.saveConfig();
-                    }else if (i == 1){
-                        Items.Electrostone(p,1);
-                        p.sendTitle("§d§kR§r§eElectric Stone§r§d§kR","");
-                        config.set(p.getName()+".stone", "Electric");
-                        config.set(p.getName()+".level",1);
-                        NikeyV1.plugin.saveConfig();
-                    }else if (i == 2){
-                        Items.Waterstone(p,1);
-                        p.sendTitle("§d§kR§r§9Water Stone§r§d§kR","");
-                        config.set(p.getName()+".stone", "Water");
-                        config.set(p.getName()+".level",1);
-                        NikeyV1.plugin.saveConfig();
-                    }else if (i == 3){
-                        Items.Frozenstone(p,1);
-                        p.sendTitle("§d§kR§r§3Frozen Stone§r§d§kR","");
-                        config.set(p.getName()+".stone", "Frozen");
-                        config.set(p.getName()+".level",1);
-                        NikeyV1.plugin.saveConfig();
-                    }else if (i == 4){
-                        Items.Undeadstone(p,1);
-                        p.sendTitle("§d§kR§r§0Undead Stone§r§d§kR","");
-                        config.set(p.getName()+".stone", "Undead");
-                        config.set(p.getName()+".level",1);
-                        NikeyV1.plugin.saveConfig();
-                    }else if (i == 5){
-                        Items.Holystone(p,1);
-                        p.sendTitle("§d§kR§r§aHoly Stone§r§d§kR","");
-                        config.set(p.getName()+".stone", "Holy");
-                        config.set(p.getName()+".level",1);
-                        NikeyV1.plugin.saveConfig();
-                    }
-                }
-            }
-        }.runTaskLater(NikeyV1.getPlugin(),10);
+        org.bukkit.entity.Player p = event.getPlayer();
         if (config.contains(p.getName())){
             String stone = config.getString(p.getName() + ".stone");
             if (stone.equalsIgnoreCase("Holy")&&p.getMaxHealth() >20)p.setMaxHealth(20);

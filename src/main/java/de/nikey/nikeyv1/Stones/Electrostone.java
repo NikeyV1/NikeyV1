@@ -52,98 +52,99 @@ public class Electrostone implements Listener {
             NikeyV1.plugin.saveConfig();
             String stone = config.getString(p.getName() + ".stone");
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
-                if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
-                    event.setCancelled(true);
-                    p.updateInventory();
-                    remainingTime1 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
-                }else {
-                    cooldown.put(p.getUniqueId(),System.currentTimeMillis() + (100*1000));
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            cooldown.remove(p.getUniqueId());
-                            cancel();
-                            return;
+                if (i >= 10){
+                    if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
+                        p.updateInventory();
+                        remainingTime1 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
+                    }else {
+                        cooldown.put(p.getUniqueId(),System.currentTimeMillis() + (100*1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                cooldown.remove(p.getUniqueId());
+                                cancel();
+                                return;
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(),20*100);
+                        if (i ==10 || i == 11){
+                            timer = 20;
+                            World world = p.getWorld();
+                            BukkitRunnable runnable = new BukkitRunnable() {
+
+                                @Override
+                                public void run() {
+                                    if (timer == 0){
+                                        cancel();
+                                        return;
+                                    }else {
+                                        int x = (int) (p.getLocation().getX());
+                                        int z = (int) (p.getLocation().getZ());
+                                        int randomX = ThreadLocalRandom.current().nextInt(x-10, x+10);
+                                        int randomZ = ThreadLocalRandom.current().nextInt(z-10, z+10);
+                                        int randomY = world.getHighestBlockYAt(randomX,randomZ);
+                                        Location location = new Location(world,randomX,randomY+1,randomZ);
+                                        LightningStrike lightningStrike = world.strikeLightning(location);
+                                        for (Entity e : location.getWorld().getNearbyEntities(location,4,4,4)){
+                                            if (e instanceof LivingEntity){
+                                                LivingEntity entity = (LivingEntity) e;
+                                                if (entity != p){
+                                                    entity.damage(8,lightningStrike);
+                                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*2,2));
+                                                }
+                                            }
+                                        }
+                                        TornadoEffect effect = new TornadoEffect(NikeyV1.em);
+                                        effect.setLocation(location);
+                                        effect.maxTornadoRadius = 3F;
+                                        effect.visibleRange = 100;
+                                        effect.tornadoParticle = Particle.ELECTRIC_SPARK;
+                                        effect.start();
+                                    }
+                                    timer--;
+                                }
+                            };
+                            runnable.runTaskTimer(NikeyV1.getPlugin(),20,20);
+
+
+                        } else if (i >= 12) {
+                            timer = 20;
+                            World world = p.getWorld();
+                            BukkitRunnable runnable = new BukkitRunnable() {
+
+                                @Override
+                                public void run() {
+                                    if (timer == 0){
+                                        cancel();
+                                        return;
+                                    }else {
+                                        int x = (int) (p.getLocation().getX());
+                                        int z = (int) (p.getLocation().getZ());
+                                        int randomX = ThreadLocalRandom.current().nextInt(x-10, x+10);
+                                        int randomZ = ThreadLocalRandom.current().nextInt(z-10, z+10);
+                                        int randomY = world.getHighestBlockYAt(randomX,randomZ);
+                                        Location location = new Location(world,randomX,randomY+1,randomZ);
+                                        LightningStrike lightningStrike = world.strikeLightning(location);
+                                        for (Entity e : location.getWorld().getNearbyEntities(location,4,4,4)){
+                                            if (e instanceof LivingEntity){
+                                                LivingEntity entity = (LivingEntity) e;
+                                                if (entity != p){
+                                                    entity.damage(10,lightningStrike);
+                                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,2));
+                                                }
+                                            }
+                                        }
+                                        TornadoEffect effect = new TornadoEffect(NikeyV1.em);
+                                        effect.setLocation(location);
+                                        effect.maxTornadoRadius = 3F;
+                                        effect.visibleRange = 100;
+                                        effect.tornadoParticle = Particle.ELECTRIC_SPARK;
+                                        effect.start();
+                                    }
+                                    timer--;
+                                }
+                            };
+                            runnable.runTaskTimer(NikeyV1.getPlugin(),20,20);
                         }
-                    }.runTaskLater(NikeyV1.getPlugin(),20*100);
-                    if (i ==10 || i == 11){
-                        timer = 20;
-                        World world = p.getWorld();
-                        BukkitRunnable runnable = new BukkitRunnable() {
-
-                            @Override
-                            public void run() {
-                                if (timer == 0){
-                                    cancel();
-                                    return;
-                                }else {
-                                    int x = (int) (p.getLocation().getX());
-                                    int z = (int) (p.getLocation().getZ());
-                                    int randomX = ThreadLocalRandom.current().nextInt(x-10, x+10);
-                                    int randomZ = ThreadLocalRandom.current().nextInt(z-10, z+10);
-                                    int randomY = world.getHighestBlockYAt(randomX,randomZ);
-                                    Location location = new Location(world,randomX,randomY+1,randomZ);
-                                    LightningStrike lightningStrike = world.strikeLightning(location);
-                                    for (Entity e : location.getWorld().getNearbyEntities(location,4,4,4)){
-                                        if (e instanceof LivingEntity){
-                                            LivingEntity entity = (LivingEntity) e;
-                                            if (entity != p){
-                                                entity.damage(8,lightningStrike);
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*2,2));
-                                            }
-                                        }
-                                    }
-                                    TornadoEffect effect = new TornadoEffect(NikeyV1.em);
-                                    effect.setLocation(location);
-                                    effect.maxTornadoRadius = 3F;
-                                    effect.visibleRange = 100;
-                                    effect.tornadoParticle = Particle.ELECTRIC_SPARK;
-                                    effect.start();
-                                }
-                                timer--;
-                            }
-                        };
-                        runnable.runTaskTimer(NikeyV1.getPlugin(),20,20);
-
-
-                    } else if (i >= 12) {
-                        timer = 20;
-                        World world = p.getWorld();
-                        BukkitRunnable runnable = new BukkitRunnable() {
-
-                            @Override
-                            public void run() {
-                                if (timer == 0){
-                                    cancel();
-                                    return;
-                                }else {
-                                    int x = (int) (p.getLocation().getX());
-                                    int z = (int) (p.getLocation().getZ());
-                                    int randomX = ThreadLocalRandom.current().nextInt(x-10, x+10);
-                                    int randomZ = ThreadLocalRandom.current().nextInt(z-10, z+10);
-                                    int randomY = world.getHighestBlockYAt(randomX,randomZ);
-                                    Location location = new Location(world,randomX,randomY+1,randomZ);
-                                    LightningStrike lightningStrike = world.strikeLightning(location);
-                                    for (Entity e : location.getWorld().getNearbyEntities(location,4,4,4)){
-                                        if (e instanceof LivingEntity){
-                                            LivingEntity entity = (LivingEntity) e;
-                                            if (entity != p){
-                                                entity.damage(10,lightningStrike);
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,2));
-                                            }
-                                        }
-                                    }
-                                    TornadoEffect effect = new TornadoEffect(NikeyV1.em);
-                                    effect.setLocation(location);
-                                    effect.maxTornadoRadius = 3F;
-                                    effect.visibleRange = 100;
-                                    effect.tornadoParticle = Particle.ELECTRIC_SPARK;
-                                    effect.start();
-                                }
-                                timer--;
-                            }
-                        };
-                        runnable.runTaskTimer(NikeyV1.getPlugin(),20,20);
                     }
                 }
             }
