@@ -22,7 +22,7 @@ public class JoinListener implements Listener {
             int i = random.nextInt(6);
             if (i == 0){
                 Items.Firestone(p,1);
-                p.sendTitle("§d§kR§r§cLava Stone§r§d§kR","");
+                p.sendTitle("§d§kR§r§cFire Stone§r§d§kR","");
                 config.set(p.getName()+".stone", "Fire");
                 config.set(p.getName()+".level",1);
                 NikeyV1.plugin.saveConfig();

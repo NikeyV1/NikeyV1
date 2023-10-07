@@ -33,6 +33,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 @SuppressWarnings("ALL")
@@ -151,142 +152,61 @@ public class Player implements Listener {
     }
 
     @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        org.bukkit.entity.Player player = event.getPlayer();
+        PlayerRespawnEvent.RespawnReason respawnReason = event.getRespawnReason();
+        if (respawnReason == PlayerRespawnEvent.RespawnReason.DEATH){
+            FileConfiguration config = NikeyV1.plugin.getConfig();
+            String stone = config.getString(player.getName() + ".stone");
+            int level = config.getInt(player.getName() + ".level");
+            if (stone.equalsIgnoreCase("Fire")) {
+                Items.Firestone(player,level);
+            }else if (stone.equalsIgnoreCase("Electric")){
+                Items.Electrostone(player,level);
+            }else if (stone.equalsIgnoreCase("Water")){
+                Items.Waterstone(player,level);
+            }else if (stone.equalsIgnoreCase("Frozen")){
+                Items.Frozenstone(player,level);
+            }else if (stone.equalsIgnoreCase("Undead")){
+                Items.Undeadstone(player,level);
+            }else if (stone.equalsIgnoreCase("Holy")){
+                Items.Holystone(player,level);
+            }
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    new ServerScoreboard(player);
+                }
+            }.runTaskLater(NikeyV1.getPlugin(),10);
+        }
+    }
+
+    @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         org.bukkit.entity.Player player = event.getPlayer();
-        if (player.getKiller() != null){
-            org.bukkit.entity.Player killer = player.getKiller();
-            FileConfiguration config = NikeyV1.plugin.getConfig();
-            int i = config.getInt(player.getName() + ".level");
-            if (i > 1){
-                config.set(player.getName() +".level",i-1);
-                String stone = config.getString(player.getName() + ".stone");
-                assert stone != null;
-                if (stone.equalsIgnoreCase("Fire")) {
-                    for (ItemStack contents : player.getInventory().getContents()) {
-                        if (contents == null || contents.getType() == Material.AIR) continue;
-                        if (contents.getItemMeta().getDisplayName().equalsIgnoreCase(net.md_5.bungee.api.ChatColor.of("#e66b63") + "Lava Stone")) {
-                            String[] arr = contents.getLore().get(1).split(":");
-                            String a = arr[1];
-                            if (a.equalsIgnoreCase(String.valueOf(i))) {
-                                int l = Integer.parseInt(a);
-                                l = l - 1;
-                                ArrayList<String> lore = new ArrayList<>();
-                                lore.add("§7As hot as §clava");
-                                lore.add(net.md_5.bungee.api.ChatColor.of("#00FFAA") + "Level:" + l);
-                                contents.setLore(lore);
-                                new ServerScoreboard(player);
-                                Items.SoulofStrenght(killer);
-                            } else {
-                                config.set(player.getName() + ".level", Integer.parseInt(a));
-                            }
-                        }
-                    }
-                }else if (stone.equalsIgnoreCase("Electric")) {
-                    for (ItemStack contents : player.getInventory().getContents()) {
-                        if (contents == null || contents.getType() == Material.AIR) continue;
-                        if (contents.getItemMeta().getDisplayName().equalsIgnoreCase("§eElectric Stone")) {
-                            String[] arr = contents.getLore().get(1).split(":");
-                            String a = arr[1];
-                            if (a.equalsIgnoreCase(String.valueOf(i))) {
-                                int l = Integer.parseInt(a);
-                                l = l - 1;
-                                ArrayList<String> lore = new ArrayList<>();
-                                lore.add(net.md_5.bungee.api.ChatColor.of("#B1A012")+ "Overloaded with electricity");
-                                lore.add(ChatColor.of("#00FFAA")+"Level:"+l);
-                                contents.setLore(lore);
-                                new ServerScoreboard(player);
-                                Items.SoulofStrenght(killer);
-                            } else {
-                                config.set(player.getName() + ".level", Integer.parseInt(a));
-                            }
-                        }
-                    }
-                }else if (stone.equalsIgnoreCase("Water")) {
-                    for (ItemStack contents : player.getInventory().getContents()) {
-                        if (contents == null || contents.getType() == Material.AIR) continue;
-                        if (contents.getItemMeta().getDisplayName().equalsIgnoreCase("§9Water Stone")) {
-                            String[] arr = contents.getLore().get(1).split(":");
-                            String a = arr[1];
-                            if (a.equalsIgnoreCase(String.valueOf(i))) {
-                                int l = Integer.parseInt(a);
-                                l = l - 1;
-                                ArrayList<String> lore = new ArrayList<>();
-                                lore.add("§1A storm rages in this stone");
-                                lore.add(ChatColor.of("#00FFAA")+"Level:"+l);
-                                contents.setLore(lore);
-                                new ServerScoreboard(player);
-                                Items.SoulofStrenght(killer);
-                            } else {
-                                config.set(player.getName() + ".level", Integer.parseInt(a));
-                            }
-                        }
-                    }
-                }else if (stone.equalsIgnoreCase("Frozen")) {
-                    for (ItemStack contents : player.getInventory().getContents()) {
-                        if (contents == null || contents.getType() == Material.AIR) continue;
-                        if (contents.getItemMeta().getDisplayName().equalsIgnoreCase("§3Frozen Stone")) {
-                            String[] arr = contents.getLore().get(1).split(":");
-                            String a = arr[1];
-                            if (a.equalsIgnoreCase(String.valueOf(i))) {
-                                int l = Integer.parseInt(a);
-                                l = l - 1;
-                                ArrayList<String> lore = new ArrayList<>();
-                                lore.add("§bCold enough to freeze fire");
-                                lore.add(ChatColor.of("#00FFAA")+"Level:"+l);
-                                contents.setLore(lore);
-                                new ServerScoreboard(player);
-                                Items.SoulofStrenght(killer);
-                            } else {
-                                config.set(player.getName() + ".level", Integer.parseInt(a));
-                            }
-                        }
-                    }
-                }else if (stone.equalsIgnoreCase("Undead")) {
-                    for (ItemStack contents : player.getInventory().getContents()) {
-                        if (contents == null || contents.getType() == Material.AIR) continue;
-                        if (contents.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#100613")+"Undead Stone")) {
-                            String[] arr = contents.getLore().get(1).split(":");
-                            String a = arr[1];
-                            if (a.equalsIgnoreCase(String.valueOf(i))) {
-                                int l = Integer.parseInt(a);
-                                l = l - 1;
-                                ArrayList<String> lore = new ArrayList<>();
-                                lore.add(ChatColor.of("#221726")+"Souls wander around in this stone");
-                                lore.add(ChatColor.of("#00FFAA")+"Level:"+l);
-                                contents.setLore(lore);
-                                new ServerScoreboard(player);
-                                Items.SoulofStrenght(killer);
-                            } else {
-                                config.set(player.getName() + ".level", Integer.parseInt(a));
-                            }
-                        }
-                    }
-                }else if (stone.equalsIgnoreCase("Holy")) {
-                    for (ItemStack contents : player.getInventory().getContents()) {
-                        if (contents == null || contents.getType() == Material.AIR) continue;
-                        if (contents.getItemMeta().getDisplayName().equalsIgnoreCase("§aHoly Stone")) {
-                            String[] arr = contents.getLore().get(1).split(":");
-                            String a = arr[1];
-                            if (a.equalsIgnoreCase(String.valueOf(i))) {
-                                int l = Integer.parseInt(a);
-                                l = l - 1;
-                                ArrayList<String> lore = new ArrayList<>();
-                                lore.add("§2Forged by Farys");
-                                lore.add(ChatColor.of("#00FFAA")+"Level:"+l);
-                                contents.setLore(lore);
-                                new ServerScoreboard(player);
-                                Items.SoulofStrenght(killer);
-                            } else {
-                                config.set(player.getName() + ".level", Integer.parseInt(a));
-                            }
-                        }
-                    }
+        List<ItemStack> drops = event.getDrops();
+        FileConfiguration config = NikeyV1.plugin.getConfig();
+        int i = config.getInt(player.getName() + ".level");
+        if (i > 1){
+            for (ItemStack drop : drops) {
+                if (drop.getType() == Material.FIREWORK_STAR && drop.getItemMeta().hasLore()) {
+                    drop.setAmount(0);
+                    return;
                 }
-            }else {
-                Date date = new Date(System.currentTimeMillis()+1440*60*1000);
-                Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), "§cYour stone is out of strength!",date,"Game");
-                player.kickPlayer("§cYour stone is out of strength!");
             }
+            config.set(player.getName() +".level",i-1);
+            String stone = config.getString(player.getName() + ".stone");
+            if (player.getKiller() != null&&player.getKiller() instanceof org.bukkit.entity.Player){
+                Items.SoulofStrenght(player.getKiller());
+            }
+        }else {
+            for (ItemStack drop : drops) {
+                drop.setAmount(0);
+                return;
+            }
+            Date date = new Date(System.currentTimeMillis()+1440*60*1000);
+            Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), "§cYour stone is out of strength!",date,"Game");
+            player.kickPlayer("§cYour stone is out of strength!");
         }
     }
 
