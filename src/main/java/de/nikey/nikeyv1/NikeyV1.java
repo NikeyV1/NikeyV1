@@ -2,10 +2,7 @@ package de.nikey.nikeyv1;
 
 import de.nikey.nikeyv1.Commands.EffectCMD;
 import de.nikey.nikeyv1.Commands.stone;
-import de.nikey.nikeyv1.Listeners.JoinListener;
-import de.nikey.nikeyv1.Listeners.Player;
-import de.nikey.nikeyv1.Listeners.ReloadCommand;
-import de.nikey.nikeyv1.Listeners.ReloadModifyer;
+import de.nikey.nikeyv1.Listeners.*;
 import de.nikey.nikeyv1.Stones.*;
 import de.nikey.nikeyv1.Util.Items;
 import de.slikey.effectlib.EffectLib;
@@ -37,6 +34,7 @@ public final class NikeyV1 extends JavaPlugin {
         manager.registerEvents(new ReloadCommand(),this);
         manager.registerEvents(new ReloadModifyer(),this);
         manager.registerEvents(new JoinListener(),this);
+        manager.registerEvents(new InventoryListener(),this);
         //Command
         getCommand("stone").setExecutor(new stone());
         getCommand("effect").setExecutor(new EffectCMD());

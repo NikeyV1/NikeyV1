@@ -39,6 +39,7 @@ import java.util.Random;
 public class Player implements Listener {
     int a;
     int b;
+    int times;
     @EventHandler(ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
         org.bukkit.entity.Player p = event.getPlayer();
@@ -211,30 +212,10 @@ public class Player implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        Inventory top = event.getView().getTopInventory();
-        Inventory bottom = event.getView().getBottomInventory();
-        InventoryAction action = event.getAction();
-        if (action ==InventoryAction.HOTBAR_SWAP||action == InventoryAction.HOTBAR_MOVE_AND_READD ) {
-            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR)event.setCancelled(true);
-        }
-        if (event.getCurrentItem().getType() == Material.FIREWORK_STAR && event.getCurrentItem().getItemMeta().hasLore()) {
-            String[] arr = event.getCurrentItem().getLore().get(1).split(":");
-            String a = arr[0];
-            if (a.equalsIgnoreCase(ChatColor.of("#00FFAA")+"Level") && !(top.getType() == InventoryType.CRAFTING)){
-                if (!event.getWhoClicked().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase("§dEnchanted Anvil")) {
-                    event.setCancelled(true);
-                }
-                if (event.getInventory().getType() == InventoryType.ENDER_CHEST) {
-                    event.getCurrentItem().setAmount(0);
-                }
-            }
-        }
         if (event.getWhoClicked() instanceof org.bukkit.entity.Player && event.getInventory() == inv){
             org.bukkit.entity.Player p = (org.bukkit.entity.Player) event.getWhoClicked();
             Inventory inventory = event.getInventory();
-            if (event.getCurrentItem() == null){
-                return;
-            }
+            if (event.getCurrentItem() == null);
             else if (event.getSlot() == 15 && event.getCurrentItem().getType() == Material.ANVIL || event.getCurrentItem().getType() == Material.PURPLE_STAINED_GLASS_PANE){
                 event.setCancelled(true);
                 if (inventory.getItem(13).getLore() != null){
@@ -247,112 +228,119 @@ public class Player implements Listener {
                         config.set(p.getName()+".level",num+1);
                         NikeyV1.plugin.saveConfig();
                         TimerBuild timerBuild = new TimerBuild();
-                        if (num <= 2){
-                            if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
-                                if (p.getLevel() > 30 || p.getGameMode() == GameMode.CREATIVE){
-                                    inventory.setItem(13,null);
-                                    p.closeInventory();
-                                    timerBuild.setLevel(num+1);
-                                    timerBuild.setStopTime(60*30);
-                                    timerBuild.setTime(1);
-                                    timerBuild.start(p);
-                                    p.sendMessage("§aUpgrading!");
-                                    if (p.getGameMode() != GameMode.CREATIVE){
-                                        p.setLevel(p.getLevel()-30);
-                                    }
-                                }else {
-                                    p.sendMessage("You dont have 30 levels!");
-                                }
-                            }
-                        }else if (num <= 4){
-                            if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
-                                if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
-                                    inventory.setItem(13,null);
-                                    p.closeInventory();
-                                    timerBuild.setLevel(num+1);
-                                    timerBuild.setStopTime(60*60);
-                                    timerBuild.setTime(1);
-                                    timerBuild.start(p);
-                                    if (p.getGameMode() != GameMode.CREATIVE){
-                                        p.setLevel(p.getLevel()-50);
-                                    }
-                                    p.sendMessage("§aUpgrading!");
-                                }else {
-                                    p.sendMessage("You dont have 50 levels!");
-                                }
-                            }
-                        }else if (num <= 9){
-                            if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
-                                if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
-                                    for (ItemStack contents : p.getInventory().getContents()){
-                                        if(contents != null && contents.getItemMeta().getDisplayName().equalsIgnoreCase("§3Soul of Strenght") && contents.getType() == Material.SOUL_LANTERN) continue;
+                        times = 0;
+                        if (times == 0) {
+                            if (num <= 2){
+                                if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
+                                    if (p.getLevel() > 30 || p.getGameMode() == GameMode.CREATIVE){
+                                        p.sendMessage("H");
                                         inventory.setItem(13,null);
-                                        contents.setAmount(contents.getAmount()-1);
+                                        p.closeInventory();
+                                        timerBuild.setLevel(num+1);
+                                        timerBuild.setStopTime(60*30);
+                                        timerBuild.setTime(1);
+                                        timerBuild.start(p);
+                                        p.sendMessage("§aUpgrading!");
+                                        if (p.getGameMode() != GameMode.CREATIVE){
+                                            p.setLevel(p.getLevel()-30);
+                                        }
+                                    }else {
+                                        p.sendMessage("You dont have 30 levels!");
+                                    }
+                                }
+                            }else if (num <= 4){
+                                if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
+                                    if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
+                                        inventory.setItem(13,null);
+                                        p.closeInventory();
+                                        timerBuild.setLevel(num+1);
+                                        timerBuild.setStopTime(60*60);
+                                        timerBuild.setTime(1);
+                                        timerBuild.start(p);
+                                        if (p.getGameMode() != GameMode.CREATIVE){
+                                            p.setLevel(p.getLevel()-50);
+                                        }
+                                        p.sendMessage("§aUpgrading!");
+                                    }else {
+                                        p.sendMessage("You dont have 50 levels!");
+                                    }
+                                }
+                            }else if (num <= 9){
+                                if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
+                                    if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
+                                        if (times == 0) {
+                                            for (ItemStack contents : p.getInventory().getContents()){
+                                                if(contents != null && contents.getItemMeta().getDisplayName().equalsIgnoreCase("§3Soul of Strenght") && contents.getType() == Material.SOUL_LANTERN) continue;
+                                                inventory.setItem(13,null);
+                                                times = times+1;
+                                                contents.setAmount(contents.getAmount()-times);
+                                                p.closeInventory();
+                                                timerBuild.setLevel(num+1);
+                                                timerBuild.setStopTime(60*120);
+                                                timerBuild.setTime(1);
+                                                timerBuild.start(p);
+
+                                                if (p.getGameMode() != GameMode.CREATIVE){
+                                                    p.setLevel(p.getLevel()-50);
+                                                }
+                                                p.sendMessage("§aUpgrading!");
+                                                return;
+                                            }
+                                        }
+                                    }else {
+                                        p.sendMessage("You dont have 50 levels!");
+                                    }
+                                }
+                            }else if (num <= 14){
+                                if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
+                                    if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
+                                        inventory.setItem(13,null);
                                         p.closeInventory();
                                         timerBuild.setLevel(num+1);
                                         timerBuild.setStopTime(60*120);
                                         timerBuild.setTime(1);
                                         timerBuild.start(p);
-
                                         if (p.getGameMode() != GameMode.CREATIVE){
                                             p.setLevel(p.getLevel()-50);
                                         }
                                         p.sendMessage("§aUpgrading!");
-                                        return;
+                                    }else {
+                                        p.sendMessage("You dont have 50 levels!");
                                     }
-                                }else {
-                                    p.sendMessage("You dont have 50 levels!");
                                 }
-                            }
-                        }else if (num <= 14){
-                            if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
-                                if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
-                                    inventory.setItem(13,null);
-                                    p.closeInventory();
-                                    timerBuild.setLevel(num+1);
-                                    timerBuild.setStopTime(60*120);
-                                    timerBuild.setTime(1);
-                                    timerBuild.start(p);
-                                    if (p.getGameMode() != GameMode.CREATIVE){
-                                        p.setLevel(p.getLevel()-50);
+                            }else if (num <= 19){
+                                if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
+                                    if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
+                                        inventory.setItem(13,null);
+                                        p.closeInventory();
+                                        timerBuild.setLevel(num+1);
+                                        timerBuild.setStopTime(60*120);
+                                        timerBuild.setTime(1);
+                                        timerBuild.start(p);
+                                        if (p.getGameMode() != GameMode.CREATIVE){
+                                            p.setLevel(p.getLevel()-50);
+                                        }
+                                        p.sendMessage("§aUpgrading!");
+                                    }else {
+                                        p.sendMessage("You dont have 50 levels!");
                                     }
-                                    p.sendMessage("§aUpgrading!");
-                                }else {
-                                    p.sendMessage("You dont have 50 levels!");
                                 }
-                            }
-                        }else if (num <= 19){
-                            if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
-                                if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
-                                    inventory.setItem(13,null);
-                                    p.closeInventory();
-                                    timerBuild.setLevel(num+1);
-                                    timerBuild.setStopTime(60*120);
-                                    timerBuild.setTime(1);
-                                    timerBuild.start(p);
-                                    if (p.getGameMode() != GameMode.CREATIVE){
-                                        p.setLevel(p.getLevel()-50);
+                            } else if (num == 20) {
+                                if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
+                                    if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
+                                        inventory.setItem(13,null);
+                                        p.closeInventory();
+                                        timerBuild.setLevel(num+1);
+                                        timerBuild.setStopTime(60*120);
+                                        timerBuild.setTime(1);
+                                        timerBuild.start(p);
+                                        if (p.getGameMode() != GameMode.CREATIVE){
+                                            p.setLevel(p.getLevel()-50);
+                                        }
+                                        p.sendMessage("§aUpgrading!");
+                                    }else {
+                                        p.sendMessage("You dont have 50 levels!");
                                     }
-                                    p.sendMessage("§aUpgrading!");
-                                }else {
-                                    p.sendMessage("You dont have 50 levels!");
-                                }
-                            }
-                        } else if (num == 20) {
-                            if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
-                                if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
-                                    inventory.setItem(13,null);
-                                    p.closeInventory();
-                                    timerBuild.setLevel(num+1);
-                                    timerBuild.setStopTime(60*120);
-                                    timerBuild.setTime(1);
-                                    timerBuild.start(p);
-                                    if (p.getGameMode() != GameMode.CREATIVE){
-                                        p.setLevel(p.getLevel()-50);
-                                    }
-                                    p.sendMessage("§aUpgrading!");
-                                }else {
-                                    p.sendMessage("You dont have 50 levels!");
                                 }
                             }
                         }
