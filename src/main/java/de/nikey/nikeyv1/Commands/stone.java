@@ -4,7 +4,6 @@ import de.nikey.nikeyv1.Util.Items;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +21,7 @@ public class stone implements CommandExecutor {
                     }catch (NumberFormatException e){
                         p.sendMessage("§cTake a Number");
                     }
-                }else if (stone.equalsIgnoreCase("Electro") ||stone.equalsIgnoreCase("Elektro")){
+                }else if (stone.equalsIgnoreCase("Electric")){
                     try {
                         int level = Integer.parseInt(args[1]);
                         Items.Electrostone(p,level);

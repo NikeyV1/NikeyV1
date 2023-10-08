@@ -31,7 +31,6 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -363,7 +362,6 @@ public class Player implements Listener {
             if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() == Material.FIREWORK_STAR && event.getPlayer().getItemInHand().getItemMeta().hasLore()) {
                 event.setCancelled(true);
                 event.getRightClicked().remove();
-                event.getPlayer().sendMessage("Du kannst kein Holz in einen Item Frame legen!");
             }
         }
     }

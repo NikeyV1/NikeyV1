@@ -14,147 +14,149 @@ public class EffectCMD implements CommandExecutor {
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (args.length == 1){
-                if (args[0].equalsIgnoreCase("Ball")){
-                    AnimatedBallEffect effect = new AnimatedBallEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Arc")){
-                    ArcEffect effect = new ArcEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Atom")){
-                    AtomEffect effect = new AtomEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("BigBang")){
-                    BigBangEffect effect = new BigBangEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Bleed")){
-                    BleedEffect effect = new BleedEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Circle")){
-                    CircleEffect effect = new CircleEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Cloud")){
-                    CloudEffect effect = new CloudEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Cone")){
-                    ConeEffect effect = new ConeEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Cube")){
-                    CubeEffect effect = new CubeEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Cuboid")){
-                    CuboidEffect effect = new CuboidEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Cylinder")){
-                    CylinderEffect effect = new CylinderEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Earth")){
-                    EarthEffect effect = new EarthEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Equation")){
-                    EquationEffect effect = new EquationEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Explode")){
-                    ExplodeEffect effect = new ExplodeEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.amount = 100;
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Fountain")){
-                    FountainEffect effect = new FountainEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Grid")){
-                    GridEffect effect = new GridEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Hill")){
-                    HillEffect effect = new HillEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Icon")){
-                    IconEffect effect = new IconEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Jump")){
-                    JumpEffect effect = new JumpEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Modified")){
-                    ModifiedEffect effect = new ModifiedEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Tornado")){
-                    TornadoEffect effect = new TornadoEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.maxTornadoRadius = 3F;
-                    effect.tornadoParticle = Particle.ELECTRIC_SPARK;
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Test")){
-                    String stone = NikeyV1.getPlugin().getConfig().getString(p.getName() + ".stone");
-                    p.sendMessage(String.valueOf(NikeyV1.getPlugin().getConfig().getInt(p.getName()+"."+stone+".cooldown1"+".time")));
-                } else if (args[0].equalsIgnoreCase("Wave")) {
-                    WaveEffect effect = new WaveEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Smoke")) {
-                    SmokeEffect effect = new SmokeEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Flame")) {
-                    FlameEffect effect = new FlameEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Shield")) {
-                    ShieldEffect effect = new ShieldEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Musik")) {
-                    MusicEffect effect = new MusicEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
-                }else if (args[0].equalsIgnoreCase("Line")) {
-                    LineEffect effect = new LineEffect(NikeyV1.em);
-                    effect.setLocation(p.getLocation());
-                    effect.start();
-                    p.sendMessage("Started");
+                if (p.isOp()) {
+                    if (args[0].equalsIgnoreCase("Ball")){
+                        AnimatedBallEffect effect = new AnimatedBallEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Arc")){
+                        ArcEffect effect = new ArcEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Atom")){
+                        AtomEffect effect = new AtomEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("BigBang")){
+                        BigBangEffect effect = new BigBangEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Bleed")){
+                        BleedEffect effect = new BleedEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Circle")){
+                        CircleEffect effect = new CircleEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Cloud")){
+                        CloudEffect effect = new CloudEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Cone")){
+                        ConeEffect effect = new ConeEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Cube")){
+                        CubeEffect effect = new CubeEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Cuboid")){
+                        CuboidEffect effect = new CuboidEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Cylinder")){
+                        CylinderEffect effect = new CylinderEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Earth")){
+                        EarthEffect effect = new EarthEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Equation")){
+                        EquationEffect effect = new EquationEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Explode")){
+                        ExplodeEffect effect = new ExplodeEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.amount = 100;
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Fountain")){
+                        FountainEffect effect = new FountainEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Grid")){
+                        GridEffect effect = new GridEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Hill")){
+                        HillEffect effect = new HillEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Icon")){
+                        IconEffect effect = new IconEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Jump")){
+                        JumpEffect effect = new JumpEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Modified")){
+                        ModifiedEffect effect = new ModifiedEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Tornado")){
+                        TornadoEffect effect = new TornadoEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.maxTornadoRadius = 3F;
+                        effect.tornadoParticle = Particle.ELECTRIC_SPARK;
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Test")){
+                        String stone = NikeyV1.getPlugin().getConfig().getString(p.getName() + ".stone");
+                        p.sendMessage(String.valueOf(NikeyV1.getPlugin().getConfig().getInt(p.getName()+"."+stone+".cooldown1"+".time")));
+                    } else if (args[0].equalsIgnoreCase("Wave")) {
+                        WaveEffect effect = new WaveEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Smoke")) {
+                        SmokeEffect effect = new SmokeEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Flame")) {
+                        FlameEffect effect = new FlameEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Shield")) {
+                        ShieldEffect effect = new ShieldEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Musik")) {
+                        MusicEffect effect = new MusicEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Line")) {
+                        LineEffect effect = new LineEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }
                 }
             }else {
                 p.sendMessage("That doesnt work like so");
