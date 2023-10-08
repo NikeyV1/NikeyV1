@@ -43,13 +43,12 @@ public class Items {
         essence.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         smeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         essence.setItemMeta(smeta);
-        //
+        //Recipe
 
         ShapedRecipe soulrecipe = new ShapedRecipe(soul);
         soulrecipe.shape("ENE","IWI","ENE");
         soulrecipe.setIngredient('I',Material.DIAMOND_BLOCK);
-        soulrecipe.setIngredient('N',Material.NETHERITE_BLOCK);
-        soulrecipe.setIngredient('W',Material.NETHER_STAR);
+        soulrecipe.setIngredient('W',Material.BEACON);
         soulrecipe.setIngredient('E', new RecipeChoice.ExactChoice(essence));
         NikeyV1.plugin.getServer().addRecipe(soulrecipe);
     }

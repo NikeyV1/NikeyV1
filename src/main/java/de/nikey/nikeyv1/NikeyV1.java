@@ -23,7 +23,8 @@ public final class NikeyV1 extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
-        saveDefaultConfig();
+        //Effect manager
+        em = new EffectManager(EffectLib.instance());
 
         PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents(new Player(),this);
@@ -42,8 +43,7 @@ public final class NikeyV1 extends JavaPlugin {
         //resipes
         Items.EnchantedAnvil();
         Items.Soulrecepie();
-        //Effect manager
-        em = new EffectManager(EffectLib.instance());
+        saveDefaultConfig();
     }
 
     public static NikeyV1 getPlugin() {

@@ -284,16 +284,22 @@ public class Player implements Listener {
                         }else if (num <= 9){
                             if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
                                 if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
-                                    inventory.setItem(13,null);
-                                    p.closeInventory();
-                                    timerBuild.setLevel(num+1);
-                                    timerBuild.setStopTime(60*120);
-                                    timerBuild.setTime(1);
-                                    timerBuild.start(p);
-                                    if (p.getGameMode() != GameMode.CREATIVE){
-                                        p.setLevel(p.getLevel()-50);
+                                    for (ItemStack contents : p.getInventory().getContents()){
+                                        if(contents != null && contents.getItemMeta().getDisplayName().equalsIgnoreCase("§3Soul of Strenght") && contents.getType() == Material.SOUL_LANTERN) continue;
+                                        inventory.setItem(13,null);
+                                        contents.setAmount(contents.getAmount()-1);
+                                        p.closeInventory();
+                                        timerBuild.setLevel(num+1);
+                                        timerBuild.setStopTime(60*120);
+                                        timerBuild.setTime(1);
+                                        timerBuild.start(p);
+
+                                        if (p.getGameMode() != GameMode.CREATIVE){
+                                            p.setLevel(p.getLevel()-50);
+                                        }
+                                        p.sendMessage("§aUpgrading!");
+                                        return;
                                     }
-                                    p.sendMessage("§aUpgrading!");
                                 }else {
                                     p.sendMessage("You dont have 50 levels!");
                                 }
