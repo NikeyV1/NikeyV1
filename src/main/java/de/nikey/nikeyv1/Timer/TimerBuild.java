@@ -74,7 +74,7 @@ public class TimerBuild  {
                                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,2,1);
                                 if (getStone(player).equalsIgnoreCase("Fire")){
                                     Items.Firestone(player,getLevel());
-                                }else if (getStone(player).equalsIgnoreCase("Elektro")){
+                                }else if (getStone(player).equalsIgnoreCase("Electric")){
                                     Items.Electrostone(player,getLevel());
                                 }else if (getStone(player).equalsIgnoreCase("Water")){
                                     Items.Waterstone(player,getLevel());
@@ -87,9 +87,10 @@ public class TimerBuild  {
                                 }
                             }
                         }else {
-                            cancel();
                             System.out.println(player.getName()+" left while upgrading!");
                             System.out.println("Was eine bitch");
+                            cancel();
+                            return;
                         }
                     }
                 };

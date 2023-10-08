@@ -154,5 +154,4 @@ public class Items {
         recipe.setIngredient('E', new RecipeChoice.ExactChoice(essence));
         NikeyV1.plugin.getServer().addRecipe(recipe);
     }
-
 }

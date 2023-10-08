@@ -222,7 +222,9 @@ public class Player implements Listener {
             String[] arr = event.getCurrentItem().getLore().get(1).split(":");
             String a = arr[0];
             if (a.equalsIgnoreCase(ChatColor.of("#00FFAA")+"Level") && !(top.getType() == InventoryType.CRAFTING)){
-                event.setCancelled(true);
+                if (!event.getWhoClicked().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase("§dEnchanted Anvil")) {
+                    event.setCancelled(true);
+                }
                 if (event.getInventory().getType() == InventoryType.ENDER_CHEST) {
                     event.getCurrentItem().setAmount(0);
                 }

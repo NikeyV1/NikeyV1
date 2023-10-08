@@ -12,6 +12,9 @@ public class Inventory {
 
         //Items
         ItemStack glass = new ItemStack(Material.PURPLE_STAINED_GLASS_PANE);
+        ItemMeta itemMeta = glass.getItemMeta();
+        itemMeta.setDisplayName("§c");
+        glass.setItemMeta(itemMeta);
         ItemStack a = new ItemStack(Material.ANVIL);
         ItemMeta m = a.getItemMeta();
         m.setDisplayName("§dUpgrade");
