@@ -49,13 +49,16 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
                 if (stone.equalsIgnoreCase("Electric")){
                     //Ability 2
-                    long remainingTime2 = Electrostone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
-                    int a = (int) (remainingTime2/1000);
-                    //
-                    if (a == 0){
-                        setScore("§7Ability 2: §aReady",3);
-                    }else {
-                        setScore("§7Ability 2: §c"+a +"/180",3);
+                    try {
+                        long remainingTime2 = Electrostone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
+                        int a = (int) (remainingTime2/1000);
+                        if (a == 0){
+                            setScore("§7Ability 2: §aReady",3);
+                        }else {
+                            setScore("§7Ability 2: §c"+a +"/180",3);
+                        }
+                    }catch (NumberFormatException ex) {
+                        ex.fillInStackTrace();
                     }
                 }else if (stone.equalsIgnoreCase("Fire")){
                     //Ability 2

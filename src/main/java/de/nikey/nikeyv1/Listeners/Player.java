@@ -227,10 +227,11 @@ public class Player implements Listener {
                         FileConfiguration config = NikeyV1.plugin.getConfig();
                         config.set(p.getName()+".level",num+1);
                         NikeyV1.plugin.saveConfig();
-                        TimerBuild timerBuild = new TimerBuild();
                         times = 0;
+                        int amountToTax = 1;
                         if (times == 0) {
-                            if (num <= 2){
+                            if (num == 1||num == 2){
+                                TimerBuild timerBuild = new TimerBuild();
                                 if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
                                     if (p.getLevel() > 30 || p.getGameMode() == GameMode.CREATIVE){
                                         p.sendMessage("H");
@@ -248,7 +249,8 @@ public class Player implements Listener {
                                         p.sendMessage("You dont have 30 levels!");
                                     }
                                 }
-                            }else if (num <= 4){
+                            }else if (num == 3||num == 4||num == 5){
+                                TimerBuild timerBuild = new TimerBuild();
                                 if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
                                     if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
                                         inventory.setItem(13,null);
@@ -265,33 +267,35 @@ public class Player implements Listener {
                                         p.sendMessage("You dont have 50 levels!");
                                     }
                                 }
-                            }else if (num <= 9){
+                            }else if (num == 6||num == 7||num == 8||num == 9 || num == 10){
+                                TimerBuild timerBuild = new TimerBuild();
                                 if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
                                     if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
-                                        if (times == 0) {
-                                            for (ItemStack contents : p.getInventory().getContents()){
-                                                if(contents != null && contents.getItemMeta().getDisplayName().equalsIgnoreCase("§3Soul of Strenght") && contents.getType() == Material.SOUL_LANTERN) continue;
+                                        for (ItemStack contents : p.getInventory().getContents()){
+                                            if(contents != null && contents.getType() != Material.AIR) continue;
+                                            if (contents.getItemMeta().getDisplayName().equalsIgnoreCase("§3Soul of Strenght") && contents.getType() == Material.SOUL_LANTERN) {
                                                 inventory.setItem(13,null);
-                                                times = times+1;
-                                                contents.setAmount(contents.getAmount()-times);
                                                 p.closeInventory();
                                                 timerBuild.setLevel(num+1);
                                                 timerBuild.setStopTime(60*120);
                                                 timerBuild.setTime(1);
                                                 timerBuild.start(p);
-
+                                                if (contents.getAmount() >= amountToTax) {
+                                                    contents.setAmount(contents.getAmount() - amountToTax);
+                                                    p.sendMessage("GGGGGG");
+                                                }
                                                 if (p.getGameMode() != GameMode.CREATIVE){
                                                     p.setLevel(p.getLevel()-50);
                                                 }
                                                 p.sendMessage("§aUpgrading!");
-                                                return;
                                             }
                                         }
                                     }else {
                                         p.sendMessage("You dont have 50 levels!");
                                     }
                                 }
-                            }else if (num <= 14){
+                            }else if (num == 11||num == 12||num == 13||num == 14|| num == 15){
+                                TimerBuild timerBuild = new TimerBuild();
                                 if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
                                     if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
                                         inventory.setItem(13,null);
@@ -308,7 +312,8 @@ public class Player implements Listener {
                                         p.sendMessage("You dont have 50 levels!");
                                     }
                                 }
-                            }else if (num <= 19){
+                            }else if (num == 16||num == 17||num == 18||num == 19 || num == 20){
+                                TimerBuild timerBuild = new TimerBuild();
                                 if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
                                     if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
                                         inventory.setItem(13,null);
@@ -325,7 +330,8 @@ public class Player implements Listener {
                                         p.sendMessage("You dont have 50 levels!");
                                     }
                                 }
-                            } else if (num == 20) {
+                            } else if (num == 21) {
+                                TimerBuild timerBuild = new TimerBuild();
                                 if (!timerBuild.isRunning() || !config.getBoolean(p.getName()+".time")){
                                     if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE){
                                         inventory.setItem(13,null);

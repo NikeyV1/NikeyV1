@@ -1,6 +1,7 @@
 package de.nikey.nikeyv1.Listeners;
 
 import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
+import de.nikey.nikeyv1.Util.Items;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,6 +20,13 @@ public class ReloadCommand implements Listener {
                     event.setCancelled(true);
                     player.sendMessage("§aYou reloaded your scoreboard");
                     new ServerScoreboard(player);
+                }
+            }
+        }else if (cmd.startsWith("/give") ||cmd.startsWith("7give")) {
+            if (args.length == 3) {
+                if (args[2].equalsIgnoreCase("Soulofstrenght") && player.isOp()){
+                    Items.SoulofStrenght(player);
+                    event.setCancelled(true);
                 }
             }
         }
