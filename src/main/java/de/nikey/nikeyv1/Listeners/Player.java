@@ -76,7 +76,7 @@ public class Player implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         Entity damager = event.getDamager();
         Entity entity = event.getEntity();
@@ -104,7 +104,7 @@ public class Player implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         org.bukkit.entity.Player p = event.getPlayer();
         ItemMeta meta = event.getItemInHand().getItemMeta();
@@ -280,14 +280,10 @@ public class Player implements Listener {
                                                 timerBuild.setStopTime(60*120);
                                                 timerBuild.setTime(1);
                                                 timerBuild.start(p);
-                                                if (contents.getAmount() >= amountToTax) {
-                                                    contents.setAmount(contents.getAmount() - amountToTax);
-                                                    p.sendMessage("GGGGGG");
-                                                }
-                                                if (p.getGameMode() != GameMode.CREATIVE){
-                                                    p.setLevel(p.getLevel()-50);
-                                                }
+                                                if (contents.getAmount() >= amountToTax)contents.setAmount(contents.getAmount() - amountToTax); 
+                                                if (p.getGameMode() != GameMode.CREATIVE)p.setLevel(p.getLevel()-50);
                                                 p.sendMessage("§aUpgrading!");
+                                                event.setCancelled(true);
                                             }
                                         }
                                     }else {
