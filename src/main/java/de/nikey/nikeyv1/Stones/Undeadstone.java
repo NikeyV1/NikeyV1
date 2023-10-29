@@ -286,7 +286,7 @@ public class Undeadstone implements Listener {
                 LivingEntity entity = (LivingEntity) event.getEntity();
                 FileConfiguration config = NikeyV1.plugin.getConfig();
                 String stone = config.getString(p.getName() + ".stone");
-                if (entity.getCategory() == EntityCategory.UNDEAD && stone.equalsIgnoreCase("Undead")&&config.getInt(p.getName()+".level")>5){
+                if (entity.getCategory() == EntityCategory.UNDEAD && stone.equalsIgnoreCase("Undead")&&config.getInt(p.getName()+".level")>=5){
                     event.setDamage(event.getDamage()+1);
                 }
             }
