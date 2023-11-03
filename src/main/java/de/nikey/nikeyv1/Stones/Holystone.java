@@ -127,7 +127,7 @@ public class Holystone implements Listener {
                         p.updateInventory();
                         remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
                     }else {
-                        ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
+                        ability.put(p.getUniqueId(),System.currentTimeMillis() + (1800*1000));
                         new BukkitRunnable() {
                             @Override
                             public void run() {
@@ -142,7 +142,7 @@ public class Holystone implements Listener {
                            if (e instanceof Player) {
                                Player player =(Player) e;
                                double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                               armor = armor*1.6;
+                               armor = armor*1.7;
                                int players = p.getNearbyEntities(20, 20, 20).size();
                                if (players < 3){
                                    p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
@@ -151,11 +151,11 @@ public class Holystone implements Listener {
                                }else {
                                    p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
                                }
-                               player.damage(armor+10,p);
+                               player.damage(armor+32,p);
                            }
                            if (e instanceof LivingEntity){
                                LivingEntity entity = (LivingEntity) e;
-                               entity.damage(10,p);
+                               entity.damage(11,p);
                            }
                        }
                     }
