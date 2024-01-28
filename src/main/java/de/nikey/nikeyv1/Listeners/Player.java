@@ -88,6 +88,7 @@ public class Player implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        FileConfiguration config = NikeyV1.getPlugin().getConfig();
         Entity damager = event.getDamager();
         Entity entity = event.getEntity();
         EntityDamageEvent.DamageCause cause = event.getCause();
@@ -95,8 +96,15 @@ public class Player implements Listener {
             event.setDamage(event.getDamage()+1.5);
         }
         if (Electrostone.stunned.contains(entity)){
-            int damg = (int) (event.getDamage() + (event.getDamage() * (20 / 100)));
-            event.setDamage(damg);
+            Integer i = config.getInt(damager.getName() + ".level");
+            if (i == 15||i == 16||i == 17) {
+                float damg = (float) ((float) event.getDamage()*1.4);
+                event.setDamage(damg);
+            } else if (i >= 18) {
+                float damg = (float) ((float) event.getDamage()*1.6);
+                event.setDamage(damg);
+            }
+
         }
     }
 
@@ -142,21 +150,18 @@ public class Player implements Listener {
 
     @EventHandler
     public void onEnchantItem(EnchantItemEvent event) {
-        int expLevelCost = event.getExpLevelCost();
-        if (expLevelCost >8 ){
-            Random rand = new Random();
-            int nextInt = rand.nextInt(25);
-            if (nextInt == 20){
-                org.bukkit.entity.Player p = event.getEnchanter();
-                ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
-                ItemMeta meta = essence.getItemMeta();
-                meta.setDisplayName("§dEnchanted Essence");
-                essence.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                essence.setItemMeta(meta);
-                p.getInventory().addItem(essence);
-                p.playSound(p.getLocation(), Sound.ENTITY_BAT_TAKEOFF,1,1);
-            }
+        Random rand = new Random();
+        int nextInt = rand.nextInt(25);
+        if (nextInt == 20){
+            org.bukkit.entity.Player p = event.getEnchanter();
+            ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
+            ItemMeta meta = essence.getItemMeta();
+            meta.setDisplayName("§dEnchanted Essence");
+            essence.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            essence.setItemMeta(meta);
+            p.getInventory().addItem(essence);
+            p.playSound(p.getLocation(), Sound.ENTITY_BAT_TAKEOFF,1,1);
         }
     }
 

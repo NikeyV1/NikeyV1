@@ -71,7 +71,7 @@ public class Firestone implements Listener {
                             SphereEffect effect = new SphereEffect(NikeyV1.em);
                             effect.setEntity(p);
                             effect.duration = 20000;
-                            effect.particles = 120;
+                            effect.particles = 100;
                             effect.particle = Particle.FLAME;
                             effect.radius = 20.0;
                             effect.start();

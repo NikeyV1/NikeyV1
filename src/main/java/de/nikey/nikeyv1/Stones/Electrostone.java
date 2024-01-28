@@ -137,6 +137,8 @@ public class Electrostone implements Listener {
                                         effect.setLocation(location);
                                         effect.maxTornadoRadius = 3F;
                                         effect.visibleRange = 100;
+                                        effect.circleParticles =32;
+                                        effect.cloudParticles =50;
                                         effect.tornadoParticle = Particle.ELECTRIC_SPARK;
                                         effect.start();
                                     }
@@ -166,7 +168,7 @@ public class Electrostone implements Listener {
                     p.updateInventory();
                     remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
                 }else {
-                    if (i >= 15){
+                    if (i == 15||i == 16||i == 17){
                         ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
                         new BukkitRunnable() {
                             @Override
@@ -178,19 +180,19 @@ public class Electrostone implements Listener {
                         }.runTaskLater(NikeyV1.getPlugin(),20*180);
                         String stone = config.getString(p.getName() + ".stone");
                         stunned.add(entity);
-                        entity.getWorld().strikeLightning(entity.getLocation());
                         CylinderEffect effect = new CylinderEffect(NikeyV1.em);
                         effect.setEntity(entity);
                         effect.duration = 5000;
-                        effect.particles = 80;
-                        effect.particle = Particle.FLASH;
+                        effect.particles = 30;
+                        effect.particle = Particle.ELECTRIC_SPARK;
                         effect.visibleRange = 100;
                         effect.start();
-                        for (Entity e : entity.getNearbyEntities(1,1,1)){
+                        for (Entity e : entity.getNearbyEntities(2,2,2)){
                             if (e != p){
                                 e.getWorld().strikeLightningEffect(e.getLocation());
                                 stunned.add(e);
                                 if (entity instanceof LivingEntity) {
+                                    p.sendMessage("0");
                                     ((org.bukkit.entity.LivingEntity)entity).damage(5,p);
                                 }
                                 BukkitRunnable runnable = new BukkitRunnable() {
@@ -199,7 +201,42 @@ public class Electrostone implements Listener {
                                         stunned.clear();
                                     }
                                 };
-                                runnable.runTaskLater(NikeyV1.getPlugin(),20*5);
+                                runnable.runTaskLater(NikeyV1.getPlugin(),20*10);
+                            }
+                        }
+                    } else if (i >=18) {
+                        ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                ability.remove(p.getUniqueId());
+                                cancel();
+                                return;
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(),20*180);
+                        String stone = config.getString(p.getName() + ".stone");
+                        stunned.add(entity);
+                        CylinderEffect effect = new CylinderEffect(NikeyV1.em);
+                        effect.setEntity(entity);
+                        effect.duration = 5000;
+                        effect.particles = 30;
+                        effect.particle = Particle.ELECTRIC_SPARK;
+                        effect.visibleRange = 100;
+                        effect.start();
+                        for (Entity e : entity.getNearbyEntities(2,2,2)){
+                            if (e != p){
+                                e.getWorld().strikeLightningEffect(e.getLocation());
+                                stunned.add(e);
+                                if (entity instanceof LivingEntity) {
+                                    ((org.bukkit.entity.LivingEntity)entity).damage(8,p);
+                                }
+                                BukkitRunnable runnable = new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        stunned.remove(e);
+                                    }
+                                };
+                                runnable.runTaskLater(NikeyV1.getPlugin(),20*6);
                             }
                         }
                     }
