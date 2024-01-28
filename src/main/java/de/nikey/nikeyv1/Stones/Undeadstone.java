@@ -1,7 +1,7 @@
 package de.nikey.nikeyv1.Stones;
 
-import com.sun.java.accessibility.util.internal.CheckboxTranslator;
 import de.nikey.nikeyv1.NikeyV1;
+import de.nikey.nikeyv1.Util.HelpUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,9 +14,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -138,7 +136,6 @@ public class Undeadstone implements Listener {
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
-                                            spawn.setArmsRaised(true);
                                         }else if (r == 2){
                                             WitherSkeleton spawn = location.getWorld().spawn(location, WitherSkeleton.class);
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
@@ -286,6 +283,16 @@ public class Undeadstone implements Listener {
                 LivingEntity entity = (LivingEntity) event.getEntity();
                 FileConfiguration config = NikeyV1.plugin.getConfig();
                 String stone = config.getString(p.getName() + ".stone");
+
+                if (stone.equalsIgnoreCase("Undead")) {
+                    Monster damagedEntity = (Monster) event.getEntity();
+                    // Überprüfen, ob der Spieler ein Entity schlägt
+                    if (damagedEntity != null) {
+                        // Aggro-Mechanismus aktivieren
+                        HelpUtil.triggerEntityAggro(damagedEntity,p);
+                    }
+                }
+
                 if (entity.getCategory() == EntityCategory.UNDEAD && stone.equalsIgnoreCase("Undead")&&config.getInt(p.getName()+".level")>=5){
                     event.setDamage(event.getDamage()+1);
                 }
@@ -296,11 +303,10 @@ public class Undeadstone implements Listener {
                     event.setCancelled(true);
                 }else {
                     event.setDamage(4);
+                    }
                 }
             }
         }
-    }
-
     @EventHandler
     public void onEntityTarget(EntityTargetEvent event){
         if (event.getTarget() instanceof Player){

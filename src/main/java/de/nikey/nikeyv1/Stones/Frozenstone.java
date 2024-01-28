@@ -122,7 +122,7 @@ public class Frozenstone implements Listener {
                     }
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
-                if (i >=15){
+                if (i == 15||i == 16||i == 17){
                     if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
                         event.setCancelled(true);
                         p.updateInventory();
@@ -137,16 +137,51 @@ public class Frozenstone implements Listener {
                             }
                         }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                         //Cooldown-Ability
-                        for(Block b : getNearbyBlocks(p.getLocation(), 50)) {
-                            if (b.getType().equals(Material.WATER)){
-                                b.setType(Material.FROSTED_ICE);
-                            }
-                        }
+
                         for (Entity e : p.getNearbyEntities(50,50,50)){
                             if (e instanceof LivingEntity){
                                 LivingEntity entity = (LivingEntity) e;
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,3,false));
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
+                                notp.add(entity);
+                                entity.damage(16,p);
+                                entity.setFreezeTicks(600);
+                                SmokeEffect effect = new SmokeEffect(NikeyV1.em);
+                                effect.setEntity(entity);
+                                effect.particle = Particle.SNOWFLAKE;
+                                effect.duration = 20000;
+                                effect.particles = 2;
+                                effect.start();
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        notp.remove(entity);
+                                    }
+                                }.runTaskLater(NikeyV1.getPlugin(),400);
+                            }
+                        }
+                    }
+                }else if (i >=18){
+                    if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                        event.setCancelled(true);
+                        p.updateInventory();
+                        remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                    }else {
+                        ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                ability.remove(p.getUniqueId());
+                                cancel();
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                        //Cooldown-Ability
+
+                        for (Entity e : p.getNearbyEntities(50,50,50)){
+                            if (e instanceof LivingEntity){
+                                LivingEntity entity = (LivingEntity) e;
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,3,false));
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,3,false));
                                 notp.add(entity);
                                 entity.damage(18,p);
                                 entity.setFreezeTicks(700);

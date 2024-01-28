@@ -35,6 +35,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import static org.bukkit.Bukkit.getServer;
+
 @SuppressWarnings("ALL")
 public class Player implements Listener {
     int a;
@@ -47,13 +49,25 @@ public class Player implements Listener {
 
     public static Inventory inv = Bukkit.createInventory(null, 27, "Enchanted Anvil");
 
+    public void run(org.bukkit.entity.Player player){
+        if(player.getLocation().getBlock().getType() == Material.WATER){// I don't know which WATER in the material list is for a block,
+            if(player.getVelocity().getX() <= 2 && player.getVelocity().getY() <= 2 && player.getVelocity().getZ() <= 2)//makes sure players don't move at speed of light
+                player.setVelocity(player.getVelocity().multiply(1.5));
+        }
+    }
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         FileConfiguration config = NikeyV1.getPlugin().getConfig();
         org.bukkit.entity.Player p = event.getPlayer();
         if (config.contains(p.getName())){
             String stone = config.getString(p.getName() + ".stone");
-            if (stone.equalsIgnoreCase("Holy")&&p.getMaxHealth() >20)p.setMaxHealth(20);
+            Integer level = config.getInt(p.getName() + ".level");
+
+            if (stone.equalsIgnoreCase("Water")&&level >=5) {
+                run(p);
+            }
+            p.setMaxHealth(20);
             TimerBuild timerBuild = new TimerBuild();
             if (config.getBoolean(p.getName()+".time")){
                 BukkitRunnable runnable = new BukkitRunnable() {
@@ -129,7 +143,6 @@ public class Player implements Listener {
             }
         }
     }
-
 
     @EventHandler
     public void onEnchantItem(EnchantItemEvent event) {
@@ -207,6 +220,21 @@ public class Player implements Listener {
             Date date = new Date(System.currentTimeMillis()+1440*60*1000);
             Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), "§cYour stone is out of strength!",date,"Game");
             player.kickPlayer("§cYour stone is out of strength!");
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (event.getEntityType() == EntityType.PLAYER ){
+            org.bukkit.entity.Player p = (org.bukkit.entity.Player) event.getEntity();
+            if (event.getCause() == EntityDamageEvent.DamageCause.FREEZE){
+                FileConfiguration config = NikeyV1.plugin.getConfig();
+                String stone = config.getString(p.getName() + ".stone");
+                int level = config.getInt(p.getName() + ".level");
+                if (stone.equalsIgnoreCase("Frozen") && level>=3){
+                    event.setCancelled(true);
+                }
+            }
         }
     }
 
@@ -354,10 +382,13 @@ public class Player implements Listener {
 
     @EventHandler
     public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
-        if (event.getRightClicked() != null && event.getRightClicked().getType() == EntityType.ITEM_FRAME) {
-            if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() == Material.FIREWORK_STAR && event.getPlayer().getItemInHand().getItemMeta().hasLore()) {
+        if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() == Material.FIREWORK_STAR && event.getPlayer().getItemInHand().getItemMeta().hasLore()) {
+            if (event.getRightClicked() != null && event.getRightClicked().getType() == EntityType.ITEM_FRAME) {
                 event.setCancelled(true);
                 event.getRightClicked().remove();
+            } else if (event.getRightClicked().getType() == EntityType.ALLAY) {
+                event.setCancelled(true);
+                event.getPlayer().damage(2);
             }
         }
     }

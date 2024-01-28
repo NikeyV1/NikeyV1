@@ -3,13 +3,13 @@ package de.nikey.nikeyv1.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings("ALL")
 public class HelpUtil {
     public static Entity getNearestEntityInSight(Player player, int range) {
         ArrayList<Entity> entities = (ArrayList<Entity>) player.getNearbyEntities(range, range, range);
@@ -40,4 +40,20 @@ public class HelpUtil {
         }
         return blocks;
     }
+
+    public static void triggerEntityAggro(Monster damagedEntity, Player p) {
+        // Iteriere durch alle nahegelegenen Entitäten
+        for (Entity nearbySummoned : damagedEntity.getWorld().getNearbyEntities(damagedEntity.getLocation(),200,200,200)) {
+            if (nearbySummoned instanceof Monster) {
+                Monster monster = (Monster) nearbySummoned;
+                // Überprüfen, ob die Entität ein gespawntes Entity ist
+                if (monster.getName().contains(p.getName()+"'s")) {
+                    // Setze das Ziel des Entitys auf den Spieler, der das ursprünglichen Entity geschlagen hat
+                    monster.setTarget(damagedEntity);
+                }
+            }
+        }
+    }
 }
+
+
