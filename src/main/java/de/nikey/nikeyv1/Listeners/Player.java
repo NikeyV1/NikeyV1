@@ -272,45 +272,8 @@ public class Player implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        org.bukkit.entity.Player player = (org.bukkit.entity.Player) event.getWhoClicked();
-        Inventory clickedInventory = event.getClickedInventory();
-        Material itemMaterial = event.getCursor().getType();
-
-        // Überprüfen, ob es sich um ein Hopper- oder Trichter-Minecart-Inventar handelt
-        if (isMinecartInventory(clickedInventory) && itemMaterial == Material.FIREWORK_STAR) {
-            event.setCancelled(true);
-            player.sendMessage("§cYou are not allowed to do that!");
-            player.damage(10);
-
-        }
-
-        // Überprüfen, ob es sich um eine Truhe handelt und der Spieler versucht, Diamanten zu legen
-        if (clickedInventory != null && isChest(clickedInventory) && itemMaterial == Material.FIREWORK_STAR) {
-            event.setCancelled(true);
-            player.sendMessage("§cYou are not allowed to do that!");
-            player.damage(10);
-        }
-
-        Inventory top = event.getView().getTopInventory();
-        Inventory bottom = event.getView().getBottomInventory();
-
-
-            if (bottom.getType() == InventoryType.PLAYER) {
-                if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.FIREWORK_STAR) {
-                    if (top.getType() == InventoryType.CHEST  || event.getInventory().getType() == InventoryType.ANVIL|| event.getInventory().getType() == InventoryType.BARREL|| event.getInventory().getType() == InventoryType.BEACON|| event.getInventory().getType() == InventoryType.BLAST_FURNACE|| event.getInventory().getType() == InventoryType.BREWING|| event.getInventory().getType() == InventoryType.CARTOGRAPHY|| event.getInventory().getType() == InventoryType.LOOM
-                            || event.getInventory().getType() == InventoryType.SMOKER|| event.getInventory().getType() == InventoryType.ENDER_CHEST|| event.getInventory().getType() == InventoryType.STONECUTTER|| event.getInventory().getType() == InventoryType.SHULKER_BOX|| event.getInventory().getType() == InventoryType.SMITHING|| event.getInventory().getType() == InventoryType.GRINDSTONE|| event.getInventory().getType() == InventoryType.FURNACE|| event.getInventory().getType() == InventoryType.ENCHANTING|| event.getInventory().getType() == InventoryType.HOPPER|| event.getInventory().getType() == InventoryType.DROPPER|| event.getInventory().getType() == InventoryType.DISPENSER
-                    ) {
-                        if (event.getRawSlot() > 26) {
-                            event.setCancelled(true);
-                            player.damage(4);
-                            player.sendMessage("§cYou are not allowed to do that!");
-                        }
-                    }
-                }
-            }
-
-
-            if (event.getWhoClicked() instanceof org.bukkit.entity.Player && event.getInventory() == inv) {
+        if (event.getInventory() == inv) {
+            if (event.getWhoClicked() instanceof org.bukkit.entity.Player ) {
                 org.bukkit.entity.Player p = (org.bukkit.entity.Player) event.getWhoClicked();
                 Inventory inventory = event.getInventory();
                 if (event.getCurrentItem() == null) ;
@@ -411,37 +374,49 @@ public class Player implements Listener {
                                 } else if (num == 16 || num == 17 || num == 18 || num == 19 || num == 20) {
                                     TimerBuild timerBuild = new TimerBuild();
                                     if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
-                                        if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE) {
-                                            inventory.setItem(13, null);
-                                            p.closeInventory();
-                                            timerBuild.setLevel(num + 1);
-                                            timerBuild.setStopTime(60 * 50);
-                                            timerBuild.setTime(1);
-                                            timerBuild.start(p);
-                                            if (p.getGameMode() != GameMode.CREATIVE) {
-                                                p.setLevel(p.getLevel() - 50);
+                                        // Durchlaufe das Inventar des Spielers und entferne die Soul of Strenght
+                                        for (ItemStack soul : p.getInventory().getContents()) {
+                                            if (soul != null && soul.getType() == Material.SOUL_LANTERN && soul.getItemMeta().hasLore()) {
+                                                if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE) {
+                                                    p.getInventory().remove(soul);
+                                                    inventory.setItem(13, null);
+                                                    p.closeInventory();
+                                                    timerBuild.setLevel(num + 1);
+                                                    timerBuild.setStopTime(60 * 50);
+                                                    timerBuild.setTime(1);
+                                                    timerBuild.start(p);
+                                                    if (p.getGameMode() != GameMode.CREATIVE) {
+                                                        p.setLevel(p.getLevel() - 50);
+                                                    }
+                                                    p.sendMessage("§aUpgrading!");
+                                                } else {
+                                                    p.sendMessage("You dont have 50 levels!");
+                                                }
                                             }
-                                            p.sendMessage("§aUpgrading!");
-                                        } else {
-                                            p.sendMessage("You dont have 50 levels!");
                                         }
                                     }
                                 } else if (num == 21) {
                                     TimerBuild timerBuild = new TimerBuild();
                                     if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
-                                        if (p.getLevel() > 100 || p.getGameMode() == GameMode.CREATIVE) {
-                                            inventory.setItem(13, null);
-                                            p.closeInventory();
-                                            timerBuild.setLevel(num + 1);
-                                            timerBuild.setStopTime(60 * 120);
-                                            timerBuild.setTime(1);
-                                            timerBuild.start(p);
-                                            if (p.getGameMode() != GameMode.CREATIVE) {
-                                                p.setLevel(p.getLevel() - 100);
+                                        // Durchlaufe das Inventar des Spielers und entferne die Soul of Strenght
+                                        for (ItemStack soul : p.getInventory().getContents()) {
+                                            if (soul != null && soul.getType() == Material.SOUL_LANTERN && soul.getItemMeta().hasLore()) {
+                                                if (p.getLevel() > 100 || p.getGameMode() == GameMode.CREATIVE) {
+                                                    p.getInventory().remove(soul);
+                                                    inventory.setItem(13, null);
+                                                    p.closeInventory();
+                                                    timerBuild.setLevel(num + 1);
+                                                    timerBuild.setStopTime(60 * 120);
+                                                    timerBuild.setTime(1);
+                                                    timerBuild.start(p);
+                                                    if (p.getGameMode() != GameMode.CREATIVE) {
+                                                        p.setLevel(p.getLevel() - 100);
+                                                    }
+                                                    p.sendMessage("§aUpgrading!");
+                                                } else {
+                                                    p.sendMessage("You dont have 100 levels!");
+                                                }
                                             }
-                                            p.sendMessage("§aUpgrading!");
-                                        } else {
-                                            p.sendMessage("You dont have 1^00 levels!");
                                         }
                                     }
                                 }
@@ -450,6 +425,44 @@ public class Player implements Listener {
                     }
                 }
             }
+        }else {
+            org.bukkit.entity.Player player = (org.bukkit.entity.Player) event.getWhoClicked();
+            Inventory clickedInventory = event.getClickedInventory();
+            Material itemMaterial = event.getCursor().getType();
+
+            // Überprüfen, ob es sich um ein Hopper- oder Trichter-Minecart-Inventar handelt
+            if (isMinecartInventory(clickedInventory) && itemMaterial == Material.FIREWORK_STAR) {
+                event.setCancelled(true);
+                player.sendMessage("§cYou are not allowed to do that!");
+                player.damage(10);
+
+            }
+
+            // Überprüfen, ob es sich um eine Truhe handelt und der Spieler versucht, Diamanten zu legen
+            if (clickedInventory != null && isChest(clickedInventory) && itemMaterial == Material.FIREWORK_STAR) {
+                event.setCancelled(true);
+                player.sendMessage("§cYou are not allowed to do that!");
+                player.damage(10);
+            }
+
+            Inventory top = event.getView().getTopInventory();
+            Inventory bottom = event.getView().getBottomInventory();
+
+
+            if (bottom.getType() == InventoryType.PLAYER) {
+                if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.FIREWORK_STAR) {
+                    if (top.getType() == InventoryType.CHEST  || event.getInventory().getType() == InventoryType.ANVIL|| event.getInventory().getType() == InventoryType.BARREL|| event.getInventory().getType() == InventoryType.BEACON|| event.getInventory().getType() == InventoryType.BLAST_FURNACE|| event.getInventory().getType() == InventoryType.BREWING|| event.getInventory().getType() == InventoryType.CARTOGRAPHY|| event.getInventory().getType() == InventoryType.LOOM
+                            || event.getInventory().getType() == InventoryType.SMOKER|| event.getInventory().getType() == InventoryType.ENDER_CHEST|| event.getInventory().getType() == InventoryType.STONECUTTER|| event.getInventory().getType() == InventoryType.SHULKER_BOX|| event.getInventory().getType() == InventoryType.SMITHING|| event.getInventory().getType() == InventoryType.GRINDSTONE|| event.getInventory().getType() == InventoryType.FURNACE|| event.getInventory().getType() == InventoryType.ENCHANTING|| event.getInventory().getType() == InventoryType.HOPPER|| event.getInventory().getType() == InventoryType.DROPPER|| event.getInventory().getType() == InventoryType.DISPENSER
+                    ) {
+                        if (event.getRawSlot() > 26) {
+                            event.setCancelled(true);
+                            player.damage(4);
+                            player.sendMessage("§cYou are not allowed to do that!");
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @EventHandler(ignoreCancelled = true)

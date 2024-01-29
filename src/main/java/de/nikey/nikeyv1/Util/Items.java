@@ -46,7 +46,7 @@ public class Items {
         //Recipe
 
         ShapedRecipe soulrecipe = new ShapedRecipe(soul);
-        soulrecipe.shape("ENE","IWI","ENE");
+        soulrecipe.shape("EIE","IWI","EIE");
         soulrecipe.setIngredient('I',Material.DIAMOND_BLOCK);
         soulrecipe.setIngredient('W',Material.BEACON);
         soulrecipe.setIngredient('E', new RecipeChoice.ExactChoice(essence));
@@ -146,9 +146,8 @@ public class Items {
         anvil.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         anvil.setItemMeta(meta);
         ShapedRecipe recipe = new ShapedRecipe(anvil);
-        recipe.shape("IWI","ENE","IEI");
-        recipe.setIngredient('I',Material.IRON_BLOCK);
-        recipe.setIngredient('N',Material.NETHERITE_BLOCK);
+        recipe.shape("NWN","ENE","NEN");
+        recipe.setIngredient('N',Material.NETHERITE_INGOT);
         recipe.setIngredient('W',Material.NETHER_STAR);
         recipe.setIngredient('E', new RecipeChoice.ExactChoice(essence));
         NikeyV1.plugin.getServer().addRecipe(recipe);

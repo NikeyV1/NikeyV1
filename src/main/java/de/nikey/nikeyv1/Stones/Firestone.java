@@ -136,7 +136,7 @@ public class Firestone implements Listener {
                     }
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
-                if (i >=15){
+                if (i == 15||i == 16||i == 17){
                     if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
                         event.setCancelled(true);
                         p.updateInventory();
@@ -168,7 +168,45 @@ public class Firestone implements Listener {
                                     return;
                                 }else {
                                     double health = p.getHealth();
-                                    p.setHealth(health+1);
+                                    p.setHealth(health+0.8);
+                                }
+                                time--;
+                            }
+                        }.runTaskTimer(NikeyV1.getPlugin(),40,40);
+                    }
+                }else if (i >=18){
+                    if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                        event.setCancelled(true);
+                        p.updateInventory();
+                        remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                    }else {
+
+                        ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                ability.remove(p.getUniqueId());
+                                cancel();
+                                return;
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(),20*180);
+                        //Cooldown-Ability
+                        time = 10;
+                        AnimatedBallEffect effect = new AnimatedBallEffect(NikeyV1.em);
+                        effect.setEntity(p);
+                        effect.particle = Particle.FLAME;
+                        effect.duration = 20000;
+                        effect.visibleRange = 100;
+                        effect.start();
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                if (timer == 0){
+                                    cancel();
+                                    return;
+                                }else {
+                                    double health = p.getHealth();
+                                    p.setHealth(health+1.2);
                                 }
                                 time--;
                             }
@@ -181,18 +219,30 @@ public class Firestone implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+
         Entity d = event.getDamager();
         Entity entity = event.getEntity();
         if (entity instanceof Player && d instanceof LivingEntity){
             Player p = (Player) entity;
             LivingEntity damager = (LivingEntity) d;
+            int i = NikeyV1.getPlugin().getConfig().getInt(p.getName() + ".level");
             if (ability.containsKey(p.getUniqueId())){
-                long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                int a = (int) (remain/1000);
-                if (a >160){
-                    double damage = event.getDamage();
-                    event.setDamage(damage*0.5);
-                    damager.damage(damage*0.4,entity);
+                if (i == 15||i == 16||i == 17){
+                    long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remain/1000);
+                    if (a >160){
+                        double damage = event.getDamage();
+                        event.setDamage(damage*0.3);
+                        damager.damage(damage*0.2,entity);
+                    }
+                }else if (i >= 18){
+                    long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remain/1000);
+                    if (a >160){
+                        double damage = event.getDamage();
+                        event.setDamage(damage*0.75);
+                        damager.damage(damage*0.4,entity);
+                    }
                 }
             }
         }
@@ -203,12 +253,22 @@ public class Firestone implements Listener {
         Entity entity = event.getEntity();
         if (entity instanceof Player) {
             Player p = (Player) entity;
+            int i = NikeyV1.getPlugin().getConfig().getInt(p.getName() + ".level");
             if (ability.containsKey(p.getUniqueId())){
-                long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                int a = (int) (remain/1000);
-                if (a >160){
-                    double damage = event.getDamage();
-                    event.setDamage(damage*0.5);
+                if (i == 15||i == 16||i == 17){
+                    long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remain/1000);
+                    if (a >160){
+                        double damage = event.getDamage();
+                        event.setDamage(damage*0.30);
+                    }
+                }else if (i >= 18){
+                    long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remain/1000);
+                    if (a >160){
+                        double damage = event.getDamage();
+                        event.setDamage(damage*0.5);
+                    }
                 }
             }
         }

@@ -277,6 +277,20 @@ public class Undeadstone implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player p = (Player) event.getEntity();
+            FileConfiguration config = NikeyV1.plugin.getConfig();
+            String stone = config.getString(p.getName() + ".stone");
+            if (stone.equalsIgnoreCase("Undead")) {
+                Monster damager = (Monster) event.getDamager();
+                // Überprüfen, ob der Spieler von einen Entity geschlagen wurde
+                if (damager != null) {
+                    // Aggro-Mechanismus aktivieren
+                    HelpUtil.triggerEntityAggro(damager,p);
+                }
+            }
+        }
+
         if (event.getDamager() instanceof Player){
             Player p = (Player) event.getDamager();
             if (event.getEntity() instanceof LivingEntity){
