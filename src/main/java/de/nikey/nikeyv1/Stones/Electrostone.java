@@ -233,7 +233,7 @@ public class Electrostone implements Listener {
                                 BukkitRunnable runnable = new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        stunned.remove(e);
+                                        stunned.clear();
                                     }
                                 };
                                 runnable.runTaskLater(NikeyV1.getPlugin(),20*6);
