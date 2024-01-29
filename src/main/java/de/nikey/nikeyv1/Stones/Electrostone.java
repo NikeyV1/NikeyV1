@@ -37,6 +37,53 @@ public class Electrostone implements Listener {
     public static long remainingTime1;
     public static long remainingTime2;
 
+    public void lightning2(Player p) {
+        int x = (int) (p.getLocation().getX());
+        int z = (int) (p.getLocation().getZ());
+        int randomX = ThreadLocalRandom.current().nextInt(x-10, x+10);
+        int randomZ = ThreadLocalRandom.current().nextInt(z-10, z+10);
+        int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
+        Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
+        LightningStrike lightningStrike = p.getWorld().strikeLightning(location);
+        for (Entity e : location.getWorld().getNearbyEntities(location,4,4,4)){
+            if (e instanceof LivingEntity){
+                LivingEntity entity = (LivingEntity) e;
+                if (entity != p){
+                    entity.damage(8,lightningStrike);
+                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*2,2));
+                }
+            }
+        }
+    }
+    public void lightning(Player p) {
+        int x = (int) (p.getLocation().getX());
+        int z = (int) (p.getLocation().getZ());
+        int randomX = ThreadLocalRandom.current().nextInt(x-10, x+10);
+        int randomZ = ThreadLocalRandom.current().nextInt(z-10, z+10);
+        int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
+        Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
+        LightningStrike lightningStrike = p.getWorld().strikeLightning(location);
+        for (Entity e : location.getWorld().getNearbyEntities(location,4,4,4)){
+            if (e instanceof LivingEntity){
+                LivingEntity entity = (LivingEntity) e;
+                if (entity != p){
+                    entity.damage(10,lightningStrike);
+                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,2));
+                }
+            }
+        }
+        TornadoEffect effect = new TornadoEffect(NikeyV1.em);
+        effect.setLocation(location);
+        effect.maxTornadoRadius = 3F;
+        effect.visibleRange = 100;
+        effect.circleParticles =32;
+        effect.cloudParticles =50;
+        effect.cloudSpeed = 0.5F;
+        effect.tornadoParticle = Particle.ELECTRIC_SPARK;
+        effect.duration = 1500;
+        effect.start();
+    }
+
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -77,28 +124,7 @@ public class Electrostone implements Listener {
                                         cancel();
                                         return;
                                     }else {
-                                        int x = (int) (p.getLocation().getX());
-                                        int z = (int) (p.getLocation().getZ());
-                                        int randomX = ThreadLocalRandom.current().nextInt(x-10, x+10);
-                                        int randomZ = ThreadLocalRandom.current().nextInt(z-10, z+10);
-                                        int randomY = world.getHighestBlockYAt(randomX,randomZ);
-                                        Location location = new Location(world,randomX,randomY+1,randomZ);
-                                        LightningStrike lightningStrike = world.strikeLightning(location);
-                                        for (Entity e : location.getWorld().getNearbyEntities(location,4,4,4)){
-                                            if (e instanceof LivingEntity){
-                                                LivingEntity entity = (LivingEntity) e;
-                                                if (entity != p){
-                                                    entity.damage(8,lightningStrike);
-                                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*2,2));
-                                                }
-                                            }
-                                        }
-                                        TornadoEffect effect = new TornadoEffect(NikeyV1.em);
-                                        effect.setLocation(location);
-                                        effect.maxTornadoRadius = 3F;
-                                        effect.visibleRange = 100;
-                                        effect.tornadoParticle = Particle.ELECTRIC_SPARK;
-                                        effect.start();
+                                        lightning2(p);
                                     }
                                     timer--;
                                 }
@@ -109,7 +135,7 @@ public class Electrostone implements Listener {
                         } else if (i >= 12) {
                             timer = 20;
                             World world = p.getWorld();
-                            BukkitRunnable runnable = new BukkitRunnable() {
+                            new BukkitRunnable() {
 
                                 @Override
                                 public void run() {
@@ -117,35 +143,11 @@ public class Electrostone implements Listener {
                                         cancel();
                                         return;
                                     }else {
-                                        int x = (int) (p.getLocation().getX());
-                                        int z = (int) (p.getLocation().getZ());
-                                        int randomX = ThreadLocalRandom.current().nextInt(x-10, x+10);
-                                        int randomZ = ThreadLocalRandom.current().nextInt(z-10, z+10);
-                                        int randomY = world.getHighestBlockYAt(randomX,randomZ);
-                                        Location location = new Location(world,randomX,randomY+1,randomZ);
-                                        LightningStrike lightningStrike = world.strikeLightning(location);
-                                        for (Entity e : location.getWorld().getNearbyEntities(location,4,4,4)){
-                                            if (e instanceof LivingEntity){
-                                                LivingEntity entity = (LivingEntity) e;
-                                                if (entity != p){
-                                                    entity.damage(10,lightningStrike);
-                                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,2));
-                                                }
-                                            }
-                                        }
-                                        TornadoEffect effect = new TornadoEffect(NikeyV1.em);
-                                        effect.setLocation(location);
-                                        effect.maxTornadoRadius = 3F;
-                                        effect.visibleRange = 100;
-                                        effect.circleParticles =32;
-                                        effect.cloudParticles =50;
-                                        effect.tornadoParticle = Particle.ELECTRIC_SPARK;
-                                        effect.start();
+                                        lightning(p);
                                     }
                                     timer--;
                                 }
-                            };
-                            runnable.runTaskTimer(NikeyV1.getPlugin(),20,20);
+                            }.runTaskTimer(NikeyV1.getPlugin(),20,20);
                         }
                     }
                 }
@@ -182,26 +184,25 @@ public class Electrostone implements Listener {
                         stunned.add(entity);
                         CylinderEffect effect = new CylinderEffect(NikeyV1.em);
                         effect.setEntity(entity);
-                        effect.duration = 5000;
+                        effect.duration = 6000;
                         effect.particles = 30;
                         effect.particle = Particle.ELECTRIC_SPARK;
                         effect.visibleRange = 100;
                         effect.start();
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                stunned.clear();
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(),20*6);
                         for (Entity e : entity.getNearbyEntities(2,2,2)){
                             if (e != p){
                                 e.getWorld().strikeLightningEffect(e.getLocation());
                                 stunned.add(e);
-                                if (entity instanceof LivingEntity) {
-                                    p.sendMessage("0");
-                                    ((org.bukkit.entity.LivingEntity)entity).damage(5,p);
+                                if (e instanceof LivingEntity) {
+                                    LivingEntity livingEntity = (LivingEntity) e;
+                                    livingEntity.damage(8,p);
                                 }
-                                BukkitRunnable runnable = new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        stunned.clear();
-                                    }
-                                };
-                                runnable.runTaskLater(NikeyV1.getPlugin(),20*10);
                             }
                         }
                     } else if (i >=18) {
@@ -218,25 +219,21 @@ public class Electrostone implements Listener {
                         stunned.add(entity);
                         CylinderEffect effect = new CylinderEffect(NikeyV1.em);
                         effect.setEntity(entity);
-                        effect.duration = 5000;
+                        effect.duration = 6000;
                         effect.particles = 30;
                         effect.particle = Particle.ELECTRIC_SPARK;
                         effect.visibleRange = 100;
                         effect.start();
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                stunned.clear();
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(),20*6);
                         for (Entity e : entity.getNearbyEntities(2,2,2)){
                             if (e != p){
                                 e.getWorld().strikeLightningEffect(e.getLocation());
                                 stunned.add(e);
-                                if (entity instanceof LivingEntity) {
-                                    ((org.bukkit.entity.LivingEntity)entity).damage(8,p);
-                                }
-                                BukkitRunnable runnable = new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        stunned.clear();
-                                    }
-                                };
-                                runnable.runTaskLater(NikeyV1.getPlugin(),20*6);
                             }
                         }
                     }
@@ -257,15 +254,7 @@ public class Electrostone implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         Player entity = event.getPlayer();
         if (stunned.contains(entity)){
-            Location from = event.getFrom();
-            Location to = event.getTo();
-            double x = from.getX();
-            double z = from.getZ();
-            double xx = to.getX();
-            double zz = to.getZ();
-            if (x != xx||z !=zz){
-                event.setCancelled(true);
-            }
+            event.setCancelled(true);
         }
     }
 

@@ -4,6 +4,7 @@ import com.destroystokyo.paper.event.entity.EntityJumpEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import de.nikey.nikeyv1.NikeyV1;
 import de.slikey.effectlib.effect.SmokeEffect;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
@@ -45,7 +46,7 @@ public class Frozenstone implements Listener {
         Player player = event.getPlayer();
         FileConfiguration config = NikeyV1.plugin.getConfig();
         String stone = config.getString(player.getName() + ".stone");
-        if (stone.equalsIgnoreCase("Frozen") && config.getInt(player.getName()+".level") >4){
+        if (stone.equalsIgnoreCase("Frozen")&&player.getGameMode() == GameMode.SURVIVAL && config.getInt(player.getName()+".level") >4){
             if (player.getLocation().getBlock().getType() == Material.POWDER_SNOW) {
                 player.setAllowFlight(true);
                 player.setFlying(true);
