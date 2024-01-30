@@ -51,7 +51,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
                 if (stone.equalsIgnoreCase("Electric")){
                     //Ability 2
-                    try {
+                    
                         long remainingTime2 = Electrostone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
                         int a = (int) (remainingTime2/1000);
                         if (a == 0){
@@ -59,9 +59,6 @@ public class ServerScoreboard extends ScoreboardBuilder {
                         }else {
                             setScore("§7Ability 2: §c"+a +"/180",3);
                         }
-                    }catch (NumberFormatException ex) {
-                        ex.fillInStackTrace();
-                    }
                 }else if (stone.equalsIgnoreCase("Fire")){
                     //Ability 2
                     long remainingTime2 = Firestone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
