@@ -51,36 +51,30 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
                 if (stone.equalsIgnoreCase("Electric")){
                     //Ability 2
-                    
+                    if(Electrostone.ability.get(player.getUniqueId()) - System.currentTimeMillis() != null) {
                         long remainingTime2 = Electrostone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
                         int a = (int) (remainingTime2/1000);
-                        if (a == 0){
-                            setScore("§7Ability 2: §aReady",3);
-                        }else {
-                            setScore("§7Ability 2: §c"+a +"/180",3);
-                        }
+                        setScore("§7Ability 2: §c"+a +"/180",3);
+                    }else {
+                        setScore("§7Ability 2: §aReady",3);
+                    }
                 }else if (stone.equalsIgnoreCase("Fire")){
                     //Ability 2
-                    long remainingTime2 = Firestone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
-                    int a = (int) (remainingTime2/1000);
-                    //
-                    if (a == 0){
-                        setScore("§7Ability 2: §aReady",3);
-                    }else {
+                    if(Firestone.ability.get(player.getUniqueId()) - System.currentTimeMillis() != null) {
+                        long remainingTime2 = Firestone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
+                        int a = (int) (remainingTime2/1000);               
                         setScore("§7Ability 2: §c"+a +"/180",3);
+                    } else {
+                        setScore("§7Ability 2: §aReady",3);
                     }
                 }else if (stone.equalsIgnoreCase("Water")){
                     //Ability 2
-                    try {
+                    if(Waterstone.ability.get(player.getUniqueId()) - System.currentTimeMillis() != null) {
                         long remainingTime2 = Waterstone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
-                        int a = (int) (remainingTime2/1000);
-                        //
-                        if (a == 0){
-                            setScore("§7Ability 2: §aReady",3);
-                        }else {
-                            setScore("§7Ability 2: §c"+a +"/180",3);
-                        }
-                    }catch (NumberFormatException ex){
+                        int a = (int) (remainingTime2/1000);               
+                        setScore("§7Ability 2: §c"+a +"/180",3);
+                    } else {
+                        setScore("§7Ability 2: §aReady",3);
                     }
                 }else if (stone.equalsIgnoreCase("Frozen")){
                     //Ability 2
