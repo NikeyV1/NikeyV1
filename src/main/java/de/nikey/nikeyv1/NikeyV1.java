@@ -19,9 +19,9 @@ public final class NikeyV1 extends JavaPlugin {
     private final HashMap<org.bukkit.entity.Player, Integer> time = new HashMap<>();
     @Override
     public void onEnable() {
-        em = new EffectManager(EffectLib.instance());
         plugin = this;
         //Effect manager
+        em = new EffectManager(EffectLib.instance());
 
         PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents(new Player(),this);

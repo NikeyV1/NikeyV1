@@ -49,11 +49,20 @@ public class Electrostone implements Listener {
             if (e instanceof LivingEntity){
                 LivingEntity entity = (LivingEntity) e;
                 if (entity != p){
-                    entity.damage(8,lightningStrike);
-                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*2,2));
+                    entity.damage(10,lightningStrike);
+                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                 }
             }
         }
+        TornadoEffect effect = new TornadoEffect(NikeyV1.em);
+        effect.setLocation(location);
+        effect.maxTornadoRadius = 3F;
+        effect.visibleRange = 70;
+        effect.circleParticles =32;
+        effect.cloudParticles =20;
+        effect.tornadoParticle = Particle.ELECTRIC_SPARK;
+        effect.duration = 1500;
+        effect.start();
     }
     public void lightning(Player p) {
         int x = (int) (p.getLocation().getX());
@@ -67,18 +76,17 @@ public class Electrostone implements Listener {
             if (e instanceof LivingEntity){
                 LivingEntity entity = (LivingEntity) e;
                 if (entity != p){
-                    entity.damage(10,lightningStrike);
-                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,2));
+                    entity.damage(14,lightningStrike);
+                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                 }
             }
         }
         TornadoEffect effect = new TornadoEffect(NikeyV1.em);
         effect.setLocation(location);
         effect.maxTornadoRadius = 3F;
-        effect.visibleRange = 100;
+        effect.visibleRange = 70;
         effect.circleParticles =32;
-        effect.cloudParticles =50;
-        effect.cloudSpeed = 0.5F;
+        effect.cloudParticles =20;
         effect.tornadoParticle = Particle.ELECTRIC_SPARK;
         effect.duration = 1500;
         effect.start();

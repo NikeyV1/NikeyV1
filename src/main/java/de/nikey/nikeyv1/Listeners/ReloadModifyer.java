@@ -13,7 +13,7 @@ public class ReloadModifyer implements Listener {
         final Player p = event.getPlayer();
         final String cmd = event.getMessage();
         final String[] args = cmd.split(" ");
-        if (cmd.startsWith("/rl") ||cmd.startsWith("/reload")){
+        if (cmd.startsWith("/rl") ||cmd.startsWith("/reload")||cmd.startsWith("rl")){
             if (args.length == 1){
                 event.setCancelled(true);
                 for (Player players : Bukkit.getOnlinePlayers()){

@@ -192,12 +192,6 @@ public class Firestone implements Listener {
                         }.runTaskLater(NikeyV1.getPlugin(),20*180);
                         //Cooldown-Ability
                         time = 10;
-                        AnimatedBallEffect effect = new AnimatedBallEffect(NikeyV1.em);
-                        effect.setEntity(p);
-                        effect.particle = Particle.FLAME;
-                        effect.duration = 20000;
-                        effect.visibleRange = 100;
-                        effect.start();
                         new BukkitRunnable() {
                             @Override
                             public void run() {
@@ -211,6 +205,12 @@ public class Firestone implements Listener {
                                 time--;
                             }
                         }.runTaskTimer(NikeyV1.getPlugin(),40,40);
+                        AnimatedBallEffect effect = new AnimatedBallEffect(NikeyV1.em);
+                        effect.setEntity(p);
+                        effect.particle = Particle.FLAME;
+                        effect.duration = 20000;
+                        effect.visibleRange = 100;
+                        effect.start();
                     }
                 }
             }

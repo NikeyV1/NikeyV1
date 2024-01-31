@@ -51,57 +51,60 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
                 if (stone.equalsIgnoreCase("Electric")){
                     //Ability 2
-                    if(Electrostone.ability.get(player.getUniqueId()) - System.currentTimeMillis() != null) {
-                        long remainingTime2 = Electrostone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
-                        int a = (int) (remainingTime2/1000);
-                        setScore("§7Ability 2: §c"+a +"/180",3);
-                    }else {
+                    long remainingTime2 = Electrostone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remainingTime2/1000);
+                    //
+                    if (a == 0){
                         setScore("§7Ability 2: §aReady",3);
+                    }else {
+                        setScore("§7Ability 2: §c"+a +"/180",3);
                     }
                 }else if (stone.equalsIgnoreCase("Fire")){
                     //Ability 2
-                    if(Firestone.ability.get(player.getUniqueId()) - System.currentTimeMillis() != null) {
-                        long remainingTime2 = Firestone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
-                        int a = (int) (remainingTime2/1000);               
-                        setScore("§7Ability 2: §c"+a +"/180",3);
-                    } else {
+                    long remainingTime2 = Firestone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remainingTime2/1000);
+                    //
+                    if (a == 0){
                         setScore("§7Ability 2: §aReady",3);
+                    }else {
+                        setScore("§7Ability 2: §c"+a +"/180",3);
                     }
                 }else if (stone.equalsIgnoreCase("Water")){
                     //Ability 2
-                    if(Waterstone.ability.get(player.getUniqueId()) - System.currentTimeMillis() != null) {
-                        long remainingTime2 = Waterstone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
-                        int a = (int) (remainingTime2/1000);               
-                        setScore("§7Ability 2: §c"+a +"/180",3);
-                    } else {
+                    long remainingTime2 = Waterstone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remainingTime2/1000);
+                    //
+                    if (a == 0){
                         setScore("§7Ability 2: §aReady",3);
+                    }else {
+                        setScore("§7Ability 2: §c"+a +"/180",3);
                     }
                 }else if (stone.equalsIgnoreCase("Frozen")){
                     //Ability 2
-                    if(Frozenstone.ability.get(player.getUniqueId()) - System.currentTimeMillis() != null) {
-                        long remainingTime2 = Frozenstone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
-                        int a = (int) (remainingTime2/1000);               
-                        setScore("§7Ability 2: §c"+a +"/180",3);
-                    } else {
+                    long remainingTime2 = Frozenstone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remainingTime2/1000);
+                    //
+                    if (a == 0){
                         setScore("§7Ability 2: §aReady",3);
+                    }else {
+                        setScore("§7Ability 2: §c"+a +"/180",3);
                     }
                 }else if (stone.equalsIgnoreCase("Undead")){
-                    //Ability 2
-                    if(Undeadstone.ability.get(player.getUniqueId()) - System.currentTimeMillis() != null) {
-                        long remainingTime2 = Undeadstone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
-                        int a = (int) (remainingTime2/1000);               
-                        setScore("§7Ability 2: §c"+a +"/180",3);
-                    } else {
+                    long remainingTime2 = Undeadstone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remainingTime2/1000);
+                    //
+                    if (a == 0){
                         setScore("§7Ability 2: §aReady",3);
+                    }else {
+                        setScore("§7Ability 2: §c"+a +"/180",3);
                     }
                 }else if (stone.equalsIgnoreCase("Holy")){
-                    //Ability 2
-                    if(Holystone.ability.get(player.getUniqueId()) - System.currentTimeMillis() != null) {
-                        long remainingTime2 = Holystone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
-                        int a = (int) (remainingTime2/1000);               
-                        setScore("§7Ability 2: §c"+a +"/180",3);
-                    } else {
+                    long remainingTime2 = Holystone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remainingTime2/1000);
+                    if (a == 0){
                         setScore("§7Ability 2: §aReady",3);
+                    }else {
+                        setScore("§7Ability 2: §c"+a +"/180",3);
                     }
                 }
             }
@@ -113,58 +116,52 @@ public class ServerScoreboard extends ScoreboardBuilder {
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
                 if (stone.equalsIgnoreCase("Electric")){
-                    //Ability 2
-                    if(Electrostone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis() != null) {
-                        long remainingTime = Electrostone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
-                        int i = (int) (remainingTime/1000);               
-                        setScore("§7Ability 1: §c"+ i+"/100",4);
-                    } else {
+                    long remainingTime = Electrostone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int i = (int) (remainingTime/1000);
+                    if (i == 0){
                         setScore("§7Ability 1: §aReady",4);
+                    }else {
+                        setScore("§7Ability 1: §c"+ i+"/100",4);
                     }
                 }else if (stone.equalsIgnoreCase("Fire")){
-                    //Ability 2
-                    if(Firestone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis() != null) {
-                        long remainingTime = Firestone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
-                        int i = (int) (remainingTime/1000);               
-                        setScore("§7Ability 1: §c"+ i+"/100",4);
-                    } else {
+                    long remainingTime = Firestone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int i = (int) (remainingTime/1000);
+                    if (i == 0){
                         setScore("§7Ability 1: §aReady",4);
+                    }else {
+                        setScore("§7Ability 1: §c"+ i+"/100",4);
                     }
                 }else if (stone.equalsIgnoreCase("Water")){
-                    //Ability 2
-                    if(Waterstone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis() != null) {
-                        long remainingTime = Waterstone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
-                        int i = (int) (remainingTime/1000);               
-                        setScore("§7Ability 1: §c"+ i+"/100",4);
-                    } else {
+                    long remainingTime = Waterstone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int i = (int) (remainingTime/1000);
+                    if (i == 0){
                         setScore("§7Ability 1: §aReady",4);
+                    }else {
+                        setScore("§7Ability 1: §c"+ i+"/100",4);
                     }
                 }else if (stone.equalsIgnoreCase("Frozen")){
-                    //Ability 2
-                    if(Frozenstone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis() != null) {
-                        long remainingTime = Frozenstone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
-                        int i = (int) (remainingTime/1000);               
-                        setScore("§7Ability 1: §c"+ i+"/100",4);
-                    } else {
+                    long remainingTime = Frozenstone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int i = (int) (remainingTime/1000);
+                    if (i == 0){
                         setScore("§7Ability 1: §aReady",4);
+                    }else {
+                        setScore("§7Ability 1: §c"+ i+"/100",4);
                     }
                 }else if (stone.equalsIgnoreCase("Undead")){
-                    //Ability 2
-                    if(Undeadstone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis() != null) {
-                        long remainingTime = Undeadstone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
-                        int i = (int) (remainingTime/1000);               
-                        setScore("§7Ability 1: §c"+ i+"/100",4);
-                    } else {
+                    long remainingTime = Undeadstone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int i = (int) (remainingTime/1000);
+                    if (i == 0){
                         setScore("§7Ability 1: §aReady",4);
+                    }else {
+                        setScore("§7Ability 1: §c"+ i+"/100",4);
                     }
                 }else if (stone.equalsIgnoreCase("Holy")){
-                    //Ability 2
-                    if(Holystone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis() != null) {
-                        long remainingTime = Holystone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
-                        int i = (int) (remainingTime/1000);               
-                        setScore("§7Ability 1: §c"+ i+"/100",4);
-                    } else {
+                    long remainingTime = Holystone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int i = (int) (remainingTime/1000);
+                    if (i == 0){
                         setScore("§7Ability 1: §aReady",4);
+                    }else {
+                        setScore("§7Ability 1: §c"+ i+"/100",4);
                     }
                 }
                 setScore("§7Ping: "+ChatColor.DARK_PURPLE+ player.getPing(),1);
