@@ -150,6 +150,6 @@ public class Items {
         recipe.setIngredient('N',Material.NETHERITE_INGOT);
         recipe.setIngredient('W',Material.NETHER_STAR);
         recipe.setIngredient('E', new RecipeChoice.ExactChoice(essence));
-        NikeyV1.plugin.getServer().addRecipe(recipe);
+        NikeyV1.getPlugin().getServer().addRecipe(recipe);
     }
 }
