@@ -101,10 +101,10 @@ public class Electrostone implements Listener {
         if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§eElectric Stone")&& event.getItem().getType() == Material.FIREWORK_STAR){
             String[] arr = item.getLore().get(1).split(":");
             int i = Integer.parseInt(arr[1]);
-            FileConfiguration config = NikeyV1.plugin.getConfig();
+            FileConfiguration config = NikeyV1.getPlugin().getConfig();
             config.set(p.getName()+".stone","Electric");
             config.set(p.getName()+".level",i);
-            NikeyV1.plugin.saveConfig();
+            NikeyV1.getPlugin().saveConfig();
             String stone = config.getString(p.getName() + ".stone");
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
                 if (i >= 10){
@@ -172,7 +172,7 @@ public class Electrostone implements Listener {
                 Entity entity = event.getEntity();
                 String[] arr = p.getInventory().getItemInMainHand().getLore().get(1).split(":");
                 int i = Integer.parseInt(arr[1]);
-                FileConfiguration config = NikeyV1.plugin.getConfig();
+                FileConfiguration config = NikeyV1.getPlugin().getConfig();
                 if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
                     event.setCancelled(true);
                     p.updateInventory();

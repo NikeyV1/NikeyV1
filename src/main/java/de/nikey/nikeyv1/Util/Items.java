@@ -50,7 +50,7 @@ public class Items {
         soulrecipe.setIngredient('I',Material.DIAMOND_BLOCK);
         soulrecipe.setIngredient('W',Material.BEACON);
         soulrecipe.setIngredient('E', new RecipeChoice.ExactChoice(essence));
-        NikeyV1.plugin.getServer().addRecipe(soulrecipe);
+        NikeyV1.getPlugin().getServer().addRecipe(soulrecipe);
     }
     
     public static void Firestone(Player player , Integer level){

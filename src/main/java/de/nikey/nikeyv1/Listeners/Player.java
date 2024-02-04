@@ -170,7 +170,7 @@ public class Player implements Listener {
         org.bukkit.entity.Player player = event.getPlayer();
         PlayerRespawnEvent.RespawnReason respawnReason = event.getRespawnReason();
         if (respawnReason == PlayerRespawnEvent.RespawnReason.DEATH){
-            FileConfiguration config = NikeyV1.plugin.getConfig();
+            FileConfiguration config = NikeyV1.getPlugin().getConfig();
             String stone = config.getString(player.getName() + ".stone");
             int level = config.getInt(player.getName() + ".level");
             if (stone.equalsIgnoreCase("Fire")) {
@@ -199,7 +199,7 @@ public class Player implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         org.bukkit.entity.Player player = event.getPlayer();
         List<ItemStack> drops = event.getDrops();
-        FileConfiguration config = NikeyV1.plugin.getConfig();
+        FileConfiguration config = NikeyV1.getPlugin().getConfig();
         int i = config.getInt(player.getName() + ".level");
         if (player.getKiller() != null&&player.getKiller() instanceof org.bukkit.entity.Player)Items.SoulofStrenght(player.getKiller());
         if (i > 1){
@@ -227,7 +227,7 @@ public class Player implements Listener {
         if (event.getEntityType() == EntityType.PLAYER ){
             org.bukkit.entity.Player p = (org.bukkit.entity.Player) event.getEntity();
             if (event.getCause() == EntityDamageEvent.DamageCause.FREEZE){
-                FileConfiguration config = NikeyV1.plugin.getConfig();
+                FileConfiguration config = NikeyV1.getPlugin().getConfig();
                 String stone = config.getString(p.getName() + ".stone");
                 int level = config.getInt(p.getName() + ".level");
                 if (stone.equalsIgnoreCase("Frozen") && level>=3){
@@ -284,9 +284,9 @@ public class Player implements Listener {
                         String a = arr[0];
                         if (inventory.getItem(13).getLore().get(1).contains(a)) {
                             int num = Integer.parseInt(arr[1]);
-                            FileConfiguration config = NikeyV1.plugin.getConfig();
+                            FileConfiguration config = NikeyV1.getPlugin().getConfig();
                             config.set(p.getName() + ".level", num + 1);
-                            NikeyV1.plugin.saveConfig();
+                            NikeyV1.getPlugin().saveConfig();
                             times = 0;
                             int amountToTax = 1;
                             if (times == 0) {

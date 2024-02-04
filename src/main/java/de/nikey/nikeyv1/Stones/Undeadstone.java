@@ -45,10 +45,10 @@ public class Undeadstone implements Listener {
         if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#100613")+"Undead Stone")&& event.getItem().getType() == Material.FIREWORK_STAR){
             String[] arr = item.getLore().get(1).split(":");
             int i = Integer.parseInt(arr[1]);
-            FileConfiguration config = NikeyV1.plugin.getConfig();
+            FileConfiguration config = NikeyV1.getPlugin().getConfig();
             config.set(p.getName()+".stone","Undead");
             config.set(p.getName()+".level",i);
-            NikeyV1.plugin.saveConfig();
+            NikeyV1.getPlugin().saveConfig();
             String stone = config.getString(p.getName() + ".stone");
             if (event.getAction() == Action.RIGHT_CLICK_AIR||event.getAction() == Action.RIGHT_CLICK_BLOCK){
                 if (!Soul.isEmpty()){
@@ -279,7 +279,7 @@ public class Undeadstone implements Listener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player) {
             Player p = (Player) event.getEntity();
-            FileConfiguration config = NikeyV1.plugin.getConfig();
+            FileConfiguration config = NikeyV1.getPlugin().getConfig();
             String stone = config.getString(p.getName() + ".stone");
             if (stone.equalsIgnoreCase("Undead")) {
                 Monster damager = (Monster) event.getDamager();
@@ -295,7 +295,7 @@ public class Undeadstone implements Listener {
             Player p = (Player) event.getDamager();
             if (event.getEntity() instanceof LivingEntity){
                 LivingEntity entity = (LivingEntity) event.getEntity();
-                FileConfiguration config = NikeyV1.plugin.getConfig();
+                FileConfiguration config = NikeyV1.getPlugin().getConfig();
                 String stone = config.getString(p.getName() + ".stone");
 
                 if (stone.equalsIgnoreCase("Undead")) {

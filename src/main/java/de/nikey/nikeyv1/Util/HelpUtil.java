@@ -6,28 +6,40 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 @SuppressWarnings("ALL")
 public class HelpUtil {
     public static Entity getNearestEntityInSight(Player player, int range) {
-        ArrayList<Entity> entities = (ArrayList<Entity>) player.getNearbyEntities(range, range, range);
-        ArrayList<Block> sightBlock = (ArrayList<Block>) player.getLineOfSight( (Set<Material>) null, range);
-        ArrayList<Location> sight = new ArrayList<Location>();
-        for (Block block : sightBlock) sight.add(block.getLocation());
-        for (int i = 0;i<sight.size();i++) {
-            for (int k = 0;k<entities.size();k++) {
-                if (Math.abs(entities.get(k).getLocation().getX()-sight.get(i).getX())<1.3) {
-                    if (Math.abs(entities.get(k).getLocation().getY()-sight.get(i).getY())<1.5) {
-                        if (Math.abs(entities.get(k).getLocation().getZ()-sight.get(i).getZ())<1.3) {
-                            return entities.get(k);
-                        }
-                    }
+        ArrayList<Entity> entities = new ArrayList<>(player.getNearbyEntities(range, range, range));
+        ArrayList<Block> sightBlock = new ArrayList<>(player.getLineOfSight((Set<Material>) null, range));
+        ArrayList<Location> sight = new ArrayList<>();
+
+        for (Block block : sightBlock) {
+            // Überprüfe, ob der Block Wasser ist und ignoriere ihn in diesem Fall
+            //Dosnt work :(
+            if (block.getType() == Material.WATER) {
+                continue;
+            }
+            sight.add(block.getLocation());
+        }
+
+        for (Location location : sight) {
+            for (Entity entity : entities) {
+                double xDiff = Math.abs(entity.getLocation().getX() - location.getX());
+                double yDiff = Math.abs(entity.getLocation().getY() - location.getY());
+                double zDiff = Math.abs(entity.getLocation().getZ() - location.getZ());
+
+                // Überprüfe die Nähe unter Berücksichtigung von Wasser
+                if (xDiff < 1.3 && yDiff < 1.5 && zDiff < 1.3) {
+                    return entity;
                 }
             }
         }
-        return null; //Return null/nothing if no entity was found
+
+        return null; // Rückgabe von null, wenn keine Entity gefunden wurde
     }
     public static List<Block> getNearbyBlocks(Location location, int radius) {
         List<Block> blocks = new ArrayList<Block>();

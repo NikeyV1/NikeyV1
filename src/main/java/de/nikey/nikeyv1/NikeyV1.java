@@ -10,18 +10,21 @@ import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 @SuppressWarnings("ALL")
 public final class NikeyV1 extends JavaPlugin {
     public static EffectManager em;
-    public static NikeyV1 plugin;
+    private static NikeyV1 plugin;
     private final HashMap<org.bukkit.entity.Player, Integer> time = new HashMap<>();
     @Override
     public void onEnable() {
         plugin = this;
-        //Effect manager
         em = new EffectManager(EffectLib.instance());
+        //Effect manager
 
         PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents(new Player(),this);
@@ -43,6 +46,7 @@ public final class NikeyV1 extends JavaPlugin {
         Items.Soulrecepie();
         saveDefaultConfig();
     }
+
 
     public static NikeyV1 getPlugin() {
         return plugin;

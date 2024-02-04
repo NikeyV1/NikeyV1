@@ -25,7 +25,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
         BukkitRunnable runnable = new BukkitRunnable() {
             @Override
             public void run() {
-                FileConfiguration config = NikeyV1.plugin.getConfig();
+                FileConfiguration config = NikeyV1.getPlugin().getConfig();
                 setScore("§7Level: "+ChatColor.AQUA+config.getString(player.getName()+".level"),5);
             }
         };
@@ -34,14 +34,36 @@ public class ServerScoreboard extends ScoreboardBuilder {
 
     @Override
     public void createScoreboard() {
-        FileConfiguration config = NikeyV1.plugin.getConfig();
+        FileConfiguration config = NikeyV1.getPlugin().getConfig();
         String stone = config.getString(player.getName() + ".stone");
-        setScore("§7Level: "+ChatColor.AQUA+config.getString(player.getName()+".level"),5);
-        setScore("§7Ability 1: §aReady",4);
-        setScore("§7Ability 2: §aReady",3);
+        setScore("§7Level: "+ChatColor.AQUA+config.getString(player.getName()+".level"),6);
+        setScore("§7Ability 1: §aReady",5);
+        setScore("§7Ability 2: §aReady",4);
+        setScore("§7Master Ability: §aReady",3);
         setScore("--------------",2);
         setScore("§7Ping: "+ChatColor.DARK_PURPLE+ player.getPing(),1);
         setScore("§7Online Players: "+ChatColor.DARK_PURPLE+ Bukkit.getOnlinePlayers().size(),0);
+    }
+
+
+    private void masterability() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
+                if (stone.equalsIgnoreCase("Water")){
+                    //Ability 2
+                    long remainingTime3 = Waterstone.cooldown2.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remainingTime3/1000);
+                    //
+                    if (a == 0){
+                        setScore("§7Master Ability: §aReady",3);
+                    }else {
+                        setScore("§7Master Ability: §c"+a +"/300",3);
+                    }
+                }
+            }
+        }.runTaskTimer(NikeyV1.getPlugin(),10,10);
     }
 
     private void ability2() {
@@ -55,9 +77,9 @@ public class ServerScoreboard extends ScoreboardBuilder {
                     int a = (int) (remainingTime2/1000);
                     //
                     if (a == 0){
-                        setScore("§7Ability 2: §aReady",3);
+                        setScore("§7Ability 2: §aReady",4);
                     }else {
-                        setScore("§7Ability 2: §c"+a +"/180",3);
+                        setScore("§7Ability 2: §c"+a +"/180",4);
                     }
                 }else if (stone.equalsIgnoreCase("Fire")){
                     //Ability 2
@@ -65,9 +87,9 @@ public class ServerScoreboard extends ScoreboardBuilder {
                     int a = (int) (remainingTime2/1000);
                     //
                     if (a == 0){
-                        setScore("§7Ability 2: §aReady",3);
+                        setScore("§7Ability 2: §aReady",4);
                     }else {
-                        setScore("§7Ability 2: §c"+a +"/180",3);
+                        setScore("§7Ability 2: §c"+a +"/180",4);
                     }
                 }else if (stone.equalsIgnoreCase("Water")){
                     //Ability 2
@@ -75,9 +97,9 @@ public class ServerScoreboard extends ScoreboardBuilder {
                     int a = (int) (remainingTime2/1000);
                     //
                     if (a == 0){
-                        setScore("§7Ability 2: §aReady",3);
+                        setScore("§7Ability 2: §aReady",4);
                     }else {
-                        setScore("§7Ability 2: §c"+a +"/180",3);
+                        setScore("§7Ability 2: §c"+a +"/180",4);
                     }
                 }else if (stone.equalsIgnoreCase("Frozen")){
                     //Ability 2
@@ -85,26 +107,26 @@ public class ServerScoreboard extends ScoreboardBuilder {
                     int a = (int) (remainingTime2/1000);
                     //
                     if (a == 0){
-                        setScore("§7Ability 2: §aReady",3);
+                        setScore("§7Ability 2: §aReady",4);
                     }else {
-                        setScore("§7Ability 2: §c"+a +"/180",3);
+                        setScore("§7Ability 2: §c"+a +"/180",4);
                     }
                 }else if (stone.equalsIgnoreCase("Undead")){
                     long remainingTime2 = Undeadstone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
                     int a = (int) (remainingTime2/1000);
                     //
                     if (a == 0){
-                        setScore("§7Ability 2: §aReady",3);
+                        setScore("§7Ability 2: §aReady",4);
                     }else {
-                        setScore("§7Ability 2: §c"+a +"/180",3);
+                        setScore("§7Ability 2: §c"+a +"/180",4);
                     }
                 }else if (stone.equalsIgnoreCase("Holy")){
                     long remainingTime2 = Holystone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
                     int a = (int) (remainingTime2/1000);
                     if (a == 0){
-                        setScore("§7Ability 2: §aReady",3);
+                        setScore("§7Ability 2: §aReady",4);
                     }else {
-                        setScore("§7Ability 2: §c"+a +"/180",3);
+                        setScore("§7Ability 2: §c"+a +"/180",4);
                     }
                 }
             }
@@ -119,60 +141,60 @@ public class ServerScoreboard extends ScoreboardBuilder {
                     long remainingTime = Electrostone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
                     int i = (int) (remainingTime/1000);
                     if (i == 0){
-                        setScore("§7Ability 1: §aReady",4);
+                        setScore("§7Ability 1: §aReady",5);
                     }else {
-                        setScore("§7Ability 1: §c"+ i+"/100",4);
+                        setScore("§7Ability 1: §c"+ i+"/100",5);
                     }
                 }else if (stone.equalsIgnoreCase("Fire")){
                     long remainingTime = Firestone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
                     int i = (int) (remainingTime/1000);
                     if (i == 0){
-                        setScore("§7Ability 1: §aReady",4);
+                        setScore("§7Ability 1: §aReady",5);
                     }else {
-                        setScore("§7Ability 1: §c"+ i+"/100",4);
+                        setScore("§7Ability 1: §c"+ i+"/100",5);
                     }
                 }else if (stone.equalsIgnoreCase("Water")){
                     long remainingTime = Waterstone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
                     int i = (int) (remainingTime/1000);
                     if (i == 0){
-                        setScore("§7Ability 1: §aReady",4);
+                        setScore("§7Ability 1: §aReady",5);
                     }else {
-                        setScore("§7Ability 1: §c"+ i+"/100",4);
+                        setScore("§7Ability 1: §c"+ i+"/100",5);
                     }
                 }else if (stone.equalsIgnoreCase("Frozen")){
                     long remainingTime = Frozenstone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
                     int i = (int) (remainingTime/1000);
                     if (i == 0){
-                        setScore("§7Ability 1: §aReady",4);
+                        setScore("§7Ability 1: §aReady",5);
                     }else {
-                        setScore("§7Ability 1: §c"+ i+"/100",4);
+                        setScore("§7Ability 1: §c"+ i+"/100",5);
                     }
                 }else if (stone.equalsIgnoreCase("Undead")){
                     long remainingTime = Undeadstone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
                     int i = (int) (remainingTime/1000);
                     if (i == 0){
-                        setScore("§7Ability 1: §aReady",4);
+                        setScore("§7Ability 1: §aReady",5);
                     }else {
-                        setScore("§7Ability 1: §c"+ i+"/100",4);
+                        setScore("§7Ability 1: §c"+ i+"/100",5);
                     }
                 }else if (stone.equalsIgnoreCase("Holy")){
                     long remainingTime = Holystone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
                     int i = (int) (remainingTime/1000);
                     if (i == 0){
-                        setScore("§7Ability 1: §aReady",4);
+                        setScore("§7Ability 1: §aReady",5);
                     }else {
-                        setScore("§7Ability 1: §c"+ i+"/100",4);
+                        setScore("§7Ability 1: §c"+ i+"/100",5);
                     }
                 }
                 setScore("§7Ping: "+ChatColor.DARK_PURPLE+ player.getPing(),1);
                 setScore("§7Online Players: "+ChatColor.DARK_PURPLE+ Bukkit.getOnlinePlayers().size(),0);
             }
-        }.runTaskTimer(NikeyV1.plugin,10,10);
+        }.runTaskTimer(NikeyV1.getPlugin(),10,10);
     }
 
 
     private void stone() {
-        FileConfiguration config = NikeyV1.plugin.getConfig();
+        FileConfiguration config = NikeyV1.getPlugin().getConfig();
         String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
         if (stone.equalsIgnoreCase("Fire")){
             setScore("§7Stone: "+ChatColor.RED +config.getString(player.getName()+".stone"),6);

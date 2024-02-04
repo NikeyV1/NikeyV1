@@ -44,12 +44,12 @@ public class Firestone implements Listener {
             ItemStack item = event.getItem();
             String[] arr = item.getLore().get(1).split(":");
             int i = Integer.parseInt(arr[1]);
-            FileConfiguration config = NikeyV1.plugin.getConfig();
+            FileConfiguration config = NikeyV1.getPlugin().getConfig();
             config.set(p.getName()+".stone","Fire");
             config.set(p.getName()+".fire",null);
             config.set(p.getName()+".level",i);
             String stone = NikeyV1.getPlugin().getConfig().getString(p.getName() + ".stone");
-            NikeyV1.plugin.saveConfig();
+            NikeyV1.getPlugin().saveConfig();
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
                 if (i >= 10) {
                     if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){

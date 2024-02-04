@@ -44,7 +44,7 @@ public class Frozenstone implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        FileConfiguration config = NikeyV1.plugin.getConfig();
+        FileConfiguration config = NikeyV1.getPlugin().getConfig();
         String stone = config.getString(player.getName() + ".stone");
         if (stone.equalsIgnoreCase("Frozen")&&player.getGameMode() == GameMode.SURVIVAL && config.getInt(player.getName()+".level") >4){
             if (player.getLocation().getBlock().getType() == Material.POWDER_SNOW) {
@@ -65,10 +65,10 @@ public class Frozenstone implements Listener {
         if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§3Frozen Stone")&& event.getItem().getType() == Material.FIREWORK_STAR){
             String[] arr = item.getLore().get(1).split(":");
             int i = Integer.parseInt(arr[1]);
-            FileConfiguration config = NikeyV1.plugin.getConfig();
+            FileConfiguration config = NikeyV1.getPlugin().getConfig();
             config.set(p.getName()+".stone","Frozen");
             config.set(p.getName()+".level",i);
-            NikeyV1.plugin.saveConfig();
+            NikeyV1.getPlugin().saveConfig();
             String stone = config.getString(p.getName() + ".stone");
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
                 if (i >= 10) {
