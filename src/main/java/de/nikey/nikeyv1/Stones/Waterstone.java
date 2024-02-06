@@ -2,6 +2,7 @@ package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
+import de.nikey.nikeyv1.Util.Tornado;
 import de.slikey.effectlib.effect.EquationEffect;
 import de.slikey.effectlib.effect.FountainEffect;
 import org.bukkit.Location;
@@ -62,7 +63,7 @@ public class Waterstone implements Listener {
             config.set(p.getName()+".level",i);
             NikeyV1.getPlugin().saveConfig();
             String stone = config.getString(p.getName() + ".stone");
-            if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
+            if (event.getAction().isRightClick()) {
                 if (i >= 10) {
                     if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
                         p.updateInventory();
@@ -141,73 +142,73 @@ public class Waterstone implements Listener {
                         }
                     }
                 }
-            }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
-                if (i == 15||i == 16||i == 17){
-                    if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                        event.setCancelled(true);
-                        p.updateInventory();
-                        remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                    }else {
+            }else if (event.getAction()==Action.LEFT_CLICK_AIR){
+                if (p.isSneaking()) {
+                    if (i == 15||i == 16||i == 17){
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
 
-                        ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                ability.remove(p.getUniqueId());
-                                cancel();
+                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                            //Cooldown-Ability
+                            EquationEffect effect = new EquationEffect(NikeyV1.em);
+                            effect.setEntity(p);
+                            effect.particle = Particle.BUBBLE_COLUMN_UP;
+                            effect.particles = 5;
+                            effect.visibleRange = 100;
+                            effect.start();
+                            p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH,1,1);
+                            Entity e = HelpUtil.getNearestEntityInSight(p, 40);
+                            e.getLocation().getWorld().createExplosion(e.getLocation(),2F);
+                            if (e instanceof LivingEntity){
+                                LivingEntity entity = (LivingEntity) e;
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 400,0));
+                                double maxHealth = entity.getMaxHealth();
+                                double damage = 0.25 * maxHealth; // 25% der maximalen Herzen als Schaden
+                                entity.damage(damage);
+                                entity.setVisualFire(false);
                             }
-                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
-                        //Cooldown-Ability
-                        EquationEffect effect = new EquationEffect(NikeyV1.em);
-                        effect.setEntity(p);
-                        effect.particle = Particle.BUBBLE_COLUMN_UP;
-                        effect.particles = 5;
-                        effect.visibleRange = 100;
-                        effect.start();
-                        p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH,1,1);
-                        Entity e = HelpUtil.getNearestEntityInSight(p, 40);
-                        e.getLocation().getWorld().createExplosion(e.getLocation(),2F);
-                        if (e instanceof LivingEntity){
-                            LivingEntity entity = (LivingEntity) e;
-                            entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 400,0));
-                            double maxHealth = entity.getMaxHealth();
-                            double damage = 0.25 * maxHealth; // 25% der maximalen Herzen als Schaden
-                            entity.damage(damage);
-                            entity.setVisualFire(false);
                         }
-                    }
-                }else if (i >=18){
-                    if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                        event.setCancelled(true);
-                        p.updateInventory();
-                        remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                    }else {
+                    }else if (i >=18){
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
 
-                        ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                ability.remove(p.getUniqueId());
-                                cancel();
+                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                            //Cooldown-Ability
+                            EquationEffect effect = new EquationEffect(NikeyV1.em);
+                            effect.setEntity(p);
+                            effect.particle = Particle.BUBBLE_COLUMN_UP;
+                            effect.particles = 5;
+                            effect.visibleRange = 100;
+                            effect.start();
+                            p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH,1,1);
+                            Entity e = HelpUtil.getNearestEntityInSight(p, 50);
+                            e.getLocation().getWorld().createExplosion(e.getLocation(),2F);
+                            if (e instanceof LivingEntity){
+                                LivingEntity entity = (LivingEntity) e;
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 450,0));
+                                double maxHealth = entity.getMaxHealth();
+                                double damage = 0.35 * maxHealth; // 35% der maximalen Herzen als Schaden
+                                entity.damage(damage);
+                                entity.setVisualFire(false);
                             }
-                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
-                        //Cooldown-Ability
-                        EquationEffect effect = new EquationEffect(NikeyV1.em);
-                        effect.setEntity(p);
-                        effect.particle = Particle.BUBBLE_COLUMN_UP;
-                        effect.particles = 5;
-                        effect.visibleRange = 100;
-                        effect.start();
-                        p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH,1,1);
-                        Entity e = HelpUtil.getNearestEntityInSight(p, 50);
-                        e.getLocation().getWorld().createExplosion(e.getLocation(),2F);
-                        if (e instanceof LivingEntity){
-                            LivingEntity entity = (LivingEntity) e;
-                            entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 450,0));
-                            double maxHealth = entity.getMaxHealth();
-                            double damage = 0.35 * maxHealth; // 35% der maximalen Herzen als Schaden
-                            entity.damage(damage);
-                            entity.setVisualFire(false);
                         }
                     }
                 }
@@ -215,7 +216,7 @@ public class Waterstone implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         Player p = event.getPlayer();
         ItemStack item = event.getItemDrop().getItemStack();
@@ -228,65 +229,43 @@ public class Waterstone implements Listener {
             config.set(p.getName()+".level",i);
             NikeyV1.getPlugin().saveConfig();
             String stone = config.getString(p.getName() + ".stone");
-            event.setCancelled(true);
-            if (i== 20){
-                if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
-                    event.setCancelled(true);
-                    p.updateInventory();
-                    remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
-                }else {
-                    cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            cooldown2.remove(p.getUniqueId());
-                            cancel();
-                        }
-                    }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
-                    //Cooldown-Ability
-                    triggerMegaWaterAbility(p);
-                    p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH, 1.0f, 1.0f);
-                }
-            } else if (i == 21) {
-
-            }
-        }
-    }
-
-    private void triggerMegaWaterAbility(Player player) {
-        player.getWorld().spawnParticle(Particle.WATER_SPLASH, player.getLocation(), 100);
-
-        // Aquastrom erzeugen
-        new BukkitRunnable() {
-            int iterations = 0;
-
-            @Override
-            public void run() {
-                if (iterations >= 5) {
-                    this.cancel();
-                    return;
-                }
-
-                for (Player nearPlayer : player.getWorld().getPlayers()) {
-                    if (nearPlayer != player && nearPlayer.getLocation().distance(player.getLocation()) < 5) {
-                        // Spieler in der Nähe werden vom Aquastrom mitgerissen
-                        Vector direction = player.getLocation().getDirection().multiply(1.5);
-                        nearPlayer.setVelocity(direction);
-                        nearPlayer.playSound(nearPlayer.getLocation(), Sound.ENTITY_PLAYER_SWIM, 1.0f, 1.0f);
+            if (!p.isSneaking()) {
+                if (i== 20){
+                    if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
+                        p.updateInventory();
+                        remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
+                    }else {
+                        cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                cooldown2.remove(p.getUniqueId());
+                                cancel();
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
+                        //Cooldown-Ability
+                        p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH, 1.0f, 1.0f);
+                        Tornado.spawnTornado(NikeyV1.getPlugin(),p.getLocation(),p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getType(),p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getData(),p.getLocation().getDirection().multiply(4),0.4,175,20*20,true,p,false);
+                    }
+                } else if (i == 21) {
+                    if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
+                        p.updateInventory();
+                        remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
+                    }else {
+                        cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                cooldown2.remove(p.getUniqueId());
+                                cancel();
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
+                        //Cooldown-Ability
+                        p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH, 1.0f, 1.0f);
+                        Tornado.spawnTornado(NikeyV1.getPlugin(),p.getLocation(),p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getType(),p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getData(),p.getLocation().getDirection().multiply(4.5),0.4,175,20*30,true,p,false);
                     }
                 }
-
-                // Spieler für kurze Zeit um den Tornado herum schleudern
-                Vector currentVelocity = player.getVelocity();
-                Vector tornadoDirection = player.getLocation().getDirection().multiply(0.5);
-                player.setVelocity(currentVelocity.add(tornadoDirection));
-
-                player.getWorld().spawnParticle(Particle.WATER_BUBBLE, player.getLocation(), 50);
-                iterations++;
             }
-        }.runTaskTimer(NikeyV1.getPlugin(), 0L, 20L);
-
-        // Hier könntest du weitere Logik hinzufügen, um die Mega Wasser Fähigkeit zu gestalten.
-        // Zum Beispiel: Wasser in einem Muster erzeugen, etc.
+        }
     }
 }

@@ -46,7 +46,7 @@ public class Player implements Listener {
     public static Inventory inv = Bukkit.createInventory(null, 27, "Enchanted Anvil");
 
     public void run(org.bukkit.entity.Player player){
-        if(player.getLocation().getBlock().getType() == Material.WATER){// I don't know which WATER in the material list is for a block,
+        if(player.isInWater()){
             if(player.getVelocity().getX() <= 2 && player.getVelocity().getY() <= 2 && player.getVelocity().getZ() <= 2)//makes sure players don't move at speed of light
                 player.setVelocity(player.getVelocity().multiply(1.5));
         }
@@ -114,11 +114,7 @@ public class Player implements Listener {
         org.bukkit.entity.Player player = event.getPlayer();
         PlayerInventory inventory = player.getInventory();
         if (itemDrop.getItemStack().getType() == Material.FIREWORK_STAR||itemDrop.getItemStack().getItemMeta().hasLore()){
-            String[] arr = itemDrop.getItemStack().getLore().get(1).split(":");
-            String a = arr[0];
-            if (a.equalsIgnoreCase(ChatColor.of("#00FFAA")+"Level")){
-               event.setCancelled(true);
-            }
+            event.setCancelled(true);
         }
     }
 

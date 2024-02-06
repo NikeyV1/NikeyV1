@@ -49,18 +49,18 @@ public class TimerBuild  {
 
     private BukkitRunnable task;
     public void start(Player player){
-        FileConfiguration config = NikeyV1.plugin.getConfig();
+        FileConfiguration config = NikeyV1.getPlugin().getConfig();
         if (!isRunning()){
             if (!config.getBoolean(player.getName()+".time")){
                 setRunning(true);
-                NikeyV1.plugin.getConfig().set(player.getName()+".stoptime",getStopTime());
-                NikeyV1.plugin.saveConfig();
+                NikeyV1.getPlugin().getConfig().set(player.getName()+".stoptime",getStopTime());
+                NikeyV1.getPlugin().saveConfig();
                 task = new BukkitRunnable() {
                     @Override
                     public void run() {
                         if (Bukkit.getOnlinePlayers().contains(player)){
                             if (getStopTime() >getTime()){
-                                NikeyV1.plugin.getConfig().set(player.getName()+".timer",getTime());
+                                NikeyV1.getPlugin().getConfig().set(player.getName()+".timer",getTime());
                                 config.set(player.getName()+".time",true);
                                 NikeyV1.getPlugin().saveConfig();
                                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent(ChatColor.GOLD.toString()+ChatColor.BOLD+getTime()+"/"+getStopTime()));

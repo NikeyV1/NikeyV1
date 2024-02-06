@@ -11,9 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
 
 @SuppressWarnings("ALL")
 public final class NikeyV1 extends JavaPlugin {

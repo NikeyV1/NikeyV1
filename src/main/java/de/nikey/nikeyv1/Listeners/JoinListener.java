@@ -25,37 +25,37 @@ public class JoinListener implements Listener {
                 p.sendTitle("§d§kR§r§cFire Stone§r§d§kR","");
                 config.set(p.getName()+".stone", "Fire");
                 config.set(p.getName()+".level",3);
-                NikeyV1.plugin.saveConfig();
+                NikeyV1.getPlugin().saveConfig();
             }else if (i == 1){
                 Items.Electrostone(p,3);
                 p.sendTitle("§d§kR§r§eElectric Stone§r§d§kR","");
                 config.set(p.getName()+".stone", "Electric");
                 config.set(p.getName()+".level",3);
-                NikeyV1.plugin.saveConfig();
+                NikeyV1.getPlugin().saveConfig();
             }else if (i == 2){
                 Items.Waterstone(p,3);
                 p.sendTitle("§d§kR§r§9Water Stone§r§d§kR","");
                 config.set(p.getName()+".stone", "Water");
                 config.set(p.getName()+".level",3);
-                NikeyV1.plugin.saveConfig();
+                NikeyV1.getPlugin().saveConfig();
             }else if (i == 3){
                 Items.Frozenstone(p,3);
                 p.sendTitle("§d§kR§r§3Frozen Stone§r§d§kR","");
                 config.set(p.getName()+".stone", "Frozen");
                 config.set(p.getName()+".level",3);
-                NikeyV1.plugin.saveConfig();
+                NikeyV1.getPlugin().saveConfig();
             }else if (i == 4){
                 Items.Undeadstone(p,3);
                 p.sendTitle("§d§kR§r§0Undead Stone§r§d§kR","");
                 config.set(p.getName()+".stone", "Undead");
                 config.set(p.getName()+".level",3);
-                NikeyV1.plugin.saveConfig();
+                NikeyV1.getPlugin().saveConfig();
             }else if (i == 5){
                 Items.Holystone(p,3);
                 p.sendTitle("§d§kR§r§aHoly Stone§r§d§kR","");
                 config.set(p.getName()+".stone", "Holy");
                 config.set(p.getName()+".level",3);
-                NikeyV1.plugin.saveConfig();
+                NikeyV1.getPlugin().saveConfig();
             }
         }
         new ServerScoreboard(p);
