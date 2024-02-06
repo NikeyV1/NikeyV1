@@ -269,7 +269,7 @@ public class Firestone implements Listener {
                     int a = (int) (remain/1000);
                     if (a >160){
                         double damage = event.getDamage();
-                        event.setDamage(damage*0.30);
+                        event.setDamage(damage*0.70);
                     }
                 }else if (i >= 18){
                     long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
