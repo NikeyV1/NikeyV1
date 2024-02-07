@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("ALL")
 public class Firestone implements Listener {
@@ -144,7 +146,7 @@ public class Firestone implements Listener {
                         }
                     }
                 }
-            }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
+            }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK && !p.isSneaking()){
                 if (i == 15||i == 16||i == 17){
                     if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
                         event.setCancelled(true);
@@ -296,21 +298,23 @@ public class Firestone implements Listener {
             config.set(p.getName()+".level",i);
             NikeyV1.getPlugin().saveConfig();
             String stone = config.getString(p.getName() + ".stone");
-            if (i == 20){
-                if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
-                    p.updateInventory();
-                    remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
-                }else {
-                    cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            cooldown2.remove(p.getUniqueId());
-                            cancel();
-                        }
-                    }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
-                    //Cooldown-Ability
-                    openPlayerSelectionInventory(p);
+            if (i == 20 || i==21){
+                if (p.isSneaking()) {
+                    if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
+                        p.updateInventory();
+                        remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
+                    }else {
+                        cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                cooldown2.remove(p.getUniqueId());
+                                cancel();
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
+                        //Cooldown-Ability
+                        openPlayerSelectionInventory(p);
+                    }
                 }
             }
         }
@@ -353,66 +357,74 @@ public class Firestone implements Listener {
     }
 
 
-    public void onInventoryClick(InventoryInteractEvent event) {
-        event.getWhoClicked().sendMessage("G2");
-        if (event.getView().getTitle().equalsIgnoreCase("§cSelect Player")) {
-            event.getWhoClicked().sendMessage("G");
-            event.setCancelled(true);
-        }
-    }
-
+    @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getView().getTitle().equalsIgnoreCase("§cSelect Player")) {
             event.setCancelled(true);
-            event.getWhoClicked().sendMessage("HH");
 
             if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.PLAYER_HEAD) {
                 Player selectedPlayer = Bukkit.getPlayerExact(event.getCurrentItem().getItemMeta().getDisplayName());
 
                 if (selectedPlayer != null) {
-                    triggerMegaFireAbility(selectedPlayer);
+                    triggerMegaFireAbility(selectedPlayer, (Player) event.getWhoClicked());
                 }
             }
         }
     }
 
 
-    private void triggerMegaFireAbility(Player selectedPlayer) {
-        selectedPlayer.sendMessage("Mega Fire Ability activated at your location!");
-
+    private void triggerMegaFireAbility(Player selectedPlayer, Player launcherPlayer) {
+        launcherPlayer.closeInventory();
+        timer=20;
         new BukkitRunnable() {
-            int ticks = 0;
-
             @Override
             public void run() {
-                ticks++;
-
-                if (ticks > 20 * 5) { // Duration: 5 seconds
-                    cancel();
-                    selectedPlayer.sendMessage("Mega Fire Ability deactivated!");
+                timer--;
+                int x = (int) (selectedPlayer.getLocation().getX());
+                int z = (int) (selectedPlayer.getLocation().getZ());
+                int randomX = ThreadLocalRandom.current().nextInt(x-6, x+6);
+                int randomZ = ThreadLocalRandom.current().nextInt(z-6, z+6);
+                int randomY = selectedPlayer.getWorld().getHighestBlockYAt(randomX,randomZ);
+                if (selectedPlayer.getLocation().getZ() > 50) {
+                    Location location = new Location(selectedPlayer.getWorld(),randomX,randomY+20,randomZ);
+                    Fireball fireball = (Fireball) location.getWorld().spawnEntity(location, EntityType.FIREBALL);
+                    fireball.setShooter(launcherPlayer);
+                    fireball.setVelocity(new org.bukkit.util.Vector(0, -0.5, 0)); // Adjust the fireball trajectory
+                    fireball.setIsIncendiary(false);
+                    fireball.setCustomName("airstrike");
+                    fireball.setCustomNameVisible(false);
+                }else {
+                    Location location = new Location(selectedPlayer.getWorld(),randomX,randomY+40,randomZ);
+                    Fireball fireball = (Fireball) location.getWorld().spawnEntity(location, EntityType.FIREBALL);
+                    fireball.setShooter(launcherPlayer);
+                    fireball.setVelocity(new org.bukkit.util.Vector(0, -0.5, 0)); // Adjust the fireball trajectory
+                    fireball.setCustomName("airstrike");
+                    fireball.setCustomNameVisible(false);
                 }
 
-                spawnFireball(selectedPlayer.getLocation());
+
+                if (timer == 0) {
+                    cancel();
+                    return;
+                }
             }
-        }.runTaskTimer(NikeyV1.getPlugin(), 0, 10); // Adjust the interval between fireballs
+        }.runTaskTimer(NikeyV1.getPlugin(),0,5);
     }
 
-
-    private void spawnFireball(Location location) {
-        double radius = 5.0; // Adjust the radius of the fireball area
-
-        for (double theta = 0; theta < 2 * Math.PI; theta += Math.PI / 8) {
-            double x = radius * Math.cos(theta);
-            double z = radius * Math.sin(theta);
-
-            Location fireballLocation = location.clone().add(x, 2, z);
-            Fireball fireball = (Fireball) location.getWorld().spawnEntity(fireballLocation, EntityType.FIREBALL);
-            fireball.setShooter(null);
-            fireball.setVelocity(new org.bukkit.util.Vector(0, -1, 0)); // Adjust the fireball trajectory
-            fireball.setIsIncendiary(false);
+    @EventHandler
+    public void onProjectileHit(ProjectileHitEvent event) {
+        if (event.getEntity() instanceof Fireball && event.getEntity().getCustomName().equalsIgnoreCase("airstrike")) {
+            Location location = event.getEntity().getLocation();
+            location.getWorld().createExplosion(location,3.5F,false,false);
+            location.getWorld().createExplosion(location,1.2F,false,true);
+            event.setCancelled(true);
         }
-
-        // Optional: Add a visual effect
-        location.getWorld().spawnParticle(Particle.FLAME, location, 20);
+    }
+    @EventHandler
+    public void onInventoryInteract(InventoryInteractEvent event) {
+        if (event.getView().getTitle().equalsIgnoreCase("§cSelect Player")) {
+            event.setCancelled(true);
+        }
     }
 }
+

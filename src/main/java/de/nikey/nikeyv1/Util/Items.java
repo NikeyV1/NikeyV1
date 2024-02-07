@@ -152,4 +152,20 @@ public class Items {
         recipe.setIngredient('E', new RecipeChoice.ExactChoice(essence));
         NikeyV1.getPlugin().getServer().addRecipe(recipe);
     }
+    public static void GiveEnchantedAnvil(Player player){
+        ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
+        ItemMeta emeta = essence.getItemMeta();
+        emeta.setDisplayName("§dEnchanted Essence");
+        essence.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        emeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        essence.setItemMeta(emeta);
+        //
+        ItemStack anvil = new ItemStack(Material.ANVIL);
+        ItemMeta meta = anvil.getItemMeta();
+        meta.setDisplayName("§dEnchanted Anvil");
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        anvil.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        anvil.setItemMeta(meta);
+        player.getInventory().addItem(anvil);
+    }
 }

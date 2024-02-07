@@ -281,7 +281,6 @@ public class Player implements Listener {
                         if (inventory.getItem(13).getLore().get(1).contains(a)) {
                             int num = Integer.parseInt(arr[1]);
                             FileConfiguration config = NikeyV1.getPlugin().getConfig();
-                            config.set(p.getName() + ".level", num + 1);
                             NikeyV1.getPlugin().saveConfig();
                             times = 0;
                             int amountToTax = 1;
@@ -298,6 +297,7 @@ public class Player implements Listener {
                                             timerBuild.setTime(1);
                                             timerBuild.start(p);
                                             p.sendMessage("§aUpgrading!");
+                                            config.set(p.getName() + ".level", num + 1);
                                             if (p.getGameMode() != GameMode.CREATIVE) {
                                                 p.setLevel(p.getLevel() - 10);
                                             }
@@ -315,6 +315,7 @@ public class Player implements Listener {
                                             timerBuild.setStopTime(60 * 20);
                                             timerBuild.setTime(1);
                                             timerBuild.start(p);
+                                            config.set(p.getName() + ".level", num + 1);
                                             if (p.getGameMode() != GameMode.CREATIVE) {
                                                 p.setLevel(p.getLevel() - 20);
                                             }
@@ -336,6 +337,7 @@ public class Player implements Listener {
                                                     timerBuild.setStopTime(60 * 30);
                                                     timerBuild.setTime(1);
                                                     timerBuild.start(p);
+                                                    config.set(p.getName() + ".level", num + 1);
                                                     if (contents.getAmount() >= amountToTax)
                                                         contents.setAmount(contents.getAmount() - amountToTax);
                                                     if (p.getGameMode() != GameMode.CREATIVE)
@@ -358,6 +360,7 @@ public class Player implements Listener {
                                             timerBuild.setStopTime(60 * 40);
                                             timerBuild.setTime(1);
                                             timerBuild.start(p);
+                                            config.set(p.getName() + ".level", num + 1);
                                             if (p.getGameMode() != GameMode.CREATIVE) {
                                                 p.setLevel(p.getLevel() - 40);
                                             }
@@ -380,6 +383,7 @@ public class Player implements Listener {
                                                     timerBuild.setStopTime(60 * 50);
                                                     timerBuild.setTime(1);
                                                     timerBuild.start(p);
+                                                    config.set(p.getName() + ".level", num + 1);
                                                     if (p.getGameMode() != GameMode.CREATIVE) {
                                                         p.setLevel(p.getLevel() - 50);
                                                     }
@@ -404,6 +408,7 @@ public class Player implements Listener {
                                                     timerBuild.setStopTime(60 * 120);
                                                     timerBuild.setTime(1);
                                                     timerBuild.start(p);
+                                                    config.set(p.getName() + ".level", num + 1);
                                                     if (p.getGameMode() != GameMode.CREATIVE) {
                                                         p.setLevel(p.getLevel() - 100);
                                                     }

@@ -22,7 +22,7 @@ public class InventoryListener implements Listener {
             String[] arr = event.getCurrentItem().getLore().get(1).split(":");
             String a = arr[0];
             if (a.equalsIgnoreCase(ChatColor.of("#00FFAA")+"Level") && !(top.getType() == InventoryType.CRAFTING)){
-                if (!event.getWhoClicked().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase("§dEnchanted Anvil")) {
+                if (!event.getView().getTitle().equalsIgnoreCase("Enchanted Anvil")) {
                     event.setCancelled(true);
                 }
                 if (event.getInventory().getType() == InventoryType.ENDER_CHEST) {

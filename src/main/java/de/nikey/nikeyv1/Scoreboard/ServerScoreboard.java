@@ -72,6 +72,16 @@ public class ServerScoreboard extends ScoreboardBuilder {
                     }else {
                         setScore("§7Master Ability: §c"+a +"/300",2);
                     }
+                }else if (stone.equalsIgnoreCase("Fire")){
+                    //Ability 2
+                    long remainingTime3 = Firestone.cooldown2.get(player.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remainingTime3/1000);
+                    //
+                    if (a == 0){
+                        setScore("§7Master Ability: §aReady",2);
+                    }else {
+                        setScore("§7Master Ability: §c"+a +"/300",2);
+                    }
                 }
             }
         }.runTaskTimer(NikeyV1.getPlugin(),10,10);
