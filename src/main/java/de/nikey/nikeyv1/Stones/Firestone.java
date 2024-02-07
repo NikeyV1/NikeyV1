@@ -3,10 +3,8 @@ package de.nikey.nikeyv1.Stones;
 import de.nikey.nikeyv1.NikeyV1;
 import de.slikey.effectlib.effect.*;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -21,10 +19,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -146,82 +141,83 @@ public class Firestone implements Listener {
                         }
                     }
                 }
-            }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK && !p.isSneaking()){
-                if (i == 15||i == 16||i == 17){
-                    if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                        event.setCancelled(true);
-                        p.updateInventory();
-                        remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                    }else {
-
-                        ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                ability.remove(p.getUniqueId());
-                                cancel();
-                                return;
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(),20*180);
-                        //Cooldown-Ability
-                        time = 10;
-                        AnimatedBallEffect effect = new AnimatedBallEffect(NikeyV1.em);
-                        effect.setEntity(p);
-                        effect.particle = Particle.FLAME;
-                        effect.duration = 20000;
-                        effect.visibleRange = 100;
-                        effect.start();
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                if (timer == 0){
+            }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
+                if (!p.isSneaking()) {
+                    if (i == 15||i == 16||i == 17){
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            event.setCancelled(true);
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
+                            ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
                                     cancel();
                                     return;
-                                }else {
-                                    double health = p.getHealth();
-                                    p.setHealth(health+0.8);
                                 }
-                                time--;
-                            }
-                        }.runTaskTimer(NikeyV1.getPlugin(),40,40);
-                    }
-                }else if (i >=18){
-                    if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                        event.setCancelled(true);
-                        p.updateInventory();
-                        remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                    }else {
+                            }.runTaskLater(NikeyV1.getPlugin(),20*180);
+                            //Cooldown-Ability
+                            time = 10;
+                            AnimatedBallEffect effect = new AnimatedBallEffect(NikeyV1.em);
+                            effect.setEntity(p);
+                            effect.particle = Particle.FLAME;
+                            effect.duration = 20000;
+                            effect.visibleRange = 100;
+                            effect.start();
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    if (timer == 0){
+                                        cancel();
+                                        return;
+                                    }else {
+                                        double health = p.getHealth();
+                                        p.setHealth(health+0.8);
+                                    }
+                                    time--;
+                                }
+                            }.runTaskTimer(NikeyV1.getPlugin(),40,40);
+                        }
+                    }else if (i >=18){
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            event.setCancelled(true);
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
 
-                        ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                ability.remove(p.getUniqueId());
-                                cancel();
-                                return;
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(),20*180);
-                        //Cooldown-Ability
-                        time = 10;
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                if (timer == 0){
+                            ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
                                     cancel();
                                     return;
-                                }else {
-                                    double health = p.getHealth();
-                                    p.setHealth(health+1.2);
                                 }
-                                time--;
-                            }
-                        }.runTaskTimer(NikeyV1.getPlugin(),40,40);
-                        AnimatedBallEffect effect = new AnimatedBallEffect(NikeyV1.em);
-                        effect.setEntity(p);
-                        effect.particle = Particle.FLAME;
-                        effect.duration = 20000;
-                        effect.visibleRange = 100;
-                        effect.start();
+                            }.runTaskLater(NikeyV1.getPlugin(),20*180);
+                            //Cooldown-Ability
+                            time = 10;
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    if (timer == 0){
+                                        cancel();
+                                        return;
+                                    }else {
+                                        double health = p.getHealth();
+                                        p.setHealth(health+1.2);
+                                    }
+                                    time--;
+                                }
+                            }.runTaskTimer(NikeyV1.getPlugin(),40,40);
+                            AnimatedBallEffect effect = new AnimatedBallEffect(NikeyV1.em);
+                            effect.setEntity(p);
+                            effect.particle = Particle.FLAME;
+                            effect.duration = 20000;
+                            effect.visibleRange = 100;
+                            effect.start();
+                        }
                     }
                 }
             }
@@ -304,14 +300,6 @@ public class Firestone implements Listener {
                         p.updateInventory();
                         remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
                     }else {
-                        cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                cooldown2.remove(p.getUniqueId());
-                                cancel();
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
                         //Cooldown-Ability
                         openPlayerSelectionInventory(p);
                     }
@@ -364,9 +352,23 @@ public class Firestone implements Listener {
 
             if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.PLAYER_HEAD) {
                 Player selectedPlayer = Bukkit.getPlayerExact(event.getCurrentItem().getItemMeta().getDisplayName());
+                Player p = (Player) event.getWhoClicked();
 
                 if (selectedPlayer != null) {
-                    triggerMegaFireAbility(selectedPlayer, (Player) event.getWhoClicked());
+                    if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
+                        p.updateInventory();
+                        remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
+                    }else {
+                        cooldown2.put(event.getWhoClicked().getUniqueId(), System.currentTimeMillis() + (300 * 1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                cooldown2.remove(p.getUniqueId());
+                                cancel();
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
+                        triggerMegaFireAbility(selectedPlayer, (Player) event.getWhoClicked());
+                    }
                 }
             }
         }
@@ -375,51 +377,133 @@ public class Firestone implements Listener {
 
     private void triggerMegaFireAbility(Player selectedPlayer, Player launcherPlayer) {
         launcherPlayer.closeInventory();
-        timer=20;
+        FileConfiguration config = NikeyV1.getPlugin().getConfig();
+        Integer level = config.getInt(launcherPlayer.getName() + ".level");
+        playDangerousWarning(selectedPlayer);
         new BukkitRunnable() {
             @Override
             public void run() {
-                timer--;
-                int x = (int) (selectedPlayer.getLocation().getX());
-                int z = (int) (selectedPlayer.getLocation().getZ());
-                int randomX = ThreadLocalRandom.current().nextInt(x-6, x+6);
-                int randomZ = ThreadLocalRandom.current().nextInt(z-6, z+6);
-                int randomY = selectedPlayer.getWorld().getHighestBlockYAt(randomX,randomZ);
-                if (selectedPlayer.getLocation().getZ() > 50) {
-                    Location location = new Location(selectedPlayer.getWorld(),randomX,randomY+20,randomZ);
-                    Fireball fireball = (Fireball) location.getWorld().spawnEntity(location, EntityType.FIREBALL);
-                    fireball.setShooter(launcherPlayer);
-                    fireball.setVelocity(new org.bukkit.util.Vector(0, -0.5, 0)); // Adjust the fireball trajectory
-                    fireball.setIsIncendiary(false);
-                    fireball.setCustomName("airstrike");
-                    fireball.setCustomNameVisible(false);
-                }else {
-                    Location location = new Location(selectedPlayer.getWorld(),randomX,randomY+40,randomZ);
-                    Fireball fireball = (Fireball) location.getWorld().spawnEntity(location, EntityType.FIREBALL);
-                    fireball.setShooter(launcherPlayer);
-                    fireball.setVelocity(new org.bukkit.util.Vector(0, -0.5, 0)); // Adjust the fireball trajectory
-                    fireball.setCustomName("airstrike");
-                    fireball.setCustomNameVisible(false);
-                }
+                if (level == 20) {
+                    timer=38;
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            timer--;
+                            int x = (int) (selectedPlayer.getLocation().getX());
+                            int z = (int) (selectedPlayer.getLocation().getZ());
+                            int randomX = ThreadLocalRandom.current().nextInt(x-6, x+6);
+                            int randomZ = ThreadLocalRandom.current().nextInt(z-6, z+6);
+                            int randomY = selectedPlayer.getWorld().getHighestBlockYAt(randomX,randomZ);
+                            if (selectedPlayer.getLocation().getZ() > 50) {
+                                Location location = new Location(selectedPlayer.getWorld(),randomX,randomY+20,randomZ);
+                                Fireball fireball = (Fireball) location.getWorld().spawnEntity(location, EntityType.FIREBALL);
+                                fireball.setShooter(launcherPlayer);
+                                fireball.setVelocity(new org.bukkit.util.Vector(0, -0.8, 0)); // Adjust the fireball trajectory
+                                fireball.setIsIncendiary(false);
+                                fireball.setCustomName("airstrike");
+                                fireball.setCustomNameVisible(false);
+                            }else {
+                                Location location = new Location(selectedPlayer.getWorld(),randomX,randomY+40,randomZ);
+                                Fireball fireball = (Fireball) location.getWorld().spawnEntity(location, EntityType.FIREBALL);
+                                fireball.setShooter(launcherPlayer);
+                                fireball.setVelocity(new org.bukkit.util.Vector(0, -0.8, 0)); // Adjust the fireball trajectory
+                                fireball.setCustomName("airstrike");
+                                fireball.setCustomNameVisible(false);
+                            }
 
 
-                if (timer == 0) {
-                    cancel();
-                    return;
+                            if (timer == 0) {
+                                cancel();
+                                return;
+                            }
+                        }
+                    }.runTaskTimer(NikeyV1.getPlugin(),0,4);
+                } else if (level == 21) {
+                    timer = 45;
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            timer--;
+                            int x = (int) (selectedPlayer.getLocation().getX());
+                            int z = (int) (selectedPlayer.getLocation().getZ());
+                            int randomX = ThreadLocalRandom.current().nextInt(x - 6, x + 6);
+                            int randomZ = ThreadLocalRandom.current().nextInt(z - 6, z + 6);
+                            int randomY = selectedPlayer.getWorld().getHighestBlockYAt(randomX, randomZ);
+                            if (selectedPlayer.getLocation().getZ() > 50) {
+                                Location location = new Location(selectedPlayer.getWorld(), randomX, randomY + 20, randomZ);
+                                Fireball fireball = (Fireball) location.getWorld().spawnEntity(location, EntityType.FIREBALL);
+                                fireball.setShooter(launcherPlayer);
+                                fireball.setVelocity(new org.bukkit.util.Vector(0, -0.8, 0)); // Adjust the fireball trajectory
+                                fireball.setIsIncendiary(false);
+                                fireball.setCustomName("strongairstrike");
+                                fireball.setCustomNameVisible(false);
+
+                            } else {
+                                Location location = new Location(selectedPlayer.getWorld(), randomX, randomY + 40, randomZ);
+                                Fireball fireball = (Fireball) location.getWorld().spawnEntity(location, EntityType.FIREBALL);
+                                fireball.setShooter(launcherPlayer);
+                                fireball.setVelocity(new org.bukkit.util.Vector(0, -0.8, 0)); // Adjust the fireball trajectory
+                                fireball.setCustomName("strongairstrike");
+                                fireball.setCustomNameVisible(false);
+                            }
+
+
+                            if (timer == 0) {
+                                cancel();
+                                return;
+                            }
+                        }
+                    }.runTaskTimer(NikeyV1.getPlugin(), 0, 8);
                 }
             }
-        }.runTaskTimer(NikeyV1.getPlugin(),0,5);
+        }.runTaskLater(NikeyV1.getPlugin(),40);
     }
 
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
-        if (event.getEntity() instanceof Fireball && event.getEntity().getCustomName().equalsIgnoreCase("airstrike")) {
-            Location location = event.getEntity().getLocation();
-            location.getWorld().createExplosion(location,3.5F,false,false);
-            location.getWorld().createExplosion(location,1.2F,false,true);
-            event.setCancelled(true);
+        if (event.getEntity() instanceof Fireball ) {
+            if (event.getEntity().getCustomName().equalsIgnoreCase("airstrike")) {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        Location location = event.getEntity().getLocation();
+                        Fireball fireball = (Fireball) event.getEntity();
+                        Block highestBlockAt = fireball.getWorld().getHighestBlockAt(fireball.getLocation());
+                        Location exp = highestBlockAt.getLocation().add(0, 1, 0);
+                        fireball.getWorld().createExplosion(exp,2.7F,false,false);
+                        fireball.remove();
+                    }
+                }.runTaskLater(NikeyV1.getPlugin(),4);
+            } else if (event.getEntity().getCustomName().equals("strongairstrike")) {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        Location location = event.getEntity().getLocation();
+                        Fireball fireball = (Fireball) event.getEntity();
+                        Block highestBlockAt = fireball.getWorld().getHighestBlockAt(fireball.getLocation());
+                        Location exp = highestBlockAt.getLocation().add(0, 1, 0);
+                        fireball.getWorld().createExplosion(exp,3.5F,false,false);
+                        fireball.remove();
+                    }
+                }.runTaskLater(NikeyV1.getPlugin(),4);
+            }
         }
     }
+
+    private void playDangerousWarning(Player player) {
+
+        // Die Melodie abspielen
+        for (int i=0;i<7;i++) {
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
+            try {
+                // Eine kurze Pause zwischen den Tönen
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @EventHandler
     public void onInventoryInteract(InventoryInteractEvent event) {
         if (event.getView().getTitle().equalsIgnoreCase("§cSelect Player")) {

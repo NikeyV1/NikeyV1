@@ -216,19 +216,24 @@ public class ServerScoreboard extends ScoreboardBuilder {
 
     private void stone() {
         FileConfiguration config = NikeyV1.getPlugin().getConfig();
-        String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
-        if (stone.equalsIgnoreCase("Fire")){
-            setScore("§7Stone: "+ChatColor.RED +config.getString(player.getName()+".stone"),6);
-        }else if (stone.equalsIgnoreCase("Electric")){
-            setScore("§7Stone: "+ChatColor.YELLOW +config.getString(player.getName()+".stone"),6);
-        }else if (stone.equalsIgnoreCase("Water")){
-            setScore("§7Stone: "+ChatColor.BLUE +config.getString(player.getName()+".stone"),6);
-        }else if (stone.equalsIgnoreCase("Frozen")){
-            setScore("§7Stone: "+ChatColor.DARK_AQUA +config.getString(player.getName()+".stone"),6);
-        }else if (stone.equalsIgnoreCase("Undead")){
-            setScore("§7Stone: "+ net.md_5.bungee.api.ChatColor.of("#100613")+config.getString(player.getName()+".stone"),6);
-        }else if (stone.equalsIgnoreCase("Holy")){
-            setScore("§7Stone: "+ net.md_5.bungee.api.ChatColor.of("#47d147")+config.getString(player.getName()+".stone"),6);
-        }
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
+                if (stone.equalsIgnoreCase("Fire")){
+                    setScore("§7Stone: "+ChatColor.RED +config.getString(player.getName()+".stone"),6);
+                }else if (stone.equalsIgnoreCase("Electric")){
+                    setScore("§7Stone: "+ChatColor.YELLOW +config.getString(player.getName()+".stone"),6);
+                }else if (stone.equalsIgnoreCase("Water")){
+                    setScore("§7Stone: "+ChatColor.BLUE +config.getString(player.getName()+".stone"),6);
+                }else if (stone.equalsIgnoreCase("Frozen")){
+                    setScore("§7Stone: "+ChatColor.DARK_AQUA +config.getString(player.getName()+".stone"),6);
+                }else if (stone.equalsIgnoreCase("Undead")){
+                    setScore("§7Stone: "+ net.md_5.bungee.api.ChatColor.of("#100613")+config.getString(player.getName()+".stone"),6);
+                }else if (stone.equalsIgnoreCase("Holy")){
+                    setScore("§7Stone: "+ net.md_5.bungee.api.ChatColor.of("#47d147")+config.getString(player.getName()+".stone"),6);
+                }
+            }
+        }.runTaskTimer(NikeyV1.getPlugin(),0,120);
     }
 }
