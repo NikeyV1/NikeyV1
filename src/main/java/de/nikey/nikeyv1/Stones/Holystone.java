@@ -138,15 +138,15 @@ public class Holystone implements Listener {
                         }.runTaskLater(NikeyV1.getPlugin(),20*180);
                         //Cooldown-Ability
                         p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
-                       for (Entity e : p.getNearbyEntities(20,20,20)){
+                       for (Entity e : p.getNearbyEntities(20,15,20)){
                            if (e instanceof Player) {
                                Player player =(Player) e;
                                double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                armor = armor*1.5;
                                int players = p.getNearbyEntities(15, 15, 15).size();
-                               if (players < 3){
+                               if (players == 1 || players == 2){
                                    p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                               } else if (players < 6) {
+                               } else if (players  == 3||players == 4 || players == 5) {
                                    p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
                                }else {
                                    p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
@@ -181,9 +181,9 @@ public class Holystone implements Listener {
                                 double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                 armor = armor*1.65;
                                 int players = p.getNearbyEntities(20, 20, 20).size();
-                                if (players < 3){
+                                if (players == 1 || players == 2){
                                     p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                                } else if (players < 6) {
+                                } else if (players  == 3||players == 4 || players == 5) {
                                     p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
                                 }else {
                                     p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));

@@ -84,8 +84,8 @@ public class Waterstone implements Listener {
                             FountainEffect effect = new FountainEffect(NikeyV1.em);
                             effect.setLocation(location);
                             effect.duration = 20000;
-                            effect.particlesStrand = 80;
-                            effect.particlesSpout = 100;
+                            effect.particlesStrand = 50;
+                            effect.particlesSpout = 70;
                             effect.start();
                             //Ability
                             new BukkitRunnable() {
@@ -114,8 +114,8 @@ public class Waterstone implements Listener {
                             FountainEffect effect = new FountainEffect(NikeyV1.em);
                             effect.setLocation(location);
                             effect.duration = 20000;
-                            effect.particlesStrand = 80;
-                            effect.particlesSpout = 100;
+                            effect.particlesStrand = 50;
+                            effect.particlesSpout = 70;
                             effect.start();
                             //Ability
                             new BukkitRunnable() {
@@ -200,14 +200,16 @@ public class Waterstone implements Listener {
                             effect.start();
                             p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH,1,1);
                             Entity e = HelpUtil.getNearestEntityInSight(p, 50);
-                            e.getLocation().getWorld().createExplosion(e.getLocation(),2F);
-                            if (e instanceof LivingEntity){
-                                LivingEntity entity = (LivingEntity) e;
-                                entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 450,0));
-                                double maxHealth = entity.getMaxHealth();
-                                double damage = 0.35 * maxHealth; // 35% der maximalen Herzen als Schaden
-                                entity.damage(damage);
-                                entity.setVisualFire(false);
+                            if (e != null) {
+                                e.getLocation().getWorld().createExplosion(e.getLocation(),2F);
+                                if (e instanceof LivingEntity){
+                                    LivingEntity entity = (LivingEntity) e;
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 450,0));
+                                    double maxHealth = entity.getMaxHealth();
+                                    double damage = 0.35 * maxHealth; // 35% der maximalen Herzen als Schaden
+                                    entity.damage(damage);
+                                    entity.setVisualFire(false);
+                                }
                             }
                         }
                     }

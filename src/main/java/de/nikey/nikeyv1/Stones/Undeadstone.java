@@ -275,7 +275,7 @@ public class Undeadstone implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player) {
             Player p = (Player) event.getEntity();
@@ -325,8 +325,10 @@ public class Undeadstone implements Listener {
     public void onEntityTarget(EntityTargetEvent event){
         if (event.getTarget() instanceof Player){
             if (event.getEntity() instanceof Monster || event.getEntity() instanceof IronGolem || event.getEntity() instanceof Warden){
-                if (event.getEntity().getCustomName().equalsIgnoreCase(((Player) event.getTarget()).getDisplayName()+"'s "+event.getEntityType().getName())){
-                    event.setCancelled(true);
+                if (event.getEntity().getCustomName() != null) {
+                    if (event.getEntity().getCustomName().equalsIgnoreCase(((Player) event.getTarget()).getDisplayName()+"'s "+event.getEntityType().getName())){
+                        event.setCancelled(true);
+                    }
                 }
             }
         }
