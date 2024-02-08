@@ -8,7 +8,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.IOException;
+import java.util.Arrays;
 
 @SuppressWarnings("ALL")
 public class ServerScoreboard extends ScoreboardBuilder {
@@ -53,7 +53,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
     }
 
     private void hideMasterability() {
-        setScore("§7§kMaster Ability: Unusable",2);
+        setScore("--------------",2);
     }
 
 
@@ -62,29 +62,14 @@ public class ServerScoreboard extends ScoreboardBuilder {
             @Override
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
-                if (stone.equalsIgnoreCase("Water")){
-                    //Ability 2
-                    long remainingTime3 = Waterstone.cooldown2.get(player.getUniqueId()) - System.currentTimeMillis();
-                    int a = (int) (remainingTime3/1000);
-                    //
-                    if (a == 0){
-                        setScore("§7Master Ability: §aReady",2);
-                    }else {
-                        setScore("§7Master Ability: §c"+a +"/300",2);
-                    }
-                }else if (stone.equalsIgnoreCase("Fire")){
-                    //Ability 2
-                    long remainingTime3 = Firestone.cooldown2.get(player.getUniqueId()) - System.currentTimeMillis();
-                    int a = (int) (remainingTime3/1000);
-                    //
-                    if (a == 0){
-                        setScore("§7Master Ability: §aReady",2);
-                    }else {
-                        setScore("§7Master Ability: §c"+a +"/300",2);
-                    }
+                long remainingTime3 = 0;
+                if (stone.equalsIgnoreCase("Water") || stone.equalsIgnoreCase("Fire")) {
+                    remainingTime3 = d(player,stone);
                 }
+                int a = (int) ((remainingTime3 - System.currentTimeMillis()) / 1000);
+                setScore("§7Master Ability: " + (a <= 0 ? "§aReady" : "§c" + a + "/300"), 2);
             }
-        }.runTaskTimer(NikeyV1.getPlugin(),10,10);
+        }.runTaskTimer(NikeyV1.getPlugin(), 10, 10);
     }
 
     private void ability2() {
@@ -92,125 +77,85 @@ public class ServerScoreboard extends ScoreboardBuilder {
             @Override
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
-                if (stone.equalsIgnoreCase("Electric")){
-                    //Ability 2
-                    long remainingTime2 = Electrostone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
-                    int a = (int) (remainingTime2/1000);
-                    //
-                    if (a == 0){
-                        setScore("§7Ability 2: §aReady",3);
-                    }else {
-                        setScore("§7Ability 2: §c"+a +"/180",3);
-                    }
-                }else if (stone.equalsIgnoreCase("Fire")){
-                    //Ability 2
-                    long remainingTime2 = Firestone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
-                    int a = (int) (remainingTime2/1000);
-                    //
-                    if (a == 0){
-                        setScore("§7Ability 2: §aReady",3);
-                    }else {
-                        setScore("§7Ability 2: §c"+a +"/180",3);
-                    }
-                }else if (stone.equalsIgnoreCase("Water")){
-                    //Ability 2
-                    long remainingTime2 = Waterstone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
-                    int a = (int) (remainingTime2/1000);
-                    //
-                    if (a == 0){
-                        setScore("§7Ability 2: §aReady",3);
-                    }else {
-                        setScore("§7Ability 2: §c"+a +"/180",3);
-                    }
-                }else if (stone.equalsIgnoreCase("Frozen")){
-                    //Ability 2
-                    long remainingTime2 = Frozenstone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
-                    int a = (int) (remainingTime2/1000);
-                    //
-                    if (a == 0){
-                        setScore("§7Ability 2: §aReady",3);
-                    }else {
-                        setScore("§7Ability 2: §c"+a +"/180",3);
-                    }
-                }else if (stone.equalsIgnoreCase("Undead")){
-                    long remainingTime2 = Undeadstone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
-                    int a = (int) (remainingTime2/1000);
-                    //
-                    if (a == 0){
-                        setScore("§7Ability 2: §aReady",3);
-                    }else {
-                        setScore("§7Ability 2: §c"+a +"/180",3);
-                    }
-                }else if (stone.equalsIgnoreCase("Holy")){
-                    long remainingTime2 = Holystone.ability.get(player.getUniqueId()) - System.currentTimeMillis();
-                    int a = (int) (remainingTime2/1000);
-                    if (a == 0){
-                        setScore("§7Ability 2: §aReady",3);
-                    }else {
-                        setScore("§7Ability 2: §c"+a +"/180",3);
+                if (stone.equalsIgnoreCase("Electric") || stone.equalsIgnoreCase("Fire") || stone.equalsIgnoreCase("Water") || stone.equalsIgnoreCase("Frozen") || stone.equalsIgnoreCase("Undead") || stone.equalsIgnoreCase("Holy")) {
+                    long remainingTime2 = getAbilityCooldown(player, stone);
+                    int a = (int) ((remainingTime2 - System.currentTimeMillis()) / 1000);
+                    if (a <= 0) {
+                        setScore("§7Ability 2: §aReady", 3);
+                    } else {
+                        setScore("§7Ability 2: §c" + a + "/180", 3);
                     }
                 }
             }
-        }.runTaskTimer(NikeyV1.getPlugin(),10,10);
+        }.runTaskTimer(NikeyV1.getPlugin(), 10, 10);
     }
     private void run() {
         new BukkitRunnable() {
             @Override
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
-                if (stone.equalsIgnoreCase("Electric")){
-                    long remainingTime = Electrostone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
-                    int i = (int) (remainingTime/1000);
-                    if (i == 0){
-                        setScore("§7Ability 1: §aReady",4);
-                    }else {
-                        setScore("§7Ability 1: §c"+ i+"/100",4);
-                    }
-                }else if (stone.equalsIgnoreCase("Fire")){
-                    long remainingTime = Firestone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
-                    int i = (int) (remainingTime/1000);
-                    if (i == 0){
-                        setScore("§7Ability 1: §aReady",4);
-                    }else {
-                        setScore("§7Ability 1: §c"+ i+"/100",4);
-                    }
-                }else if (stone.equalsIgnoreCase("Water")){
-                    long remainingTime = Waterstone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
-                    int i = (int) (remainingTime/1000);
-                    if (i == 0){
-                        setScore("§7Ability 1: §aReady",4);
-                    }else {
-                        setScore("§7Ability 1: §c"+ i+"/100",4);
-                    }
-                }else if (stone.equalsIgnoreCase("Frozen")){
-                    long remainingTime = Frozenstone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
-                    int i = (int) (remainingTime/1000);
-                    if (i == 0){
-                        setScore("§7Ability 1: §aReady",4);
-                    }else {
-                        setScore("§7Ability 1: §c"+ i+"/100",4);
-                    }
-                }else if (stone.equalsIgnoreCase("Undead")){
-                    long remainingTime = Undeadstone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
-                    int i = (int) (remainingTime/1000);
-                    if (i == 0){
-                        setScore("§7Ability 1: §aReady",4);
-                    }else {
-                        setScore("§7Ability 1: §c"+ i+"/100",4);
-                    }
-                }else if (stone.equalsIgnoreCase("Holy")){
-                    long remainingTime = Holystone.cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
-                    int i = (int) (remainingTime/1000);
-                    if (i == 0){
-                        setScore("§7Ability 1: §aReady",4);
-                    }else {
-                        setScore("§7Ability 1: §c"+ i+"/100",4);
+                if (Arrays.asList("Electric", "Fire", "Water", "Frozen", "Undead", "Holy").contains(stone)) {
+                    long remainingTime = getCooldown(player, stone);
+                    int i = (int) ((remainingTime - System.currentTimeMillis()) / 1000);
+                    if (i <= 0) {
+                        setScore("§7Ability 1: §aReady", 4);
+                    } else {
+                        setScore("§7Ability 1: §c" + i + "/100", 4);
                     }
                 }
-                setScore("§7Ping: "+ChatColor.DARK_PURPLE+ player.getPing(),1);
-                setScore("§7Online Players: "+ChatColor.DARK_PURPLE+ Bukkit.getOnlinePlayers().size(),0);
+                setScore("§7Ping: " + ChatColor.DARK_PURPLE + player.getPing(), 1);
+                setScore("§7Online Players: " + ChatColor.DARK_PURPLE + Bukkit.getOnlinePlayers().size(), 0);
             }
         }.runTaskTimer(NikeyV1.getPlugin(),10,10);
+    }
+
+    private long getAbilityCooldown(Player player, String stone) {
+        switch (stone.toLowerCase()) {
+            case "electric":
+                return Electrostone.ability.getOrDefault(player.getUniqueId(), 0L);
+            case "fire":
+                return Firestone.ability.getOrDefault(player.getUniqueId(), 0L);
+            case "water":
+                return Waterstone.ability.getOrDefault(player.getUniqueId(), 0L);
+            case "frozen":
+                return Frozenstone.ability.getOrDefault(player.getUniqueId(), 0L);
+            case "undead":
+                return Undeadstone.ability.getOrDefault(player.getUniqueId(), 0L);
+            case "holy":
+                return Holystone.ability.getOrDefault(player.getUniqueId(), 0L);
+            default:
+                return 0L;
+        }
+    }
+
+    private long d(Player player, String stone) {
+        switch (stone.toLowerCase()) {
+            case "fire":
+                return Firestone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
+            case "water":
+                return Waterstone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
+            default:
+                return 0L;
+        }
+    }
+
+    private long getCooldown(Player player, String stone) {
+        switch (stone.toLowerCase()) {
+            case "electric":
+                return Electrostone.cooldown.getOrDefault(player.getUniqueId(), 0L);
+            case "fire":
+                return Firestone.cooldown.getOrDefault(player.getUniqueId(), 0L);
+            case "water":
+                return Waterstone.cooldown.getOrDefault(player.getUniqueId(), 0L);
+            case "frozen":
+                return Frozenstone.cooldown.getOrDefault(player.getUniqueId(), 0L);
+            case "undead":
+                return Undeadstone.cooldown.getOrDefault(player.getUniqueId(), 0L);
+            case "holy":
+                return Holystone.cooldown.getOrDefault(player.getUniqueId(), 0L);
+            default:
+                return 0L;
+        }
     }
 
 
@@ -219,20 +164,33 @@ public class ServerScoreboard extends ScoreboardBuilder {
         new BukkitRunnable() {
             @Override
             public void run() {
-                String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
-                if (stone.equalsIgnoreCase("Fire")){
-                    setScore("§7Stone: "+ChatColor.RED +config.getString(player.getName()+".stone"),6);
-                }else if (stone.equalsIgnoreCase("Electric")){
-                    setScore("§7Stone: "+ChatColor.YELLOW +config.getString(player.getName()+".stone"),6);
-                }else if (stone.equalsIgnoreCase("Water")){
-                    setScore("§7Stone: "+ChatColor.BLUE +config.getString(player.getName()+".stone"),6);
-                }else if (stone.equalsIgnoreCase("Frozen")){
-                    setScore("§7Stone: "+ChatColor.DARK_AQUA +config.getString(player.getName()+".stone"),6);
-                }else if (stone.equalsIgnoreCase("Undead")){
-                    setScore("§7Stone: "+ net.md_5.bungee.api.ChatColor.of("#100613")+config.getString(player.getName()+".stone"),6);
-                }else if (stone.equalsIgnoreCase("Holy")){
-                    setScore("§7Stone: "+ net.md_5.bungee.api.ChatColor.of("#47d147")+config.getString(player.getName()+".stone"),6);
+                FileConfiguration config = NikeyV1.getPlugin().getConfig();
+                String stone = config.getString(player.getName() + ".stone");
+                net.md_5.bungee.api.ChatColor color;
+                switch (stone.toLowerCase()) {
+                    case "fire":
+                        color = ChatColor.RED.asBungee();
+                        break;
+                    case "electric":
+                        color = ChatColor.YELLOW.asBungee();
+                        break;
+                    case "water":
+                        color = ChatColor.BLUE.asBungee();
+                        break;
+                    case "frozen":
+                        color = ChatColor.DARK_AQUA.asBungee();
+                        break;
+                    case "undead":
+                        color = net.md_5.bungee.api.ChatColor.of("#100613");
+                        break;
+                    case "holy":
+                        color = net.md_5.bungee.api.ChatColor.of("#47d147");
+                        break;
+                    default:
+                        color = ChatColor.WHITE.asBungee();
+                        break;
                 }
+                setScore("§7Stone: " + color + stone, 6);
             }
         }.runTaskTimer(NikeyV1.getPlugin(),0,120);
     }

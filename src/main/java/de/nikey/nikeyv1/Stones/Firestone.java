@@ -34,6 +34,7 @@ public class Firestone implements Listener {
     private ArrayList<Entity> player = new ArrayList<>();
     private int timer;
     private int time;
+    private int timecooldown;
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> ability = new HashMap<>();
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
@@ -174,7 +175,7 @@ public class Firestone implements Listener {
                                         return;
                                     }else {
                                         double health = p.getHealth();
-                                        p.setHealth(health+0.8);
+                                        if (p.getHealth() <=18 )p.setHealth(health+1.2);
                                     }
                                     time--;
                                 }
@@ -206,7 +207,7 @@ public class Firestone implements Listener {
                                         return;
                                     }else {
                                         double health = p.getHealth();
-                                        p.setHealth(health+1.2);
+                                        if (p.getHealth() <=18 )p.setHealth(health+1.2);
                                     }
                                     time--;
                                 }
@@ -266,15 +267,25 @@ public class Firestone implements Listener {
                     long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
                     int a = (int) (remain/1000);
                     if (a >160){
-                        double damage = event.getDamage();
-                        event.setDamage(damage*0.70);
+                        if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
+                            double damage = event.getDamage();
+                            event.setDamage(damage*0.75);
+                        }else {
+                            double damage = event.getDamage();
+                            event.setDamage(damage*0.70);
+                        }
                     }
                 }else if (i >= 18){
                     long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
                     int a = (int) (remain/1000);
                     if (a >160){
-                        double damage = event.getDamage();
-                        event.setDamage(damage*0.5);
+                        if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
+                            double damage = event.getDamage();
+                            event.setDamage(damage*0.6);
+                        }else {
+                            double damage = event.getDamage();
+                            event.setDamage(damage*0.5);
+                        }
                     }
                 }
             }
@@ -290,7 +301,7 @@ public class Firestone implements Listener {
             String[] arr = item.getLore().get(1).split(":");
             int i = Integer.parseInt(arr[1]);
             FileConfiguration config = NikeyV1.getPlugin().getConfig();
-            config.set(p.getName()+".stone","Water");
+            config.set(p.getName()+".stone","Fire");
             config.set(p.getName()+".level",i);
             NikeyV1.getPlugin().saveConfig();
             String stone = config.getString(p.getName() + ".stone");
@@ -384,11 +395,11 @@ public class Firestone implements Listener {
             @Override
             public void run() {
                 if (level == 20) {
-                    timer=38;
+                    timecooldown=38;
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            timer--;
+                            timecooldown--;
                             int x = (int) (selectedPlayer.getLocation().getX());
                             int z = (int) (selectedPlayer.getLocation().getZ());
                             int randomX = ThreadLocalRandom.current().nextInt(x-6, x+6);
@@ -412,18 +423,18 @@ public class Firestone implements Listener {
                             }
 
 
-                            if (timer == 0) {
+                            if (timecooldown == 0) {
                                 cancel();
                                 return;
                             }
                         }
                     }.runTaskTimer(NikeyV1.getPlugin(),0,4);
                 } else if (level == 21) {
-                    timer = 45;
+                    timecooldown = 45;
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            timer--;
+                            timecooldown--;
                             int x = (int) (selectedPlayer.getLocation().getX());
                             int z = (int) (selectedPlayer.getLocation().getZ());
                             int randomX = ThreadLocalRandom.current().nextInt(x - 6, x + 6);
@@ -448,7 +459,7 @@ public class Firestone implements Listener {
                             }
 
 
-                            if (timer == 0) {
+                            if (timecooldown == 0) {
                                 cancel();
                                 return;
                             }
