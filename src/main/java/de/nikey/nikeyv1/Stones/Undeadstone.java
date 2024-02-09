@@ -2,9 +2,11 @@ package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
+import de.slikey.effectlib.effect.SmokeEffect;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
@@ -120,6 +122,12 @@ public class Undeadstone implements Listener {
                                         Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
                                         Random random = new Random();
                                         int r = random.nextInt(3);
+                                        SmokeEffect effect = new SmokeEffect(NikeyV1.em);
+                                        effect.setLocation(location);
+                                        effect.particle = Particle.SOUL;
+                                        effect.duration = 100;
+                                        effect.particles = 3;
+                                        effect.start();
                                         if (r ==0){
                                             Zombie zombie = location.getWorld().spawn(location, Zombie.class);
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
@@ -192,6 +200,12 @@ public class Undeadstone implements Listener {
                                         Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
                                         Random random = new Random();
                                         int r = random.nextInt(3);
+                                        SmokeEffect effect = new SmokeEffect(NikeyV1.em);
+                                        effect.setLocation(location);
+                                        effect.particle = Particle.SOUL;
+                                        effect.duration = 100;
+                                        effect.particles = 3;
+                                        effect.start();
                                         if (r ==0){
                                             Zombie zombie = location.getWorld().spawn(location, Zombie.class);
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));

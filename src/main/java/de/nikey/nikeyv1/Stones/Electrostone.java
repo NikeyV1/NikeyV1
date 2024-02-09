@@ -2,19 +2,18 @@ package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.slikey.effectlib.effect.CylinderEffect;
+import de.slikey.effectlib.effect.ShieldEffect;
 import de.slikey.effectlib.effect.TornadoEffect;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LightningStrike;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -33,9 +32,15 @@ public class Electrostone implements Listener {
     public static ArrayList<Entity> stunned = new ArrayList<>();
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> ability = new HashMap<>();
+
+    public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
     private int timer;
+
+    private int mtimer;
     public static long remainingTime1;
     public static long remainingTime2;
+
+    public static long remainingTime3;
 
     public void lightning2(Player p) {
         int x = (int) (p.getLocation().getX());
@@ -249,6 +254,119 @@ public class Electrostone implements Listener {
             }
         }
     }
+
+    @EventHandler
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        Player p = event.getPlayer();
+        ItemStack item = event.getItemDrop().getItemStack();
+        if (item == null) return;
+        if (event.getItemDrop().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase("§eElectric Stone")&& event.getItemDrop().getItemStack().getType() == Material.FIREWORK_STAR){
+            String[] arr = item.getLore().get(1).split(":");
+            int i = Integer.parseInt(arr[1]);
+            FileConfiguration config = NikeyV1.getPlugin().getConfig();
+            config.set(p.getName()+".stone","Electric");
+            config.set(p.getName()+".level",i);
+            NikeyV1.getPlugin().saveConfig();
+            String stone = config.getString(p.getName() + ".stone");
+            if (i == 20 ){
+                mtimer =80;
+                if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
+                    p.updateInventory();
+                    remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
+                }else {
+                    cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            cooldown2.remove(p.getUniqueId());
+                            cancel();
+                        }
+                    }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
+                    //Cooldown-Ability
+
+                    ShieldEffect effect = new ShieldEffect(NikeyV1.em);
+                    effect.radius = 6;
+                    effect.sphere = true;
+                    effect.setEntity(p);
+                    effect.duration = 20000;
+                    effect.particle = Particle.SCRAPE;
+                    effect.particles = 50;
+                    effect.start();
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            mtimer--;
+                            for (Entity entity : p.getNearbyEntities(5, 5, 5)) {
+                                if (entity instanceof LivingEntity) {
+                                    LivingEntity target = (LivingEntity) entity;
+                                    if (target != p) {
+
+                                        target.damage(1);
+                                        target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
+                                    }
+                                }
+                            }
+
+                            if (mtimer == 0) {
+                                cancel();
+                                return;
+                            }
+                        }
+                    }.runTaskTimer(NikeyV1.getPlugin(),0,7);
+                }
+            } else if (i == 21) {
+                mtimer = 80;
+                if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
+                    p.updateInventory();
+                    remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
+                }else {
+                    cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            cooldown2.remove(p.getUniqueId());
+                            cancel();
+                        }
+                    }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
+                    //Cooldown-Ability
+
+                    ShieldEffect effect = new ShieldEffect(NikeyV1.em);
+                    effect.radius = 10;
+                    effect.sphere = true;
+                    effect.setEntity(p);
+                    effect.duration = 20000;
+                    effect.particle = Particle.SCRAPE;
+                    effect.particles = 50;
+                    effect.start();
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            mtimer--;
+                            for (Entity entity : p.getNearbyEntities(9, 9, 9)) {
+                                if (entity instanceof LivingEntity) {
+                                    LivingEntity target = (LivingEntity) entity;
+                                    if (target != p) {
+                                        target.damage(3);
+                                        target.setVelocity(target.getLocation().getDirection().multiply(-2));
+                                    }
+                                }
+                            }
+
+                            if (mtimer == 0) {
+                                cancel();
+                                return;
+                            }
+                        }
+                    }.runTaskTimer(NikeyV1.getPlugin(),0,5);
+                }
+            }
+        }
+    }
+
+
+
+
+
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityMove(EntityMoveEvent event) {

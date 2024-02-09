@@ -63,8 +63,8 @@ public class ServerScoreboard extends ScoreboardBuilder {
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
                 long remainingTime3 = 0;
-                if (stone.equalsIgnoreCase("Water") || stone.equalsIgnoreCase("Fire")) {
-                    remainingTime3 = d(player,stone);
+                if (stone.equalsIgnoreCase("Water") || stone.equalsIgnoreCase("Fire") || stone.equalsIgnoreCase("Electric")) {
+                    remainingTime3 = getMasterCooldown(player,stone);
                 }
                 int a = (int) ((remainingTime3 - System.currentTimeMillis()) / 1000);
                 setScore("§7Master Ability: " + (a <= 0 ? "§aReady" : "§c" + a + "/300"), 2);
@@ -128,12 +128,14 @@ public class ServerScoreboard extends ScoreboardBuilder {
         }
     }
 
-    private long d(Player player, String stone) {
+    private long getMasterCooldown(Player player, String stone) {
         switch (stone.toLowerCase()) {
             case "fire":
                 return Firestone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
             case "water":
                 return Waterstone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
+            case "electric":
+                return Electrostone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
             default:
                 return 0L;
         }
