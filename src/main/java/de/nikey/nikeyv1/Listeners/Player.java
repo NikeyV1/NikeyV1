@@ -206,15 +206,13 @@ public class Player implements Listener {
                     event.getDrops().remove(item);
                 }
             }
-            String stone = config.getString(player.getName() + ".stone");
         }else {
-            for (ItemStack drop : drops) {
-                event.getDrops().remove(drop);
-                return;
-            }
+            player.kickPlayer("§cYour stone is out of strength!");
             Date date = new Date(System.currentTimeMillis()+1440*60*1000);
             Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), "§cYour stone is out of strength!",date,"Game");
-            player.kickPlayer("§cYour stone is out of strength!");
+            for (ItemStack drop : drops) {
+                event.getDrops().remove(drop);
+            }
         }
     }
 

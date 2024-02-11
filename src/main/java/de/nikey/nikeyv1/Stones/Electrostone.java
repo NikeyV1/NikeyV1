@@ -365,9 +365,7 @@ public class Electrostone implements Listener {
 
 
 
-
-
-
+    
     @EventHandler(ignoreCancelled = true)
     public void onEntityMove(EntityMoveEvent event) {
         LivingEntity entity = event.getEntity();

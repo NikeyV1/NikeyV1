@@ -39,7 +39,7 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <outputDirectory>C:\Users\nheid\AppData\Roaming\.feather\player-server\servers\4d64c617-e999-4572-9533-e5a78368c1a7\plugins</outputDirectory>
+                            <outputDirectory>C:\Users\NikeyV1\AppData\Roaming\.feather\player-server\servers\4d64c617-e999-4572-9533-e5a78368c1a7\plugins</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>

@@ -155,7 +155,7 @@ public class Holystone implements Listener {
                            }
                            if (e instanceof LivingEntity){
                                LivingEntity entity = (LivingEntity) e;
-                               entity.damage(8,p);
+                               entity.damage(12,p);
                            }
                        }
                     }
@@ -188,7 +188,7 @@ public class Holystone implements Listener {
                                 }else {
                                     p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
                                 }
-                                player.damage(armor+12,p);
+                                player.damage(armor+15,p);
                             }
                             if (e instanceof LivingEntity){
                                 LivingEntity entity = (LivingEntity) e;
