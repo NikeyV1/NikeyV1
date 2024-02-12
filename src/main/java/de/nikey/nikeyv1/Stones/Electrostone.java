@@ -39,7 +39,6 @@ public class Electrostone implements Listener {
     private int mtimer;
     public static long remainingTime1;
     public static long remainingTime2;
-
     public static long remainingTime3;
 
     public void lightning2(Player p) {

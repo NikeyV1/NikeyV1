@@ -3,10 +3,9 @@ package de.nikey.nikeyv1.Stones;
 import com.destroystokyo.paper.event.entity.EntityJumpEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import de.nikey.nikeyv1.NikeyV1;
+import de.nikey.nikeyv1.Util.Tornado;
 import de.slikey.effectlib.effect.SmokeEffect;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
@@ -15,10 +14,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
@@ -35,10 +36,14 @@ public class Frozenstone implements Listener {
     private ArrayList<LivingEntity> entities = new ArrayList<>();
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> ability = new HashMap<>();
+    public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
     public static ArrayList<LivingEntity> notp = new ArrayList<>();
     private int timer;
     public static long remainingTime1;
     public static long remainingTime2;
+    public static long remainingTime3;
+
+    private static final String ICE_ARROW_METADATA = "isIceArrow";
 
 
     @EventHandler
@@ -124,86 +129,154 @@ public class Frozenstone implements Listener {
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
                 if (i == 15||i == 16||i == 17){
-                    if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                        event.setCancelled(true);
-                        p.updateInventory();
-                        remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                    }else {
-                        ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                ability.remove(p.getUniqueId());
-                                cancel();
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
-                        //Cooldown-Ability
+                    if (!p.isSneaking()) {
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            event.setCancelled(true);
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
+                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                            //Cooldown-Ability
 
-                        for (Entity e : p.getNearbyEntities(50,50,50)){
-                            if (e instanceof LivingEntity){
-                                LivingEntity entity = (LivingEntity) e;
-                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,3,false));
-                                entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
-                                notp.add(entity);
-                                entity.damage(16,p);
-                                entity.setFreezeTicks(600);
-                                SmokeEffect effect = new SmokeEffect(NikeyV1.em);
-                                effect.setEntity(entity);
-                                effect.particle = Particle.SNOWFLAKE;
-                                effect.duration = 20000;
-                                effect.particles = 2;
-                                effect.start();
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        notp.remove(entity);
-                                    }
-                                }.runTaskLater(NikeyV1.getPlugin(),400);
+                            for (Entity e : p.getNearbyEntities(50,50,50)){
+                                if (e instanceof LivingEntity){
+                                    LivingEntity entity = (LivingEntity) e;
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,3,false));
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
+                                    notp.add(entity);
+                                    entity.damage(16,p);
+                                    entity.setFreezeTicks(600);
+                                    SmokeEffect effect = new SmokeEffect(NikeyV1.em);
+                                    effect.setEntity(entity);
+                                    effect.particle = Particle.SNOWFLAKE;
+                                    effect.duration = 20000;
+                                    effect.particles = 2;
+                                    effect.start();
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            notp.remove(entity);
+                                        }
+                                    }.runTaskLater(NikeyV1.getPlugin(),400);
+                                }
                             }
                         }
                     }
                 }else if (i >=18){
-                    if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                        event.setCancelled(true);
-                        p.updateInventory();
-                        remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                    }else {
-                        ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                ability.remove(p.getUniqueId());
-                                cancel();
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
-                        //Cooldown-Ability
+                    if (!p.isSneaking()) {
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            event.setCancelled(true);
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
+                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                            //Cooldown-Ability
 
-                        for (Entity e : p.getNearbyEntities(50,50,50)){
-                            if (e instanceof LivingEntity){
-                                LivingEntity entity = (LivingEntity) e;
-                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,3,false));
-                                entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,3,false));
-                                notp.add(entity);
-                                entity.damage(18,p);
-                                entity.setFreezeTicks(700);
-                                SmokeEffect effect = new SmokeEffect(NikeyV1.em);
-                                effect.setEntity(entity);
-                                effect.particle = Particle.SNOWFLAKE;
-                                effect.duration = 20000;
-                                effect.particles = 2;
-                                effect.start();
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        notp.remove(entity);
-                                    }
-                                }.runTaskLater(NikeyV1.getPlugin(),400);
+                            for (Entity e : p.getNearbyEntities(50,50,50)){
+                                if (e instanceof LivingEntity){
+                                    LivingEntity entity = (LivingEntity) e;
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,3,false));
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,3,false));
+                                    notp.add(entity);
+                                    entity.damage(18,p);
+                                    entity.setFreezeTicks(700);
+                                    SmokeEffect effect = new SmokeEffect(NikeyV1.em);
+                                    effect.setEntity(entity);
+                                    effect.particle = Particle.SNOWFLAKE;
+                                    effect.duration = 20000;
+                                    effect.particles = 2;
+                                    effect.start();
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            notp.remove(entity);
+                                        }
+                                    }.runTaskLater(NikeyV1.getPlugin(),400);
+                                }
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        Player p = event.getPlayer();
+        ItemStack item = event.getItemDrop().getItemStack();
+        if (item == null) return;
+        if (event.getItemDrop().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase("§3Frozen Stone")&& event.getItemDrop().getItemStack().getType() == Material.FIREWORK_STAR){
+            String[] arr = item.getLore().get(1).split(":");
+            int i = Integer.parseInt(arr[1]);
+            FileConfiguration config = NikeyV1.getPlugin().getConfig();
+            config.set(p.getName()+".stone","Frozen");
+            config.set(p.getName()+".level",i);
+            NikeyV1.getPlugin().saveConfig();
+            String stone = config.getString(p.getName() + ".stone");
+            if (p.isSneaking()) {
+                if (i == 20) {
+                    if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
+                        p.updateInventory();
+                        remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
+                    }else {
+                        cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                cooldown2.remove(p.getUniqueId());
+                                cancel();
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
+                        //Cooldown-Ability
+                        shootFrozenDagger(p);
+                    }
+                }
+            }
+        }
+    }
+
+    private void shootFrozenDagger(Player player) {
+        Location eyeLocation = player.getEyeLocation();
+        Location spawnLocation = eyeLocation.add(eyeLocation.getDirection().normalize());
+        Arrow arrow = (Arrow) player.getWorld().spawnEntity(spawnLocation, EntityType.ARROW);
+        arrow.setShooter(player);
+        arrow.setVelocity(eyeLocation.getDirection().multiply(2));
+        arrow.setCustomName(ChatColor.RED + "Frozen Dagger");
+        arrow.setCustomNameVisible(true);
+
+        // Make the arrow do no damage
+        arrow.setDamage(8);
+
+        // Disable arrow gravity
+        arrow.setGravity(false);
+
+        // Set metadata to mark arrow as ice arrow
+        arrow.setMetadata(ICE_ARROW_METADATA, new FixedMetadataValue(NikeyV1.getPlugin(), true));
+
+        // Remove arrow after 20 seconds
+        Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), arrow::remove, 20 * 20L);
+
+        // Apply particle effects
+        Bukkit.getScheduler().runTaskTimer(NikeyV1.getPlugin(), () -> {
+            if (arrow.isValid() && arrow.getMetadata(ICE_ARROW_METADATA).get(0).asBoolean()) {
+                arrow.getWorld().spawnParticle(Particle.SNOWBALL, arrow.getLocation(), 10, 0.2, 0.2, 0.2, 0);
+            }
+        }, 0L, 5L); // Particle effect every 0.25 seconds
     }
 
     @EventHandler

@@ -63,7 +63,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
                 long remainingTime3 = 0;
-                if (stone.equalsIgnoreCase("Water") || stone.equalsIgnoreCase("Fire") || stone.equalsIgnoreCase("Electric")) {
+                if (stone.equalsIgnoreCase("Water") || stone.equalsIgnoreCase("Fire") || stone.equalsIgnoreCase("Electric") || stone.equalsIgnoreCase("Frozen") ) {
                     remainingTime3 = getMasterCooldown(player,stone);
                 }
                 int a = (int) ((remainingTime3 - System.currentTimeMillis()) / 1000);
@@ -136,6 +136,8 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 return Waterstone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
             case "electric":
                 return Electrostone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
+            case "frozen":
+                return Frozenstone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
             default:
                 return 0L;
         }
