@@ -45,6 +45,10 @@ public class Frozenstone implements Listener {
 
     private static final String ICE_ARROW_METADATA = "isIceArrow";
 
+    private boolean abilityActivated = false;
+
+    private int arrowsShot = 0;
+
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
@@ -76,54 +80,65 @@ public class Frozenstone implements Listener {
             NikeyV1.getPlugin().saveConfig();
             String stone = config.getString(p.getName() + ".stone");
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
-                if (i >= 10) {
-                    if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
-                        event.setCancelled(true);
-                        p.updateInventory();
-                        remainingTime1 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
-                    }else {
-                        cooldown.put(p.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                cooldown.remove(p.getUniqueId());
-                                cancel();
+                if (abilityActivated) {
+                    if (abilityActivated && arrowsShot < 5) {
+                        shootFrozenDagger(p);
+                        arrowsShot++;
+                        if (arrowsShot == 5) {
+                            abilityActivated = false;
+                            p.sendMessage(ChatColor.RED + "You have shot 5 Frozen Daggers. Ability deactivated!");
+                        }
+                    }
+                }else {
+                    if (i >= 10) {
+                        if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            event.setCancelled(true);
+                            p.updateInventory();
+                            remainingTime1 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
+                            cooldown.put(p.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    cooldown.remove(p.getUniqueId());
+                                    cancel();
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
+                            //cooldown-ability
+                            if (i ==10 || i == 11){
+                                timer = 4;
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        timer--;
+                                        p.sendMessage(String.valueOf(timer));
+                                        if (timer ==0){
+                                            cancel();
+                                        }else {
+                                            Snowball snowball = p.launchProjectile(Snowball.class);
+                                            snowball.setVelocity(p.getLocation().getDirection().multiply(2));
+                                            snowball.setShooter(p);
+                                            snowball.setCustomName("B");
+                                        }
+                                    }
+                                }.runTaskTimer(NikeyV1.getPlugin(),15,15);
+                            }else if (i >= 12) {
+                                timer = 4;
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        timer--;
+                                        if (timer ==0){
+                                            cancel();
+                                        }else {
+                                            Snowball snowball = p.launchProjectile(Snowball.class);
+                                            snowball.setVelocity(p.getLocation().getDirection().multiply(2));
+                                            snowball.setShooter(p);
+                                            snowball.setCustomName("B");
+                                        }
+                                    }
+                                }.runTaskTimer(NikeyV1.getPlugin(),15,15);
                             }
-                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
-                        //cooldown-ability
-                        if (i ==10 || i == 11){
-                            timer = 4;
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    timer--;
-                                    p.sendMessage(String.valueOf(timer));
-                                    if (timer ==0){
-                                        cancel();
-                                    }else {
-                                        Snowball snowball = p.launchProjectile(Snowball.class);
-                                        snowball.setVelocity(p.getLocation().getDirection().multiply(2));
-                                        snowball.setShooter(p);
-                                        snowball.setCustomName("B");
-                                    }
-                                }
-                            }.runTaskTimer(NikeyV1.getPlugin(),15,15);
-                        }else if (i >= 12) {
-                            timer = 4;
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    timer--;
-                                    if (timer ==0){
-                                        cancel();
-                                    }else {
-                                        Snowball snowball = p.launchProjectile(Snowball.class);
-                                        snowball.setVelocity(p.getLocation().getDirection().multiply(2));
-                                        snowball.setShooter(p);
-                                        snowball.setCustomName("B");
-                                    }
-                                }
-                            }.runTaskTimer(NikeyV1.getPlugin(),15,15);
                         }
                     }
                 }
@@ -243,7 +258,7 @@ public class Frozenstone implements Listener {
                             }
                         }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
                         //Cooldown-Ability
-                        shootFrozenDagger(p);
+                        activateAbility(p);
                     }
                 }
             }
@@ -255,9 +270,9 @@ public class Frozenstone implements Listener {
         Location spawnLocation = eyeLocation.add(eyeLocation.getDirection().normalize());
         Arrow arrow = (Arrow) player.getWorld().spawnEntity(spawnLocation, EntityType.ARROW);
         arrow.setShooter(player);
-        arrow.setVelocity(eyeLocation.getDirection().multiply(2));
-        arrow.setCustomName(ChatColor.RED + "Frozen Dagger");
-        arrow.setCustomNameVisible(true);
+        arrow.setVelocity(eyeLocation.getDirection().multiply(2.6));
+        arrow.setCustomName(ChatColor.DARK_AQUA + "FD");
+        arrow.setCustomNameVisible(false);
 
         // Make the arrow do no damage
         arrow.setDamage(8);
@@ -277,6 +292,15 @@ public class Frozenstone implements Listener {
                 arrow.getWorld().spawnParticle(Particle.SNOWBALL, arrow.getLocation(), 10, 0.2, 0.2, 0.2, 0);
             }
         }, 0L, 5L); // Particle effect every 0.25 seconds
+    }
+
+    public void activateAbility(Player player) {
+        abilityActivated = true;
+        player.sendMessage(ChatColor.GREEN + "Ability activated! You can now throw Frozen Daggers for 20 seconds.");
+        Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
+            abilityActivated = false;
+            player.sendMessage(ChatColor.RED + "Ability deactivated.");
+        }, 20 * 20L);
     }
 
     @EventHandler
