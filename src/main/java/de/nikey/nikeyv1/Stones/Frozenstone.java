@@ -354,7 +354,7 @@ public class Frozenstone implements Listener {
                 }
             }.runTaskLater(NikeyV1.getPlugin(),20*20);
         }
-        if (entity instanceof Arrow && entity.getCustomName().equals(ChatColor.DARK_AQUA + "FD") && shooter instanceof Player) {
+        if (entity instanceof Arrow && entity.getCustomName() != null && entity.getCustomName().equals(ChatColor.DARK_AQUA + "FD") && shooter instanceof Player) {
             Player p = (Player) shooter;
             LivingEntity e = (LivingEntity) hitEntity;
             e.addPotionEffect(new PotionEffect(PotionEffectType.POISON ,20*6, 2,true,true,false));
