@@ -37,6 +37,7 @@ public final class NikeyV1 extends JavaPlugin {
         manager.registerEvents(new JoinListener(),this);
         manager.registerEvents(new InventoryListener(),this);
         //Command
+
         getCommand("stone").setExecutor(new stone());
         getCommand("effect").setExecutor(new EffectCMD());
         //resipes
