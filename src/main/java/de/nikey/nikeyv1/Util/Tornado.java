@@ -1,6 +1,7 @@
 package de.nikey.nikeyv1.Util;
 
 import de.nikey.nikeyv1.NikeyV1;
+import de.nikey.nikeyv1.Stones.Frozenstone;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -144,6 +145,15 @@ public class Tornado {
                 entity.setVelocity(v);
                 if (entity instanceof LivingEntity){
                     LivingEntity entity1 = (LivingEntity) entity;
+                    if (!Frozenstone.notp.contains(entity1)) {
+                        Frozenstone.notp.add(entity1);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                Frozenstone.notp.remove(entity1);
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(),20*10);
+                    }
                     if (level == 20) {
                         entity1.damage(2);
                         entity1.getWorld().spawnParticle(Particle.DOLPHIN,entity1.getLocation(),10);

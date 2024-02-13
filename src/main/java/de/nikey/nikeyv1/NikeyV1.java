@@ -45,6 +45,10 @@ public final class NikeyV1 extends JavaPlugin {
         saveDefaultConfig();
     }
 
+    @Override
+    public void onDisable() {
+    }
+
 
     public static NikeyV1 getPlugin() {
         return plugin;

@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import static de.nikey.nikeyv1.Util.HelpUtil.getNearbyBlocks;
+import static de.nikey.nikeyv1.Util.HelpUtil.triggerEntityAggro;
 
 @SuppressWarnings("ALL")
 public class Frozenstone implements Listener {
@@ -47,7 +48,7 @@ public class Frozenstone implements Listener {
 
     private boolean abilityActivated = false;
 
-    private int arrowsShot = 0;
+    public static HashMap<Player, Integer> arrowsShot = new HashMap<>();
 
 
     @EventHandler
@@ -81,12 +82,14 @@ public class Frozenstone implements Listener {
             String stone = config.getString(p.getName() + ".stone");
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
                 if (abilityActivated) {
-                    if (abilityActivated && arrowsShot < 5) {
+                    if (abilityActivated && arrowsShot.containsKey(p) && arrowsShot.get(p) < 5) {
                         shootFrozenDagger(p);
-                        arrowsShot++;
-                        if (arrowsShot == 5) {
+                        Integer shot = arrowsShot.get(p);
+                        arrowsShot.replace(p,shot+1);
+                        if (arrowsShot.get(p) == 5) {
                             abilityActivated = false;
                             p.sendMessage(ChatColor.RED + "You have shot 5 Frozen Daggers. Ability deactivated!");
+                            arrowsShot.put(p,0);
                         }
                     }
                 }else {
@@ -267,39 +270,49 @@ public class Frozenstone implements Listener {
 
     private void shootFrozenDagger(Player player) {
         Location eyeLocation = player.getEyeLocation();
-        Location spawnLocation = eyeLocation.add(eyeLocation.getDirection().normalize());
+        Location spawnLocation1 = eyeLocation.add(eyeLocation.getDirection().normalize());
+        Location spawnLocation2 = spawnLocation1.clone().add(0, -0.8D, 0);
+        Location spawnLocation3 = spawnLocation1.clone().add(0.8D, 0, 0);
+        Location spawnLocation4 = spawnLocation1.clone().add(0, 0.8D, 0);
+        Location spawnLocation5 = spawnLocation1.clone().add(-0.8D, 0, 0);
+
+        shootArrow(player, spawnLocation2);
+        shootArrow(player, spawnLocation3);
+        shootArrow(player, spawnLocation4);
+        shootArrow(player, spawnLocation5);
+    }
+
+    private void shootArrow(Player player, Location spawnLocation) {
         Arrow arrow = (Arrow) player.getWorld().spawnEntity(spawnLocation, EntityType.ARROW);
         arrow.setShooter(player);
-        arrow.setVelocity(eyeLocation.getDirection().multiply(2.6));
+        arrow.setVelocity(player.getEyeLocation().getDirection().multiply(2.6));
         arrow.setCustomName(ChatColor.DARK_AQUA + "FD");
         arrow.setCustomNameVisible(false);
-
-        // Make the arrow do no damage
-        arrow.setDamage(8);
-
-        // Disable arrow gravity
-        arrow.setGravity(false);
-
-        // Set metadata to mark arrow as ice arrow
-        arrow.setMetadata(ICE_ARROW_METADATA, new FixedMetadataValue(NikeyV1.getPlugin(), true));
-
-        // Remove arrow after 20 seconds
-        Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), arrow::remove, 20 * 20L);
-
-        // Apply particle effects
-        Bukkit.getScheduler().runTaskTimer(NikeyV1.getPlugin(), () -> {
-            if (arrow.isValid() && arrow.getMetadata(ICE_ARROW_METADATA).get(0).asBoolean()) {
-                arrow.getWorld().spawnParticle(Particle.SNOWBALL, arrow.getLocation(), 10, 0.2, 0.2, 0.2, 0);
+        arrow.setDamage(12);
+        arrow.setPierceLevel(2);
+        arrow.setGravity(false); // Disable arrow gravity
+        arrow.setMetadata(ICE_ARROW_METADATA, new FixedMetadataValue(NikeyV1.getPlugin(), true)); // Set metadata to mark arrow as ice arrow for no reason
+        Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), arrow::remove, 20 * 10L); // Remove arrow after 10 seconds
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                if (!arrow.isDead()){
+                    arrow.getWorld().spawnParticle(Particle.SNOWFLAKE,arrow.getLocation(),3);
+                }else {
+                    cancel();
+                    return;
+                }
             }
-        }, 0L, 5L); // Particle effect every 0.25 seconds
+        }.runTaskTimer(NikeyV1.getPlugin(),0L,3L);
     }
 
     public void activateAbility(Player player) {
         abilityActivated = true;
+        arrowsShot.put(player,0);
         player.sendMessage(ChatColor.GREEN + "Ability activated! You can now throw Frozen Daggers for 20 seconds.");
         Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
             abilityActivated = false;
-            player.sendMessage(ChatColor.RED + "Ability deactivated.");
+            arrowsShot.remove(player);
         }, 20 * 20L);
     }
 
@@ -340,6 +353,13 @@ public class Frozenstone implements Listener {
                     entities.remove(e);
                 }
             }.runTaskLater(NikeyV1.getPlugin(),20*20);
+        }
+        if (entity instanceof Arrow && entity.getCustomName().equals(ChatColor.DARK_AQUA + "FD") && shooter instanceof Player) {
+            Player p = (Player) shooter;
+            LivingEntity e = (LivingEntity) hitEntity;
+            e.addPotionEffect(new PotionEffect(PotionEffectType.POISON ,20*6, 2,true,true,false));
+            e.setFreezeTicks(20*6);
+            entity.remove();
         }
     }
 
