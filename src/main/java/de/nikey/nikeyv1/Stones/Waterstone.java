@@ -247,7 +247,8 @@ public class Waterstone implements Listener {
                         }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
                         //Cooldown-Ability
                         p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH, 1.0f, 1.0f);
-                        Tornado.spawnTornado(NikeyV1.getPlugin(),p.getLocation(),p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getType(),p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getData(),p.getLocation().getDirection().multiply(4),0.4,200,20*20,true,p,false);
+                        Location BlocksAway = p.getLocation().add(p.getLocation().getDirection().multiply(4));
+                        Tornado.spawnTornado(NikeyV1.getPlugin(),BlocksAway,p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getType(),p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getData(),p.getLocation().getDirection().multiply(4),0.4,200,20*20,true,p,false);
                     }
                 } else if (i == 21) {
                     if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
@@ -264,7 +265,8 @@ public class Waterstone implements Listener {
                         }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
                         //Cooldown-Ability
                         p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH, 1.0f, 1.0f);
-                        Tornado.spawnTornado(NikeyV1.getPlugin(),p.getLocation(),p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getType(),p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getData(),p.getLocation().getDirection().multiply(4.5),0.4,275,20*30,true,p,false);
+                        Location BlocksAway = p.getLocation().add(p.getLocation().getDirection().multiply(4));
+                        Tornado.spawnTornado(NikeyV1.getPlugin(),BlocksAway,p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getType(),p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getData(),p.getLocation().getDirection().multiply(4.5),0.4,275,20*30,true,p,false);
                     }
                 }
             }
