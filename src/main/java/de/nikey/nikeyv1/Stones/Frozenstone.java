@@ -5,6 +5,8 @@ import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.Tornado;
 import de.slikey.effectlib.effect.SmokeEffect;
+import io.papermc.paper.configuration.type.fallback.FallbackValue;
+import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -27,6 +29,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.UUID;
 
 import static de.nikey.nikeyv1.Util.HelpUtil.getNearbyBlocks;
@@ -247,7 +250,7 @@ public class Frozenstone implements Listener {
             NikeyV1.getPlugin().saveConfig();
             String stone = config.getString(p.getName() + ".stone");
             if (p.isSneaking()) {
-                if (i == 20) {
+                if (i == 20 || i == 21) {
                     if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
                         p.updateInventory();
                         remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
@@ -283,27 +286,51 @@ public class Frozenstone implements Listener {
     }
 
     private void shootArrow(Player player, Location spawnLocation) {
-        Arrow arrow = (Arrow) player.getWorld().spawnEntity(spawnLocation, EntityType.ARROW);
-        arrow.setShooter(player);
-        arrow.setVelocity(player.getEyeLocation().getDirection().multiply(2.6));
-        arrow.setCustomName(ChatColor.DARK_AQUA + "FD");
-        arrow.setCustomNameVisible(false);
-        arrow.setDamage(12);
-        arrow.setPierceLevel(2);
-        arrow.setGravity(false); // Disable arrow gravity
-        arrow.setMetadata(ICE_ARROW_METADATA, new FixedMetadataValue(NikeyV1.getPlugin(), true)); // Set metadata to mark arrow as ice arrow for no reason
-        Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), arrow::remove, 20 * 10L); // Remove arrow after 10 seconds
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                if (!arrow.isDead()){
-                    arrow.getWorld().spawnParticle(Particle.SNOWFLAKE,arrow.getLocation(),3);
-                }else {
-                    cancel();
-                    return;
+        int i = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
+        if (i == 20) {
+            SpectralArrow arrow = (SpectralArrow) player.getWorld().spawnEntity(spawnLocation, EntityType.SPECTRAL_ARROW);
+            arrow.setShooter(player);
+            arrow.setVelocity(player.getEyeLocation().getDirection().multiply(2.4));
+            arrow.setCustomName(ChatColor.DARK_AQUA + "FD");
+            arrow.setCustomNameVisible(false);
+            arrow.setDamage(8);
+            arrow.setGravity(false); // Disable arrow gravity
+            arrow.setMetadata(ICE_ARROW_METADATA, new FixedMetadataValue(NikeyV1.getPlugin(), true)); // Set metadata to mark arrow as ice arrow for no reason
+            Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), arrow::remove, 20 * 6L); // Remove arrow after 6 seconds
+            new BukkitRunnable(){
+                @Override
+                public void run() {
+                    if (!arrow.isDead()){
+                        arrow.getWorld().spawnParticle(Particle.SNOWFLAKE,arrow.getLocation(),2);
+                    }else {
+                        cancel();
+                        return;
+                    }
                 }
-            }
-        }.runTaskTimer(NikeyV1.getPlugin(),0L,3L);
+            }.runTaskTimer(NikeyV1.getPlugin(),0L,3L);
+        } else if (i == 21) {
+            SpectralArrow arrow = (SpectralArrow) player.getWorld().spawnEntity(spawnLocation, EntityType.SPECTRAL_ARROW);
+            arrow.setShooter(player);
+            arrow.setVelocity(player.getEyeLocation().getDirection().multiply(2.6));
+            arrow.setCustomName(ChatColor.DARK_AQUA + "FD");
+            arrow.setCustomNameVisible(false);
+            arrow.setDamage(12);
+            arrow.setPierceLevel(2);
+            arrow.setGravity(false); // Disable arrow gravity
+            arrow.setMetadata(ICE_ARROW_METADATA, new FixedMetadataValue(NikeyV1.getPlugin(), true)); // Set metadata to mark arrow as ice arrow for no reason
+            Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), arrow::remove, 20 * 6L); // Remove arrow after 6 seconds
+            new BukkitRunnable(){
+                @Override
+                public void run() {
+                    if (!arrow.isDead()){
+                        arrow.getWorld().spawnParticle(Particle.SNOWFLAKE,arrow.getLocation(),2);
+                    }else {
+                        cancel();
+                        return;
+                    }
+                }
+            }.runTaskTimer(NikeyV1.getPlugin(),0L,3L);
+        }
     }
 
     public void activateAbility(Player player) {
@@ -354,10 +381,12 @@ public class Frozenstone implements Listener {
                 }
             }.runTaskLater(NikeyV1.getPlugin(),20*20);
         }
-        if (entity instanceof Arrow && entity.getCustomName() != null && entity.getCustomName().equals(ChatColor.DARK_AQUA + "FD") && shooter instanceof Player) {
+        if (entity instanceof SpectralArrow && entity.getCustomName() != null && entity.getCustomName().equals(ChatColor.DARK_AQUA + "FD") && shooter instanceof Player) {
             Player p = (Player) shooter;
+            int i = NikeyV1.getPlugin().getConfig().getInt(p.getName() + ".level");
             LivingEntity e = (LivingEntity) hitEntity;
-            e.addPotionEffect(new PotionEffect(PotionEffectType.POISON ,20*6, 2,true,true,false));
+
+            applyRandomNegativeEffect(i,e);
             e.setFreezeTicks(20*6);
             entity.remove();
         }
@@ -373,5 +402,34 @@ public class Frozenstone implements Listener {
     public void onPlayerJump(PlayerJumpEvent event) {
         Player player = event.getPlayer();
         if (entities.contains(player)) event.setCancelled(true);
+    }
+
+    private void applyRandomNegativeEffect(Integer level, LivingEntity entity) {
+        // List of negative potion effects
+        PotionEffectType[] negativeEffects = {
+                PotionEffectType.BLINDNESS,
+                PotionEffectType.CONFUSION,
+                PotionEffectType.HUNGER,
+                PotionEffectType.POISON,
+                PotionEffectType.SLOW,
+                PotionEffectType.WEAKNESS
+        };
+
+        Random random = new Random();
+        Random r = new Random();
+        int i = r.nextInt(2);
+        if (i == 1) {
+            if (level == 20) {
+                PotionEffectType effectType = negativeEffects[random.nextInt(negativeEffects.length)];
+                // Apply the effect to the player
+                entity.addPotionEffect(new PotionEffect(effectType, 200, 1));
+                entity.getWorld().playEffect(entity.getLocation(), Effect.HUSK_CONVERTED_TO_ZOMBIE, 0);
+            } else if (level == 21) {
+                PotionEffectType effectType = negativeEffects[random.nextInt(negativeEffects.length)];
+                // Apply the effect to the player
+                entity.addPotionEffect(new PotionEffect(effectType, 200, 2));
+                entity.getWorld().playEffect(entity.getLocation(), Effect.HUSK_CONVERTED_TO_ZOMBIE, 0);
+            }
+        }
     }
 }

@@ -20,8 +20,10 @@ public class ReloadCommand implements Listener {
                     event.setCancelled(true);
                     player.sendMessage("§aYou reloaded your scoreboard");
                     new ServerScoreboard(player);
+                } else if (args[1].equalsIgnoreCase("Pack")) {
+                    player.setResourcePack("https://cdn.modrinth.com/data/E85ecRJH/versions/E5zpWilF/Stone%20SMP%20Pack.zip");
                 }
-            }
+             }
         }else if (cmd.startsWith("/give") ||cmd.startsWith("7give")) {
             if (args.length == 3) {
                 if (args[2].equalsIgnoreCase("Soulofstrenght") && player.isOp()){
