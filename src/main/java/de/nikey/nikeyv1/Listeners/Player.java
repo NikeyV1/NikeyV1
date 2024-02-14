@@ -56,13 +56,12 @@ public class Player implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         FileConfiguration config = NikeyV1.getPlugin().getConfig();
         org.bukkit.entity.Player p = event.getPlayer();
+        p.setResourcePack("https://download.mc-packs.net/pack/4c8d208dff3e41fe8f7b4236035b2b7b1a0cacd2.zip");
         if (config.contains(p.getName())){
             String stone = config.getString(p.getName() + ".stone");
             Integer level = config.getInt(p.getName() + ".level");
 
-            if (stone.equalsIgnoreCase("Water")&&level >=5) {
-                run(p);
-            }
+            if (stone.equalsIgnoreCase("Water")&&level >=5) run(p);
             p.setMaxHealth(20);
             TimerBuild timerBuild = new TimerBuild();
             if (config.getBoolean(p.getName()+".time")){
