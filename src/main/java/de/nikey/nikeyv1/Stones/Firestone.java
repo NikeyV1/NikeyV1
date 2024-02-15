@@ -235,20 +235,29 @@ public class Firestone implements Listener {
             LivingEntity damager = (LivingEntity) d;
             int i = NikeyV1.getPlugin().getConfig().getInt(p.getName() + ".level");
             if (ability.containsKey(p.getUniqueId())){
-                if (i == 15||i == 16||i == 17){
+                if (i == 15){
                     long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
                     int a = (int) (remain/1000);
                     if (a >160){
                         double damage = event.getDamage();
-                        event.setDamage(damage*0.3);
+                        event.setDamage(damage*0.80);
                         damager.damage(damage*0.2,entity);
+                    }
+
+                }else if (i ==16 || i == 17){
+                    long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remain/1000);
+                    if (a >160){
+                        double damage = event.getDamage();
+                        event.setDamage(damage*0.75);
+                        damager.damage(damage*0.3,entity);
                     }
                 }else if (i >= 18){
                     long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
                     int a = (int) (remain/1000);
                     if (a >160){
                         double damage = event.getDamage();
-                        event.setDamage(damage*0.75);
+                        event.setDamage(damage*0.70);
                         damager.damage(damage*0.4,entity);
                     }
                 }
@@ -263,7 +272,7 @@ public class Firestone implements Listener {
             Player p = (Player) entity;
             int i = NikeyV1.getPlugin().getConfig().getInt(p.getName() + ".level");
             if (ability.containsKey(p.getUniqueId())){
-                if (i == 15||i == 16||i == 17){
+                if (i == 15){
                     long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
                     int a = (int) (remain/1000);
                     if (a >160){
@@ -273,6 +282,18 @@ public class Firestone implements Listener {
                         }else {
                             double damage = event.getDamage();
                             event.setDamage(damage*0.70);
+                        }
+                    }
+                }else if (i == 16||i == 17){
+                    long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remain/1000);
+                    if (a >160){
+                        if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
+                            double damage = event.getDamage();
+                            event.setDamage(damage*0.675);
+                        }else {
+                            double damage = event.getDamage();
+                            event.setDamage(damage*0.6);
                         }
                     }
                 }else if (i >= 18){
@@ -481,7 +502,7 @@ public class Firestone implements Listener {
                         Fireball fireball = (Fireball) event.getEntity();
                         Block highestBlockAt = fireball.getWorld().getHighestBlockAt(fireball.getLocation());
                         Location exp = highestBlockAt.getLocation().add(0, 1, 0);
-                        fireball.getWorld().createExplosion(exp,2.7F,false,false);
+                        fireball.getWorld().createExplosion(exp,3F,false,false);
                         fireball.remove();
                     }
                 }.runTaskLater(NikeyV1.getPlugin(),4);
@@ -493,7 +514,8 @@ public class Firestone implements Listener {
                         Fireball fireball = (Fireball) event.getEntity();
                         Block highestBlockAt = fireball.getWorld().getHighestBlockAt(fireball.getLocation());
                         Location exp = highestBlockAt.getLocation().add(0, 1, 0);
-                        fireball.getWorld().createExplosion(exp,3.5F,false,false);
+                        fireball.getWorld().createExplosion(exp,3.8F,false,false);
+                        fireball.getWorld().createExplosion(exp,1F,false,true);
                         fireball.remove();
                     }
                 }.runTaskLater(NikeyV1.getPlugin(),4);

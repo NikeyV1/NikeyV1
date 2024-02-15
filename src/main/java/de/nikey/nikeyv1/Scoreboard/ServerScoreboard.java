@@ -63,7 +63,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
                 long remainingTime3 = 0;
-                if (stone.equalsIgnoreCase("Water") || stone.equalsIgnoreCase("Fire") || stone.equalsIgnoreCase("Electric") || stone.equalsIgnoreCase("Frozen") ) {
+                if (Arrays.asList("Electric", "Fire", "Water", "Frozen", "Undead", "Holy").contains(stone)) {
                     remainingTime3 = getMasterCooldown(player,stone);
                 }
                 int a = (int) ((remainingTime3 - System.currentTimeMillis()) / 1000);
@@ -77,7 +77,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
             @Override
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
-                if (stone.equalsIgnoreCase("Electric") || stone.equalsIgnoreCase("Fire") || stone.equalsIgnoreCase("Water") || stone.equalsIgnoreCase("Frozen") || stone.equalsIgnoreCase("Undead") || stone.equalsIgnoreCase("Holy")) {
+                if (Arrays.asList("Electric", "Fire", "Water", "Frozen", "Undead", "Holy").contains(stone)) {
                     long remainingTime2 = getAbilityCooldown(player, stone);
                     int a = (int) ((remainingTime2 - System.currentTimeMillis()) / 1000);
                     if (a <= 0) {
@@ -138,6 +138,10 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 return Electrostone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
             case "frozen":
                 return Frozenstone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
+            case "undead":
+                return Undeadstone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
+            case "holy":
+                return Undeadstone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
             default:
                 return 0L;
         }

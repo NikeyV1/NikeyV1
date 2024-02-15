@@ -74,11 +74,12 @@ public class Tornado {
             @SuppressWarnings("deprecation")
             public VortexBlock(Location l, Material m, byte d) {
 
-                if (l.getBlock().getType() != Material.AIR) {
+                if (l.getBlock().getType() != Material.AIR && l.getBlock().getType() != Material.BEDROCK && l.getBlock().getType() != Material.DRAGON_EGG) {
 
                     Block b = l.getBlock();
                     entity = l.getWorld().spawnFallingBlock(l, b.getType(), b.getData());
                     entity.getWorld().spawnParticle(Particle.DRIP_WATER,entity.getLocation(),10);
+
 
                     if (b.getType() != Material.WATER)
                         b.setType(Material.AIR);
@@ -124,7 +125,7 @@ public class Tornado {
 
                 // Pick up blocks
                 Block b = entity.getLocation().add(v.clone().normalize()).getBlock();
-                if(b.getType() != Material.AIR) {
+                if(b.getType() != Material.AIR ||b.getType() != Material.BEDROCK) {
                     new_blocks.add(new VortexBlock(b.getLocation(), b.getType(), b.getData()));
                 }
 
@@ -155,10 +156,10 @@ public class Tornado {
                         }.runTaskLater(NikeyV1.getPlugin(),20*10);
                     }
                     if (level == 20) {
-                        entity1.damage(2.5F);
+                        entity1.damage(2.75F);
                         entity1.getWorld().spawnParticle(Particle.DOLPHIN,entity1.getLocation(),10);
                     } else if (level == 21) {
-                        entity1.damage(5);
+                        entity1.damage(5.5F);
                         entity1.getWorld().spawnParticle(Particle.DOLPHIN,entity1.getLocation(),12);
                     }
                 }

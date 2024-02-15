@@ -172,7 +172,7 @@ public class Frozenstone implements Listener {
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,3,false));
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                     notp.add(entity);
-                                    entity.damage(16,p);
+                                    entity.damage(20,p);
                                     entity.setFreezeTicks(600);
                                     SmokeEffect effect = new SmokeEffect(NikeyV1.em);
                                     effect.setEntity(entity);
@@ -213,7 +213,7 @@ public class Frozenstone implements Listener {
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,3,false));
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,3,false));
                                     notp.add(entity);
-                                    entity.damage(18,p);
+                                    entity.damage(24,p);
                                     entity.setFreezeTicks(700);
                                     SmokeEffect effect = new SmokeEffect(NikeyV1.em);
                                     effect.setEntity(entity);
@@ -292,7 +292,7 @@ public class Frozenstone implements Listener {
             arrow.setVelocity(player.getEyeLocation().getDirection().multiply(2.4));
             arrow.setCustomName(ChatColor.DARK_AQUA + "FD");
             arrow.setCustomNameVisible(false);
-            arrow.setDamage(9);
+            arrow.setDamage(10);
             arrow.setGravity(false); // Disable arrow gravity
             arrow.setMetadata(ICE_ARROW_METADATA, new FixedMetadataValue(NikeyV1.getPlugin(), true)); // Set metadata to mark arrow as ice arrow for no reason
             Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), arrow::remove, 20 * 6L); // Remove arrow after 6 seconds
@@ -313,7 +313,7 @@ public class Frozenstone implements Listener {
             arrow.setVelocity(player.getEyeLocation().getDirection().multiply(2.6));
             arrow.setCustomName(ChatColor.DARK_AQUA + "FD");
             arrow.setCustomNameVisible(false);
-            arrow.setDamage(14);
+            arrow.setDamage(13);
             arrow.setPierceLevel(2);
             arrow.setGravity(false); // Disable arrow gravity
             arrow.setMetadata(ICE_ARROW_METADATA, new FixedMetadataValue(NikeyV1.getPlugin(), true)); // Set metadata to mark arrow as ice arrow for no reason
@@ -367,7 +367,7 @@ public class Frozenstone implements Listener {
             if (i >=12){
                 e.damage(18,p);
             }else {
-                e.damage(8,p);
+                e.damage(12,p);
             }
             e.setFreezeTicks(800);
             e.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*20,3,false));

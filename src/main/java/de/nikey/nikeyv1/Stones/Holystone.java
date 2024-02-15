@@ -28,9 +28,11 @@ public class Holystone implements Listener {
     public static ArrayList<Entity> stunned = new ArrayList<>();
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> ability = new HashMap<>();
+    public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
     private int timer;
     public static long remainingTime1;
     public static long remainingTime2;
+    public static long remainingTime3;
 
 
     @EventHandler
@@ -84,7 +86,7 @@ public class Holystone implements Listener {
                             if (players >18){
                                 players = 18;
                             }
-                            p.setMaxHealth(21+players);
+                            p.setMaxHealth(22+players);
                             p.setHealth(20);
                             Location location = p.getLocation().add(0,1,0);
                             p.spawnParticle(Particle.HEART,location,3);
@@ -105,7 +107,10 @@ public class Holystone implements Listener {
                             p.removePotionEffect(PotionEffectType.POISON);
                             p.removePotionEffect(PotionEffectType.DARKNESS);
                             p.removePotionEffect(PotionEffectType.LEVITATION);
-                            p.setMaxHealth(21+players);
+                            p.removePotionEffect(PotionEffectType.BLINDNESS);
+                            p.removePotionEffect(PotionEffectType.SLOW);
+                            p.removePotionEffect(PotionEffectType.CONFUSION);
+                            p.setMaxHealth(22+players);
                             p.setHealth(20);
                             Location location = p.getLocation().add(0,2,0);
                             CircleEffect effect = new CircleEffect(NikeyV1.em);
@@ -138,20 +143,20 @@ public class Holystone implements Listener {
                         }.runTaskLater(NikeyV1.getPlugin(),20*180);
                         //Cooldown-Ability
                         p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
-                       for (Entity e : p.getNearbyEntities(20,15,20)){
+                       for (Entity e : p.getNearbyEntities(20,20,20)){
                            if (e instanceof Player) {
                                Player player =(Player) e;
                                double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                               armor = armor*1.5;
-                               int players = p.getNearbyEntities(15, 15, 15).size();
-                               if (players == 1 || players == 2){
-                                   p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                               } else if (players  == 3||players == 4 || players == 5) {
+                               armor = armor*2;
+                               int players = p.getNearbyEntities(20, 20, 20).size();
+                               if (players <= 2){
                                    p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
-                               }else {
+                               } else if (players  == 3||players == 4 || players == 5) {
                                    p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                               }else {
+                                   p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,3));
                                }
-                               player.damage(armor+8,p);
+                               player.damage(armor+10,p);
                            }
                            if (e instanceof LivingEntity){
                                LivingEntity entity = (LivingEntity) e;
@@ -175,24 +180,25 @@ public class Holystone implements Listener {
                         }.runTaskLater(NikeyV1.getPlugin(),20*180);
                         //Cooldown-Ability
                         p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
-                        for (Entity e : p.getNearbyEntities(20,20,20)){
+                        for (Entity e : p.getNearbyEntities(25,25,25)){
                             if (e instanceof Player) {
                                 Player player =(Player) e;
                                 double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                armor = armor*1.65;
-                                int players = p.getNearbyEntities(20, 20, 20).size();
-                                if (players == 1 || players == 2){
-                                    p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                                } else if (players  == 3||players == 4 || players == 5) {
+                                armor = armor*2.6;
+                                p.sendMessage(String.valueOf(armor));
+                                int players = p.getNearbyEntities(25, 25, 25).size();
+                                if (players <= 2){
                                     p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
-                                }else {
+                                } else if (players  == 3||players == 4 || players == 5) {
                                     p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                }else {
+                                    p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,3));
                                 }
-                                player.damage(armor+15,p);
+                                player.damage(armor+18,p);
                             }
                             if (e instanceof LivingEntity){
                                 LivingEntity entity = (LivingEntity) e;
-                                entity.damage(12,p);
+                                entity.damage(15,p);
                             }
                         }
                     }

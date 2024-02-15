@@ -3,41 +3,43 @@ package de.nikey.nikeyv1.Stones;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.slikey.effectlib.effect.SmokeEffect;
+import io.papermc.paper.event.entity.EntityMoveEvent;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static org.bukkit.Bukkit.getLogger;
+import static org.bukkit.Bukkit.getServer;
 
 @SuppressWarnings("ALL")
 public class Undeadstone implements Listener {
     public ArrayList<LivingEntity> Soul = new ArrayList<>();
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> ability = new HashMap<>();
+    public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
     private int timer;
     public static long remainingTime1;
     public static long remainingTime2;
+    public static long remainingTime3;
     private Player player;
+    private static Boolean gia = false;
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -250,9 +252,120 @@ public class Undeadstone implements Listener {
             }
         }
     }
+
+    @EventHandler
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        Player p = event.getPlayer();
+        ItemStack item = event.getItemDrop().getItemStack();
+        if (item == null) return;
+        if (event.getItemDrop().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#100613")+"Undead Stone")&& event.getItemDrop().getItemStack().getType() == Material.FIREWORK_STAR){
+            String[] arr = item.getLore().get(1).split(":");
+            int i = Integer.parseInt(arr[1]);
+            FileConfiguration config = NikeyV1.getPlugin().getConfig();
+            config.set(p.getName()+".stone","Undead");
+            config.set(p.getName()+".level",i);
+            NikeyV1.getPlugin().saveConfig();
+            String stone = config.getString(p.getName() + ".stone");
+            if (i == 20){
+                if (p.isSneaking()) {
+                    if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
+                        p.updateInventory();
+                        remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
+                    }else {
+                        cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                cooldown2.remove(p.getUniqueId());
+                                cancel();
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
+                        //Cooldown-Ability
+                        spawnRidingHusk(p);
+                    }
+                }
+            }
+        }
+    }
+
+
+    private void spawnRidingHusk(Player player) {
+        World world = getServer().getWorld("world"); // world has to be names "world"
+        if (world != null) {
+            Location added = player.getLocation().getWorld().getHighestBlockAt(player.getLocation()).getLocation();
+            Giant giant = (Giant) world.spawnEntity(added, EntityType.GIANT);
+            giant.setMaxHealth(500);
+            giant.setHealth(500);
+            giant.setCustomName(player.getDisplayName()+"'s "+giant.getType().getName());
+            giant.setCustomNameVisible(true);
+            giant.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,PotionEffect.INFINITE_DURATION,1,false,false));
+            giant.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,PotionEffect.INFINITE_DURATION,4,false,false));
+            Husk husk = (Husk) world.spawnEntity(player.getLocation(), EntityType.HUSK);
+            husk.setInvisible(true);
+            husk.setInvulnerable(true);
+            giant.addPassenger(husk);
+
+        } else {
+            getLogger().warning("Die Welt wurde nicht gefunden.");
+        }
+    }
+
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        Entity entity = event.getEntity();
+        if (entity.getType() == EntityType.GIANT) {
+            Giant giant = (Giant) entity;
+            if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+                double health = giant.getHealth() - event.getFinalDamage();
+                if (!giant.getCustomName().contains("low") && health < 100) {
+                    giant.setVelocity(new org.bukkit.util.Vector(0,2,0)); // Den Giant hoch in die Luft werfen
+                    giant.setCustomName(giant.getCustomName() +" low");
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            giant.setVelocity(new Vector(0, -1, 0)); // Den Giant wieder nach unten fallen lassen
+                        }
+                    }.runTaskLater(NikeyV1.getPlugin(), 40L); // 40 Tick (2 Sekunden) später
+                }
+            } else if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                for (Entity nearbyEntity : giant.getNearbyEntities(30, 50, 30)) {
+                    if (nearbyEntity instanceof Player) {
+                        Player player = (Player) nearbyEntity;
+                        Vector dir = player.getLocation().toVector().subtract(giant.getLocation().toVector()).normalize();
+                        player.setVelocity(dir.multiply(2)); // Spieler weg von dem Giant schleudern
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onEntityMove(EntityMoveEvent event) {
+        Entity entity = event.getEntity();
+        if (entity.getType() == EntityType.GIANT) {
+            Entity passenger = entity.getPassenger();
+            if (passenger instanceof Husk) {
+                Husk husk = (Husk) passenger;
+                for (Entity nearbyEntity : entity.getNearbyEntities(4, 12, 4)) {
+                    if (nearbyEntity instanceof Player) {
+                        Player player = (Player) nearbyEntity;
+                        double distance = husk.getLocation().distance(player.getLocation());
+                        if (distance <= 12 && player.getLocation().add(0,-1,0).getBlock().getType() != Material.AIR) {
+                            player.damage(6);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
         LivingEntity entity = event.getEntity();
+        if (event.getEntityType() == EntityType.GIANT) {
+            entity.getPassenger().remove();
+        }
         if (entity.getKiller() instanceof Player && !(entity instanceof Player)){
             Player p = (Player) entity.getKiller();
             if (p.getInventory().getItemInMainHand().getItemMeta() == null)return;
@@ -291,6 +404,32 @@ public class Undeadstone implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (event.getEntity().getType() == EntityType.GIANT) {
+            Giant giant = (Giant) event.getEntity();
+            double health = giant.getHealth() - event.getFinalDamage();
+            if (health < 100) {
+                if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                    for (Entity nearbyEntity : giant.getNearbyEntities(30, 50, 30)) {
+                        if (nearbyEntity instanceof Player) {
+                            Player player = (Player) nearbyEntity;
+                            Vector dir = player.getLocation().toVector().subtract(giant.getLocation().toVector()).normalize();
+                            player.setVelocity(dir.multiply(2)); // Spieler weg von dem Giant schleudern
+                        }
+                    }
+                }else {
+                    if (!giant.getCustomName().contains("low")) {
+                        giant.setVelocity(new org.bukkit.util.Vector(0,2,0)); // Den Giant hoch in die Luft werfen
+                        giant.setCustomName(giant.getCustomName() +" low");
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                giant.setVelocity(new Vector(0, -1, 0)); // Den Giant wieder nach unten fallen lassen
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(), 40L); // 40 Tick (2 Sekunden) später
+                    }
+                }
+            }
+        }
         if (event.getEntity() instanceof Player) {
             Player p = (Player) event.getEntity();
             FileConfiguration config = NikeyV1.getPlugin().getConfig();
@@ -338,7 +477,7 @@ public class Undeadstone implements Listener {
     @EventHandler
     public void onEntityTarget(EntityTargetEvent event){
         if (event.getTarget() instanceof Player){
-            if (event.getEntity() instanceof Monster || event.getEntity() instanceof IronGolem || event.getEntity() instanceof Warden){
+            if (event.getEntity() instanceof Monster || event.getEntity() instanceof IronGolem || event.getEntity() instanceof Warden || event.getEntity() instanceof Giant){
                 if (event.getEntity().getCustomName() != null) {
                     if (event.getEntity().getCustomName().equalsIgnoreCase(((Player) event.getTarget()).getDisplayName()+"'s "+event.getEntityType().getName())){
                         event.setCancelled(true);
