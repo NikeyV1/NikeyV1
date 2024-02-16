@@ -317,7 +317,7 @@ public class Undeadstone implements Listener {
         if (entity.getType() == EntityType.GIANT) {
             Giant giant = (Giant) entity;
             if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-                double health = giant.getHealth() - event.getFinalDamage();
+                double health = giant.getHealth();
                 if (!giant.getCustomName().contains("low") && health < 100) {
                     Vector upVector = new Vector(0, 2, 0); // Hier kannst du den Vektor anpassen (x, y, z)
                     giant.setVelocity(upVector); // Den Giant hoch in die Luft werfen
