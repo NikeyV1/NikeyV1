@@ -324,7 +324,8 @@ public class Undeadstone implements Listener {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            giant.setVelocity(new Vector(0, -1, 0)); // Den Giant wieder nach unten fallen lassen
+                            Vector upVector = new Vector(0, 1, 0); // Hier kannst du den Vektor anpassen (x, y, z)
+                            entity.setVelocity(upVector); // Den Giant wieder nach unten fallen lassen
                         }
                     }.runTaskLater(NikeyV1.getPlugin(), 40L); // 40 Tick (2 Sekunden) später
                 }
