@@ -319,13 +319,14 @@ public class Undeadstone implements Listener {
             if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
                 double health = giant.getHealth() - event.getFinalDamage();
                 if (!giant.getCustomName().contains("low") && health < 100) {
-                    giant.setVelocity(new org.bukkit.util.Vector(0,2,0)); // Den Giant hoch in die Luft werfen
+                    Vector upVector = new Vector(0, 2, 0); // Hier kannst du den Vektor anpassen (x, y, z)
+                    giant.setVelocity(upVector); // Den Giant hoch in die Luft werfen
                     giant.setCustomName(giant.getCustomName() +" low");
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            Vector upVector = new Vector(0, 1, 0); // Hier kannst du den Vektor anpassen (x, y, z)
-                            entity.setVelocity(upVector); // Den Giant wieder nach unten fallen lassen
+                            Vector upVector = new Vector(0, -1, 0); // Hier kannst du den Vektor anpassen (x, y, z)
+                            giant.setVelocity(upVector); // Den Giant wieder nach unten fallen lassen
                         }
                     }.runTaskLater(NikeyV1.getPlugin(), 40L); // 40 Tick (2 Sekunden) später
                 }
