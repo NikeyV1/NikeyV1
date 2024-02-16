@@ -408,7 +408,7 @@ public class Undeadstone implements Listener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getEntity().getType() == EntityType.GIANT) {
             Giant giant = (Giant) event.getEntity();
-            double health = giant.getHealth() - event.getFinalDamage();
+            double health = giant.getHealth();
             if (health < 100) {
                 if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
                     for (Entity nearbyEntity : giant.getNearbyEntities(30, 50, 30)) {
