@@ -62,9 +62,9 @@ public class Tornado {
 
         class VortexBlock {
 
-            private org.bukkit.entity.Entity entity;
+            private final org.bukkit.entity.Entity entity;
 
-            public boolean removable = true;
+            public final boolean removable;
 
             private float ticker_vertical = 0.0f;
             private float ticker_horisontal = (float) (Math.random() * 2 * Math.PI);
@@ -188,7 +188,7 @@ public class Tornado {
 
         final int id = new BukkitRunnable() {
 
-            private ArrayDeque<VortexBlock> blocks = new ArrayDeque<VortexBlock>();
+            private final ArrayDeque<VortexBlock> blocks = new ArrayDeque<VortexBlock>();
 
             public void run() {
 

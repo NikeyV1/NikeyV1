@@ -120,7 +120,6 @@ public class EffectCMD implements CommandExecutor {
                         TornadoEffect effect = new TornadoEffect(NikeyV1.em);
                         effect.setLocation(p.getLocation());
                         effect.maxTornadoRadius = 3F;
-                        effect.tornadoParticle = Particle.ELECTRIC_SPARK;
                         effect.start();
                         p.sendMessage("Started");
                     }else if (args[0].equalsIgnoreCase("Test")){

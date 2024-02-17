@@ -8,18 +8,26 @@ import de.nikey.nikeyv1.Util.Items;
 import de.slikey.effectlib.EffectLib;
 import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
+
 @SuppressWarnings("ALL")
-public final class NikeyV1 extends JavaPlugin {
+public final class NikeyV1 extends JavaPlugin{
     public static EffectManager em;
     private static NikeyV1 plugin;
     @Override
     public void onEnable() {
         plugin = this;
-        //Effect manager
         em = new EffectManager(EffectLib.instance());
+        //Effect manager
 
         PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents(new Player(),this);
@@ -34,19 +42,32 @@ public final class NikeyV1 extends JavaPlugin {
         manager.registerEvents(new JoinListener(),this);
         manager.registerEvents(new InventoryListener(),this);
         //Command
-
         getCommand("stone").setExecutor(new stone());
         getCommand("effect").setExecutor(new EffectCMD());
         //resipes
         Items.EnchantedAnvil();
         Items.Soulrecepie();
         saveDefaultConfig();
+
+        //Code
+
     }
 
     @Override
     public void onDisable() {
+        removeGiants();
     }
 
+    private void removeGiants() {
+        for (World world : Bukkit.getWorlds()) {
+            for (Entity entity : world.getEntities()) {
+                if (entity.getType() == EntityType.GIANT) {
+                    entity.getPassenger().remove();
+                    entity.remove();
+                }
+            }
+        }
+    }
 
     public static NikeyV1 getPlugin() {
         return plugin;
