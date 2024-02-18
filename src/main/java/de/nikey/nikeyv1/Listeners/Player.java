@@ -6,23 +6,23 @@ import de.nikey.nikeyv1.Stones.Electrostone;
 import de.nikey.nikeyv1.Timer.TimerBuild;
 import de.nikey.nikeyv1.Util.Items;
 import io.papermc.paper.event.entity.EntityMoveEvent;
-import net.md_5.bungee.api.ChatColor;
+import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -31,6 +31,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+
+import static org.bukkit.Statistic.Type.ITEM;
 
 
 @SuppressWarnings("ALL")
@@ -68,10 +70,12 @@ public class Player implements Listener {
             if (stone.equalsIgnoreCase("Water")&&level >=5) run(p);
             if (stone.equalsIgnoreCase("Electric")) {
                 if (level == 3 || level==4){
-                    p.setWalkSpeed(0.225F);
+                    p.setWalkSpeed(0.22F);
                 } else if (level >= 5) {
-                    p.setWalkSpeed(0.25F);
+                    p.setWalkSpeed(0.23F);
                 }
+            }else {
+                p.setWalkSpeed(0.2F);
             }
             p.setMaxHealth(20);
             TimerBuild timerBuild = new TimerBuild();
@@ -275,6 +279,8 @@ public class Player implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
+        ItemStack clickedItem = event.getCurrentItem();
+        int hotbarButton = event.getHotbarButton();
         if (event.getInventory() == inv) {
             if (event.getWhoClicked() instanceof org.bukkit.entity.Player ) {
                 org.bukkit.entity.Player p = (org.bukkit.entity.Player) event.getWhoClicked();
@@ -351,7 +357,6 @@ public class Player implements Listener {
                                                     if (p.getGameMode() != GameMode.CREATIVE)
                                                         p.setLevel(p.getLevel() - 30);
                                                     p.sendMessage("§aUpgrading!");
-                                                    event.setCancelled(true);
                                                 }
                                             }
                                         } else {
@@ -480,6 +485,8 @@ public class Player implements Listener {
         if (item != null&& item.getType() == Material.FIREWORK_STAR ){
             if (clickedBlock.getType() == Material.DECORATED_POT && item.getItemMeta().hasLore()) {
                 event.setCancelled(true);
+                event.getPlayer().damage(4);
+                event.getPlayer().sendMessage("§cYou are not allowed to do that!");
             }
         }
     }
@@ -488,9 +495,13 @@ public class Player implements Listener {
     public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
         if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() == Material.FIREWORK_STAR && event.getPlayer().getItemInHand().getItemMeta().hasLore()) {
             if (event.getRightClicked() != null && event.getRightClicked().getType() == EntityType.ITEM_FRAME) {
+                event.getPlayer().damage(4);
+                event.getPlayer().sendMessage("§cYou are not allowed to do that!");
                 event.setCancelled(true);
                 event.getRightClicked().remove();
             } else if (event.getRightClicked().getType() == EntityType.ALLAY ) {
+                event.getPlayer().damage(4);
+                event.getPlayer().sendMessage("§cYou are not allowed to do that!");
                 event.setCancelled(true);
                 event.getPlayer().damage(4);
                 event.getRightClicked().remove();
@@ -504,6 +515,9 @@ public class Player implements Listener {
             org.bukkit.entity.Player p = (org.bukkit.entity.Player) event.getEntity();
             Item item = event.getItem();
             if (item.getItemStack().getType() == Material.FIREWORK_STAR && item.getItemStack().getItemMeta().hasLore()) {
+                event.getEntity().damage(4);
+                event.getEntity().sendMessage("§cYou are not allowed to do that!");
+                Bukkit.broadcastMessage(ChatColor.RED+ event.getEntity().getName() +" triggered Stone-SMP anti Exploit!");
                 event.setCancelled(true);
                 item.remove();
             }

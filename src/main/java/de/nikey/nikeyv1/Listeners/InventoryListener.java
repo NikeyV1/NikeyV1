@@ -16,9 +16,6 @@ public class InventoryListener implements Listener {
         Inventory top = event.getView().getTopInventory();
         Inventory bottom = event.getView().getBottomInventory();
         InventoryAction action = event.getAction();
-        if (action ==InventoryAction.HOTBAR_SWAP||action == InventoryAction.HOTBAR_MOVE_AND_READD ) {
-            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR)event.setCancelled(true);
-        }
         if (event.getCurrentItem().getType() == Material.FIREWORK_STAR && event.getCurrentItem().getItemMeta().hasLore()) {
             String[] arr = event.getCurrentItem().getLore().get(1).split(":");
             String a = arr[0];
@@ -27,7 +24,7 @@ public class InventoryListener implements Listener {
                     event.setCancelled(true);
                 }
                 if (event.getInventory().getType() == InventoryType.ENDER_CHEST) {
-                    event.getCurrentItem().setAmount(0);
+                    event.setCancelled(true);
                 }
             }
         }

@@ -1,5 +1,6 @@
 package de.nikey.nikeyv1;
 
+import de.nikey.nikeyv1.Anti_Exploits.Stone_Swapping;
 import de.nikey.nikeyv1.Commands.EffectCMD;
 import de.nikey.nikeyv1.Commands.stone;
 import de.nikey.nikeyv1.Listeners.*;
@@ -41,6 +42,7 @@ public final class NikeyV1 extends JavaPlugin{
         manager.registerEvents(new ReloadModifyer(),this);
         manager.registerEvents(new JoinListener(),this);
         manager.registerEvents(new InventoryListener(),this);
+        manager.registerEvents(new Stone_Swapping(),this);
         //Command
         getCommand("stone").setExecutor(new stone());
         getCommand("effect").setExecutor(new EffectCMD());

@@ -267,7 +267,7 @@ public class Undeadstone implements Listener {
             config.set(p.getName()+".level",i);
             NikeyV1.getPlugin().saveConfig();
             String stone = config.getString(p.getName() + ".stone");
-            if (i == 20){
+            if (i == 20 || i == 21){
                 if (p.isSneaking()) {
                     if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
                         p.updateInventory();
@@ -302,11 +302,16 @@ public class Undeadstone implements Listener {
             giant.setCustomNameVisible(true);
             giant.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,PotionEffect.INFINITE_DURATION,1,false,false));
             giant.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,PotionEffect.INFINITE_DURATION,4,false,false));
+            int i = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
+            if (i == 21) {
+                giant.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,PotionEffect.INFINITE_DURATION,0));
+            }
             Husk husk = (Husk) world.spawnEntity(player.getLocation(), EntityType.HUSK);
             husk.setInvisible(true);
             husk.setMaxHealth(500);
             husk.setHealth(500);
             husk.setInvulnerable(true);
+            husk.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(100);
             giant.addPassenger(husk);
             new BukkitRunnable() {
                 @Override
@@ -337,7 +342,8 @@ public class Undeadstone implements Listener {
                         LivingEntity player = (LivingEntity) nearbyEntity;
                         Vector dir = player.getLocation().toVector().subtract(giant.getLocation().toVector()).normalize();
                         player.setVelocity(dir.multiply(-2.5F).add(new Vector(0,1.5F,0))); // Spieler weg von dem Giant schleudern
-                        player.damage(20);
+                        double health = player.getHealth();
+                        player.damage(20+health);
                         event.setDamage(0);
                         giant.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,PotionEffect.INFINITE_DURATION,0));
                         giant.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,PotionEffect.INFINITE_DURATION,0));
@@ -359,21 +365,43 @@ public class Undeadstone implements Listener {
                         LivingEntity player = (LivingEntity) nearbyEntity;
                         double distance = husk.getLocation().distance(player.getLocation());
                         if (distance <= 12 && player.getLocation().add(0,-1,0).getBlock().getType() != Material.AIR) {
+                            String[] arr = entity.getCustomName().split("'");
+                            int level = NikeyV1.getPlugin().getConfig().getInt(arr[0] + ".level");
                             if (!entity.getCustomName().contains("low")) {
-                                if (player instanceof Player) {
-                                    double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                    armor = armor*0.2;
-                                    player.damage(armor+3);
-                                }else {
-                                    player.damage(4);
+                                if (level == 20) {
+                                    if (player instanceof Player) {
+                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                        armor = armor*0.15;
+                                        player.damage(armor+1);
+                                    }else {
+                                        player.damage(2);
+                                    }
+                                }else if (level == 21) {
+                                    if (player instanceof Player) {
+                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                        armor = armor*0.15;
+                                        player.damage(armor+3);
+                                    }else {
+                                        player.damage(4);
+                                    }
                                 }
                             }else {
-                                if (player instanceof Player) {
-                                    double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                    armor = armor*0.2;
-                                    player.damage(armor+5);
-                                }else {
-                                    player.damage(6);
+                                if (level == 20) {
+                                    if (player instanceof Player) {
+                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                        armor = armor*0.15;
+                                        player.damage(armor+2);
+                                    }else {
+                                        player.damage(3);
+                                    }
+                                }else if (level == 21) {
+                                    if (player instanceof Player) {
+                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                        armor = armor*0.15;
+                                        player.damage(armor+4);
+                                    }else {
+                                        player.damage(5);
+                                    }
                                 }
                             }
                         }
@@ -388,6 +416,9 @@ public class Undeadstone implements Listener {
         LivingEntity entity = event.getEntity();
         if (event.getEntityType() == EntityType.GIANT) {
             entity.getPassenger().remove();
+        }
+        if (entity.getCustomName().contains("'s")) {
+            event.getDrops().clear();
         }
         if (entity.getKiller() instanceof Player && !(entity instanceof Player) && !(entity instanceof Giant)){
             Player p = (Player) entity.getKiller();
@@ -426,16 +457,20 @@ public class Undeadstone implements Listener {
     }
 
     @EventHandler
+    public void onProjectileHit(ProjectileHitEvent event) {
+        if (event.getHitEntity() != null) {
+            Entity hitEntity = event.getHitEntity();
+            if (hitEntity.getType() == EntityType.GIANT && hitEntity.getCustomName().contains("low") && event.getEntity().getCustomName() == null) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getEntity().getType() == EntityType.GIANT) {
             Giant giant = (Giant) event.getEntity();
             double health = giant.getHealth();
-            if (giant.getCustomName().contains("low")) {
-                if (event.getEntity() instanceof Projectile  && event.getEntity().getCustomName() == null) {
-                    event.setDamage(1);
-                    event.setCancelled(true);
-                }
-            }
             if (event.getFinalDamage() >12) {
                 event.setDamage(12);
             }
