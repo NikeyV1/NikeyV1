@@ -248,7 +248,7 @@ public class Waterstone implements Listener {
                         //Cooldown-Ability
                         p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH, 1.0f, 1.0f);
                         Location BlocksAway = p.getLocation().add(p.getLocation().getDirection().multiply(4));
-                        Tornado.spawnTornado(NikeyV1.getPlugin(),BlocksAway,p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getType(),p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getData(),p.getLocation().getDirection().multiply(4),0.4,275,20*20,false,p,false);
+                        Tornado.spawnTornado(NikeyV1.getPlugin(),BlocksAway,Material.STONE,p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getData(),p.getLocation().getDirection().multiply(4),0.4,275,20*20,false,p,false);
                     }
                 } else if (i == 21) {
                     if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
@@ -266,7 +266,7 @@ public class Waterstone implements Listener {
                         //Cooldown-Ability
                         p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH, 1.0f, 1.0f);
                         Location BlocksAway = p.getLocation().add(p.getLocation().getDirection().multiply(4));
-                        Tornado.spawnTornado(NikeyV1.getPlugin(),BlocksAway,p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getType(),p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getData(),p.getLocation().getDirection().multiply(4.5),0.4,300,20*30,false,p,false);
+                        Tornado.spawnTornado(NikeyV1.getPlugin(),BlocksAway,Material.STONE,p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getData(),p.getLocation().getDirection().multiply(4.5),0.4,300,20*30,false,p,false);
                     }
                 }
             }

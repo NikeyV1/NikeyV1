@@ -7,6 +7,7 @@ import io.papermc.paper.event.entity.EntityMoveEvent;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
@@ -303,8 +304,12 @@ public class Undeadstone implements Listener {
             giant.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,PotionEffect.INFINITE_DURATION,1,false,false));
             giant.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,PotionEffect.INFINITE_DURATION,4,false,false));
             int i = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
+            AttributeInstance attribute = giant.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
+            if (attribute != null) {
+                attribute.setBaseValue(1);
+            }
             if (i == 21) {
-                giant.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,PotionEffect.INFINITE_DURATION,0));
+                giant.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,PotionEffect.INFINITE_DURATION,1));
             }
             Husk husk = (Husk) world.spawnEntity(player.getLocation(), EntityType.HUSK);
             husk.setInvisible(true);
@@ -313,6 +318,13 @@ public class Undeadstone implements Listener {
             husk.setInvulnerable(true);
             husk.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(100);
             giant.addPassenger(husk);
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    giant.setJumping(true);
+                }
+            }.runTaskTimer(NikeyV1.getPlugin(),0,100);
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -321,7 +333,7 @@ public class Undeadstone implements Listener {
                 }
             }.runTaskLater(NikeyV1.getPlugin(),20*60*10);
         } else {
-            getLogger().warning("Die Welt wurde nicht gefunden.");
+            getLogger().warning("The world called world was not found.");
         }
     }
 
@@ -341,9 +353,9 @@ public class Undeadstone implements Listener {
                         giant.getWorld().playSound(giant,Sound.ENTITY_WITHER_BREAK_BLOCK,1,1);
                         LivingEntity player = (LivingEntity) nearbyEntity;
                         Vector dir = player.getLocation().toVector().subtract(giant.getLocation().toVector()).normalize();
-                        player.setVelocity(dir.multiply(-2.5F).add(new Vector(0,1.5F,0))); // Spieler weg von dem Giant schleudern
+                        player.setVelocity(dir.multiply(2.5F).add(new Vector(0,1.5F,0))); // Spieler weg von dem Giant schleudern
                         double health = player.getHealth();
-                        player.damage(20+health);
+                        player.damage(20+health,giant);
                         event.setDamage(0);
                         giant.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,PotionEffect.INFINITE_DURATION,0));
                         giant.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,PotionEffect.INFINITE_DURATION,0));
@@ -360,11 +372,11 @@ public class Undeadstone implements Listener {
             Entity passenger = entity.getPassenger();
             if (passenger instanceof Husk) {
                 Husk husk = (Husk) passenger;
-                for (Entity nearbyEntity : entity.getNearbyEntities(4, 12, 4)) {
+                for (Entity nearbyEntity : entity.getNearbyEntities(4, 13, 4)) {
                     if (nearbyEntity instanceof LivingEntity) {
                         LivingEntity player = (LivingEntity) nearbyEntity;
                         double distance = husk.getLocation().distance(player.getLocation());
-                        if (distance <= 12 && player.getLocation().add(0,-1,0).getBlock().getType() != Material.AIR) {
+                        if (distance <= 13 && player.getLocation().add(0,-1,0).getBlock().getType() != Material.AIR) {
                             String[] arr = entity.getCustomName().split("'");
                             int level = NikeyV1.getPlugin().getConfig().getInt(arr[0] + ".level");
                             if (!entity.getCustomName().contains("low")) {
@@ -417,7 +429,7 @@ public class Undeadstone implements Listener {
         if (event.getEntityType() == EntityType.GIANT) {
             entity.getPassenger().remove();
         }
-        if (entity.getCustomName().contains("'s")) {
+        if (entity.getCustomName() != null && entity.getCustomName().contains("'s")) {
             event.getDrops().clear();
         }
         if (entity.getKiller() instanceof Player && !(entity instanceof Player) && !(entity instanceof Giant)){

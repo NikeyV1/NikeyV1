@@ -77,7 +77,7 @@ public class Tornado {
                 if (l.getBlock().getType() != Material.AIR && l.getBlock().getType() != Material.BEDROCK && l.getBlock().getType() != Material.DRAGON_EGG) {
 
                     Block b = l.getBlock();
-                    entity = l.getWorld().spawnFallingBlock(l, b.getType(), b.getData());
+                    entity = l.getWorld().spawnFallingBlock(l, Material.STONE, b.getData());
                     entity.getWorld().spawnParticle(Particle.DRIP_WATER,entity.getLocation(),10);
 
 
@@ -87,6 +87,7 @@ public class Tornado {
                     removable = !spew;
                 }
                 else {
+
                     entity = l.getWorld().spawnFallingBlock(l, m, d);
                     entity.getWorld().spawnParticle(Particle.DRIP_WATER,entity.getLocation(),10);
                     removable = !explode;
@@ -125,8 +126,8 @@ public class Tornado {
 
                 // Pick up blocks
                 Block b = entity.getLocation().add(v.clone().normalize()).getBlock();
-                if(b.getType() != Material.AIR ||b.getType() != Material.BEDROCK) {
-                    new_blocks.add(new VortexBlock(b.getLocation(), b.getType(), b.getData()));
+                if(b.getType() != Material.AIR && b.getType() != Material.BEDROCK && b.getType() != Material.DRAGON_EGG) {
+                    new_blocks.add(new VortexBlock(b.getLocation(), Material.STONE , b.getData()));
                 }
 
                 // Pick up other entities
