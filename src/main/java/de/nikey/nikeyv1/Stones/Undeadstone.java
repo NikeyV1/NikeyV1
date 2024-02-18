@@ -353,7 +353,7 @@ public class Undeadstone implements Listener {
                         giant.getWorld().playSound(giant,Sound.ENTITY_WITHER_BREAK_BLOCK,1,1);
                         LivingEntity player = (LivingEntity) nearbyEntity;
                         Vector dir = player.getLocation().toVector().subtract(giant.getLocation().toVector()).normalize();
-                        player.setVelocity(dir.multiply(2.5F).add(new Vector(0,1.5F,0))); // Spieler weg von dem Giant schleudern
+                        player.setVelocity(dir.multiply(-2.5F).add(new Vector(0,1.5F,0))); // Spieler zum von dem Giant schleudern
                         double health = player.getHealth();
                         player.damage(20+health,giant);
                         event.setDamage(0);
@@ -555,9 +555,32 @@ public class Undeadstone implements Listener {
                 }
             }
         }
+
+
+    @EventHandler
+    public void onHuskTargetPlayer(EntityTargetLivingEntityEvent event) {
+        if (event.getTarget() instanceof Player && event.getEntity() instanceof Husk) {
+            Husk husk = (Husk) event.getEntity();
+            Player player = (Player) event.getTarget();
+
+            // Überprüfen, ob der Spieler einen Giant reitet
+            if (husk.getVehicle() != null && husk.getVehicle().getType() == EntityType.GIANT) {
+                Entity vehicle = husk.getVehicle();
+                String[] arr = vehicle.getCustomName().split("'");
+                if (player.getCustomName().equalsIgnoreCase(arr[0])) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
+
     @EventHandler
     public void onEntityTarget(EntityTargetEvent event){
         if (event.getTarget() instanceof Player){
+            Entity entity = event.getEntity();
+            if (event.getEntity() instanceof Husk && event.getEntity().isInvulnerable()) {
+                event.setCancelled(true);
+            }
             if (event.getEntity() instanceof Monster || event.getEntity() instanceof IronGolem || event.getEntity() instanceof Warden || event.getEntity() instanceof Giant){
                 if (event.getEntity().getCustomName() != null) {
                     if (event.getEntity().getCustomName().equalsIgnoreCase(((Player) event.getTarget()).getDisplayName()+"'s "+event.getEntityType().getName())){

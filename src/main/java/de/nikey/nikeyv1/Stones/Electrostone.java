@@ -300,7 +300,7 @@ public class Electrostone implements Listener {
                                     LivingEntity target = (LivingEntity) entity;
                                     if (target != p) {
 
-                                        target.damage(2);
+                                        target.damage(3);
                                         target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
                                     }
                                 }
@@ -345,7 +345,7 @@ public class Electrostone implements Listener {
                                 if (entity instanceof LivingEntity) {
                                     LivingEntity target = (LivingEntity) entity;
                                     if (target != p) {
-                                        target.damage(5);
+                                        target.damage(6);
                                         target.setVelocity(target.getLocation().getDirection().multiply(-2));
                                     }
                                 }

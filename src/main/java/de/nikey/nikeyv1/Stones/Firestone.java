@@ -502,7 +502,7 @@ public class Firestone implements Listener {
                         Fireball fireball = (Fireball) event.getEntity();
                         Block highestBlockAt = fireball.getWorld().getHighestBlockAt(fireball.getLocation());
                         Location exp = highestBlockAt.getLocation().add(0, 1, 0);
-                        fireball.getWorld().createExplosion(exp,3F,false,false);
+                        fireball.getWorld().createExplosion(exp,3.4F,false,false);
                         fireball.remove();
                     }
                 }.runTaskLater(NikeyV1.getPlugin(),4);
@@ -514,7 +514,7 @@ public class Firestone implements Listener {
                         Fireball fireball = (Fireball) event.getEntity();
                         Block highestBlockAt = fireball.getWorld().getHighestBlockAt(fireball.getLocation());
                         Location exp = highestBlockAt.getLocation().add(0, 1, 0);
-                        fireball.getWorld().createExplosion(exp,3.8F,false,false);
+                        fireball.getWorld().createExplosion(exp,4.2F,false,false);
                         fireball.getWorld().createExplosion(exp,1F,false,true);
                         fireball.remove();
                     }
