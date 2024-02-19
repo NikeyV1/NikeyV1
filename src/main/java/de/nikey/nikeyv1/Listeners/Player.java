@@ -118,7 +118,6 @@ public class Player implements Listener {
                 float damg = (float) ((float) event.getDamage()*1.6);
                 event.setDamage(damg);
             }
-
         }
     }
 

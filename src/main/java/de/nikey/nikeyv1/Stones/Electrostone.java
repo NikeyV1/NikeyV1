@@ -328,7 +328,6 @@ public class Electrostone implements Listener {
                         }
                     }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
                     //Cooldown-Ability
-
                     ShieldEffect effect = new ShieldEffect(NikeyV1.em);
                     effect.radius = 10;
                     effect.sphere = true;

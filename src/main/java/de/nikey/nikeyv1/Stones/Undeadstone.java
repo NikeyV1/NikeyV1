@@ -491,7 +491,6 @@ public class Undeadstone implements Listener {
             int level = NikeyV1.getPlugin().getConfig().getInt(event.getDamager().getName() + ".level");
             if (stone.equalsIgnoreCase("undead") && level >= 19) {
                 HelpUtil.triggerEntityAggro((LivingEntity) event.getEntity(), (Player) event.getDamager());
-                event.getDamager().sendMessage("Pd");
             }
         }
         if (event.getEntity().getType() == EntityType.GIANT) {

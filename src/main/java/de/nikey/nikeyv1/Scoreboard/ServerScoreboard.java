@@ -141,7 +141,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
             case "undead":
                 return Undeadstone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
             case "holy":
-                return Undeadstone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
+                return Holystone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
             default:
                 return 0L;
         }
