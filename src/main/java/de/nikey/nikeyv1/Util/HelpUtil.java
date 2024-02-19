@@ -53,10 +53,10 @@ public class HelpUtil {
         return blocks;
     }
 
-    public static void triggerEntityAggro(Monster damagedEntity, Player p) {
+    public static void triggerEntityAggro(LivingEntity damagedEntity, Player p) {
         // Iteriere durch alle nahegelegenen Entitäten
         for (Entity nearbySummoned : damagedEntity.getWorld().getNearbyEntities(damagedEntity.getLocation(),200,200,200)) {
-            if (nearbySummoned instanceof Monster) {
+            if (nearbySummoned instanceof Monster || nearbySummoned instanceof Giant || nearbySummoned instanceof Husk) {
                 Monster monster = (Monster) nearbySummoned;
                 // Überprüfen, ob die Entität ein gespawntes Entity ist
                 if (monster.getName().contains(p.getName()+"'s")) {

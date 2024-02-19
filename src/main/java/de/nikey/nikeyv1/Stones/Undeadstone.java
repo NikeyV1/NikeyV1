@@ -299,11 +299,15 @@ public class Undeadstone implements Listener {
             Giant giant = (Giant) world.spawnEntity(l, EntityType.GIANT);
             giant.setMaxHealth(500);
             giant.setHealth(500);
-            giant.setCustomName(player.getDisplayName()+"'s "+giant.getType().getName());
+            int i = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
+            if (i == 20) {
+                giant.setCustomName(player.getName()+"'s "+giant.getType().getName());
+            } else if (i == 21) {
+                giant.setCustomName(player.getName()+"'s "+giant.getType().getName()+" strong");
+            }
             giant.setCustomNameVisible(true);
             giant.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,PotionEffect.INFINITE_DURATION,1,false,false));
             giant.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,PotionEffect.INFINITE_DURATION,4,false,false));
-            int i = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
             AttributeInstance attribute = giant.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
             if (attribute != null) {
                 attribute.setBaseValue(1);
@@ -317,6 +321,8 @@ public class Undeadstone implements Listener {
             husk.setHealth(500);
             husk.setInvulnerable(true);
             husk.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(100);
+            husk.setCustomName(player.getName()+"'s");
+            husk.setCustomNameVisible(false);
             giant.addPassenger(husk);
 
             new BukkitRunnable() {
@@ -333,7 +339,7 @@ public class Undeadstone implements Listener {
                 }
             }.runTaskLater(NikeyV1.getPlugin(),20*60*10);
         } else {
-            getLogger().warning("The world called world was not found.");
+            getLogger().warning("A world called world was not found.");
         }
     }
 
@@ -380,39 +386,39 @@ public class Undeadstone implements Listener {
                             String[] arr = entity.getCustomName().split("'");
                             int level = NikeyV1.getPlugin().getConfig().getInt(arr[0] + ".level");
                             if (!entity.getCustomName().contains("low")) {
-                                if (level == 20) {
+                                if (!entity.getCustomName().contains("strong")) {
                                     if (player instanceof Player) {
                                         double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                         armor = armor*0.15;
-                                        player.damage(armor+1);
+                                        player.damage(armor+1.5F);
                                     }else {
-                                        player.damage(2);
+                                        player.damage(2.5F);
                                     }
-                                }else if (level == 21) {
+                                }else{
                                     if (player instanceof Player) {
                                         double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                         armor = armor*0.15;
-                                        player.damage(armor+3);
+                                        player.damage(armor+3.5F);
                                     }else {
-                                        player.damage(4);
+                                        player.damage(4.5F);
                                     }
                                 }
                             }else {
-                                if (level == 20) {
+                                if (!entity.getCustomName().contains("strong")) {
                                     if (player instanceof Player) {
                                         double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                        armor = armor*0.15;
-                                        player.damage(armor+2);
+                                        armor = armor*0.2;
+                                        player.damage(armor+2.5F);
                                     }else {
-                                        player.damage(3);
+                                        player.damage(3.5F);
                                     }
-                                }else if (level == 21) {
+                                }else{
                                     if (player instanceof Player) {
                                         double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                        armor = armor*0.15;
-                                        player.damage(armor+4);
+                                        armor = armor*0.2;
+                                        player.damage(armor+4.5F);
                                     }else {
-                                        player.damage(5);
+                                        player.damage(5.5F);
                                     }
                                 }
                             }
@@ -480,6 +486,14 @@ public class Undeadstone implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player && event.getEntity() instanceof LivingEntity) {
+            String stone = NikeyV1.getPlugin().getConfig().getString(event.getDamager().getName() + ".stone");
+            int level = NikeyV1.getPlugin().getConfig().getInt(event.getDamager().getName() + ".level");
+            if (stone.equalsIgnoreCase("undead") && level >= 19) {
+                HelpUtil.triggerEntityAggro((LivingEntity) event.getEntity(), (Player) event.getDamager());
+                event.getDamager().sendMessage("Pd");
+            }
+        }
         if (event.getEntity().getType() == EntityType.GIANT) {
             Giant giant = (Giant) event.getEntity();
             double health = giant.getHealth();
@@ -493,7 +507,6 @@ public class Undeadstone implements Listener {
                     if (!giant.getCustomName().contains("low") && giant.getHealth() <100) {
                         Block h = giant.getWorld().getHighestBlockAt(giant.getLocation());
                         Location loc = h.getLocation().add(0, 50, 0);
-                        Bukkit.broadcastMessage(String.valueOf(giant.getUniqueId()));
                         int y = (int) giant.getLocation().getY();
                         y += 50;
                         int x = (int) giant.getLocation().getX();
@@ -542,7 +555,7 @@ public class Undeadstone implements Listener {
                 }
 
                 if (entity.getCategory() == EntityCategory.UNDEAD && stone.equalsIgnoreCase("Undead")&&config.getInt(p.getName()+".level")>=5){
-                    event.setDamage(event.getDamage()+1);
+                    event.setDamage(event.getFinalDamage()+1);
                 }
             }
             if (p.getInventory().getItemInMainHand().getItemMeta() == null)return;
@@ -556,31 +569,21 @@ public class Undeadstone implements Listener {
             }
         }
 
-
     @EventHandler
-    public void onHuskTargetPlayer(EntityTargetLivingEntityEvent event) {
+    public void onEntityTarget(EntityTargetEvent event){
         if (event.getTarget() instanceof Player && event.getEntity() instanceof Husk) {
             Husk husk = (Husk) event.getEntity();
             Player player = (Player) event.getTarget();
-
-            // Überprüfen, ob der Spieler einen Giant reitet
             if (husk.getVehicle() != null && husk.getVehicle().getType() == EntityType.GIANT) {
                 Entity vehicle = husk.getVehicle();
                 String[] arr = vehicle.getCustomName().split("'");
-                if (player.getCustomName().equalsIgnoreCase(arr[0])) {
+                if (player.getName().equalsIgnoreCase(arr[0])) {
                     event.setCancelled(true);
                 }
             }
         }
-    }
 
-    @EventHandler
-    public void onEntityTarget(EntityTargetEvent event){
         if (event.getTarget() instanceof Player){
-            Entity entity = event.getEntity();
-            if (event.getEntity() instanceof Husk && event.getEntity().isInvulnerable()) {
-                event.setCancelled(true);
-            }
             if (event.getEntity() instanceof Monster || event.getEntity() instanceof IronGolem || event.getEntity() instanceof Warden || event.getEntity() instanceof Giant){
                 if (event.getEntity().getCustomName() != null) {
                     if (event.getEntity().getCustomName().equalsIgnoreCase(((Player) event.getTarget()).getDisplayName()+"'s "+event.getEntityType().getName())){
