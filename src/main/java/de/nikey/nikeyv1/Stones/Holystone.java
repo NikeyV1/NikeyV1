@@ -17,6 +17,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -25,15 +26,14 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @SuppressWarnings("ALL")
 public class Holystone implements Listener {
     public static ArrayList<Entity> stunned = new ArrayList<>();
     private final List<UUID> selectedPlayers = new ArrayList<>();
+    private final Set<Player> vanishedPlayers = new HashSet<>();
+    public static final Map<Player, BukkitRunnable> auraTasks = new HashMap<>();
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> ability = new HashMap<>();
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
@@ -240,6 +240,14 @@ public class Holystone implements Listener {
                         p.updateInventory();
                         remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
                     }else {
+                        cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                cooldown2.remove(p.getUniqueId());
+                                cancel();
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
                         //Cooldown-Ability
                         openMenu(p);
                     }
@@ -324,8 +332,71 @@ public class Holystone implements Listener {
                 Player selectedPlayer = Bukkit.getPlayer(selectedPlayerUUID);
                 if (selectedPlayer != null) {
                     selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*45, 1)); // Strength effect
+
+                }
+            }
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                if (!selectedPlayers.contains(onlinePlayer.getUniqueId()) && onlinePlayer != player) {
+                    for (UUID selectedPlayerUUID : selectedPlayers) {
+                        Player selectedPlayer = Bukkit.getPlayer(selectedPlayerUUID);
+                        if (selectedPlayer != null) {
+                            startAura(selectedPlayer);
+                            onlinePlayer.hidePlayer(NikeyV1.getPlugin(), selectedPlayer);
+                            selectedPlayer.sendMessage(ChatColor.GREEN+player.getName()+" buffed you");
+                            Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
+                                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                                    onlinePlayer.showPlayer(NikeyV1.getPlugin(), selectedPlayer  );
+                                }
+                                vanishedPlayers.remove(player);
+                            }, 200L); // 10 seconds (20 ticks per second)
+
+                            vanishedPlayers.add(player);
+                        }
+                    }
                 }
             }
         }
     }
+
+    private void startAura(Player player) {
+        BukkitRunnable auraTask = new BukkitRunnable() {
+            int ticks = 0;
+
+            @Override
+            public void run() {
+                ticks++;
+                if (ticks >= 200) { // 10 seconds (20 ticks per second)
+                    cancel();
+                    auraTasks.remove(player);
+                }
+                Location loc = player.getLocation().clone();
+                spawnParticleCircle(loc);
+            }
+        };
+        auraTask.runTaskTimer(NikeyV1.getPlugin(), 0, 1); // Run every tick
+        auraTasks.put(player, auraTask);
+    }
+
+    private void spawnParticleCircle(Location center) {
+        double radius = 2.0;
+        double x, z;
+        for (double theta = 0; theta <= 2 * Math.PI; theta += Math.PI / 16) {
+            x = radius * Math.cos(theta);
+            z = radius * Math.sin(theta);
+            center.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, center.getX() + x, center.getY(), center.getZ() + z, 1);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        if (vanishedPlayers.contains(player)) {
+            for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                p.showPlayer(NikeyV1.getPlugin(), player);
+            }
+            vanishedPlayers.remove(player);
+        }
+    }
+
+
 }

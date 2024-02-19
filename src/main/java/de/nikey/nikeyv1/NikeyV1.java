@@ -17,6 +17,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
@@ -52,11 +53,14 @@ public final class NikeyV1 extends JavaPlugin{
         saveDefaultConfig();
 
         //Code
-
     }
 
     @Override
     public void onDisable() {
+        for (BukkitRunnable task : Holystone.auraTasks.values()) {
+            task.cancel();
+        }
+        Holystone.auraTasks.clear();
         removeGiants();
     }
 
