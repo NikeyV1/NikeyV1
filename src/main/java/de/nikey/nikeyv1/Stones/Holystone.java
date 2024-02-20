@@ -327,12 +327,28 @@ public class Holystone implements Listener {
     public void onInventoryClose(InventoryCloseEvent event) {
         Player player = (Player) event.getPlayer();
         if (event.getView().getTitle().equals("§aSelect Players to Buff")) {
+            int level = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
             // Apply strength effect to selected players
             for (UUID selectedPlayerUUID : selectedPlayers) {
                 Player selectedPlayer = Bukkit.getPlayer(selectedPlayerUUID);
                 if (selectedPlayer != null) {
-                    selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*45, 1)); // Strength effect
-
+                    if (level == 20) {
+                        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*30, 1)); // Strength effect
+                        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*30, 0));
+                        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*30, 1));
+                        selectedPlayer.setHealth(20);
+                        selectedPlayer.setFoodLevel(20);
+                        selectedPlayer.setSaturation(20);
+                        selectedPlayer.setFireTicks(0);
+                    } else if (level == 21) {
+                        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*45, 1)); // Strength effect
+                        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*45, 0));
+                        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*45, 1));
+                        selectedPlayer.setHealth(20);
+                        selectedPlayer.setFoodLevel(20);
+                        selectedPlayer.setSaturation(20);
+                        selectedPlayer.setFireTicks(0);
+                    }
                 }
             }
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
@@ -340,15 +356,24 @@ public class Holystone implements Listener {
                     for (UUID selectedPlayerUUID : selectedPlayers) {
                         Player selectedPlayer = Bukkit.getPlayer(selectedPlayerUUID);
                         if (selectedPlayer != null) {
-                            startAura(selectedPlayer);
+                            startAura(selectedPlayer,level);
                             onlinePlayer.hidePlayer(NikeyV1.getPlugin(), selectedPlayer);
-                            selectedPlayer.sendMessage(ChatColor.GREEN+player.getName()+" buffed you");
-                            Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
-                                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                                    onlinePlayer.showPlayer(NikeyV1.getPlugin(), selectedPlayer  );
-                                }
-                                vanishedPlayers.remove(player);
-                            }, 200L); // 10 seconds (20 ticks per second)
+                            selectedPlayer.sendMessage(ChatColor.BLUE+player.getName()+ChatColor.GREEN+" buffed you");
+                            if (level == 20) {
+                                Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
+                                    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                                        onlinePlayer.showPlayer(NikeyV1.getPlugin(), selectedPlayer  );
+                                    }
+                                    vanishedPlayers.remove(player);
+                                }, 20*10); // 10 seconds (20 ticks per second)
+                            } else if (level == 21) {
+                                Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
+                                    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                                        onlinePlayer.showPlayer(NikeyV1.getPlugin(), selectedPlayer  );
+                                    }
+                                    vanishedPlayers.remove(player);
+                                }, 20*15); // 15 seconds (20 ticks per second)
+                            }
 
                             vanishedPlayers.add(player);
                         }
@@ -358,16 +383,23 @@ public class Holystone implements Listener {
         }
     }
 
-    private void startAura(Player player) {
+    private void startAura(Player player, int level) {
         BukkitRunnable auraTask = new BukkitRunnable() {
             int ticks = 0;
 
             @Override
             public void run() {
                 ticks++;
-                if (ticks >= 200) { // 10 seconds (20 ticks per second)
-                    cancel();
-                    auraTasks.remove(player);
+                if (level == 20) {
+                    if (ticks >= 200) { // 10 seconds (20 ticks per second)
+                        cancel();
+                        auraTasks.remove(player);
+                    }
+                }else if (level == 21) {
+                    if (ticks >= 20*15) { // 15 seconds (20 ticks per second)
+                        cancel();
+                        auraTasks.remove(player);
+                    }
                 }
                 Location loc = player.getLocation().clone();
                 spawnParticleCircle(loc);
