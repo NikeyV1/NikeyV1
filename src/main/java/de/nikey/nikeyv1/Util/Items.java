@@ -131,6 +131,33 @@ public class Items {
         holystone.setItemMeta(meta);
         player.getInventory().addItem(holystone);
     }
+
+    public static void switcher() {
+        ItemStack soul = new ItemStack(Material.SOUL_LANTERN);
+        ItemMeta smeta = soul.getItemMeta();
+        smeta.setDisplayName("§3Soul of Strenght");
+        ArrayList<String> slore = new ArrayList<>();
+        slore.add("§7A §3Soul §7that contains the §cStrenght §7of 1000 Players");
+        smeta.setLore(slore);
+        soul.setItemMeta(smeta);
+
+        ItemStack anvil = new ItemStack(Material.PAPER);
+        ItemMeta meta = anvil.getItemMeta();
+        meta.setDisplayName("§3Stone Switcher");
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        anvil.addUnsafeEnchantment(Enchantment.DIG_SPEED,1);
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add("§7This Item has the Power to trick your §8Stone §7into swapping itself for a outher weak random §8Stone");
+        meta.setLore(lore);
+        anvil.setItemMeta(meta);
+        ShapedRecipe recipe = new ShapedRecipe(anvil);
+        recipe.shape("YTY","TWT","EYE");
+        recipe.setIngredient('T',Material.TOTEM_OF_UNDYING);
+        recipe.setIngredient('W',Material.RECOVERY_COMPASS);
+        recipe.setIngredient('Y',Material.NETHERITE_INGOT);
+        recipe.setIngredient('E', new RecipeChoice.ExactChoice(soul));
+        NikeyV1.getPlugin().getServer().addRecipe(recipe);
+    }
     public static void EnchantedAnvil(){
         ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
         ItemMeta emeta = essence.getItemMeta();

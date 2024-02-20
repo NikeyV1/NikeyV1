@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -21,6 +22,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -257,6 +259,22 @@ public class Holystone implements Listener {
     }
 
     @EventHandler
+    public void onPlayerDamage(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player ) {
+            Player damager = (Player) event.getDamager();
+            if (selectedPlayers.contains(damager.getUniqueId())) {
+                double healingMultiplier = 0.04;
+
+                double damage = event.getDamage();
+                double healingAmount = damage * healingMultiplier;
+
+                // Heilung des Angreifers
+                damager.setHealth(Math.min(damager.getHealth() + healingAmount, damager.getMaxHealth()));
+            }
+        }
+    }
+
+    @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         Inventory clickedInventory = event.getClickedInventory();
@@ -274,7 +292,7 @@ public class Holystone implements Listener {
                     if (selectedPlayers.size() < 5) {
                         selectedPlayers.add(selectedPlayerUUID);
                     } else {
-                        player.sendMessage("You can only select up to 5 players!");
+                        player.sendMessage("§cYou can only select up to 5 players!");
                         return;
                     }
                 }
@@ -333,21 +351,21 @@ public class Holystone implements Listener {
                 Player selectedPlayer = Bukkit.getPlayer(selectedPlayerUUID);
                 if (selectedPlayer != null) {
                     if (level == 20) {
-                        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*30, 1)); // Strength effect
-                        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*30, 0));
-                        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*30, 1));
+                        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*30, 0)); // Strength effect
                         selectedPlayer.setHealth(20);
                         selectedPlayer.setFoodLevel(20);
                         selectedPlayer.setSaturation(20);
                         selectedPlayer.setFireTicks(0);
                     } else if (level == 21) {
-                        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*45, 1)); // Strength effect
-                        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*45, 0));
+                        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*45, 0)); // Strength effect
                         selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*45, 1));
                         selectedPlayer.setHealth(20);
                         selectedPlayer.setFoodLevel(20);
                         selectedPlayer.setSaturation(20);
                         selectedPlayer.setFireTicks(0);
+                        for (ItemStack armor : selectedPlayer.getInventory().getArmorContents()) {
+                            armor.setDurability((short) 0);
+                        }
                     }
                 }
             }
@@ -365,16 +383,15 @@ public class Holystone implements Listener {
                                         onlinePlayer.showPlayer(NikeyV1.getPlugin(), selectedPlayer  );
                                     }
                                     vanishedPlayers.remove(player);
-                                }, 20*10); // 10 seconds (20 ticks per second)
+                                }, 20*15); // 15 seconds (20 ticks per second)
                             } else if (level == 21) {
                                 Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
                                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                                         onlinePlayer.showPlayer(NikeyV1.getPlugin(), selectedPlayer  );
                                     }
                                     vanishedPlayers.remove(player);
-                                }, 20*15); // 15 seconds (20 ticks per second)
+                                }, 20*20); // 20 seconds (20 ticks per second)
                             }
-
                             vanishedPlayers.add(player);
                         }
                     }
@@ -391,12 +408,12 @@ public class Holystone implements Listener {
             public void run() {
                 ticks++;
                 if (level == 20) {
-                    if (ticks >= 200) { // 10 seconds (20 ticks per second)
+                    if (ticks >= 20*15) { // 15 seconds (20 ticks per second)
                         cancel();
                         auraTasks.remove(player);
                     }
                 }else if (level == 21) {
-                    if (ticks >= 20*15) { // 15 seconds (20 ticks per second)
+                    if (ticks >= 20*20) { // 20 seconds (20 ticks per second)
                         cancel();
                         auraTasks.remove(player);
                     }

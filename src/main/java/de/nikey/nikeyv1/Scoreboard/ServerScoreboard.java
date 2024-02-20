@@ -13,7 +13,7 @@ import java.util.Arrays;
 @SuppressWarnings("ALL")
 public class ServerScoreboard extends ScoreboardBuilder {
     public ServerScoreboard(Player player) {
-        super(player, "  §8>> §6§l§nNikey§r §8<<  ");
+        super(player, "  §8>> §6§l§nStone SMP§r §8<<  ");
         FileConfiguration config = NikeyV1.getPlugin().getConfig();
         Integer level = config.getInt(player.getName() + ".level");
         stone();
