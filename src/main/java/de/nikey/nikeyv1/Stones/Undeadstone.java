@@ -59,7 +59,7 @@ public class Undeadstone implements Listener {
             if (event.getAction() == Action.RIGHT_CLICK_AIR||event.getAction() == Action.RIGHT_CLICK_BLOCK){
                 if (!Soul.isEmpty()){
                     EntityType type = Soul.get(0).getType();
-                    if (type.equals(EntityType.WITHER)||type.equals(EntityType.ENDER_DRAGON)||type.equals(EntityType.EVOKER)){
+                    if (type.equals(EntityType.WITHER)||type.equals(EntityType.ENDER_DRAGON)||type.equals(EntityType.EVOKER)||type.equals(EntityType.GIANT)){
                     }else {
                         if (i == 10||i == 11){
                             LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
@@ -76,8 +76,8 @@ public class Undeadstone implements Listener {
                         }else if (i >= 12){
                             LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
                             summoned.setCustomName(p.getDisplayName()+"'s "+type.getName());
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,0));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,1));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
                             Soul.clear();
                             p.getWorld().playSound(p.getLocation(),Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
                             ItemStack hand = p.getInventory().getItemInMainHand();
