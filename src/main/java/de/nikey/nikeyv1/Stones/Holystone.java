@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.EntityResurrectEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -30,9 +31,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
+import static org.bukkit.Bukkit.getServer;
+
 @SuppressWarnings("ALL")
 public class Holystone implements Listener {
     public static ArrayList<Entity> stunned = new ArrayList<>();
+    public static ArrayList<Player> hitted = new ArrayList<>();
     private final List<UUID> selectedPlayers = new ArrayList<>();
     private final Set<Player> vanishedPlayers = new HashSet<>();
     public static final Map<Player, BukkitRunnable> auraTasks = new HashMap<>();
@@ -215,12 +219,27 @@ public class Holystone implements Listener {
                     }
                 }
             }
-        }    
+        }
+        if (hitted.contains(event.getPlayer())) {
+            // Cancel shield blocking during cooldown
+            if (event.getItem() != null && event.getItem().getType() == Material.SHIELD) {
+                event.setCancelled(true);
+            }
+        }
     }
 
-
-
-
+    @EventHandler
+    public void onEntityResurrect(EntityResurrectEvent event) {
+        // Überprüfen, ob das wiederbelebte Entity ein Spieler ist
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            // Überprüfen, ob der Spieler in der deaktivierten Liste ist
+            if (hitted.contains(player)) {
+                // Totem-Auslösen abbrechen
+                event.setCancelled(true);
+            }
+        }
+    }
 
     //Master Ability
     @EventHandler
@@ -263,6 +282,13 @@ public class Holystone implements Listener {
         if (event.getDamager() instanceof Player ) {
             Player damager = (Player) event.getDamager();
             if (selectedPlayers.contains(damager.getUniqueId())) {
+                hitted.add((Player) event.getEntity());
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        hitted.remove(event.getEntity());
+                    }
+                }.runTaskLater(NikeyV1.getPlugin(),20*25);
                 double healingMultiplier = 0.04;
 
                 double damage = event.getDamage();
@@ -341,6 +367,7 @@ public class Holystone implements Listener {
         meta.setLore(lore);
         item.setItemMeta(meta);
     }
+
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
         Player player = (Player) event.getPlayer();
@@ -379,14 +406,14 @@ public class Holystone implements Listener {
                             selectedPlayer.sendMessage(ChatColor.BLUE+player.getName()+ChatColor.GREEN+" buffed you");
                             if (level == 20) {
                                 Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
-                                    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                                    for (Player p : getServer().getOnlinePlayers()) {
                                         onlinePlayer.showPlayer(NikeyV1.getPlugin(), selectedPlayer  );
                                     }
                                     vanishedPlayers.remove(player);
                                 }, 20*15); // 15 seconds (20 ticks per second)
                             } else if (level == 21) {
                                 Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
-                                    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                                    for (Player p : getServer().getOnlinePlayers()) {
                                         onlinePlayer.showPlayer(NikeyV1.getPlugin(), selectedPlayer  );
                                     }
                                     vanishedPlayers.remove(player);
@@ -440,7 +467,7 @@ public class Holystone implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         if (vanishedPlayers.contains(player)) {
-            for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+            for (Player p : getServer().getOnlinePlayers()) {
                 p.showPlayer(NikeyV1.getPlugin(), player);
             }
             vanishedPlayers.remove(player);
