@@ -42,7 +42,6 @@ public class Undeadstone implements Listener {
     public static long remainingTime3;
     private Player player;
 
-
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player p = event.getPlayer();
@@ -722,13 +721,38 @@ public class Undeadstone implements Listener {
         }
     }
 
-    @EventHandler
+    private boolean isUndead(LivingEntity entity) {
+        // Check if the entity is undead (zombie, skeleton, etc.)
+        EntityType type = entity.getType();
+        return type == EntityType.ZOMBIE || type == EntityType.SKELETON || type == EntityType.ZOGLIN|| type == EntityType.ZOMBIFIED_PIGLIN|| type == EntityType.ZOMBIE_VILLAGER|| type == EntityType.PHANTOM || type == EntityType.DROWNED  || type == EntityType.WITHER_SKELETON || type == EntityType.STRAY || type == EntityType.HUSK;
+    }
+
+    @EventHandler(ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            // Check if the damage source is an undead monster
+            if (isUndead((LivingEntity) event.getDamager())) {
+                double damageReductionPercentage = 7.5; // 7.5% damage reduction
+                double damage = event.getDamage();
+                double reducedDamage = damage - (damage * (damageReductionPercentage / 100));
+                event.setDamage(reducedDamage);
+            }
+        }
         if (event.getDamager() instanceof Player && event.getEntity() instanceof LivingEntity) {
             String stone = NikeyV1.getPlugin().getConfig().getString(event.getDamager().getName() + ".stone");
             int level = NikeyV1.getPlugin().getConfig().getInt(event.getDamager().getName() + ".level");
-            if (stone.equalsIgnoreCase("undead") && level >= 19) {
+            if (stone.equalsIgnoreCase("undead")) {
                 HelpUtil.triggerEntityAggro((LivingEntity) event.getEntity(), (Player) event.getDamager());
+                if (isUndead((LivingEntity) event.getEntity()) ) {
+                    if (level == 3) {
+                        event.setDamage(event.getDamage()+0.5F);
+                    } else if (level == 4) {
+                        event.setDamage(event.getDamage()+1);
+                    }else if (level == 5) {
+                        event.setDamage(event.getDamage()+1.5F);
+                    }
+                }
             }
         }
         if (event.getEntity().getType() == EntityType.GIANT) {

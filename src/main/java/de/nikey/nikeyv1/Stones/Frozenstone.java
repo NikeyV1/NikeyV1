@@ -3,13 +3,9 @@ package de.nikey.nikeyv1.Stones;
 import com.destroystokyo.paper.event.entity.EntityJumpEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import de.nikey.nikeyv1.NikeyV1;
-import de.nikey.nikeyv1.Util.Tornado;
 import de.slikey.effectlib.effect.SmokeEffect;
-import io.papermc.paper.configuration.type.fallback.FallbackValue;
-import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -33,9 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.UUID;
-
-import static de.nikey.nikeyv1.Util.HelpUtil.getNearbyBlocks;
-import static de.nikey.nikeyv1.Util.HelpUtil.triggerEntityAggro;
 
 @SuppressWarnings("ALL")
 public class Frozenstone implements Listener {
@@ -86,7 +79,7 @@ public class Frozenstone implements Listener {
                 player.setFlying(false);
             }
             if (isColdBiome(player.getWorld().getBiome(player.getLocation()))) {
-                player.setFlySpeed(player.getFlySpeed() * 1.2f);
+                player.setFlySpeed(player.getFlySpeed() * 1.3f);
             }
         }
     }

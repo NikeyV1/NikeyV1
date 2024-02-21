@@ -55,11 +55,16 @@ public class Holystone implements Listener {
         if (event.getEntity() instanceof Player){
             Player p = (Player) event.getEntity();
             String stone = config.getString(p.getName() + ".stone");
+            int level = NikeyV1.getPlugin().getConfig().getInt(p.getName() + ".level");
             if (stone.equalsIgnoreCase("Holy")){
-                if (config.getInt(p.getName()+".level") == 3||config.getInt(p.getName()+".level") == 4){
+                if (level == 3){
+                    event.setAmount(event.getAmount()+0.2);
+                }else if (level == 4){
+                    event.setAmount(event.getAmount()+0.3);
+                }else if (level == 5){
                     event.setAmount(event.getAmount()+0.4);
-                }else if (config.getInt(p.getName()+".level") >= 5){
-                    event.setAmount(event.getAmount()+0.6);
+                }else if (level == 6){
+                    event.setAmount(event.getAmount()+0.5);
                 }
             }
         }
@@ -586,14 +591,14 @@ public class Holystone implements Listener {
                                         onlinePlayer.showPlayer(NikeyV1.getPlugin(), selectedPlayer  );
                                     }
                                     vanishedPlayers.remove(player);
-                                }, 20*15); // 15 seconds (20 ticks per second)
+                                }, 20*20); // 15 seconds (20 ticks per second)
                             } else if (level == 21) {
                                 Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
                                     for (Player p : getServer().getOnlinePlayers()) {
                                         onlinePlayer.showPlayer(NikeyV1.getPlugin(), selectedPlayer  );
                                     }
                                     vanishedPlayers.remove(player);
-                                }, 20*20); // 20 seconds (20 ticks per second)
+                                }, 20*25); // 20 seconds (20 ticks per second)
                             }
                             vanishedPlayers.add(player);
                         }
@@ -611,12 +616,12 @@ public class Holystone implements Listener {
             public void run() {
                 ticks++;
                 if (level == 20) {
-                    if (ticks >= 20*15) { // 15 seconds (20 ticks per second)
+                    if (ticks >= 20*20) { // 20 seconds (20 ticks per second)
                         cancel();
                         auraTasks.remove(player);
                     }
                 }else if (level == 21) {
-                    if (ticks >= 20*20) { // 20 seconds (20 ticks per second)
+                    if (ticks >= 20*25) { // 25 seconds (20 ticks per second)
                         cancel();
                         auraTasks.remove(player);
                     }
