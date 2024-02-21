@@ -282,13 +282,15 @@ public class Holystone implements Listener {
         if (event.getDamager() instanceof Player ) {
             Player damager = (Player) event.getDamager();
             if (selectedPlayers.contains(damager.getUniqueId())) {
-                hitted.add((Player) event.getEntity());
+                if (!hitted.contains((Player) event.getEntity())) {
+                    hitted.add((Player) event.getEntity());
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         hitted.remove(event.getEntity());
                     }
                 }.runTaskLater(NikeyV1.getPlugin(),20*25);
+                }
                 double healingMultiplier = 0.04;
 
                 double damage = event.getDamage();
