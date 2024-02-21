@@ -78,7 +78,37 @@ public class Waterstone implements Listener {
                             }
                         }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
                         //cooldown-ability
-                        if (i ==10 || i == 11){
+                        if (i ==10){
+                            timer = 15;
+                            Location location = p.getLocation();
+                            FountainEffect effect = new FountainEffect(NikeyV1.em);
+                            effect.setLocation(location);
+                            effect.duration = 20000;
+                            effect.particlesStrand = 50;
+                            effect.particlesSpout = 70;
+                            effect.start();
+                            //Ability
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    timer--;
+                                    if (timer == 0){
+                                        cancel();
+                                        return;
+                                    }
+                                    for (Entity e : location.getNearbyEntities(8,8,8)){
+                                        if (e == p){
+                                            if (p.getHealth() < 18)p.setHealth(p.getHealth()+3);
+                                        } else {
+                                            if (e instanceof LivingEntity){
+                                                LivingEntity entity = (LivingEntity) e;
+                                                entity.damage(2);
+                                            }
+                                        }
+                                    }
+                                }
+                            }.runTaskTimer(NikeyV1.getPlugin(), 30,30);
+                        } else if (i == 11) {
                             timer = 15;
                             Location location = p.getLocation();
                             FountainEffect effect = new FountainEffect(NikeyV1.em);
@@ -108,6 +138,66 @@ public class Waterstone implements Listener {
                                     }
                                 }
                             }.runTaskTimer(NikeyV1.getPlugin(), 30,30);
+                        } else if (i == 12) {
+                            timer = 15;
+                            Location location = p.getLocation();
+                            FountainEffect effect = new FountainEffect(NikeyV1.em);
+                            effect.setLocation(location);
+                            effect.duration = 20000;
+                            effect.particlesStrand = 50;
+                            effect.particlesSpout = 70;
+                            effect.start();
+                            //Ability
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    timer--;
+                                    if (timer == 0){
+                                        cancel();
+                                        return;
+                                    }
+                                    for (Entity e : location.getNearbyEntities(10,8,10)){
+                                        if (e == p){
+                                            if (p.getHealth() < 18)p.setHealth(p.getHealth()+3);
+                                        } else {
+                                            if (e instanceof LivingEntity){
+                                                LivingEntity entity = (LivingEntity) e;
+                                                entity.damage(4);
+                                            }
+                                        }
+                                    }
+                                }
+                            }.runTaskTimer(NikeyV1.getPlugin(), 30,30);
+                        }else if (i == 13) {
+                            timer = 15;
+                            Location location = p.getLocation();
+                            FountainEffect effect = new FountainEffect(NikeyV1.em);
+                            effect.setLocation(location);
+                            effect.duration = 20000;
+                            effect.particlesStrand = 50;
+                            effect.particlesSpout = 70;
+                            effect.start();
+                            //Ability
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    timer--;
+                                    if (timer == 0){
+                                        cancel();
+                                        return;
+                                    }
+                                    for (Entity e : location.getNearbyEntities(10,8,10)){
+                                        if (e == p){
+                                            if (p.getHealth() < 18)p.setHealth(p.getHealth()+4);
+                                        } else {
+                                            if (e instanceof LivingEntity){
+                                                LivingEntity entity = (LivingEntity) e;
+                                                entity.damage(4);
+                                            }
+                                        }
+                                    }
+                                }
+                            }.runTaskTimer(NikeyV1.getPlugin(), 30,30);
                         }else if (i >= 12) {
                             timer = 15;
                             Location location = p.getLocation();
@@ -129,7 +219,7 @@ public class Waterstone implements Listener {
                                     for (Entity e : location.getNearbyEntities(10,8,10)){
                                         if (e == p){
                                             p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
-                                            if (p.getHealth() < 18)p.setHealth(p.getHealth()+3);
+                                            if (p.getHealth() < 18)p.setHealth(p.getHealth()+4);
                                         } else {
                                             if (e instanceof LivingEntity){
                                                 LivingEntity entity = (LivingEntity) e;
@@ -143,8 +233,43 @@ public class Waterstone implements Listener {
                     }
                 }
             }else if (event.getAction()==Action.LEFT_CLICK_AIR){
-                if (p.isSneaking()) {
-                    if (i == 15||i == 16||i == 17){
+                if (!p.isSneaking()) {
+                    if (i == 15){
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
+
+                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                            //Cooldown-Ability
+                            EquationEffect effect = new EquationEffect(NikeyV1.em);
+                            effect.setEntity(p);
+                            effect.particle = Particle.BUBBLE_COLUMN_UP;
+                            effect.particles = 5;
+                            effect.visibleRange = 100;
+                            effect.start();
+                            p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH,1,1);
+                            Entity e = HelpUtil.getNearestEntityInSight(p, 30);
+                            if (e != null) {
+                                e.getLocation().getWorld().createExplosion(e.getLocation(),1F);
+                                if (e instanceof LivingEntity){
+                                    LivingEntity entity = (LivingEntity) e;
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 400,0));
+                                    double maxHealth = entity.getMaxHealth();
+                                    double damage = 0.35 * maxHealth; // 35% der maximalen Herzen als Schaden
+                                    entity.damage(damage);
+                                    entity.setVisualFire(false);
+                                }
+                            }
+                        }
+                    } else if (i == 16) {
                         if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
                             p.updateInventory();
                             remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
@@ -167,17 +292,89 @@ public class Waterstone implements Listener {
                             effect.start();
                             p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH,1,1);
                             Entity e = HelpUtil.getNearestEntityInSight(p, 40);
-                            e.getLocation().getWorld().createExplosion(e.getLocation(),2F);
-                            if (e instanceof LivingEntity){
-                                LivingEntity entity = (LivingEntity) e;
-                                entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 400,0));
-                                double maxHealth = entity.getMaxHealth();
-                                double damage = 0.35 * maxHealth; // 35% der maximalen Herzen als Schaden
-                                entity.damage(damage);
-                                entity.setVisualFire(false);
+                            if (e != null) {
+                                e.getLocation().getWorld().createExplosion(e.getLocation(),1F);
+                                if (e instanceof LivingEntity){
+                                    LivingEntity entity = (LivingEntity) e;
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 400,0));
+                                    double maxHealth = entity.getMaxHealth();
+                                    double damage = 0.35 * maxHealth; // 35% der maximalen Herzen als Schaden
+                                    entity.damage(damage);
+                                    entity.setVisualFire(false);
+                                }
                             }
                         }
-                    }else if (i >=18){
+                    }else if (i == 17) {
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
+
+                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                            //Cooldown-Ability
+                            EquationEffect effect = new EquationEffect(NikeyV1.em);
+                            effect.setEntity(p);
+                            effect.particle = Particle.BUBBLE_COLUMN_UP;
+                            effect.particles = 5;
+                            effect.visibleRange = 100;
+                            effect.start();
+                            p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH,1,1);
+                            Entity e = HelpUtil.getNearestEntityInSight(p, 40);
+                            if (e != null) {
+                                e.getLocation().getWorld().createExplosion(e.getLocation(),1F);
+                                if (e instanceof LivingEntity){
+                                    LivingEntity entity = (LivingEntity) e;
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 400,0));
+                                    double maxHealth = entity.getMaxHealth();
+                                    double damage = 0.45 * maxHealth; // 45% der maximalen Herzen als Schaden
+                                    entity.damage(damage);
+                                    entity.setVisualFire(false);
+                                }
+                            }
+                        }
+                    } else if (i == 18){
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
+
+                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                            //Cooldown-Ability
+                            EquationEffect effect = new EquationEffect(NikeyV1.em);
+                            effect.setEntity(p);
+                            effect.particle = Particle.BUBBLE_COLUMN_UP;
+                            effect.particles = 5;
+                            effect.visibleRange = 100;
+                            effect.start();
+                            p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH,1,1);
+                            Entity e = HelpUtil.getNearestEntityInSight(p, 40);
+                            if (e != null) {
+                                e.getLocation().getWorld().createExplosion(e.getLocation(),2F);
+                                if (e instanceof LivingEntity){
+                                    LivingEntity entity = (LivingEntity) e;
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 450,0));
+                                    double maxHealth = entity.getMaxHealth();
+                                    double damage = 0.45 * maxHealth; // 45% der maximalen Herzen als Schaden
+                                    entity.damage(damage);
+                                    entity.setVisualFire(false);
+                                }
+                            }
+                        }
+                    }else if (i >=19){
                         if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
                             p.updateInventory();
                             remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
@@ -231,7 +428,7 @@ public class Waterstone implements Listener {
             config.set(p.getName()+".level",i);
             NikeyV1.getPlugin().saveConfig();
             String stone = config.getString(p.getName() + ".stone");
-            if (!p.isSneaking()) {
+            if (p.isSneaking()) {
                 if (i== 20){
                     if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
                         p.updateInventory();

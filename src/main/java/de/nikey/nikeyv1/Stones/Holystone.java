@@ -94,7 +94,27 @@ public class Holystone implements Listener {
                                 return;
                             }
                         }.runTaskLater(NikeyV1.getPlugin(),20*100);
-                        if (i ==10 || i == 11){
+                        //Ability
+                        if (i ==10 ){
+                            World world = p.getWorld();
+                            int players = p.getNearbyEntities(20, 20, 20).size();
+                            if (players >8){
+                                players = 8;
+                            }
+                            p.setMaxHealth(22+players);
+                            p.setHealth(20);
+                            Location location = p.getLocation().add(0,1,0);
+                            p.spawnParticle(Particle.HEART,location,3);
+                            CircleEffect effect = new CircleEffect(NikeyV1.em);
+                            effect.setEntity(p);
+                            effect.start();
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    p.setMaxHealth(20);
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(),30*30);
+                        } else if (i == 11) {
                             World world = p.getWorld();
                             int players = p.getNearbyEntities(20, 20, 20).size();
                             if (players >18){
@@ -112,10 +132,51 @@ public class Holystone implements Listener {
                                 public void run() {
                                     p.setMaxHealth(20);
                                 }
-                            }.runTaskLater(NikeyV1.getPlugin(),20*40);
-                        }else if (i >= 12) {
+                            }.runTaskLater(NikeyV1.getPlugin(),30*30);
+                        } else if (i == 12) {
                             World world = p.getWorld();
-                            int players = p.getNearbyEntities(20, 20, 20).size();
+                            int players = p.getNearbyEntities(25, 25, 25).size();
+                            if (players >18)players = 18;
+                            p.setMaxHealth(22+players);
+                            p.setHealth(20);
+                            Location location = p.getLocation().add(0,2,0);
+                            CircleEffect effect = new CircleEffect(NikeyV1.em);
+                            effect.setEntity(p);
+                            effect.start();
+                            p.spawnParticle(Particle.HEART,location,3);
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    p.setMaxHealth(20);
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(),30*40);
+                        }else if (i == 13) {
+                            World world = p.getWorld();
+                            int players = p.getNearbyEntities(25, 25, 25).size();
+                            if (players >18)players = 18;
+                            p.removePotionEffect(PotionEffectType.WEAKNESS);
+                            p.removePotionEffect(PotionEffectType.POISON);
+                            p.removePotionEffect(PotionEffectType.DARKNESS);
+                            p.removePotionEffect(PotionEffectType.LEVITATION);
+                            p.removePotionEffect(PotionEffectType.BLINDNESS);
+                            p.removePotionEffect(PotionEffectType.SLOW);
+                            p.removePotionEffect(PotionEffectType.CONFUSION);
+                            p.setMaxHealth(22+players);
+                            p.setHealth(20);
+                            Location location = p.getLocation().add(0,2,0);
+                            CircleEffect effect = new CircleEffect(NikeyV1.em);
+                            effect.setEntity(p);
+                            effect.start();
+                            p.spawnParticle(Particle.HEART,location,3);
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    p.setMaxHealth(20);
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(),20*30);
+                        }else if (i >= 14) {
+                            World world = p.getWorld();
+                            int players = p.getNearbyEntities(25, 25, 25).size();
                             if (players >18)players = 18;
                             p.removePotionEffect(PotionEffectType.WEAKNESS);
                             p.removePotionEffect(PotionEffectType.POISON);
@@ -138,6 +199,7 @@ public class Holystone implements Listener {
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(),20*40);
                         }
+                        //Ability End
                     }            
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR){
@@ -283,13 +345,14 @@ public class Holystone implements Listener {
             Player damager = (Player) event.getDamager();
             if (selectedPlayers.contains(damager.getUniqueId())) {
                 if (!hitted.contains((Player) event.getEntity())) {
+                    event.getEntity().sendMessage("§cYour totem and shield are disabled");
                     hitted.add((Player) event.getEntity());
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        hitted.remove(event.getEntity());
-                    }
-                }.runTaskLater(NikeyV1.getPlugin(),20*25);
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            hitted.remove(event.getEntity());
+                        }
+                    }.runTaskLater(NikeyV1.getPlugin(),20*25);
                 }
                 double healingMultiplier = 0.04;
 

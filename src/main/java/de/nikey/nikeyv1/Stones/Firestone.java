@@ -73,7 +73,7 @@ public class Firestone implements Listener {
                                 return;
                             }
                         }.runTaskLater(NikeyV1.getPlugin(),20*100);
-                        if (i == 10 || i == 11) {
+                        if (i == 10 ) {
                             timer = 20;
                             SphereEffect effect = new SphereEffect(NikeyV1.em);
                             effect.setEntity(p);
@@ -106,7 +106,106 @@ public class Firestone implements Listener {
                                 }
                             };
                             runnable.runTaskTimer(NikeyV1.getPlugin(),0,20);
-                        } else if (i >= 12) {
+                        } else if (i == 11) {
+                            timer = 20;
+                            SphereEffect effect = new SphereEffect(NikeyV1.em);
+                            effect.setEntity(p);
+                            effect.duration = 20000;
+                            effect.particles = 200;
+                            effect.particle = Particle.FLAME;
+                            effect.radius = 25.0;
+                            effect.start();
+                            BukkitRunnable runnable = new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(), 25, 25, 25)) {
+                                        if (e instanceof LivingEntity) {
+                                            LivingEntity entity = (LivingEntity) e;
+                                            entities.add(entity);
+                                            if (entity != p) {
+                                                e.setVisualFire(true);
+                                                entity.damage(2);
+                                            }
+                                            if (timer == 0) {
+                                                entity.setVisualFire(false);
+                                                entities.forEach(entity1 -> entity1.setVisualFire(false));
+                                                entities.clear();
+                                                cancel();
+                                                return;
+                                            }
+                                        }
+                                    }
+                                    timer--;
+                                }
+                            };
+                            runnable.runTaskTimer(NikeyV1.getPlugin(), 0, 20);
+                        }else if (i == 12) {
+                            timer = 20;
+                            SphereEffect effect = new SphereEffect(NikeyV1.em);
+                            effect.setEntity(p);
+                            effect.duration = 20000;
+                            effect.particles = 200;
+                            effect.particle = Particle.FLAME;
+                            effect.radius = 25.0;
+                            effect.start();
+                            BukkitRunnable runnable = new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(), 25, 25, 25)) {
+                                        if (e instanceof LivingEntity) {
+                                            LivingEntity entity = (LivingEntity) e;
+                                            entities.add(entity);
+                                            if (entity != p) {
+                                                e.setVisualFire(true);
+                                                entity.damage(2.5F);
+                                            }
+                                            if (timer == 0) {
+                                                entity.setVisualFire(false);
+                                                entities.forEach(entity1 -> entity1.setVisualFire(false));
+                                                entities.clear();
+                                                cancel();
+                                                return;
+                                            }
+                                        }
+                                    }
+                                    timer--;
+                                }
+                            };
+                            runnable.runTaskTimer(NikeyV1.getPlugin(), 0, 20);
+                        }else if (i == 13) {
+                            timer = 20;
+                            SphereEffect effect = new SphereEffect(NikeyV1.em);
+                            effect.setEntity(p);
+                            effect.duration = 20000;
+                            effect.particles = 200;
+                            effect.particle = Particle.FLAME;
+                            effect.radius = 30.0;
+                            effect.start();
+                            BukkitRunnable runnable = new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(), 30, 30, 30)) {
+                                        if (e instanceof LivingEntity) {
+                                            LivingEntity entity = (LivingEntity) e;
+                                            entities.add(entity);
+                                            if (entity != p) {
+                                                e.setVisualFire(true);
+                                                entity.damage(2.5);
+                                            }
+                                            if (timer == 0) {
+                                                entity.setVisualFire(false);
+                                                entities.forEach(entity1 -> entity1.setVisualFire(false));
+                                                entities.clear();
+                                                cancel();
+                                                return;
+                                            }
+                                        }
+                                    }
+                                    timer--;
+                                }
+                            };
+                            runnable.runTaskTimer(NikeyV1.getPlugin(), 0, 20);
+                        }else if (i >= 14) {
                             timer = 20;
                             SphereEffect effect = new SphereEffect(NikeyV1.em);
                             effect.setEntity(p);
@@ -243,8 +342,15 @@ public class Firestone implements Listener {
                         event.setDamage(damage*0.80);
                         damager.damage(damage*0.2,entity);
                     }
-
-                }else if (i ==16 || i == 17){
+                }else if (i ==16 ){
+                    long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remain/1000);
+                    if (a >160){
+                        double damage = event.getDamage();
+                        event.setDamage(damage*0.75);
+                        damager.damage(damage*0.2,entity);
+                    }
+                }else if (i == 17){
                     long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
                     int a = (int) (remain/1000);
                     if (a >160){
@@ -252,7 +358,15 @@ public class Firestone implements Listener {
                         event.setDamage(damage*0.75);
                         damager.damage(damage*0.3,entity);
                     }
-                }else if (i >= 18){
+                }else if (i == 18){
+                    long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remain/1000);
+                    if (a >160){
+                        double damage = event.getDamage();
+                        event.setDamage(damage*0.75);
+                        damager.damage(damage*0.3,entity);
+                    }
+                }else if (i >= 19){
                     long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
                     int a = (int) (remain/1000);
                     if (a >160){
@@ -279,31 +393,55 @@ public class Firestone implements Listener {
                         if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
                             double damage = event.getDamage();
                             event.setDamage(damage*0.75);
-                        }else {
+                        }else if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK && event.getCause() != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK){
                             double damage = event.getDamage();
-                            event.setDamage(damage*0.70);
+                            event.setDamage(damage*0.8);
                         }
                     }
-                }else if (i == 16||i == 17){
+                }else if (i == 16){
                     long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
                     int a = (int) (remain/1000);
                     if (a >160){
                         if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
                             double damage = event.getDamage();
-                            event.setDamage(damage*0.675);
-                        }else {
+                            event.setDamage(damage*0.7);
+                        }else if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK && event.getCause() != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK){
+                            double damage = event.getDamage();
+                            event.setDamage(damage*0.7);
+                        }
+                    }
+                }else if (i == 17){
+                    long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remain/1000);
+                    if (a >160){
+                        if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
+                            double damage = event.getDamage();
+                            event.setDamage(damage*0.65);
+                        }else if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK && event.getCause() != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK){
                             double damage = event.getDamage();
                             event.setDamage(damage*0.6);
                         }
                     }
-                }else if (i >= 18){
+                }else if (i == 18){
                     long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
                     int a = (int) (remain/1000);
                     if (a >160){
                         if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
                             double damage = event.getDamage();
                             event.setDamage(damage*0.6);
-                        }else {
+                        }else if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK && event.getCause() != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK){
+                            double damage = event.getDamage();
+                            event.setDamage(damage*0.5);
+                        }
+                    }
+                }else if (i >= 19){
+                    long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                    int a = (int) (remain/1000);
+                    if (a >160){
+                        if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
+                            double damage = event.getDamage();
+                            event.setDamage(damage*0.6);
+                        }else if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK && event.getCause() != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK){
                             double damage = event.getDamage();
                             event.setDamage(damage*0.5);
                         }

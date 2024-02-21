@@ -61,7 +61,7 @@ public class Undeadstone implements Listener {
                     EntityType type = Soul.get(0).getType();
                     if (type.equals(EntityType.WITHER)||type.equals(EntityType.ENDER_DRAGON)||type.equals(EntityType.EVOKER)||type.equals(EntityType.GIANT)){
                     }else {
-                        if (i == 10||i == 11){
+                        if (i == 10){
                             LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
                             summoned.setCustomName(p.getDisplayName()+"'s "+type.getName());
                             Soul.clear();
@@ -73,11 +73,59 @@ public class Undeadstone implements Listener {
                             list.add(ChatColor.of("#00FFAA")+"Level:"+i);
                             meta.setLore(list);
                             hand.setItemMeta(meta);
-                        }else if (i >= 12){
+                        } else if (i == 11) {
+                            LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
+                            summoned.setCustomName(p.getDisplayName()+"'s "+type.getName());
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,PotionEffect.INFINITE_DURATION,1));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,PotionEffect.INFINITE_DURATION,1));
+                            Soul.clear();
+                            p.getWorld().playSound(p.getLocation(),Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
+                            ItemStack hand = p.getInventory().getItemInMainHand();
+                            ItemMeta meta = hand.getItemMeta();
+                            ArrayList<String> list = new ArrayList<>();
+                            list.add(ChatColor.of("#221726")+"Souls wander around in this stone");
+                            list.add(ChatColor.of("#00FFAA")+"Level:"+i);
+                            meta.setLore(list);
+                            hand.setItemMeta(meta);
+                        } else if (i == 12){
+                            LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
+                            summoned.setCustomName(p.getDisplayName()+"'s "+type.getName());
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,PotionEffect.INFINITE_DURATION,1));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,PotionEffect.INFINITE_DURATION,1));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                            Soul.clear();
+                            p.getWorld().playSound(p.getLocation(),Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
+                            ItemStack hand = p.getInventory().getItemInMainHand();
+                            ItemMeta meta = hand.getItemMeta();
+                            ArrayList<String> list = new ArrayList<>();
+                            list.add(ChatColor.of("#221726")+"Souls wander around in this stone");
+                            list.add(ChatColor.of("#00FFAA")+"Level:"+i);
+                            meta.setLore(list);
+                            hand.setItemMeta(meta);
+                        }else if (i == 13){
+                            LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
+                            summoned.setCustomName(p.getDisplayName()+"'s "+type.getName());
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,PotionEffect.INFINITE_DURATION,1));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,PotionEffect.INFINITE_DURATION,1));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                            summoned.setAbsorptionAmount(4);
+                            Soul.clear();
+                            p.getWorld().playSound(p.getLocation(),Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
+                            ItemStack hand = p.getInventory().getItemInMainHand();
+                            ItemMeta meta = hand.getItemMeta();
+                            ArrayList<String> list = new ArrayList<>();
+                            list.add(ChatColor.of("#221726")+"Souls wander around in this stone");
+                            list.add(ChatColor.of("#00FFAA")+"Level:"+i);
+                            meta.setLore(list);
+                            hand.setItemMeta(meta);
+                        }else if (i >= 14){
                             LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
                             summoned.setCustomName(p.getDisplayName()+"'s "+type.getName());
                             summoned.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,1));
                             summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,PotionEffect.INFINITE_DURATION,0));
+                            summoned.setAbsorptionAmount(4);
                             Soul.clear();
                             p.getWorld().playSound(p.getLocation(),Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
                             ItemStack hand = p.getInventory().getItemInMainHand();
@@ -163,7 +211,6 @@ public class Undeadstone implements Listener {
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
-                                            spawn.setArmsRaised(true);
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }
                                     }

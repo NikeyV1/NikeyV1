@@ -111,7 +111,7 @@ public class Frozenstone implements Listener {
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
                             //cooldown-ability
-                            if (i ==10 || i == 11){
+                            if (i ==10){
                                 timer = 4;
                                 new BukkitRunnable() {
                                     @Override
@@ -127,7 +127,23 @@ public class Frozenstone implements Listener {
                                         }
                                     }
                                 }.runTaskTimer(NikeyV1.getPlugin(),15,15);
-                            }else if (i >= 12) {
+                            } else if (i == 11) {
+                                timer = 4;
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        timer--;
+                                        if (timer ==0){
+                                            cancel();
+                                        }else {
+                                            Snowball snowball = p.launchProjectile(Snowball.class);
+                                            snowball.setVelocity(p.getLocation().getDirection().multiply(2));
+                                            snowball.setShooter(p);
+                                            snowball.setCustomName("B");
+                                        }
+                                    }
+                                }.runTaskTimer(NikeyV1.getPlugin(),15,15);
+                            } else if (i >= 12) {
                                 timer = 4;
                                 new BukkitRunnable() {
                                     @Override
@@ -148,7 +164,171 @@ public class Frozenstone implements Listener {
                     }
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
-                if (i == 15||i == 16||i == 17){
+                if (i == 15){
+                    if (!p.isSneaking()) {
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            event.setCancelled(true);
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
+                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                            //Cooldown-Ability
+
+                            for (Entity e : p.getNearbyEntities(40,40,40)){
+                                if (e instanceof LivingEntity){
+                                    LivingEntity entity = (LivingEntity) e;
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
+                                    notp.add(entity);
+                                    entity.damage(18,p);
+                                    entity.setFreezeTicks(600);
+                                    SmokeEffect effect = new SmokeEffect(NikeyV1.em);
+                                    effect.setEntity(entity);
+                                    effect.particle = Particle.SNOWFLAKE;
+                                    effect.duration = 20000;
+                                    effect.particles = 2;
+                                    effect.start();
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            notp.remove(entity);
+                                        }
+                                    }.runTaskLater(NikeyV1.getPlugin(),400);
+                                }
+                            }
+                        }
+                    }
+                } else if (i == 16) {
+                    if (!p.isSneaking()) {
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            event.setCancelled(true);
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
+                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                            //Cooldown-Ability
+
+                            for (Entity e : p.getNearbyEntities(50,50,50)){
+                                if (e instanceof LivingEntity){
+                                    LivingEntity entity = (LivingEntity) e;
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
+                                    notp.add(entity);
+                                    entity.damage(18,p);
+                                    entity.setFreezeTicks(600);
+                                    SmokeEffect effect = new SmokeEffect(NikeyV1.em);
+                                    effect.setEntity(entity);
+                                    effect.particle = Particle.SNOWFLAKE;
+                                    effect.duration = 20000;
+                                    effect.particles = 2;
+                                    effect.start();
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            notp.remove(entity);
+                                        }
+                                    }.runTaskLater(NikeyV1.getPlugin(),400);
+                                }
+                            }
+                        }
+                    }
+                }else if (i == 17) {
+                    if (!p.isSneaking()) {
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            event.setCancelled(true);
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
+                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                            //Cooldown-Ability
+
+                            for (Entity e : p.getNearbyEntities(50,50,50)){
+                                if (e instanceof LivingEntity){
+                                    LivingEntity entity = (LivingEntity) e;
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
+                                    notp.add(entity);
+                                    entity.damage(24,p);
+                                    entity.setFreezeTicks(600);
+                                    SmokeEffect effect = new SmokeEffect(NikeyV1.em);
+                                    effect.setEntity(entity);
+                                    effect.particle = Particle.SNOWFLAKE;
+                                    effect.duration = 20000;
+                                    effect.particles = 2;
+                                    effect.start();
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            notp.remove(entity);
+                                        }
+                                    }.runTaskLater(NikeyV1.getPlugin(),400);
+                                }
+                            }
+                        }
+                    }
+                }else if (i == 18) {
+                    if (!p.isSneaking()) {
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            event.setCancelled(true);
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
+                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                            //Cooldown-Ability
+
+                            for (Entity e : p.getNearbyEntities(50,50,50)){
+                                if (e instanceof LivingEntity){
+                                    LivingEntity entity = (LivingEntity) e;
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
+                                    notp.add(entity);
+                                    entity.damage(24,p);
+                                    entity.setFreezeTicks(700);
+                                    SmokeEffect effect = new SmokeEffect(NikeyV1.em);
+                                    effect.setEntity(entity);
+                                    effect.particle = Particle.SNOWFLAKE;
+                                    effect.duration = 20000;
+                                    effect.particles = 2;
+                                    effect.start();
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            notp.remove(entity);
+                                        }
+                                    }.runTaskLater(NikeyV1.getPlugin(),400);
+                                }
+                            }
+                        }
+                    }
+                } else if (i >=19){
                     if (!p.isSneaking()) {
                         if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
                             event.setCancelled(true);
@@ -170,47 +350,6 @@ public class Frozenstone implements Listener {
                                     LivingEntity entity = (LivingEntity) e;
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,3,false));
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
-                                    notp.add(entity);
-                                    entity.damage(20,p);
-                                    entity.setFreezeTicks(600);
-                                    SmokeEffect effect = new SmokeEffect(NikeyV1.em);
-                                    effect.setEntity(entity);
-                                    effect.particle = Particle.SNOWFLAKE;
-                                    effect.duration = 20000;
-                                    effect.particles = 2;
-                                    effect.start();
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            notp.remove(entity);
-                                        }
-                                    }.runTaskLater(NikeyV1.getPlugin(),400);
-                                }
-                            }
-                        }
-                    }
-                }else if (i >=18){
-                    if (!p.isSneaking()) {
-                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            event.setCancelled(true);
-                            p.updateInventory();
-                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
-                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
-                            //Cooldown-Ability
-
-                            for (Entity e : p.getNearbyEntities(50,50,50)){
-                                if (e instanceof LivingEntity){
-                                    LivingEntity entity = (LivingEntity) e;
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,3,false));
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,3,false));
                                     notp.add(entity);
                                     entity.damage(24,p);
                                     entity.setFreezeTicks(700);
@@ -363,21 +502,29 @@ public class Frozenstone implements Listener {
             LivingEntity e = (LivingEntity) hitEntity;
             int i = NikeyV1.getPlugin().getConfig().getInt(p.getName() + ".level");
             assert e != null;
-            if (i >=12){
-                e.damage(18,p);
-            }else {
+            if (i == 10 || i == 11){
                 e.damage(12,p);
+            }else if (i == 12 || i == 13){
+                e.damage(15,p);
+            } else if (i >= 14) {
+                e.damage(18,p);
             }
             e.setFreezeTicks(800);
-            e.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*20,3,false));
+            if (i == 10 || i == 11 || i == 12) {
+                e.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*20,1,false));
+            }else if (i >= 13) {
+                e.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*20,3,false));
+            }
             e.setVisualFire(false);
-            entities.add(e);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    entities.remove(e);
-                }
-            }.runTaskLater(NikeyV1.getPlugin(),20*20);
+            if (i >= 11) {
+                entities.add(e);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        entities.remove(e);
+                    }
+                }.runTaskLater(NikeyV1.getPlugin(),20*20);
+            }
         }
         if (entity instanceof SpectralArrow && entity.getCustomName() != null && entity.getCustomName().equals(ChatColor.DARK_AQUA + "FD") && shooter instanceof Player) {
             Player p = (Player) shooter;

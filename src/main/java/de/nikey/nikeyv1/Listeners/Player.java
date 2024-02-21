@@ -6,16 +6,13 @@ import de.nikey.nikeyv1.Stones.Electrostone;
 import de.nikey.nikeyv1.Timer.TimerBuild;
 import de.nikey.nikeyv1.Util.Items;
 import io.papermc.paper.event.entity.EntityMoveEvent;
-import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -31,8 +28,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-
-import static org.bukkit.Statistic.Type.ITEM;
 
 
 @SuppressWarnings("ALL")
@@ -111,10 +106,13 @@ public class Player implements Listener {
         }
         if (Electrostone.stunned.contains(entity)){
             Integer i = config.getInt(damager.getName() + ".level");
-            if (i == 15||i == 16||i == 17) {
+            if (i == 15) {
                 float damg = (float) ((float) event.getDamage()*1.4);
                 event.setDamage(damg);
-            } else if (i >= 18) {
+            } else if (i == 16 || i == 17) {
+                float damg = (float) ((float) event.getDamage()*1.5);
+                event.setDamage(damg);
+            }else if (i >= 18) {
                 float damg = (float) ((float) event.getDamage()*1.6);
                 event.setDamage(damg);
             }
