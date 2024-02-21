@@ -117,7 +117,6 @@ public class Frozenstone implements Listener {
                                     @Override
                                     public void run() {
                                         timer--;
-                                        p.sendMessage(String.valueOf(timer));
                                         if (timer ==0){
                                             cancel();
                                         }else {
