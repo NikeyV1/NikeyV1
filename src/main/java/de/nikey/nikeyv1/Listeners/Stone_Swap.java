@@ -38,6 +38,7 @@ public class Stone_Swap implements Listener {
                 FileConfiguration config = NikeyV1.getPlugin().getConfig();
                 String stone = config.getString(player.getName() + ".stone");
                 Integer level = config.getInt(player.getName() + ".level");
+                player.getActivePotionEffects().clear();
                 swap(player,config,level, stone);
                 player.getWorld().playSound(player.getLocation(),Sound.BLOCK_BEACON_POWER_SELECT,1,1);
             }

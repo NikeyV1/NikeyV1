@@ -8,12 +8,14 @@ import de.slikey.effectlib.effect.SmokeEffect;
 import io.papermc.paper.configuration.type.fallback.FallbackValue;
 import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.*;
+import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -54,18 +56,55 @@ public class Frozenstone implements Listener {
     public static HashMap<Player, Integer> arrowsShot = new HashMap<>();
 
 
+    private boolean isColdBiome(Biome biome) {
+        // Define cold biomes (you can adjust this list based on your preferences)
+        Biome[] coldBiomes = {Biome.FROZEN_OCEAN, Biome.FROZEN_RIVER, Biome.COLD_OCEAN, Biome.DEEP_COLD_OCEAN, Biome.ICE_SPIKES, Biome.OCEAN,
+                Biome.SNOWY_BEACH, Biome.SNOWY_PLAINS, Biome.SNOWY_SLOPES, Biome.SNOWY_TAIGA, Biome.STONY_SHORE, Biome.FROZEN_RIVER,Biome.DEEP_FROZEN_OCEAN,Biome.JAGGED_PEAKS,
+                Biome.GROVE};
+
+        // Check if the biome is in the list of cold biomes
+        for (Biome coldBiome : coldBiomes) {
+            if (biome.equals(coldBiome)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         FileConfiguration config = NikeyV1.getPlugin().getConfig();
         String stone = config.getString(player.getName() + ".stone");
-        if (stone.equalsIgnoreCase("Frozen")&&player.getGameMode() == GameMode.SURVIVAL && config.getInt(player.getName()+".level") >4){
+        if (stone.equalsIgnoreCase("Frozen")&&player.getGameMode() == GameMode.SURVIVAL && config.getInt(player.getName()+".level") >=5){
             if (player.getLocation().getBlock().getType() == Material.POWDER_SNOW) {
                 player.setAllowFlight(true);
                 player.setFlying(true);
             } else {
                 player.setAllowFlight(false);
                 player.setFlying(false);
+            }
+            if (isColdBiome(player.getWorld().getBiome(player.getLocation()))) {
+                player.setFlySpeed(player.getFlySpeed() * 1.2f);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        Entity entity = event.getEntity();
+        if (entity instanceof Player) {
+            Player player = (Player) entity;
+            int level = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
+            String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
+            if (stone.equalsIgnoreCase("frozen") && event.getCause() == EntityDamageEvent.DamageCause.FREEZE) {
+                if (level == 3) {
+                    double damage = event.getDamage();
+                    event.setDamage(damage * 0.5);
+                } else if (level >= 4) {
+                    event.setCancelled(true);
+                }
             }
         }
     }

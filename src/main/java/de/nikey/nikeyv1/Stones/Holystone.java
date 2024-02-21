@@ -204,7 +204,7 @@ public class Holystone implements Listener {
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR){
                 if (!p.isSneaking()) {
-                    if (i == 15||i == 16||i == 17){
+                    if (i == 15){
                         if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
                             p.updateInventory();
                             remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
@@ -227,11 +227,11 @@ public class Holystone implements Listener {
                                     armor = armor*2;
                                     int players = p.getNearbyEntities(20, 20, 20).size();
                                     if (players <= 2){
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
                                     } else if (players  == 3||players == 4 || players == 5) {
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
                                     }else {
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,3));
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
                                     }
                                     player.damage(armor+10,p);
                                 }
@@ -241,7 +241,118 @@ public class Holystone implements Listener {
                                 }
                             }
                         }
-                    } else if (i >= 18) {
+                    } else if (i == 16) {
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
+                            ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                    return;
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(),20*180);
+                            //Cooldown-Ability
+                            p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
+                            for (Entity e : p.getNearbyEntities(25,25,25)){
+                                if (e instanceof Player) {
+                                    Player player =(Player) e;
+                                    double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                    armor = armor*2;
+                                    int players = p.getNearbyEntities(25, 25, 25).size();
+                                    if (players <= 2){
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                    } else if (players  == 3||players == 4 || players == 5) {
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                    }else {
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                    }
+                                    player.damage(armor+10,p);
+                                }
+                                if (e instanceof LivingEntity){
+                                    LivingEntity entity = (LivingEntity) e;
+                                    entity.damage(12,p);
+                                }
+                            }
+                        }
+                    }else if (i == 17) {
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
+                            ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                    return;
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(),20*180);
+                            //Cooldown-Ability
+                            p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
+                            for (Entity e : p.getNearbyEntities(25,25,25)){
+                                if (e instanceof Player) {
+                                    Player player =(Player) e;
+                                    double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                    armor = armor*2;
+                                    int players = p.getNearbyEntities(25, 25, 25).size();
+                                    if (players <= 2){
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                    } else if (players  == 3||players == 4 || players == 5) {
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                    }else {
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                    }
+                                    player.damage(armor+18,p);
+                                }
+                                if (e instanceof LivingEntity){
+                                    LivingEntity entity = (LivingEntity) e;
+                                    entity.damage(15,p);
+                                }
+                            }
+                        }
+                    } else if (i == 18) {
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
+                            ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                    return;
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(),20*180);
+                            //Cooldown-Ability
+                            p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
+                            for (Entity e : p.getNearbyEntities(25,25,25)){
+                                if (e instanceof Player) {
+                                    Player player =(Player) e;
+                                    double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                    armor = armor*2.6;
+                                    int players = p.getNearbyEntities(25, 25, 25).size();
+                                    if (players <= 2){
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                    } else if (players  == 3||players == 4 || players == 5) {
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                    }else {
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                    }
+                                    player.damage(armor+18,p);
+                                }
+                                if (e instanceof LivingEntity){
+                                    LivingEntity entity = (LivingEntity) e;
+                                    entity.damage(15,p);
+                                }
+                            }
+                        }
+                    }else if (i >= 19) {
                         if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
                             p.updateInventory();
                             remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();

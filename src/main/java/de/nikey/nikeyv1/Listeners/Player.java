@@ -62,13 +62,16 @@ public class Player implements Listener {
         if (config.contains(p.getName())){
             String stone = config.getString(p.getName() + ".stone");
             Integer level = config.getInt(p.getName() + ".level");
+            p.setFlySpeed(0.1f);
             if (stone.equalsIgnoreCase("Water")&&level >=5) run(p);
             if (stone.equalsIgnoreCase("Electric")) {
-                if (level == 3 || level==4){
-                    p.setWalkSpeed(0.22F);
-                } else if (level >= 5) {
-                    p.setWalkSpeed(0.23F);
-                }
+                if (level == 3){
+                    p.setWalkSpeed(0.2075F);
+                } else if (level == 4) {
+                    p.setWalkSpeed(0.2150F);
+                }else if (level == 5) {
+                    p.setWalkSpeed(0.2225F);
+                }else if (level >= 6) p.setWalkSpeed(0.23F);
             }else {
                 p.setWalkSpeed(0.2F);
             }

@@ -140,7 +140,70 @@ public class Undeadstone implements Listener {
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
                 if (p.isSneaking()){
-                    if (i == 15||i == 16||i == 17){
+                    if (i == 15){
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            event.setCancelled(true);
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
+                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                    return;
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                            //cooldown-ability
+                            timer = 40;
+                            player = p;
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    timer--;
+                                    if (timer == 0){
+                                        cancel();
+                                        return;
+                                    }else {
+                                        int x = (int) (p.getLocation().getX());
+                                        int z = (int) (p.getLocation().getZ());
+                                        int randomX = ThreadLocalRandom.current().nextInt(x-6, x+6);
+                                        int randomZ = ThreadLocalRandom.current().nextInt(z-6, z+6);
+                                        int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
+                                        Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
+                                        Random random = new Random();
+                                        int r = random.nextInt(2);
+                                        SmokeEffect effect = new SmokeEffect(NikeyV1.em);
+                                        effect.setLocation(location);
+                                        effect.particle = Particle.SOUL;
+                                        effect.duration = 100;
+                                        effect.particles = 3;
+                                        effect.start();
+                                        if (r == 0){
+                                            Zombie zombie = location.getWorld().spawn(location, Zombie.class);
+                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
+                                            zombie.setCustomName(p.getDisplayName()+"'s "+zombie.getType().getName());
+                                        }else if (r ==1){
+                                            ZombieVillager spawn = location.getWorld().spawn(location, ZombieVillager.class);
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
+                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
+                                        }else{
+                                            Zombie spawn = location.getWorld().spawn(location, Zombie.class);
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
+                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
+                                        }
+                                    }
+                                }
+                            }.runTaskTimer(NikeyV1.getPlugin(),10,10);
+                        }
+                    } else if (i == 16) {
                         if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
                             event.setCancelled(true);
                             p.updateInventory();
@@ -180,44 +243,105 @@ public class Undeadstone implements Listener {
                                         effect.duration = 100;
                                         effect.particles = 3;
                                         effect.start();
-                                        if (r ==0){
+                                        if (r == 0){
                                             Zombie zombie = location.getWorld().spawn(location, Zombie.class);
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
                                             zombie.setCustomName(p.getDisplayName()+"'s "+zombie.getType().getName());
                                         }else if (r ==1){
                                             ZombieVillager spawn = location.getWorld().spawn(location, ZombieVillager.class);
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }else if (r == 2){
                                             WitherSkeleton spawn = location.getWorld().spawn(location, WitherSkeleton.class);
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }else{
                                             Zombie spawn = location.getWorld().spawn(location, Zombie.class);
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }
                                     }
                                 }
                             }.runTaskTimer(NikeyV1.getPlugin(),10,10);
                         }
-                    }else if (i >=18){
+                    }else if (i == 17) {
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            event.setCancelled(true);
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
+                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                    return;
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                            //cooldown-ability
+                            timer = 40;
+                            player = p;
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    timer--;
+                                    if (timer == 0){
+                                        cancel();
+                                        return;
+                                    }else {
+                                        int x = (int) (p.getLocation().getX());
+                                        int z = (int) (p.getLocation().getZ());
+                                        int randomX = ThreadLocalRandom.current().nextInt(x-6, x+6);
+                                        int randomZ = ThreadLocalRandom.current().nextInt(z-6, z+6);
+                                        int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
+                                        Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
+                                        Random random = new Random();
+                                        int r = random.nextInt(3);
+                                        SmokeEffect effect = new SmokeEffect(NikeyV1.em);
+                                        effect.setLocation(location);
+                                        effect.particle = Particle.SOUL;
+                                        effect.duration = 100;
+                                        effect.particles = 3;
+                                        effect.start();
+                                        if (r == 0){
+                                            Zombie zombie = location.getWorld().spawn(location, Zombie.class);
+                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            zombie.setCustomName(p.getDisplayName()+"'s "+zombie.getType().getName());
+                                        }else if (r ==1){
+                                            ZombieVillager spawn = location.getWorld().spawn(location, ZombieVillager.class);
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
+                                        }else if (r == 2){
+                                            WitherSkeleton spawn = location.getWorld().spawn(location, WitherSkeleton.class);
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
+                                        }else{
+                                            Zombie spawn = location.getWorld().spawn(location, Zombie.class);
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
+                                        }
+                                    }
+                                }
+                            }.runTaskTimer(NikeyV1.getPlugin(),10,10);
+                        }
+                    }else if (i == 18) {
                         if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
                             event.setCancelled(true);
                             p.updateInventory();
@@ -257,12 +381,81 @@ public class Undeadstone implements Listener {
                                         effect.duration = 100;
                                         effect.particles = 3;
                                         effect.start();
-                                        if (r ==0){
+                                        if (r == 0){
+                                            Zombie zombie = location.getWorld().spawn(location, Zombie.class);
+                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            zombie.setCustomName(p.getDisplayName()+"'s "+zombie.getType().getName());
+                                        }else if (r ==1){
+                                            ZombieVillager spawn = location.getWorld().spawn(location, ZombieVillager.class);
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
+                                        }else if (r == 2){
+                                            WitherSkeleton spawn = location.getWorld().spawn(location, WitherSkeleton.class);
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
+                                        }else{
+                                            Zombie spawn = location.getWorld().spawn(location, Zombie.class);
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
+                                        }
+                                    }
+                                }
+                            }.runTaskTimer(NikeyV1.getPlugin(),10,10);
+                        }
+                    } else if (i >=19){
+                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
+                            event.setCancelled(true);
+                            p.updateInventory();
+                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
+                        }else {
+                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                    return;
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+                            //cooldown-ability
+                            timer = 60;
+                            player = p;
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    timer--;
+                                    if (timer == 0){
+                                        cancel();
+                                        return;
+                                    }else {
+                                        int x = (int) (p.getLocation().getX());
+                                        int z = (int) (p.getLocation().getZ());
+                                        int randomX = ThreadLocalRandom.current().nextInt(x-6, x+6);
+                                        int randomZ = ThreadLocalRandom.current().nextInt(z-6, z+6);
+                                        int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
+                                        Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
+                                        Random random = new Random();
+                                        int r = random.nextInt(3);
+                                        SmokeEffect effect = new SmokeEffect(NikeyV1.em);
+                                        effect.setLocation(location);
+                                        effect.particle = Particle.SOUL;
+                                        effect.duration = 100;
+                                        effect.particles = 3;
+                                        effect.start();
+                                        if (r == 0){
                                             Zombie zombie = location.getWorld().spawn(location, Zombie.class);
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
+                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
                                             zombie.setCustomName(p.getDisplayName()+"'s "+zombie.getType().getName());
                                         }else if (r ==1){
@@ -270,16 +463,15 @@ public class Undeadstone implements Listener {
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
-                                            spawn.setArmsRaised(true);
                                         }else if (r == 2){
                                             WitherSkeleton spawn = location.getWorld().spawn(location, WitherSkeleton.class);
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }else{
@@ -287,9 +479,8 @@ public class Undeadstone implements Listener {
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
-                                            spawn.setArmsRaised(true);
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }
                                     }

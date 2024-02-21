@@ -42,7 +42,6 @@ public class Firestone implements Listener {
     public static long remainingTime2;
     public static long remainingTime3;
 
-
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getItem() == null)return;
@@ -326,9 +325,27 @@ public class Firestone implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-
         Entity d = event.getDamager();
         Entity entity = event.getEntity();
+        if (d instanceof Player) {
+            Player player = (Player) d;
+            int level = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
+            String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
+            World world = player.getWorld();
+
+            // Check if the player is in the Nether
+            if (stone.equalsIgnoreCase("Fire")&&world.getEnvironment() == World.Environment.NETHER) {
+                if (level ==5) {
+                    double originalDamage = event.getDamage();
+                    double boostedDamage = originalDamage * 1.05; // Increase damage by 5%
+                    event.setDamage(boostedDamage);
+                } else if (level >= 6) {
+                    double originalDamage = event.getDamage();
+                    double boostedDamage = originalDamage * 1.075; // Increase damage by 7.5%
+                    event.setDamage(boostedDamage);
+                }
+            }
+        }
         if (entity instanceof Player && d instanceof LivingEntity){
             Player p = (Player) entity;
             LivingEntity damager = (LivingEntity) d;
@@ -379,12 +396,20 @@ public class Firestone implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
         if (entity instanceof Player) {
             Player p = (Player) entity;
             int i = NikeyV1.getPlugin().getConfig().getInt(p.getName() + ".level");
+            String stone = NikeyV1.getPlugin().getConfig().getString(p.getName() + ".stone");
+            if (stone.equalsIgnoreCase("Fire") && event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK || event.getCause() == EntityDamageEvent.DamageCause.FIRE) {
+                if (i == 3) {
+                    event.setDamage(event.getDamage() * 0.5);
+                } else if (i >= 4) {
+                    event.setCancelled(true);
+                }
+            }
             if (ability.containsKey(p.getUniqueId())){
                 if (i == 15){
                     long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();

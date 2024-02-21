@@ -1,5 +1,6 @@
 package de.nikey.nikeyv1.Stones;
 
+import com.sun.jna.platform.win32.ShTypes;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.Util.Tornado;
@@ -17,8 +18,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityAirChangeEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -26,6 +30,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
+import java.util.Random;
 import java.util.UUID;
 
 @SuppressWarnings("ALL")
@@ -42,10 +47,53 @@ public class Waterstone implements Listener {
     public void onEntityAirChange(EntityAirChangeEvent event) {
         Entity entity = event.getEntity();
         if (entity instanceof Player){
-            Player p = (Player) entity;
-            FileConfiguration config = NikeyV1.getPlugin().getConfig();
-            if (config.getString(p.getName()+".stone").equalsIgnoreCase("Water") && config.getInt(p.getName()+".level") >=3 && p.isInWater()){
-                event.setCancelled(true);
+            Player player = (Player) entity;
+            int level = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
+            String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
+            if (player.isInWater() && stone.equalsIgnoreCase("water")) {
+                if (level == 4) {
+                    Random random = new Random();
+                    int i = random.nextInt(2);
+                    if (i == 0) {
+                        event.setCancelled(true);
+                    }
+                } else if (level >= 5) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        int level = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
+        String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
+        if (stone.equalsIgnoreCase("water") && level >= 6) {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE,PotionEffect.INFINITE_DURATION,0));
+        }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        int level = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
+        String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
+        if (stone.equalsIgnoreCase("water")) {
+            if (player.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)) {
+                player.removePotionEffect(PotionEffectType.DOLPHINS_GRACE);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            int level = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
+            String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
+            if (stone.equalsIgnoreCase("water")&&level >= 3&&event.getCause() == EntityDamageEvent.DamageCause.DROWNING) {
+                event.setDamage(event.getDamage() * 0.5);
             }
         }
     }
