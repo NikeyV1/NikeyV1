@@ -31,8 +31,6 @@ public class Stone_Swap implements Listener {
                     player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
                 }
 
-
-                // Feuerwerksstern entfernen
                 player.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
 
                 FileConfiguration config = NikeyV1.getPlugin().getConfig();
