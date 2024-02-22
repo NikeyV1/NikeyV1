@@ -23,14 +23,16 @@ public class ReloadCommand implements Listener {
                 } else if (args[1].equalsIgnoreCase("Pack")) player.setResourcePack("https://download.mc-packs.net/pack/4c8d208dff3e41fe8f7b4236035b2b7b1a0cacd2.zip");
              }
         }else if (cmd.startsWith("/give") ||cmd.startsWith("7give")) {
-            if (args.length == 3) {
-                if (args[2].equalsIgnoreCase("Soulofstrenght") && player.isOp()){
-                    Items.SoulofStrenght(player);
-                    event.setCancelled(true);
-                } else if (args[2].equalsIgnoreCase("EnchantedAnvil") && player.isOp()) {
-                    Items.GiveEnchantedAnvil(player);
-                    event.setCancelled(true);
-                }
+            if(player.isOp()) {
+                if (args.length == 3) {
+                    if (args[2].equalsIgnoreCase("Soulofstrenght") && player.isOp()){
+                        Items.SoulofStrenght(player);
+                        event.setCancelled(true);
+                    } else if (args[2].equalsIgnoreCase("EnchantedAnvil") && player.isOp()) {
+                        Items.GiveEnchantedAnvil(player);
+                        event.setCancelled(true);
+                    }
+            }
             }
         }
     }
