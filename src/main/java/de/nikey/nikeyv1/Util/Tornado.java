@@ -2,14 +2,19 @@ package de.nikey.nikeyv1.Util;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Stones.Frozenstone;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -19,7 +24,7 @@ import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.List;
 
-public class Tornado {
+public class Tornado implements Listener {
     /**
      * Spawns a tornado at the given location l.
      *
@@ -79,16 +84,25 @@ public class Tornado {
                     Block b = l.getBlock();
                     entity = l.getWorld().spawnFallingBlock(l, Material.STONE, b.getData());
                     entity.getWorld().spawnParticle(Particle.DRIP_WATER,entity.getLocation(),10);
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            entity.remove();
+                        }
+                    }.runTaskLater(NikeyV1.getPlugin(),20*3);
 
-
-                    if (b.getType() != Material.WATER)
-                        b.setType(Material.AIR);
 
                     removable = !spew;
                 }
                 else {
-
                     entity = l.getWorld().spawnFallingBlock(l, m, d);
+
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            entity.remove();
+                        }
+                    }.runTaskLater(NikeyV1.getPlugin(),20*3);
                     entity.getWorld().spawnParticle(Particle.DRIP_WATER,entity.getLocation(),10);
                     removable = !explode;
                 }
@@ -156,12 +170,23 @@ public class Tornado {
                             }
                         }.runTaskLater(NikeyV1.getPlugin(),20*10);
                     }
+                    cleanStoneItemsAroundPlayer(entity);
                     if (level == 20) {
                         entity1.damage(5);
                         entity1.getWorld().spawnParticle(Particle.NAUTILUS,entity1.getLocation(),10);
                     } else if (level == 21) {
                         entity1.damage(9);
                         entity1.getWorld().spawnParticle(Particle.NAUTILUS,entity1.getLocation(),12);
+                    }
+                }
+            }
+
+            private void cleanStoneItemsAroundPlayer(Entity e) {
+                // Definiere den Radius, in dem nach Steinen gesucht werden soll (20 Blöcke)
+                int radius = 20;
+                for (Item item : e.getWorld().getEntitiesByClass(Item.class)) {
+                    if (item.getLocation().distanceSquared(e.getLocation()) <= radius * radius && item.getItemStack().getType() == Material.STONE) {
+                        item.remove();
                     }
                 }
             }
@@ -241,5 +266,16 @@ public class Tornado {
                 plugin.getServer().getScheduler().cancelTask(id);
             }
         }.runTaskLater(plugin, time);
+    }
+    @EventHandler
+    public void onBlockLand(EntityChangeBlockEvent event) {
+        if (event.getEntity() instanceof org.bukkit.entity.FallingBlock) {
+            org.bukkit.entity.FallingBlock fallingBlock = (org.bukkit.entity.FallingBlock) event.getEntity();
+            if (fallingBlock.getBlockData().getMaterial() == Material.STONE) {
+                event.setCancelled(true); // Cancel the event to prevent the block from landing
+                event.getBlock().setType(Material.AIR); // Set the block to air
+                fallingBlock.remove(); // Remove the falling block entity
+            }
+        }
     }
 }
