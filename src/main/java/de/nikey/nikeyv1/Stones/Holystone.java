@@ -467,6 +467,7 @@ public class Holystone implements Listener {
                         @Override
                         public void run() {
                             hitted.remove(event.getEntity());
+                            event.getEntity().sendMessage("§aYour totem and shield are now enabled!");
                         }
                     }.runTaskLater(NikeyV1.getPlugin(),20*25);
                 }
