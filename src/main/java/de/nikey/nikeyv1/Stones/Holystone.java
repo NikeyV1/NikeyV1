@@ -627,7 +627,7 @@ public class Holystone implements Listener {
                     for (UUID selectedPlayerUUID : selectedPlayers) {
                         Player selectedPlayer = Bukkit.getPlayer(selectedPlayerUUID);
                         if (selectedPlayer != null) {
-                            startAura(selectedPlayer,level);
+                            //startAura(selectedPlayer,level);
                             onlinePlayer.hidePlayer(NikeyV1.getPlugin(), selectedPlayer);
                             selectedPlayer.sendMessage(ChatColor.BLUE+player.getName()+ChatColor.GREEN+" buffed you");
                             if (level == 20) {

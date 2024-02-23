@@ -311,9 +311,13 @@ public class Waterstone implements Listener {
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 400,0));
-                                    double maxHealth = entity.getMaxHealth();
-                                    double damage = 0.35 * maxHealth; // 35% der maximalen Herzen als Schaden
-                                    entity.damage(damage);
+                                    double maxHealth = p.getMaxHealth();
+                                    double damage = maxHealth * 0.35;
+                                    if (entity.getHealth()-damage >= 1) {
+                                        entity.setHealth(entity.getHealth()-damage);
+                                    }else {
+                                        entity.setHealth(0);
+                                    }
                                     entity.setVisualFire(false);
                                 }
                             }
@@ -346,9 +350,13 @@ public class Waterstone implements Listener {
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 400,0));
-                                    double maxHealth = entity.getMaxHealth();
-                                    double damage = 0.35 * maxHealth; // 35% der maximalen Herzen als Schaden
-                                    entity.damage(damage);
+                                    double maxHealth = p.getMaxHealth();
+                                    double damage = maxHealth * 0.35;
+                                    if (entity.getHealth()-damage >= 1) {
+                                        entity.setHealth(entity.getHealth()-damage);
+                                    }else {
+                                        entity.setHealth(0);
+                                    }
                                     entity.setVisualFire(false);
                                 }
                             }
@@ -381,9 +389,13 @@ public class Waterstone implements Listener {
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 400,0));
-                                    double maxHealth = entity.getMaxHealth();
-                                    double damage = 0.45 * maxHealth; // 45% der maximalen Herzen als Schaden
-                                    entity.damage(damage);
+                                    double maxHealth = p.getMaxHealth();
+                                    double damage = maxHealth * 0.45;
+                                    if (entity.getHealth()-damage >= 1) {
+                                        entity.setHealth(entity.getHealth()-damage);
+                                    }else {
+                                        entity.setHealth(0);
+                                    }
                                     entity.setVisualFire(false);
                                 }
                             }
@@ -416,9 +428,13 @@ public class Waterstone implements Listener {
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 450,0));
-                                    double maxHealth = entity.getMaxHealth();
-                                    double damage = 0.45 * maxHealth; // 45% der maximalen Herzen als Schaden
-                                    entity.damage(damage);
+                                    double maxHealth = p.getMaxHealth();
+                                    double damage = maxHealth * 0.45;
+                                    if (entity.getHealth()-damage >= 1) {
+                                        entity.setHealth(entity.getHealth()-damage);
+                                    }else {
+                                        entity.setHealth(0);
+                                    }
                                     entity.setVisualFire(false);
                                 }
                             }
@@ -451,9 +467,13 @@ public class Waterstone implements Listener {
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 450,0));
-                                    double maxHealth = entity.getMaxHealth();
-                                    double damage = 0.45 * maxHealth; // 45% der maximalen Herzen als Schaden
-                                    entity.damage(damage);
+                                    double maxHealth = p.getMaxHealth();
+                                    double damage = maxHealth * 0.45;
+                                    if (entity.getHealth()-damage >= 1) {
+                                        entity.setHealth(entity.getHealth()-damage);
+                                    }else {
+                                        entity.setHealth(0);
+                                    }
                                     entity.setVisualFire(false);
                                 }
                             }
@@ -463,6 +483,8 @@ public class Waterstone implements Listener {
             }
         }
     }
+
+
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
