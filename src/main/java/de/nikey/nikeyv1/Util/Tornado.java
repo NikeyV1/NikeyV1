@@ -157,10 +157,10 @@ public class Tornado {
                         }.runTaskLater(NikeyV1.getPlugin(),20*10);
                     }
                     if (level == 20) {
-                        entity1.damage(4);
+                        entity1.damage(5);
                         entity1.getWorld().spawnParticle(Particle.NAUTILUS,entity1.getLocation(),10);
                     } else if (level == 21) {
-                        entity1.damage(7);
+                        entity1.damage(9);
                         entity1.getWorld().spawnParticle(Particle.NAUTILUS,entity1.getLocation(),12);
                     }
                 }

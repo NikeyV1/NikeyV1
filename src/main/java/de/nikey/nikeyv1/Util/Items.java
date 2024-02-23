@@ -147,7 +147,7 @@ public class Items {
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         anvil.addUnsafeEnchantment(Enchantment.DIG_SPEED,1);
         ArrayList<String> lore = new ArrayList<>();
-        lore.add("§7This Item has the Power to trick your §8Stone §7into swapping itself for a outher weak random §8Stone");
+        lore.add("§7This Item has the Power to trick your §8Stone §7into swapping itself for a outher random §8Stone");
         meta.setLore(lore);
         anvil.setItemMeta(meta);
         ShapedRecipe recipe = new ShapedRecipe(anvil);

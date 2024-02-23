@@ -5,7 +5,10 @@ import de.slikey.effectlib.effect.CylinderEffect;
 import de.slikey.effectlib.effect.ShieldEffect;
 import de.slikey.effectlib.effect.TornadoEffect;
 import io.papermc.paper.event.entity.EntityMoveEvent;
+import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -13,10 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -275,6 +275,8 @@ public class Electrostone implements Listener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player){
             Player p = (Player) event.getDamager();
+            int level = NikeyV1.getPlugin().getConfig().getInt(p.getName() + ".level");
+            String stone = NikeyV1.getPlugin().getConfig().getString(p.getName() + ".stone");
             if (p.getInventory().getItemInMainHand().getItemMeta() == null)return;
             if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase("§eElectric Stone")){
                 Entity entity = event.getEntity();
@@ -297,7 +299,6 @@ public class Electrostone implements Listener {
                             }
                         }.runTaskLater(NikeyV1.getPlugin(),20*180);
 
-                        String stone = config.getString(p.getName() + ".stone");
                         stunned.add(entity);
                         CylinderEffect effect = new CylinderEffect(NikeyV1.em);
                         effect.setEntity(entity);
@@ -333,7 +334,6 @@ public class Electrostone implements Listener {
                             }
                         }.runTaskLater(NikeyV1.getPlugin(),20*180);
 
-                        String stone = config.getString(p.getName() + ".stone");
                         stunned.add(entity);
                         CylinderEffect effect = new CylinderEffect(NikeyV1.em);
                         effect.setEntity(entity);
@@ -369,7 +369,6 @@ public class Electrostone implements Listener {
                             }
                         }.runTaskLater(NikeyV1.getPlugin(),20*180);
 
-                        String stone = config.getString(p.getName() + ".stone");
                         stunned.add(entity);
                         CylinderEffect effect = new CylinderEffect(NikeyV1.em);
                         effect.setEntity(entity);
@@ -393,6 +392,28 @@ public class Electrostone implements Listener {
                     }
                 }
             }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        int level = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
+        String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
+        if (stone.equalsIgnoreCase("electric")) {
+            if (level >= 7) {
+                if (level == 7) {
+                    player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.075);
+                } else if (level == 8) {
+                    player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.15);
+                }else if (level >= 9) {
+                    player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.2);
+                }
+            }else {
+                player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
+            }
+        }else {
+            player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
         }
     }
 

@@ -4,6 +4,7 @@ import de.nikey.nikeyv1.NikeyV1;
 import de.slikey.effectlib.effect.*;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
@@ -396,18 +397,28 @@ public class Firestone implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
         if (entity instanceof Player) {
             Player p = (Player) entity;
             int i = NikeyV1.getPlugin().getConfig().getInt(p.getName() + ".level");
             String stone = NikeyV1.getPlugin().getConfig().getString(p.getName() + ".stone");
-            if (stone.equalsIgnoreCase("Fire") && event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK || event.getCause() == EntityDamageEvent.DamageCause.FIRE) {
-                if (i == 3) {
-                    event.setDamage(event.getDamage() * 0.5);
-                } else if (i >= 4) {
-                    event.setCancelled(true);
+            if (stone.equalsIgnoreCase("Fire")) {
+                if (event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK || event.getCause() == EntityDamageEvent.DamageCause.FIRE) {
+                    if (i == 3) {
+                        event.setDamage(event.getDamage() * 0.5);
+                    } else if (i >= 4) {
+                        event.setCancelled(true);
+                    }
+                } else if (event.getCause() == EntityDamageEvent.DamageCause.LAVA) {
+                    if (i == 7) {
+                        event.setDamage(event.getDamage()*0.85);
+                    }else if (i == 8) {
+                        event.setDamage(event.getDamage()*0.70);
+                    }else if (i >= 9) {
+                        event.setDamage(event.getDamage()*0.55);
+                    }
                 }
             }
             if (ability.containsKey(p.getUniqueId())){

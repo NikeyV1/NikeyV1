@@ -18,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityAirChangeEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -513,6 +514,26 @@ public class Waterstone implements Listener {
                         Location BlocksAway = p.getLocation().add(p.getLocation().getDirection().multiply(4));
                         Tornado.spawnTornado(NikeyV1.getPlugin(),BlocksAway,Material.STONE,p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getData(),p.getLocation().getDirection().multiply(4.5),0.4,300,20*30,false,p,false);
                     }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        Entity damager = event.getDamager();
+        if (damager instanceof  Player) {
+            Player player = (Player) damager;
+            int level = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
+            String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
+            if (stone.equalsIgnoreCase("Water") && player.isInWater()) {
+                double damage = event.getDamage();
+                if (level == 7) {
+                    event.setDamage(damage *1.05);
+                }else if (level == 8) {
+                    event.setDamage(damage *1.075);
+                }else if (level >= 9) {
+                    event.setDamage(damage *1.1);
                 }
             }
         }
