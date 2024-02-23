@@ -83,6 +83,7 @@ public class Tornado implements Listener {
 
                     Block b = l.getBlock();
                     entity = l.getWorld().spawnFallingBlock(l, Material.STONE, b.getData());
+                    cleanStoneItemsAroundPlayer(entity);
                     entity.getWorld().spawnParticle(Particle.DRIP_WATER,entity.getLocation(),10);
                     new BukkitRunnable() {
                         @Override
@@ -96,6 +97,7 @@ public class Tornado implements Listener {
                 }
                 else {
                     entity = l.getWorld().spawnFallingBlock(l, m, d);
+                    cleanStoneItemsAroundPlayer(entity);
 
                     new BukkitRunnable() {
                         @Override
@@ -145,7 +147,7 @@ public class Tornado implements Listener {
                 }
 
                 // Pick up other entities
-                List<org.bukkit.entity.Entity> entities = entity.getNearbyEntities(1.0D, 1.0D, 1.0D);
+                List<org.bukkit.entity.Entity> entities = entity.getNearbyEntities(1.5D, 1.5D, 1.5D);
                 for(org.bukkit.entity.Entity e : entities) {
                     if(!e.hasMetadata("vortex")) {
                         new_blocks.add(new VortexBlock(e));
@@ -170,7 +172,6 @@ public class Tornado implements Listener {
                             }
                         }.runTaskLater(NikeyV1.getPlugin(),20*10);
                     }
-                    cleanStoneItemsAroundPlayer(entity);
                     if (level == 20) {
                         entity1.damage(5);
                         entity1.getWorld().spawnParticle(Particle.NAUTILUS,entity1.getLocation(),10);
@@ -182,11 +183,12 @@ public class Tornado implements Listener {
             }
 
             private void cleanStoneItemsAroundPlayer(Entity e) {
-                // Definiere den Radius, in dem nach Steinen gesucht werden soll (20 Blöcke)
-                int radius = 20;
-                for (Item item : e.getWorld().getEntitiesByClass(Item.class)) {
-                    if (item.getLocation().distanceSquared(e.getLocation()) <= radius * radius && item.getItemStack().getType() == Material.STONE) {
-                        item.remove();
+                for (Entity entity1 :e.getNearbyEntities(20,20,20)) {
+                    if (entity1 instanceof Item) {
+                        Item item = (Item) entity1;
+                        if (item.getItemStack().getType() == Material.STONE) {
+                            item.remove();
+                        }
                     }
                 }
             }

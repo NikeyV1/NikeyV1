@@ -78,12 +78,8 @@ public class Waterstone implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        int level = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
-        String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
-        if (stone.equalsIgnoreCase("water")) {
-            if (player.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)) {
-                player.removePotionEffect(PotionEffectType.DOLPHINS_GRACE);
-            }
+        if (player.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)) {
+            player.removePotionEffect(PotionEffectType.DOLPHINS_GRACE);
         }
     }
 

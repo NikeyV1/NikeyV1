@@ -1,6 +1,7 @@
 package de.nikey.nikeyv1.Util;
 
 import de.nikey.nikeyv1.NikeyV1;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -194,5 +195,22 @@ public class Items {
         anvil.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         anvil.setItemMeta(meta);
         player.getInventory().addItem(anvil);
+    }
+
+
+    public static void GiveInfernoBlade(Player player) {
+        ItemStack sword = new ItemStack(Material.NETHERITE_SWORD);
+        ItemMeta itemMeta = sword.getItemMeta();
+        itemMeta.setDisplayName("§dInferno Blade");
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add(null);
+        lore.add("§7What will you do?");
+        lore.add("§7§kDeath is inevitable");
+        itemMeta.setLore(lore);
+        itemMeta.setUnbreakable(false);
+        itemMeta.setCustomModelData(1);
+        sword.setItemMeta(itemMeta);
+        sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL,7);
+        player.getInventory().addItem(sword);
     }
 }

@@ -127,9 +127,25 @@ public class Player implements Listener {
         Item itemDrop = event.getItemDrop();
         org.bukkit.entity.Player player = event.getPlayer();
         PlayerInventory inventory = player.getInventory();
-        if (itemDrop.getItemStack().getType() == Material.FIREWORK_STAR||itemDrop.getItemStack().getItemMeta().hasLore()){
-            event.setCancelled(true);
+        if (itemDrop.getItemStack().getType() == Material.FIREWORK_STAR || itemDrop.getItemStack().getType() == Material.NETHERITE_SWORD && itemDrop.getItemStack().getItemMeta().hasLore()){
+            if (!isInventoryFull(player)) {
+                event.setCancelled(true);
+            }else {
+                ItemStack droppedItem = event.getItemDrop().getItemStack();
+                player.getInventory().setItemInOffHand(droppedItem);
+                event.getItemDrop().remove();
+            }
         }
+    }
+
+    private boolean isInventoryFull(org.bukkit.entity.Player player) {
+        Inventory inv = player.getInventory();
+        for (ItemStack item : inv.getContents()) {
+            if (item == null || item.getType().isAir()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @EventHandler
@@ -218,6 +234,10 @@ public class Player implements Listener {
                 if (item != null && item.getType() == Material.FIREWORK_STAR) {
                     // Stone entfernen
                     event.getDrops().remove(item);
+                    config.set(player.getName() + ".buffed", false);
+                    boolean buffed = config.getBoolean(player.getName() + ".buffed");
+                    if (buffed) {
+                    }
                 }
             }
         }else {
@@ -303,7 +323,6 @@ public class Player implements Listener {
                                     TimerBuild timerBuild = new TimerBuild();
                                     if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
                                         if (p.getLevel() > 10 || p.getGameMode() == GameMode.CREATIVE) {
-                                            p.sendMessage("H");
                                             inventory.setItem(13, null);
                                             p.closeInventory();
                                             timerBuild.setLevel(num + 1);
@@ -382,7 +401,7 @@ public class Player implements Listener {
                                             p.sendMessage("You dont have 40 levels!");
                                         }
                                     }
-                                } else if (num == 16 || num == 17 || num == 18 || num == 19 || num == 20) {
+                                } else if (num == 16 || num == 17 || num == 18 || num == 19) {
                                     TimerBuild timerBuild = new TimerBuild();
                                     if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
                                         // Durchlaufe das Inventar des Spielers und entferne die Soul of Strenght
@@ -407,7 +426,7 @@ public class Player implements Listener {
                                             }
                                         }
                                     }
-                                } else if (num == 21) {
+                                } else if (num == 20) {
                                     TimerBuild timerBuild = new TimerBuild();
                                     if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
                                         // Durchlaufe das Inventar des Spielers und entferne die Soul of Strenght
@@ -432,6 +451,19 @@ public class Player implements Listener {
                                             }
                                         }
                                     }
+                                }else if (num == 21) {
+                                    TimerBuild timerBuild = new TimerBuild();
+                                    if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
+                                        // Durchlaufe das Inventar des Spielers und entferne die Soul of Strenght
+                                        for (ItemStack soul : p.getInventory().getContents()) {
+                                            if (soul != null && soul.getType() == Material.DRAGON_EGG) {
+                                                p.getInventory().remove(soul);
+                                                p.closeInventory();
+                                                config.set(p.getName() + ".buffed", true);
+                                                Items.GiveInfernoBlade(p);
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -444,18 +476,21 @@ public class Player implements Listener {
             Material itemMaterial = event.getCursor().getType();
 
             // Überprüfen, ob es sich um ein Hopper- oder Trichter-Minecart-Inventar handelt
-            if (isMinecartInventory(clickedInventory) && itemMaterial == Material.FIREWORK_STAR) {
-                event.setCancelled(true);
-                player.sendMessage("§cYou are not allowed to do that!");
-                player.damage(10);
-
+            if (isMinecartInventory(clickedInventory)) {
+                if (itemMaterial == Material.FIREWORK_STAR || itemMaterial == Material.NETHERITE_SWORD && event.getCursor().getItemMeta().hasLore()) {
+                    event.setCancelled(true);
+                    player.sendMessage("§cYou are not allowed to do that!");
+                    player.damage(4);
+                }
             }
 
             // Überprüfen, ob es sich um eine Truhe handelt und der Spieler versucht, Diamanten zu legen
-            if (clickedInventory != null && isChest(clickedInventory) && itemMaterial == Material.FIREWORK_STAR) {
-                event.setCancelled(true);
-                player.sendMessage("§cYou are not allowed to do that!");
-                player.damage(10);
+            if (clickedInventory != null && isChest(clickedInventory)) {
+                if ( itemMaterial == Material.FIREWORK_STAR || itemMaterial == Material.NETHERITE_SWORD && event.getCursor().getItemMeta().hasLore()) {
+                    event.setCancelled(true);
+                    player.sendMessage("§cYou are not allowed to do that!");
+                    player.damage(4);
+                }
             }
 
             Inventory top = event.getView().getTopInventory();
@@ -463,7 +498,7 @@ public class Player implements Listener {
 
 
             if (bottom.getType() == InventoryType.PLAYER) {
-                if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.FIREWORK_STAR) {
+                if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.FIREWORK_STAR ||event.getCurrentItem().getType() == Material.NETHERITE_SWORD && event.getCurrentItem().getItemMeta().hasLore()) {
                     if (top.getType() == InventoryType.CHEST  || event.getInventory().getType() == InventoryType.ANVIL|| event.getInventory().getType() == InventoryType.BARREL|| event.getInventory().getType() == InventoryType.BEACON|| event.getInventory().getType() == InventoryType.BLAST_FURNACE|| event.getInventory().getType() == InventoryType.BREWING|| event.getInventory().getType() == InventoryType.CARTOGRAPHY|| event.getInventory().getType() == InventoryType.LOOM
                             || event.getInventory().getType() == InventoryType.SMOKER|| event.getInventory().getType() == InventoryType.ENDER_CHEST|| event.getInventory().getType() == InventoryType.STONECUTTER|| event.getInventory().getType() == InventoryType.SHULKER_BOX|| event.getInventory().getType() == InventoryType.SMITHING|| event.getInventory().getType() == InventoryType.GRINDSTONE|| event.getInventory().getType() == InventoryType.FURNACE|| event.getInventory().getType() == InventoryType.ENCHANTING|| event.getInventory().getType() == InventoryType.HOPPER|| event.getInventory().getType() == InventoryType.DROPPER|| event.getInventory().getType() == InventoryType.DISPENSER
                     ) {
@@ -481,9 +516,8 @@ public class Player implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Block clickedBlock = event.getClickedBlock();
-        ItemStack item = event.getItem();
-        if (item != null&& item.getType() == Material.FIREWORK_STAR ){
-            if (clickedBlock.getType() == Material.DECORATED_POT && item.getItemMeta().hasLore()) {
+        if (event.getItem() != null&& event.getItem().getType() == Material.FIREWORK_STAR || event.getItem().getType() == Material.NETHERITE_SWORD && event.getItem().getItemMeta().hasLore()){
+            if (clickedBlock.getType() == Material.DECORATED_POT && event.getItem().getItemMeta().hasLore()) {
                 event.setCancelled(true);
                 event.getPlayer().damage(4);
                 event.getPlayer().sendMessage("§cYou are not allowed to do that!");
@@ -493,7 +527,7 @@ public class Player implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
-        if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() == Material.FIREWORK_STAR && event.getPlayer().getItemInHand().getItemMeta().hasLore()) {
+        if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() == Material.FIREWORK_STAR || event.getPlayer().getItemInHand().getType() == Material.NETHERITE_SWORD && event.getPlayer().getItemInHand().getItemMeta().hasLore()) {
             if (event.getRightClicked() != null && event.getRightClicked().getType() == EntityType.ITEM_FRAME) {
                 event.getPlayer().damage(4);
                 event.getPlayer().sendMessage("§cYou are not allowed to do that!");
@@ -514,7 +548,7 @@ public class Player implements Listener {
         if (event.getEntity() instanceof org.bukkit.entity.Player) {
             org.bukkit.entity.Player p = (org.bukkit.entity.Player) event.getEntity();
             Item item = event.getItem();
-            if (item.getItemStack().getType() == Material.FIREWORK_STAR && item.getItemStack().getItemMeta().hasLore()) {
+            if (item.getItemStack().getType() == Material.FIREWORK_STAR||item.getItemStack().getType() == Material.NETHERITE_SWORD && item.getItemStack().getItemMeta().hasLore()) {
                 event.getEntity().damage(4);
                 event.getEntity().sendMessage("§cYou are not allowed to do that!");
                 Bukkit.broadcastMessage(ChatColor.RED+ event.getEntity().getName() +" triggered Stone-SMP anti Exploit!");
