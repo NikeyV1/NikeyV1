@@ -44,6 +44,8 @@ public class Holystone implements Listener {
     public static HashMap<UUID, Long> ability = new HashMap<>();
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
     private int timer;
+
+    private int particle;
     public static long remainingTime1;
     public static long remainingTime2;
     public static long remainingTime3;
@@ -340,7 +342,7 @@ public class Holystone implements Listener {
                                 if (e instanceof Player) {
                                     Player player =(Player) e;
                                     double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                    armor = armor*2.6;
+                                    armor = armor*2.45;
                                     int players = p.getNearbyEntities(25, 25, 25).size();
                                     if (players <= 2){
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
@@ -377,7 +379,7 @@ public class Holystone implements Listener {
                                 if (e instanceof Player) {
                                     Player player =(Player) e;
                                     double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                    armor = armor*2.6;
+                                    armor = armor*2.45;
                                     int players = p.getNearbyEntities(25, 25, 25).size();
                                     if (players <= 2){
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
@@ -461,15 +463,27 @@ public class Holystone implements Listener {
             Player damager = (Player) event.getDamager();
             if (selectedPlayers.contains(damager.getUniqueId())) {
                 if (!hitted.contains((Player) event.getEntity())) {
-                    event.getEntity().sendMessage("§cYour totem and shield are disabled");
+                    LivingEntity entity = (LivingEntity) event.getEntity();
+                    particle=20;
                     hitted.add((Player) event.getEntity());
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             hitted.remove(event.getEntity());
-                            event.getEntity().sendMessage("§aYour totem and shield are now enabled!");
                         }
-                    }.runTaskLater(NikeyV1.getPlugin(),20*25);
+                    }.runTaskLater(NikeyV1.getPlugin(),20*5);
+
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (particle == 0){
+                                cancel();
+                            }
+                            Location location = entity.getLocation().add(0,2.5F,0);
+                            entity.getWorld().spawnParticle(Particle.TOWN_AURA,location,5);
+                            particle--;
+                        }
+                    }.runTaskTimer(NikeyV1.getPlugin(),0,5);
                 }
                 double healingMultiplier = 0.04;
 
@@ -559,12 +573,27 @@ public class Holystone implements Listener {
             for (UUID selectedPlayerUUID : selectedPlayers) {
                 Player selectedPlayer = Bukkit.getPlayer(selectedPlayerUUID);
                 if (selectedPlayer != null) {
+                    selectedPlayer.getWorld().playSound(selectedPlayer.getLocation(),Sound.BLOCK_AMETHYST_BLOCK_BREAK,1,1);
                     if (level == 20) {
                         selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*30, 0)); // Strength effect
                         selectedPlayer.setHealth(20);
                         selectedPlayer.setFoodLevel(20);
                         selectedPlayer.setSaturation(20);
                         selectedPlayer.setFireTicks(0);
+                        //Effect
+                        CircleEffect effect = new CircleEffect(NikeyV1.em);
+                        effect.setEntity(selectedPlayer);
+                        effect.duration=1000*30;
+                        effect.enableRotation=false;
+                        effect.particle=Particle.SPELL_INSTANT;
+                        effect.start();
+                        //Remove Buff
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                selectedPlayers.remove(selectedPlayerUUID);
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(),20*30);
                     } else if (level == 21) {
                         selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*45, 0)); // Strength effect
                         selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*45, 1));
@@ -572,6 +601,21 @@ public class Holystone implements Listener {
                         selectedPlayer.setFoodLevel(20);
                         selectedPlayer.setSaturation(20);
                         selectedPlayer.setFireTicks(0);
+                        //Effect
+                        CircleEffect effect = new CircleEffect(NikeyV1.em);
+                        effect.setEntity(selectedPlayer);
+                        effect.duration=1000*45;
+                        effect.enableRotation=false;
+                        effect.particle=Particle.SPELL_INSTANT;
+                        effect.start();
+                        //Remove Buff
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                selectedPlayers.remove(selectedPlayerUUID);
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(),20*45);
+                        //Repair Armor
                         for (ItemStack armor : selectedPlayer.getInventory().getArmorContents()) {
                             armor.setDurability((short) 0);
                         }
@@ -592,14 +636,14 @@ public class Holystone implements Listener {
                                         onlinePlayer.showPlayer(NikeyV1.getPlugin(), selectedPlayer  );
                                     }
                                     vanishedPlayers.remove(player);
-                                }, 20*20); // 15 seconds (20 ticks per second)
+                                }, 20*20); // 20 seconds (20 ticks per second)
                             } else if (level == 21) {
                                 Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
                                     for (Player p : getServer().getOnlinePlayers()) {
                                         onlinePlayer.showPlayer(NikeyV1.getPlugin(), selectedPlayer  );
                                     }
                                     vanishedPlayers.remove(player);
-                                }, 20*25); // 20 seconds (20 ticks per second)
+                                }, 20*30); // 30 seconds (20 ticks per second)
                             }
                             vanishedPlayers.add(player);
                         }
@@ -617,12 +661,12 @@ public class Holystone implements Listener {
             public void run() {
                 ticks++;
                 if (level == 20) {
-                    if (ticks >= 20*20) { // 20 seconds (20 ticks per second)
+                    if (ticks >= 20*20) {
                         cancel();
                         auraTasks.remove(player);
                     }
                 }else if (level == 21) {
-                    if (ticks >= 20*25) { // 25 seconds (20 ticks per second)
+                    if (ticks >= 20*30) {
                         cancel();
                         auraTasks.remove(player);
                     }

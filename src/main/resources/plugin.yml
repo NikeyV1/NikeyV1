@@ -4,7 +4,7 @@ author: Nikey
 website: https://github.com/NikeyV1
 main: de.nikey.nikeyv1.NikeyV1
 api-version: '1.20'
-description: A stone plugin with ability's (This plugin needs "effect lib" to work url= https://dev.bukkit.org/projects/effectlib). Credit https://www.spigotmc.org/resources/tornado.16374/
+description: A stone plugin with ability's (This plugin needs "effect lib" to work url= https://dev.bukkit.org/projects/effectlib).
 depend:
   - EffectLib
 commands:
