@@ -1,5 +1,6 @@
 package de.nikey.nikeyv1.Listeners;
 
+import com.sun.jna.platform.win32.ShTypes;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
 import de.nikey.nikeyv1.Stones.Electrostone;
@@ -127,13 +128,19 @@ public class Player implements Listener {
         Item itemDrop = event.getItemDrop();
         org.bukkit.entity.Player player = event.getPlayer();
         PlayerInventory inventory = player.getInventory();
-        if (itemDrop.getItemStack().getType() == Material.FIREWORK_STAR || itemDrop.getItemStack().getType() == Material.NETHERITE_SWORD && itemDrop.getItemStack().getItemMeta().hasLore()){
+        if (itemDrop.getItemStack().getType() == Material.FIREWORK_STAR){
+            event.setCancelled(true);
+            player.sendMessage(String.valueOf(isInventoryFull(player)));
             if (!isInventoryFull(player)) {
                 event.setCancelled(true);
             }else {
                 ItemStack droppedItem = event.getItemDrop().getItemStack();
                 player.getInventory().setItemInOffHand(droppedItem);
-                event.getItemDrop().remove();
+                event.setCancelled(true);
+            }
+        }else {
+            if (itemDrop.getItemStack().getType() == Material.NETHERITE_SWORD && itemDrop.getItemStack().getItemMeta().hasLore()) {
+                event.setCancelled(true);
             }
         }
     }
@@ -142,6 +149,8 @@ public class Player implements Listener {
         Inventory inv = player.getInventory();
         for (ItemStack item : inv.getContents()) {
             if (item == null || item.getType().isAir()) {
+                Material type = item.getType();
+                player.sendMessage(String.valueOf(type));
                 return false;
             }
         }
@@ -231,12 +240,16 @@ public class Player implements Listener {
         if (i > 1){
             config.set(player.getName() +".level",i-1);
             for (ItemStack item : player.getInventory().getContents()) {
-                if (item != null && item.getType() == Material.FIREWORK_STAR) {
+                if (item != null && item.getType() == Material.FIREWORK_STAR || item.getType() == Material.NETHERITE_SWORD && item.getItemMeta().hasLore()) {
                     // Stone entfernen
                     event.getDrops().remove(item);
-                    config.set(player.getName() + ".buffed", false);
                     boolean buffed = config.getBoolean(player.getName() + ".buffed");
                     if (buffed) {
+                        config.set(player.getName() + ".buffed", false);
+                        ItemStack itemStack = new ItemStack(Material.DRAGON_EGG);
+                        Item spawn = player.getWorld().spawn(player.getLocation(), Item.class);
+                        spawn.setThrower(player.getUniqueId());
+                        spawn.setItemStack(itemStack);
                     }
                 }
             }
@@ -459,8 +472,15 @@ public class Player implements Listener {
                                             if (soul != null && soul.getType() == Material.DRAGON_EGG) {
                                                 p.getInventory().remove(soul);
                                                 p.closeInventory();
-                                                config.set(p.getName() + ".buffed", true);
-                                                Items.GiveInfernoBlade(p);
+                                                boolean buffed = config.getBoolean(p.getName() + ".buffed");
+                                                if (!buffed) {
+                                                    inventory.setItem(13, null);
+                                                    config.set(p.getName() + ".buffed", true);
+                                                    Items.GiveInfernoBlade(p);
+                                                    Items.GiveElementalStone(p);
+                                                }else {
+                                                    p.sendMessage("§cError: You are already buffed!");
+                                                }
                                             }
                                         }
                                     }
@@ -516,11 +536,13 @@ public class Player implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Block clickedBlock = event.getClickedBlock();
-        if (event.getItem() != null&& event.getItem().getType() == Material.FIREWORK_STAR || event.getItem().getType() == Material.NETHERITE_SWORD && event.getItem().getItemMeta().hasLore()){
-            if (clickedBlock.getType() == Material.DECORATED_POT && event.getItem().getItemMeta().hasLore()) {
-                event.setCancelled(true);
-                event.getPlayer().damage(4);
-                event.getPlayer().sendMessage("§cYou are not allowed to do that!");
+        if (event.getItem() != null) {
+            if (event.getItem().getType() == Material.FIREWORK_STAR || event.getItem().getType() == Material.NETHERITE_SWORD && event.getItem().getItemMeta().hasLore()){
+                if (clickedBlock.getType() == Material.DECORATED_POT && event.getItem().getItemMeta().hasLore()) {
+                    event.setCancelled(true);
+                    event.getPlayer().damage(4);
+                    event.getPlayer().sendMessage("§cYou are not allowed to do that!");
+                }
             }
         }
     }

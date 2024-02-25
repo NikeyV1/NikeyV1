@@ -207,10 +207,23 @@ public class Items {
         lore.add("§7What will you do?");
         lore.add("§7§kDeath is inevitable");
         itemMeta.setLore(lore);
-        itemMeta.setUnbreakable(false);
+        itemMeta.setUnbreakable(true);
         itemMeta.setCustomModelData(1);
         sword.setItemMeta(itemMeta);
         sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL,7);
         player.getInventory().addItem(sword);
+    }
+
+    public static void GiveElementalStone(Player player){
+        ItemStack elementalstone = new ItemStack(Material.FIREWORK_STAR);
+        ItemMeta meta =  elementalstone.getItemMeta();
+        meta.setDisplayName("§fElemental Stone");
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        elementalstone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add("§fThe combined power of all §8stones");
+        meta.setLore(lore);
+        elementalstone.setItemMeta(meta);
+        player.getInventory().addItem(elementalstone);
     }
 }
