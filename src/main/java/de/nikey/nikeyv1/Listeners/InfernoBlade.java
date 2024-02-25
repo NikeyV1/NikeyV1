@@ -19,7 +19,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
+import java.util.Random;
 
+@SuppressWarnings("ALL")
 public class InfernoBlade implements Listener {
 
     @EventHandler
@@ -32,30 +34,30 @@ public class InfernoBlade implements Listener {
             if (meta != null) {
                 // Getting the lore of the item
                 List<String> lore = meta.getLore();
-                player.sendMessage(String.valueOf(lore));
                 // Checking if lore contains the keyword "Combined"
-                if (lore != null && lore.contains("combined")) {
-                    // Getting the current display name
-                    String displayName = meta.getDisplayName();
-
-                    // Changing the color of the display name
-                    ChatColor newColor = getRandomColor();
-                    String newDisplayName = newColor + displayName;
-
-                    // Setting the new display name
-                    meta.setDisplayName(newDisplayName);
-                    item.setItemMeta(meta);
-
-                    // Informing the player
-                    player.sendMessage(ChatColor.GREEN + "The color of your stone's name has changed!");
+                if (lore != null ) {
+                    String l = String.valueOf(lore);
+                    if (l.equalsIgnoreCase("[§fThe combined power of all §8stones]")) {
+                        ChatColor currentColor = ChatColor.getByChar(meta.getDisplayName().charAt(1));
+                        ChatColor newColor = getRandomColor(currentColor);
+                        meta.setDisplayName(newColor + "Elemental Stone");
+                        item.setItemMeta(meta);
+                        player.sendMessage("The sword's color has changed to " + newColor + "!");
+                    }
                 }
             }
         }
     }
 
-    private ChatColor getRandomColor() {
-        ChatColor[] colors = ChatColor.values();
-        return colors[(int) (Math.random() * colors.length)];
+    private ChatColor getRandomColor(ChatColor currentColor) {
+        ChatColor[] colors = {ChatColor.RED, ChatColor.GREEN, ChatColor.BLUE, ChatColor.YELLOW, ChatColor.AQUA, ChatColor.LIGHT_PURPLE};
+        Random random = new Random();
+        ChatColor newColor = colors[random.nextInt(colors.length)];
+        // Ensure the new color is different from the current color
+        while (newColor == currentColor) {
+            newColor = colors[random.nextInt(colors.length)];
+        }
+        return newColor;
     }
 
     @EventHandler
