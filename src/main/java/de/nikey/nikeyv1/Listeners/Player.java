@@ -550,7 +550,7 @@ public class Player implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
         if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() == Material.FIREWORK_STAR || event.getPlayer().getItemInHand().getType() == Material.NETHERITE_SWORD && event.getPlayer().getItemInHand().getItemMeta().hasLore()) {
-            if (event.getRightClicked() != null && event.getRightClicked().getType() == EntityType.ITEM_FRAME) {
+            if (event.getRightClicked() != null && event.getRightClicked().getType() == EntityType.ITEM_FRAME || event.getRightClicked() != null && event.getRightClicked().getType() == EntityType.GLOW_ITEM_FRAME) {
                 event.getPlayer().damage(4);
                 event.getPlayer().sendMessage("§cYou are not allowed to do that!");
                 event.setCancelled(true);

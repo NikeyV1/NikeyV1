@@ -31,6 +31,8 @@ public class Elementalstone implements Listener {
 
     int dddick;
 
+    int flick;
+
     public static long remainingTime1;
     public static long remainingTime2;
     public static long remainingTime3;
@@ -39,7 +41,7 @@ public class Elementalstone implements Listener {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
 
-        if (item.getType() == Material.FIREWORK_STAR && item.getItemMeta().hasLore()) {
+        if (item != null&& item.getType() == Material.FIREWORK_STAR && item.getItemMeta().hasLore()) {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
                 // Getting the lore of the item
@@ -65,6 +67,7 @@ public class Elementalstone implements Listener {
                             timer = 200;
                             time = 200;
                             dddick = 200;
+                            flick = 200;
                             player.getWorld().setThundering(true);
                             player.getWorld().setWeatherDuration(20*180);
                             new BukkitRunnable() {
@@ -131,15 +134,15 @@ public class Elementalstone implements Listener {
                 }
             }
         }
-        TornadoEffect effect = new TornadoEffect(NikeyV1.em);
-        effect.setLocation(location);
-        effect.maxTornadoRadius = 3F;
-        effect.visibleRange = 70;
-        effect.circleParticles =32;
-        effect.cloudParticles =20;
-        effect.tornadoParticle = Particle.ELECTRIC_SPARK;
-        effect.duration = 1200;
-        effect.start();
+        //TornadoEffect effect = new TornadoEffect(NikeyV1.em);
+        //        effect.setLocation(location);
+        //        effect.maxTornadoRadius = 3F;
+        //        effect.visibleRange = 70;
+        //        effect.circleParticles =32;
+        //        effect.cloudParticles =20;
+        //        effect.tornadoParticle = Particle.ELECTRIC_SPARK;
+        //        effect.duration = 1200;
+        //        effect.start();
     }
     private void applyRandomNegativeEffect(LivingEntity entity) {
         // List of negative potion effects
