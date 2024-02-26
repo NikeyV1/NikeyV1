@@ -42,7 +42,6 @@ public class InfernoBlade implements Listener {
                         ChatColor newColor = getRandomColor(currentColor);
                         meta.setDisplayName(newColor + "Elemental Stone");
                         item.setItemMeta(meta);
-                        player.sendMessage("The sword's color has changed to " + newColor + "!");
                     }
                 }
             }

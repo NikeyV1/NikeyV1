@@ -48,6 +48,7 @@ public final class NikeyV1 extends JavaPlugin{
         manager.registerEvents(new Stone_Swap(),this);
         manager.registerEvents(new Tornado(),this);
         manager.registerEvents(new InfernoBlade(),this);
+        manager.registerEvents(new Elementalstone(),this);
         //Command
         getCommand("stone").setExecutor(new stone());
         getCommand("effect").setExecutor(new EffectCMD());

@@ -64,7 +64,12 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
                 long remainingTime3 = 0;
                 if (Arrays.asList("Electric", "Fire", "Water", "Frozen", "Undead", "Holy").contains(stone)) {
-                    remainingTime3 = getMasterCooldown(player,stone);
+                    boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
+                    if (!buffed) {
+                        remainingTime3 = getMasterCooldown(player,stone);
+                    }else {
+                        remainingTime3 = getElementalUltimate(player);
+                    }
                 }
                 int a = (int) ((remainingTime3 - System.currentTimeMillis()) / 1000);
                 setScore("§7Master Ability: " + (a <= 0 ? "§aReady" : "§c" + a + "/300"), 2);
@@ -78,12 +83,23 @@ public class ServerScoreboard extends ScoreboardBuilder {
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
                 if (Arrays.asList("Electric", "Fire", "Water", "Frozen", "Undead", "Holy").contains(stone)) {
-                    long remainingTime2 = getAbilityCooldown(player, stone);
-                    int a = (int) ((remainingTime2 - System.currentTimeMillis()) / 1000);
-                    if (a <= 0) {
-                        setScore("§7Ability 2: §aReady", 3);
-                    } else {
-                        setScore("§7Ability 2: §c" + a + "/180", 3);
+                    boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
+                    if (!buffed) {
+                        long remainingTime2 = getAbilityCooldown(player, stone);
+                        int a = (int) ((remainingTime2 - System.currentTimeMillis()) / 1000);
+                        if (a <= 0) {
+                            setScore("§7Ability 2: §aReady", 3);
+                        } else {
+                            setScore("§7Ability 2: §c" + a + "/180", 3);
+                        }
+                    }else {
+                        long remainingTime2 = getElementalAbility(player);
+                        int a = (int) ((remainingTime2 - System.currentTimeMillis()) / 1000);
+                        if (a <= 0) {
+                            setScore("§7Ability 2: §aReady", 3);
+                        } else {
+                            setScore("§7Ability 2: §c" + a + "/180", 3);
+                        }
                     }
                 }
             }
@@ -95,12 +111,23 @@ public class ServerScoreboard extends ScoreboardBuilder {
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
                 if (Arrays.asList("Electric", "Fire", "Water", "Frozen", "Undead", "Holy").contains(stone)) {
-                    long remainingTime = getCooldown(player, stone);
-                    int i = (int) ((remainingTime - System.currentTimeMillis()) / 1000);
-                    if (i <= 0) {
-                        setScore("§7Ability 1: §aReady", 4);
-                    } else {
-                        setScore("§7Ability 1: §c" + i + "/100", 4);
+                    boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
+                    if (!buffed) {
+                        long remainingTime = getCooldown(player, stone);
+                        int i = (int) ((remainingTime - System.currentTimeMillis()) / 1000);
+                        if (i <= 0) {
+                            setScore("§7Ability 1: §aReady", 4);
+                        } else {
+                            setScore("§7Ability 1: §c" + i + "/100", 4);
+                        }
+                    }else {
+                        long remainingTime = getElementalCooldown(player);
+                        int i = (int) ((remainingTime - System.currentTimeMillis()) / 1000);
+                        if (i <= 0) {
+                            setScore("§7Ability 1: §aReady", 4);
+                        } else {
+                            setScore("§7Ability 1: §c" + i + "/100", 4);
+                        }
                     }
                 }
                 setScore("§7Ping: " + ChatColor.DARK_PURPLE + player.getPing(), 1);
@@ -144,6 +171,33 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 return Holystone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
             default:
                 return 0L;
+        }
+    }
+
+    private long getElementalCooldown(Player player) {
+        boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
+        if (buffed) {
+            return Elementalstone.cooldown.getOrDefault(player.getUniqueId(),0L);
+        }else {
+            return 0L;
+        }
+    }
+
+    private long getElementalAbility(Player player) {
+        boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
+        if (buffed) {
+            return Elementalstone.ability.getOrDefault(player.getUniqueId(),0L);
+        }else {
+            return 0L;
+        }
+    }
+
+    private long getElementalUltimate(Player player) {
+        boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
+        if (buffed) {
+            return Elementalstone.cooldown2.getOrDefault(player.getUniqueId(),0L);
+        }else {
+            return 0L;
         }
     }
 
