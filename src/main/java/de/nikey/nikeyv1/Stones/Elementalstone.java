@@ -64,52 +64,11 @@ public class Elementalstone implements Listener {
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
                             //Ability
-                            timer = 200;
-                            time = 200;
-                            dddick = 200;
-                            flick = 200;
                             player.getWorld().setThundering(true);
                             player.getWorld().setWeatherDuration(20*180);
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    if (dddick == 0){
-                                        cancel();
-                                        return;
-                                    }else {
-                                        lightning(player);
-                                    }
-                                    dddick--;
-                                }
-                            }.runTaskTimer(NikeyV1.getPlugin(),0,1);
-
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    if (time == 0){
-                                        cancel();
-                                        return;
-                                    }else {
-                                        lightning(player);
-                                    }
-                                    time--;
-                                }
-                            }.runTaskTimer(NikeyV1.getPlugin(),0,1);
-                            BukkitRunnable runnable = new BukkitRunnable() {
-
-                                @Override
-                                public void run() {
-                                    if (timer == 0){
-                                        cancel();
-                                        return;
-                                    }else {
-                                        lightning(player);
-                                    }
-                                    timer--;
-                                }
-                            };
-                            runnable.runTaskTimer(NikeyV1.getPlugin(),0,1);
-
+                            for(int i = 0; i < 600; i++) {
+                                lightning(player);
+                            }
                         }
                     }
                 }
