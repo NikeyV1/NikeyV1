@@ -537,6 +537,9 @@ public class Player implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         Block clickedBlock = event.getClickedBlock();
         if (event.getItem() != null) {
+            if (event.getItem().getType() == Material.FIREWORK_STAR) {
+                event.setCancelled(true);
+            }
             if (event.getItem().getType() == Material.FIREWORK_STAR || event.getItem().getType() == Material.NETHERITE_SWORD && event.getItem().getItemMeta().hasLore()){
                 if (clickedBlock.getType() == Material.DECORATED_POT && event.getItem().getItemMeta().hasLore()) {
                     event.setCancelled(true);
