@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
+import java.util.Random;
 
 @SuppressWarnings("ALL")
 public class ServerScoreboard extends ScoreboardBuilder {
@@ -229,31 +230,48 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 FileConfiguration config = NikeyV1.getPlugin().getConfig();
                 String stone = config.getString(player.getName() + ".stone");
                 net.md_5.bungee.api.ChatColor color;
-                switch (stone.toLowerCase()) {
-                    case "fire":
-                        color = ChatColor.RED.asBungee();
-                        break;
-                    case "electric":
-                        color = ChatColor.YELLOW.asBungee();
-                        break;
-                    case "water":
-                        color = ChatColor.BLUE.asBungee();
-                        break;
-                    case "frozen":
-                        color = ChatColor.DARK_AQUA.asBungee();
-                        break;
-                    case "undead":
-                        color = net.md_5.bungee.api.ChatColor.of("#100613");
-                        break;
-                    case "holy":
-                        color = net.md_5.bungee.api.ChatColor.of("#47d147");
-                        break;
-                    default:
-                        color = ChatColor.WHITE.asBungee();
-                        break;
+                boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
+                if (!buffed) {
+                    switch (stone.toLowerCase()) {
+                        case "fire":
+                            color = ChatColor.RED.asBungee();
+                            break;
+                        case "electric":
+                            color = ChatColor.YELLOW.asBungee();
+                            break;
+                        case "water":
+                            color = ChatColor.BLUE.asBungee();
+                            break;
+                        case "frozen":
+                            color = ChatColor.DARK_AQUA.asBungee();
+                            break;
+                        case "undead":
+                            color = net.md_5.bungee.api.ChatColor.of("#100613");
+                            break;
+                        case "holy":
+                            color = net.md_5.bungee.api.ChatColor.of("#47d147");
+                            break;
+                        default:
+                            color = ChatColor.WHITE.asBungee();
+                            break;
+                    }
+                    setScore("§7Stone: " + color + stone, 6);
+                }else {
+                    ChatColor newColor = getRandomColor(ChatColor.WHITE);
+                    setScore("§7Stone: " + newColor + "Elemental Stone", 6);
                 }
-                setScore("§7Stone: " + color + stone, 6);
             }
         }.runTaskTimer(NikeyV1.getPlugin(),0,120);
+    }
+
+    private ChatColor getRandomColor(ChatColor currentColor) {
+        ChatColor[] colors = {ChatColor.RED, ChatColor.GREEN, ChatColor.BLUE, ChatColor.YELLOW, ChatColor.AQUA, ChatColor.LIGHT_PURPLE};
+        Random random = new Random();
+        ChatColor newColor = colors[random.nextInt(colors.length)];
+        // Ensure the new color is different from the current color
+        while (newColor == currentColor) {
+            newColor = colors[random.nextInt(colors.length)];
+        }
+        return newColor;
     }
 }
