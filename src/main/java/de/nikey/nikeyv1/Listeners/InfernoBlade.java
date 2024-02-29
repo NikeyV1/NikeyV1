@@ -7,15 +7,14 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerChangedMainHandEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -92,6 +91,8 @@ public class InfernoBlade implements Listener {
                                         fireball.setVelocity(player.getLocation().getDirection().multiply(1.1));
                                         fireball.setShooter(player);
                                         fireball.setYield(5F);
+                                        fireball.setCustomName("f");
+                                        fireball.setCustomNameVisible(false);
                                         new BukkitRunnable(){
                                             @Override
                                             public void run() {
@@ -137,6 +138,29 @@ public class InfernoBlade implements Listener {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onProjectileHit(ProjectileHitEvent event) {
+        Projectile entity = event.getEntity();
+        if (entity.getCustomName().equalsIgnoreCase("f")) {
+            entity.remove();
+            entity.getWorld().createExplosion(entity.getLocation(),5,true,true);
+            entity.getWorld().createExplosion(entity.getLocation(),7,false,false);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        Player player = event.getPlayer();
+        boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
+        if (buffed) {
+            ItemStack itemInHand = player.getItemInHand();
+            if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.AQUA + "Inferno Blade") && event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN) {
+                Location eventTo = event.getTo();
+                eventTo.getWorld().createExplosion(eventTo,1.7F,false,false);
             }
         }
     }
