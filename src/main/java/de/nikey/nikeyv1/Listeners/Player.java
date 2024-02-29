@@ -471,10 +471,10 @@ public class Player implements Listener {
                                         for (ItemStack soul : p.getInventory().getContents()) {
                                             if (soul != null && soul.getType() == Material.DRAGON_EGG) {
                                                 p.getInventory().remove(soul);
-                                                p.closeInventory();
                                                 boolean buffed = config.getBoolean(p.getName() + ".buffed");
                                                 if (!buffed) {
                                                     inventory.setItem(13, null);
+                                                    p.closeInventory();
                                                     config.set(p.getName() + ".buffed", true);
                                                     Items.GiveInfernoBlade(p);
                                                     Items.GiveElementalStone(p);
