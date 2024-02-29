@@ -1,5 +1,6 @@
 package de.nikey.nikeyv1.Scoreboard;
 
+import de.nikey.nikeyv1.Listeners.InfernoBlade;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Stones.*;
 import org.bukkit.Bukkit;
@@ -96,10 +97,18 @@ public class ServerScoreboard extends ScoreboardBuilder {
                     }else {
                         long remainingTime2 = getElementalAbility(player);
                         int a = (int) ((remainingTime2 - System.currentTimeMillis()) / 1000);
-                        if (a <= 0) {
-                            setScore("§7Ability 2: §aReady", 3);
-                        } else {
-                            setScore("§7Ability 2: §c" + a + "/180", 3);
+                        if (InfernoBlade.red) {
+                            if (a <= 0) {
+                                setScore("§7Ability 2: §aReady", 3);
+                            } else {
+                                setScore("§7Ability 2: §c" + a + "/120", 3);
+                            }
+                        }else {
+                            if (a <= 0) {
+                                setScore("§7Ability 2: §aReady", 3);
+                            } else {
+                                setScore("§7Ability 2: §c" + a + "/6", 3);
+                            }
                         }
                     }
                 }
@@ -187,7 +196,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
     private long getElementalAbility(Player player) {
         boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
         if (buffed) {
-            return Elementalstone.ability.getOrDefault(player.getUniqueId(),0L);
+            return InfernoBlade.ability.getOrDefault(player.getUniqueId(),0L);
         }else {
             return 0L;
         }

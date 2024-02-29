@@ -2,27 +2,34 @@ package de.nikey.nikeyv1.Listeners;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.slikey.effectlib.effect.BleedEffect;
-import org.bukkit.BanList;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChangedMainHandEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @SuppressWarnings("ALL")
 public class InfernoBlade implements Listener {
+
+    public static HashMap<UUID, Long> ability = new HashMap<>();
+
+    public static long remainingTime2;
+
+    public static boolean red;
 
     @EventHandler
     public void onPlayerItemHeld(PlayerItemHeldEvent event) {
@@ -42,6 +49,92 @@ public class InfernoBlade implements Listener {
                         ChatColor newColor = getRandomColor(currentColor);
                         meta.setDisplayName(newColor + "Elemental Stone");
                         item.setItemMeta(meta);
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        ItemStack item = event.getItem();
+        if (item.getType() == Material.NETHERITE_SWORD && item.getItemMeta().hasLore()) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                List<String> lore = meta.getLore();
+                if (lore != null ) {
+                    String l = String.valueOf(lore);
+                    if (l.contains("§7What will you do?")) {
+                        if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                            if (meta.getDisplayName().equalsIgnoreCase( ChatColor.RED +"Inferno Blade")){
+                                if (player.isSneaking()){
+                                    meta.setDisplayName(ChatColor.AQUA + "Inferno Blade");
+                                    event.getItem().setItemMeta(meta);
+                                }else {
+                                    if (ability.containsKey(player.getUniqueId()) && ability.get(player.getUniqueId()) > System.currentTimeMillis()){
+                                        event.setCancelled(true);
+                                        player.updateInventory();
+                                        remainingTime2 = ability.get(player.getUniqueId()) - System.currentTimeMillis();
+                                    }else {
+                                        ability.put(player.getUniqueId(),System.currentTimeMillis() + (120*1000));
+                                        new BukkitRunnable() {
+                                            @Override
+                                            public void run() {
+                                                ability.remove(player.getUniqueId());
+                                                cancel();
+                                                return;
+                                            }
+                                        }.runTaskLater(NikeyV1.getPlugin(),20*120);
+                                        red = true;
+                                        //Cooldown-Ability
+                                        Fireball fireball = player.getWorld().spawn(player.getEyeLocation(),Fireball.class);
+                                        fireball.setVelocity(player.getLocation().getDirection().multiply(1.1));
+                                        fireball.setShooter(player);
+                                        fireball.setYield(5F);
+                                        new BukkitRunnable(){
+                                            @Override
+                                            public void run() {
+                                                if (!fireball.isDead()){
+                                                    fireball.getWorld().spawnParticle(Particle.FLAME,fireball.getLocation(),3);
+                                                }else {
+                                                    cancel();
+                                                }
+                                            }
+                                        }.runTaskTimer(NikeyV1.getPlugin(),0L,2L);
+                                    }
+                                }
+                            } else if (meta.getDisplayName().equalsIgnoreCase( ChatColor.AQUA + "Inferno Blade")) {
+                                if (player.isSneaking()){
+                                    meta.setDisplayName(ChatColor.RED + "Inferno Blade");
+                                    event.getItem().setItemMeta(meta);
+                                }else {
+                                    if (ability.containsKey(player.getUniqueId()) && ability.get(player.getUniqueId()) > System.currentTimeMillis()){
+                                        event.setCancelled(true);
+                                        player.updateInventory();
+                                        remainingTime2 = ability.get(player.getUniqueId()) - System.currentTimeMillis();
+                                    }else {
+                                        red = false;
+                                        ability.put(player.getUniqueId(),System.currentTimeMillis() + (6*1000));
+                                        new BukkitRunnable() {
+                                            @Override
+                                            public void run() {
+                                                ability.remove(player.getUniqueId());
+                                                cancel();
+                                                return;
+                                            }
+                                        }.runTaskLater(NikeyV1.getPlugin(),20*6);
+                                        Block b = player.getTargetBlock((Set)null, 8);
+                                        Location loc = new Location(b.getWorld(), (double)b.getX(), (double)b.getY(), (double)b.getZ(), player.getLocation().getYaw(), player.getLocation().getPitch());
+                                        player.teleport(loc);
+                                        player.playSound(loc, Sound.ENTITY_ENDERMAN_TELEPORT, 0.5f, 0.5f);
+                                    }
+                                }
+                            }else if (meta.getDisplayName().equalsIgnoreCase("§dInferno Blade")){
+                                meta.setDisplayName(ChatColor.RED + "Inferno Blade");
+                                event.getItem().setItemMeta(meta);
+                            }
+                        }
                     }
                 }
             }

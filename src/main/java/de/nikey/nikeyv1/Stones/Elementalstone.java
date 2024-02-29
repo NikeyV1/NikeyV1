@@ -6,6 +6,7 @@ import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -22,14 +23,12 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Elementalstone implements Listener {
 
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
-    public static HashMap<UUID, Long> ability = new HashMap<>();
 
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
 
     private int radius = 20;
 
     public static long remainingTime1;
-    public static long remainingTime2;
     public static long remainingTime3;
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -45,22 +44,28 @@ public class Elementalstone implements Listener {
                 if (lore != null ) {
                     String l = String.valueOf(lore);
                     if (l.equalsIgnoreCase("[§fThe combined power of all §8stones]")) {
-                        if (cooldown.containsKey(player.getUniqueId()) && cooldown.get(player.getUniqueId()) > System.currentTimeMillis()){
-                            player.updateInventory();
-                            remainingTime1 = cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
-                        }else {
-                            cooldown.put(player.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    cooldown.remove(player.getUniqueId());
-                                    cancel();
-                                    return;
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
-                            //Ability
-                            player.getWorld().setThundering(true);
-                            startLightningTask(player.getWorld(),player);
+                        if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
+                            if (cooldown.containsKey(player.getUniqueId()) && cooldown.get(player.getUniqueId()) > System.currentTimeMillis()){
+                                player.updateInventory();
+                                remainingTime1 = cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
+                            }else {
+                                cooldown.put(player.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        cooldown.remove(player.getUniqueId());
+                                        cancel();
+                                    }
+                                }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
+                                //Ability
+                                player.getWorld().setStorm(true);
+                                player.getWorld().setWeatherDuration(20*60);
+                                startLightningTask(player.getWorld(),player);
+                            }
+                        }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
+                            if (!player.isSneaking()) {
+
+                            }
                         }
                     }
                 }
@@ -68,11 +73,13 @@ public class Elementalstone implements Listener {
         }
     }
 
-    int pg =200;
+    private int pg =200;
 
-    int jj =200;
+    int jj =0;
+
 
     private void startLightningTask(World world, Player p) {
+        radius = 20;
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -91,12 +98,11 @@ public class Elementalstone implements Listener {
                                     applyRandomNegativeEffect(entity);
                                     entity.damage(50,p);
                                     entity.setFreezeTicks(200);
-
                                 }
                             }
                         }
                     }
-                pg += 100;
+                pg += 110;
                 radius += 25; // Erhöhe den Radius um 20 Blöcke
                 if (radius >= 100) {
                     cancel();
@@ -125,10 +131,10 @@ public class Elementalstone implements Listener {
                         effect.duration = 100;
                         effect.start();
                     }
-                }.runTaskTimer(NikeyV1.getPlugin(),0,5);
+                }.runTaskTimer(NikeyV1.getPlugin(),0,2);
 
             }
-        }.runTaskTimer(NikeyV1.getPlugin(), 0, 30); // Alle 2 Sekunden ausführen (20 ticks)
+        }.runTaskTimer(NikeyV1.getPlugin(), 0, 20);
     }
 
     private void applyRandomNegativeEffect(LivingEntity entity) {
@@ -146,6 +152,6 @@ public class Elementalstone implements Listener {
         Random random = new Random();
         PotionEffectType effectType = negativeEffects[random.nextInt(negativeEffects.length)];
         // Apply the effect to the player
-        entity.addPotionEffect(new PotionEffect(effectType, 200, 2));
+        entity.addPotionEffect(new PotionEffect(effectType, 200, 3));
     }
 }

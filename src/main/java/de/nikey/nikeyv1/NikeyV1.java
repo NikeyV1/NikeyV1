@@ -29,8 +29,8 @@ public final class NikeyV1 extends JavaPlugin{
     @Override
     public void onEnable() {
         plugin = this;
-        em = new EffectManager(EffectLib.instance());
         //Effect manager
+        em = new EffectManager(EffectLib.instance());
 
         PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents(new Player(),this);

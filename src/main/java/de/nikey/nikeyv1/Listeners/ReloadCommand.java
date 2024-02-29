@@ -31,6 +31,9 @@ public class ReloadCommand implements Listener {
                     } else if (args[2].equalsIgnoreCase("EnchantedAnvil") && player.isOp()) {
                         Items.GiveEnchantedAnvil(player);
                         event.setCancelled(true);
+                    }else if (args[2].equalsIgnoreCase("InfernoBlade") && player.isOp()) {
+                        Items.GiveInfernoBlade(player);
+                        event.setCancelled(true);
                     }
             }
             }

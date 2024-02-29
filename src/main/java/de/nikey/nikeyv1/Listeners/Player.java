@@ -63,6 +63,7 @@ public class Player implements Listener {
         if (config.contains(p.getName())){
             String stone = config.getString(p.getName() + ".stone");
             Integer level = config.getInt(p.getName() + ".level");
+            p.setWalkSpeed(0.2F);
             p.setFlySpeed(0.1f);
             if (stone.equalsIgnoreCase("Water")&&level >=5) run(p);
             if (stone.equalsIgnoreCase("Electric")) {
@@ -73,8 +74,6 @@ public class Player implements Listener {
                 }else if (level == 5) {
                     p.setWalkSpeed(0.2225F);
                 }else if (level >= 6) p.setWalkSpeed(0.23F);
-            }else {
-                p.setWalkSpeed(0.2F);
             }
             p.setMaxHealth(20);
             TimerBuild timerBuild = new TimerBuild();
