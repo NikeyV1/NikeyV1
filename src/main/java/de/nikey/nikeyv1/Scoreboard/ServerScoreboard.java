@@ -136,7 +136,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
                         if (i <= 0) {
                             setScore("§7Ability 1: §aReady", 4);
                         } else {
-                            setScore("§7Ability 1: §c" + i + "/100", 4);
+                            setScore("§7Ability 1: §c" + i + "/120", 4);
                         }
                     }
                 }
