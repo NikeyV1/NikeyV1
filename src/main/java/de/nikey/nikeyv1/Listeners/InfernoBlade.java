@@ -76,7 +76,7 @@ public class InfernoBlade implements Listener {
                                         player.updateInventory();
                                         remainingTime2 = ability.get(player.getUniqueId()) - System.currentTimeMillis();
                                     }else {
-                                        ability.put(player.getUniqueId(),System.currentTimeMillis() + (120*1000));
+                                        ability.put(player.getUniqueId(),System.currentTimeMillis() + (80*1000));
                                         new BukkitRunnable() {
                                             @Override
                                             public void run() {
@@ -84,7 +84,7 @@ public class InfernoBlade implements Listener {
                                                 cancel();
                                                 return;
                                             }
-                                        }.runTaskLater(NikeyV1.getPlugin(),20*120);
+                                        }.runTaskLater(NikeyV1.getPlugin(),20*80);
                                         red = true;
                                         //Cooldown-Ability
                                         Fireball fireball = player.getWorld().spawn(player.getEyeLocation(),Fireball.class);
