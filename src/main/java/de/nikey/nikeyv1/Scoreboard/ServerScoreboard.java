@@ -101,7 +101,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
                             if (a <= 0) {
                                 setScore("§7Ability 2: §aReady", 3);
                             } else {
-                                setScore("§7Ability 2: §c" + a + "/120", 3);
+                                setScore("§7Ability 2: §c" + a + "/80", 3);
                             }
                         }else {
                             if (a <= 0) {
