@@ -49,14 +49,14 @@ public class Elementalstone implements Listener {
                                 player.updateInventory();
                                 remainingTime1 = cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
                             }else {
-                                cooldown.put(player.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
+                                cooldown.put(player.getUniqueId(), System.currentTimeMillis() + (120 * 1000));
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
                                         cooldown.remove(player.getUniqueId());
                                         cancel();
                                     }
-                                }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
+                                }.runTaskLater(NikeyV1.getPlugin(), 20 * 120);
                                 //Ability
                                 player.getWorld().setStorm(true);
                                 player.getWorld().setWeatherDuration(20*60);
