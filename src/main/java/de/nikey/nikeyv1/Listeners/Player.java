@@ -256,9 +256,7 @@ public class Player implements Listener {
             player.kickPlayer("§cYour stone is out of strength!");
             Date date = new Date(System.currentTimeMillis()+1440*60*1000);
             Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), "§cYour stone is out of strength!",date,"Game");
-            for (ItemStack drop : drops) {
-                event.getDrops().remove(drop);
-            }
+            player.getInventory().clear();
         }
     }
 
@@ -324,7 +322,7 @@ public class Player implements Listener {
                         ItemStack item = inventory.getItem(13);
                         String[] arr = item.getLore().get(1).split(":");
                         String a = arr[0];
-                        if (inventory.getItem(13).getLore().get(1).contains(a)) {
+                        if (inventory.getItem(13).getLore().get(1).contains(net.md_5.bungee.api.ChatColor.of("#00FFAA")+"Level")) {
                             int num = Integer.parseInt(arr[1]);
                             FileConfiguration config = NikeyV1.getPlugin().getConfig();
                             NikeyV1.getPlugin().saveConfig();
@@ -469,9 +467,9 @@ public class Player implements Listener {
                                         // Durchlaufe das Inventar des Spielers und entferne die Soul of Strenght
                                         for (ItemStack soul : p.getInventory().getContents()) {
                                             if (soul != null && soul.getType() == Material.DRAGON_EGG) {
-                                                p.getInventory().remove(soul);
                                                 boolean buffed = config.getBoolean(p.getName() + ".buffed");
                                                 if (!buffed) {
+                                                    p.getInventory().remove(soul);
                                                     inventory.setItem(13, null);
                                                     p.closeInventory();
                                                     config.set(p.getName() + ".buffed", true);

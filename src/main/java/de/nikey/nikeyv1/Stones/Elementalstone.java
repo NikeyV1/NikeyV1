@@ -5,8 +5,10 @@ import de.slikey.effectlib.effect.TornadoEffect;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -20,6 +22,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
+@SuppressWarnings("ALL")
 public class Elementalstone implements Listener {
 
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
@@ -75,8 +78,6 @@ public class Elementalstone implements Listener {
 
     private int pg =200;
 
-    int jj =0;
-
 
     private void startLightningTask(World world, Player p) {
         radius = 20;
@@ -96,7 +97,7 @@ public class Elementalstone implements Listener {
                                 LivingEntity entity = (LivingEntity) e;
                                 if (entity != p){
                                     applyRandomNegativeEffect(entity);
-                                    entity.damage(50,p);
+                                    entity.damage(52,p);
                                     entity.setFreezeTicks(200);
                                 }
                             }
@@ -104,34 +105,7 @@ public class Elementalstone implements Listener {
                     }
                 pg += 110;
                 radius += 25; // Erhöhe den Radius um 20 Blöcke
-                if (radius >= 100) {
-                    cancel();
-                }
-
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        if (jj >= 20) {
-                            cancel();
-                        }
-                        jj++;
-                        int x = (int) (p.getLocation().getX());
-                        int z = (int) (p.getLocation().getZ());
-                        int randomX = ThreadLocalRandom.current().nextInt(x-60, x+60);
-                        int randomZ = ThreadLocalRandom.current().nextInt(z-60, z+60);
-                        int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
-                        Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
-                        TornadoEffect effect = new TornadoEffect(NikeyV1.em);
-                        effect.setLocation(location);
-                        effect.maxTornadoRadius = 3F;
-                        effect.visibleRange = 70;
-                        effect.circleParticles =32;
-                        effect.cloudParticles =20;
-                        effect.tornadoParticle = Particle.ELECTRIC_SPARK;
-                        effect.duration = 100;
-                        effect.start();
-                    }
-                }.runTaskTimer(NikeyV1.getPlugin(),0,2);
+                if (radius >= 100)cancel();
 
             }
         }.runTaskTimer(NikeyV1.getPlugin(), 0, 20);

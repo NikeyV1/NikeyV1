@@ -11,7 +11,7 @@ import org.bukkit.inventory.Inventory;
 
 @SuppressWarnings("deprecation")
 public class InventoryListener implements Listener {
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Inventory top = event.getView().getTopInventory();
         Inventory bottom = event.getView().getBottomInventory();
@@ -19,7 +19,7 @@ public class InventoryListener implements Listener {
         if (event.getCurrentItem().getType() == Material.FIREWORK_STAR && event.getCurrentItem().getItemMeta().hasLore()) {
             String[] arr = event.getCurrentItem().getLore().get(1).split(":");
             String a = arr[0];
-            if (a.equalsIgnoreCase(ChatColor.of("#00FFAA")+"Level") && !(top.getType() == InventoryType.CRAFTING)){
+            if (!(top.getType() == InventoryType.CRAFTING)){
                 if (!event.getView().getTitle().equalsIgnoreCase("Enchanted Anvil")) {
                     event.setCancelled(true);
                 }

@@ -4,16 +4,12 @@ import de.nikey.nikeyv1.NikeyV1;
 import de.slikey.effectlib.effect.BleedEffect;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Fireball;
+import org.bukkit.entity.*;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -88,7 +84,7 @@ public class InfernoBlade implements Listener {
                                         red = true;
                                         //Cooldown-Ability
                                         Fireball fireball = player.getWorld().spawn(player.getEyeLocation(),Fireball.class);
-                                        fireball.setVelocity(player.getLocation().getDirection().multiply(1.1));
+                                        fireball.setVelocity(player.getLocation().getDirection().multiply(1));
                                         fireball.setShooter(player);
                                         fireball.setYield(5F);
                                         fireball.setCustomName("f");
@@ -147,8 +143,12 @@ public class InfernoBlade implements Listener {
         Projectile entity = event.getEntity();
         if (entity.getCustomName().equalsIgnoreCase("f")) {
             entity.remove();
-            entity.getWorld().createExplosion(entity.getLocation(),5,true,true);
-            entity.getWorld().createExplosion(entity.getLocation(),7,false,false);
+            entity.getWorld().createExplosion(entity.getLocation(),7.4F,false,false, (Entity) entity.getShooter());
+            entity.getWorld().createExplosion(entity.getLocation(),5,true,true,(Entity) entity.getShooter());
+            if (event.getHitEntity() != null && event.getHitEntity() instanceof LivingEntity) {
+                LivingEntity hitEntity = (LivingEntity) event.getHitEntity();
+                hitEntity.damage(32,entity);
+            }
         }
     }
 
