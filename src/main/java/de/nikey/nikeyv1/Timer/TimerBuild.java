@@ -1,6 +1,7 @@
 package de.nikey.nikeyv1.Timer;
 
 import de.nikey.nikeyv1.NikeyV1;
+import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
 import de.nikey.nikeyv1.Util.Items;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -72,6 +73,7 @@ public class TimerBuild  {
                                 cancel();
                                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent(ChatColor.RED+"Time is up!"));
                                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,2,1);
+                                new ServerScoreboard(player);
                                 if (getStone(player).equalsIgnoreCase("Fire")){
                                     Items.Firestone(player,getLevel());
                                 }else if (getStone(player).equalsIgnoreCase("Electric")){

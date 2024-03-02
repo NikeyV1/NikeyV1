@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -15,11 +16,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("ALL")
@@ -30,6 +29,7 @@ public class Elementalstone implements Listener {
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
 
     private int radius = 20;
+    private static final Map<UUID, Player> telekinesisTargets = new HashMap<>();
 
     public static long remainingTime1;
     public static long remainingTime3;
@@ -58,22 +58,84 @@ public class Elementalstone implements Listener {
                                     public void run() {
                                         cooldown.remove(player.getUniqueId());
                                         cancel();
+                                        return;
                                     }
                                 }.runTaskLater(NikeyV1.getPlugin(), 20 * 120);
                                 //Ability
-                                player.getWorld().setStorm(true);
+                                player.getWorld().setThundering(true);
                                 player.getWorld().setWeatherDuration(20*60);
                                 startLightningTask(player.getWorld(),player);
                             }
                         }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
                             if (!player.isSneaking()) {
-
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
+            Player attacker = (Player) event.getDamager();
+            Player victim = (Player) event.getEntity();
+            useForce(attacker, victim);
+            telekinesisTargets.put(victim.getUniqueId(), attacker);
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player victim = (Player) event.getEntity();
+            if (telekinesisTargets.containsKey(victim.getUniqueId())) {
+                Player attacker = telekinesisTargets.get(victim.getUniqueId());
+                if (attacker != null && event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK && event.getCause() != EntityDamageEvent.DamageCause.CUSTOM) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    public static void startDamageScheduler() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (Map.Entry<UUID, Player> entry : telekinesisTargets.entrySet()) {
+                    Player victim = Bukkit.getPlayer(entry.getKey());
+                    if (victim != null && victim.isOnline()) {
+                        victim.damage(1.0); // Adjust the damage value as needed
+                    } else {
+                        telekinesisTargets.remove(entry.getKey());
+                    }
+                }
+            }
+        }.runTaskTimer(NikeyV1.getPlugin(),10,10);
+    }
+
+    private void useForce(Player attacker, Player victim) {
+        Location attackerLocation = attacker.getLocation();
+        Location victimLocation = victim.getLocation();
+
+        Vector direction = attackerLocation.toVector().subtract(victimLocation.toVector()).normalize();
+
+        double forceMultiplier = 2.0; // Adjust this value to change the force of the telekinesis
+
+        Vector force = direction.multiply(forceMultiplier);
+
+        //
+        // victim.setVelocity(force);
+
+        // Play sound and visual effects
+        attacker.getWorld().playSound(attacker.getLocation(), "entity.enderman.teleport", 1.0f, 1.0f);
+        attacker.getWorld().spawnParticle(org.bukkit.Particle.PORTAL, attacker.getLocation(), 50, 1, 1, 1);
+
+        // Optionally, you can also lift the victim slightly off the ground
+        double liftHeight = 1.5;
+        victimLocation.setY(victimLocation.getY() + liftHeight);
+        victim.teleport(victimLocation);
     }
 
     private int pg =200;
@@ -97,7 +159,7 @@ public class Elementalstone implements Listener {
                                 LivingEntity entity = (LivingEntity) e;
                                 if (entity != p){
                                     applyRandomNegativeEffect(entity);
-                                    entity.damage(52,p);
+                                    entity.damage(45,p);
                                     entity.setFreezeTicks(200);
                                 }
                             }
@@ -126,6 +188,6 @@ public class Elementalstone implements Listener {
         Random random = new Random();
         PotionEffectType effectType = negativeEffects[random.nextInt(negativeEffects.length)];
         // Apply the effect to the player
-        entity.addPotionEffect(new PotionEffect(effectType, 200, 3));
+        entity.addPotionEffect(new PotionEffect(effectType, 260, 3));
     }
 }

@@ -88,7 +88,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
                     boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
                     if (!buffed) {
                         long remainingTime2 = getAbilityCooldown(player, stone);
-                        int a = (int) ((remainingTime2 - System.currentTimeMillis()) / 1000);
+                        int a = (int) ((remainingTime2 - System.currentTimeMillis()) / 1000+1);
                         if (a <= 0) {
                             setScore("§7Ability 2: §aReady", 3);
                         } else {
@@ -96,7 +96,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
                         }
                     }else {
                         long remainingTime2 = getElementalAbility(player);
-                        int a = (int) ((remainingTime2 - System.currentTimeMillis()) / 1000);
+                        int a = (int) ((remainingTime2 - System.currentTimeMillis()) / 1000 +1);
                         if (InfernoBlade.red) {
                             if (a <= 0) {
                                 setScore("§7Ability 2: §aReady", 3);

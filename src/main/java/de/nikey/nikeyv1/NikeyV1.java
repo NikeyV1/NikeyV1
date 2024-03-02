@@ -13,14 +13,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.List;
 
 @SuppressWarnings("ALL")
 public final class NikeyV1 extends JavaPlugin{
@@ -29,8 +24,8 @@ public final class NikeyV1 extends JavaPlugin{
     @Override
     public void onEnable() {
         plugin = this;
-        //Effect manager
         em = new EffectManager(EffectLib.instance());
+        //Effect manager
 
         PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents(new Player(),this);
@@ -40,7 +35,7 @@ public final class NikeyV1 extends JavaPlugin{
         manager.registerEvents(new Frozenstone(),this);
         manager.registerEvents(new Undeadstone(),this);
         manager.registerEvents(new Holystone(),this);
-        manager.registerEvents(new ReloadCommand(),this);
+        manager.registerEvents(new CommandChenges(),this);
         manager.registerEvents(new ReloadModifyer(),this);
         manager.registerEvents(new JoinListener(),this);
         manager.registerEvents(new InventoryListener(),this);
@@ -59,6 +54,8 @@ public final class NikeyV1 extends JavaPlugin{
         saveDefaultConfig();
 
         //Code
+
+        Elementalstone.startDamageScheduler();
     }
 
     @Override

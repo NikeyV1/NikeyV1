@@ -162,7 +162,25 @@ public class Player implements Listener {
         ItemMeta meta = event.getItemInHand().getItemMeta();
         if (meta.getDisplayName().equalsIgnoreCase("§dEnchanted Anvil")){
             event.setCancelled(true);
-            de.nikey.nikeyv1.Util.Inventory.anvilinv(inv);
+            ItemStack glass = new ItemStack(Material.PURPLE_STAINED_GLASS_PANE);
+            ItemMeta itemMeta = glass.getItemMeta();
+            itemMeta.setDisplayName("§c");
+            glass.setItemMeta(itemMeta);
+            ItemStack a = new ItemStack(Material.ANVIL);
+            ItemMeta m = a.getItemMeta();
+            m.setDisplayName("§dUpgrade");
+            a.setItemMeta(m);
+            //Invsetup
+            inv.clear();
+            inv.setItem(3,glass);
+            inv.setItem(4,glass);
+            inv.setItem(5,glass);
+            inv.setItem(12,glass);
+            inv.setItem(14,glass);
+            inv.setItem(15,a);
+            inv.setItem(21,glass);
+            inv.setItem(22,glass);
+            inv.setItem(23,glass);
             p.openInventory(inv);
         }else if (meta.getDisplayName().equalsIgnoreCase("§3Soul of Strenght")){
             event.setCancelled(true);
@@ -245,6 +263,7 @@ public class Player implements Listener {
                     boolean buffed = config.getBoolean(player.getName() + ".buffed");
                     if (buffed) {
                         config.set(player.getName() + ".buffed", false);
+                        NikeyV1.getPlugin().saveConfig();
                         ItemStack itemStack = new ItemStack(Material.DRAGON_EGG);
                         Item spawn = player.getWorld().spawn(player.getLocation(), Item.class);
                         spawn.setThrower(player.getUniqueId());
@@ -341,6 +360,7 @@ public class Player implements Listener {
                                             timerBuild.start(p);
                                             p.sendMessage("§aUpgrading!");
                                             config.set(p.getName() + ".level", num + 1);
+                                            NikeyV1.getPlugin().saveConfig();
                                             if (p.getGameMode() != GameMode.CREATIVE) {
                                                 p.setLevel(p.getLevel() - 10);
                                             }
@@ -359,6 +379,7 @@ public class Player implements Listener {
                                             timerBuild.setTime(1);
                                             timerBuild.start(p);
                                             config.set(p.getName() + ".level", num + 1);
+                                            NikeyV1.getPlugin().saveConfig();
                                             if (p.getGameMode() != GameMode.CREATIVE) {
                                                 p.setLevel(p.getLevel() - 20);
                                             }
@@ -381,6 +402,7 @@ public class Player implements Listener {
                                                     timerBuild.setTime(1);
                                                     timerBuild.start(p);
                                                     config.set(p.getName() + ".level", num + 1);
+                                                    NikeyV1.getPlugin().saveConfig();
                                                     if (contents.getAmount() >= amountToTax)
                                                         contents.setAmount(contents.getAmount() - amountToTax);
                                                     if (p.getGameMode() != GameMode.CREATIVE)
@@ -403,6 +425,7 @@ public class Player implements Listener {
                                             timerBuild.setTime(1);
                                             timerBuild.start(p);
                                             config.set(p.getName() + ".level", num + 1);
+                                            NikeyV1.getPlugin().saveConfig();
                                             if (p.getGameMode() != GameMode.CREATIVE) {
                                                 p.setLevel(p.getLevel() - 40);
                                             }
@@ -426,6 +449,7 @@ public class Player implements Listener {
                                                     timerBuild.setTime(1);
                                                     timerBuild.start(p);
                                                     config.set(p.getName() + ".level", num + 1);
+                                                    NikeyV1.getPlugin().saveConfig();
                                                     if (p.getGameMode() != GameMode.CREATIVE) {
                                                         p.setLevel(p.getLevel() - 50);
                                                     }
@@ -451,6 +475,7 @@ public class Player implements Listener {
                                                     timerBuild.setTime(1);
                                                     timerBuild.start(p);
                                                     config.set(p.getName() + ".level", num + 1);
+                                                    NikeyV1.getPlugin().saveConfig();
                                                     if (p.getGameMode() != GameMode.CREATIVE) {
                                                         p.setLevel(p.getLevel() - 100);
                                                     }
@@ -473,8 +498,10 @@ public class Player implements Listener {
                                                     inventory.setItem(13, null);
                                                     p.closeInventory();
                                                     config.set(p.getName() + ".buffed", true);
+                                                    NikeyV1.getPlugin().saveConfig();
                                                     Items.GiveInfernoBlade(p);
                                                     Items.GiveElementalStone(p);
+                                                    new ServerScoreboard(p);
                                                 }else {
                                                     p.sendMessage("§cError: You are already buffed!");
                                                 }

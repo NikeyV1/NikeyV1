@@ -13,7 +13,10 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -54,7 +57,7 @@ public class InfernoBlade implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
-        if (item.getType() == Material.NETHERITE_SWORD && item.getItemMeta().hasLore()) {
+        if (item != null && item.getType() == Material.NETHERITE_SWORD && item.getItemMeta().hasLore()) {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
                 List<String> lore = meta.getLore();
@@ -141,13 +144,22 @@ public class InfernoBlade implements Listener {
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
         Projectile entity = event.getEntity();
-        if (entity.getCustomName().equalsIgnoreCase("f")) {
+        if (entity.getCustomName() != null && entity.getCustomName().equalsIgnoreCase("f")) {
             entity.remove();
             entity.getWorld().createExplosion(entity.getLocation(),7.4F,false,false, (Entity) entity.getShooter());
             entity.getWorld().createExplosion(entity.getLocation(),5,true,true,(Entity) entity.getShooter());
             if (event.getHitEntity() != null && event.getHitEntity() instanceof LivingEntity) {
                 LivingEntity hitEntity = (LivingEntity) event.getHitEntity();
                 hitEntity.damage(32,entity);
+            }
+            if (event.getEntity().getShooter() instanceof LivingEntity) {
+                for (Entity entitys : event.getEntity().getNearbyEntities(6,6,6)) {
+                    if (entitys instanceof LivingEntity) {
+                        LivingEntity player = (Player) entitys;
+                        Vector direction = entity.getLocation().toVector().subtract(player.getLocation().toVector()).normalize();
+                        player.setVelocity(direction.multiply(1.5));
+                    }
+                }
             }
         }
     }
