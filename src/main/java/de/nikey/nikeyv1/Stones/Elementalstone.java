@@ -81,8 +81,8 @@ public class Elementalstone implements Listener {
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
             Player attacker = (Player) event.getDamager();
             Player victim = (Player) event.getEntity();
-            useForce(attacker, victim);
-            telekinesisTargets.put(victim.getUniqueId(), attacker);
+            //useForce(attacker, victim);
+            //telekinesisTargets.put(victim.getUniqueId(), attacker);
         }
     }
 

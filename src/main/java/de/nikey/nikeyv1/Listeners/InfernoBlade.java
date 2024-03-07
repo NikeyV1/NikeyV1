@@ -29,6 +29,8 @@ public class InfernoBlade implements Listener {
 
     public static boolean red;
 
+    private final Random random = new Random();
+
     @EventHandler
     public void onPlayerItemHeld(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
@@ -86,22 +88,16 @@ public class InfernoBlade implements Listener {
                                         }.runTaskLater(NikeyV1.getPlugin(),20*80);
                                         red = true;
                                         //Cooldown-Ability
-                                        Fireball fireball = player.getWorld().spawn(player.getEyeLocation(),Fireball.class);
-                                        fireball.setVelocity(player.getLocation().getDirection().multiply(1));
-                                        fireball.setShooter(player);
-                                        fireball.setYield(5F);
-                                        fireball.setCustomName("f");
-                                        fireball.setCustomNameVisible(false);
-                                        new BukkitRunnable(){
-                                            @Override
-                                            public void run() {
-                                                if (!fireball.isDead()){
-                                                    fireball.getWorld().spawnParticle(Particle.FLAME,fireball.getLocation(),3);
-                                                }else {
-                                                    cancel();
-                                                }
+                                        List<Entity> nearbyEntities = player.getNearbyEntities(12, 12, 12);
+                                        List<LivingEntity> targets = new ArrayList<>();
+                                        for (Entity entity : nearbyEntities) {
+                                            if ((entity instanceof Player || entity instanceof LivingEntity) && !entity.equals(player)) {
+                                                targets.add((LivingEntity) entity);
                                             }
-                                        }.runTaskTimer(NikeyV1.getPlugin(),0L,2L);
+                                        }
+                                        if (!targets.isEmpty()) {
+                                            teleportAndRoot(player, targets);
+                                        }
                                     }
                                 }
                             } else if (meta.getDisplayName().equalsIgnoreCase( ChatColor.AQUA + "Inferno Blade")) {
@@ -141,28 +137,37 @@ public class InfernoBlade implements Listener {
         }
     }
 
-    @EventHandler
-    public void onProjectileHit(ProjectileHitEvent event) {
-        Projectile entity = event.getEntity();
-        if (entity.getCustomName() != null && entity.getCustomName().equalsIgnoreCase("f")) {
-            entity.remove();
-            entity.getWorld().createExplosion(entity.getLocation(),7.4F,false,false, (Entity) entity.getShooter());
-            entity.getWorld().createExplosion(entity.getLocation(),5,true,true,(Entity) entity.getShooter());
-            if (event.getHitEntity() != null && event.getHitEntity() instanceof LivingEntity) {
-                LivingEntity hitEntity = (LivingEntity) event.getHitEntity();
-                hitEntity.damage(32,entity);
-            }
-            if (event.getEntity().getShooter() instanceof LivingEntity) {
-                for (Entity entitys : event.getEntity().getNearbyEntities(6,6,6)) {
-                    if (entitys instanceof LivingEntity) {
-                        LivingEntity player = (Player) entitys;
-                        Vector direction = entity.getLocation().toVector().subtract(player.getLocation().toVector()).normalize();
-                        player.setVelocity(direction.multiply(1.5));
-                    }
+    private void teleportAndRoot(Player player, List<LivingEntity> targets) {
+        Collections.sort(targets, Comparator.comparingDouble(entity -> entity.getLocation().distance(player.getLocation())));
+
+        new BukkitRunnable() {
+            int teleportCount = 0;
+
+            @Override
+            public void run() {
+                if (teleportCount >= 5 || targets.isEmpty()) {
+                    cancel();
+                    return;
                 }
+
+                LivingEntity targetEntity = targets.get(teleportCount);
+                targetEntity.damage(8);
+                Location playerLocation = player.getLocation();
+                Location nearestPlayerLocation = targetEntity.getLocation();
+
+                // Überprüfen, ob der Spieler weniger als 10 Blöcke entfernt ist
+                double distance = playerLocation.distance(nearestPlayerLocation);
+                if (distance < 10) {
+                    // Teleportieren zum höchsten Block
+                    Location teleportLocation = nearestPlayerLocation.getWorld().getHighestBlockAt(nearestPlayerLocation).getLocation();
+                    player.teleport(teleportLocation);
+                }
+                teleportCount++;
             }
-        }
+        }.runTaskTimer(NikeyV1.getPlugin(), 20, 20);
     }
+
+
 
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) {
