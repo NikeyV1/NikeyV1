@@ -123,9 +123,9 @@ public class InfernoBlade implements Listener {
                                         Block b = player.getTargetBlock((Set)null, 8);
                                         Location loc = new Location(b.getWorld(), (double)b.getX(), (double)b.getY(), (double)b.getZ(), player.getLocation().getYaw(), player.getLocation().getPitch());
                                         for (int i = 0; i < 3; i++) {
-                                            Location loc = targetLocation.clone().subtract(0, i, 0);
-                                            if (loc.getBlock().getType().isSolid()) {
-                                                targetLocation = loc.add(0, i + 1, 0);
+                                            Location loca = loc.clone().subtract(0, i, 0);
+                                            if (loca.getBlock().getType().isSolid()) {
+                                                loc = loca.add(0, i + 1, 0);
                                                 break;
                                             }
                                         }
