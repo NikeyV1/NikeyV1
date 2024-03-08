@@ -163,6 +163,7 @@ public class InfernoBlade implements Listener {
                     // Teleportieren zum höchsten Block
                     Location teleportLocation = nearestPlayerLocation.getWorld().getHighestBlockAt(nearestPlayerLocation).getLocation();
                     player.teleport(teleportLocation);
+                    player.playSound(teleportLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
                 }
                 teleportCount++;
             }
