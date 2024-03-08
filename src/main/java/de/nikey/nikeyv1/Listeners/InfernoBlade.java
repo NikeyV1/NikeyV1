@@ -122,6 +122,13 @@ public class InfernoBlade implements Listener {
                                         }.runTaskLater(NikeyV1.getPlugin(),20*6);
                                         Block b = player.getTargetBlock((Set)null, 8);
                                         Location loc = new Location(b.getWorld(), (double)b.getX(), (double)b.getY(), (double)b.getZ(), player.getLocation().getYaw(), player.getLocation().getPitch());
+                                        for (int i = 0; i < 3; i++) {
+                                            Location loc = targetLocation.clone().subtract(0, i, 0);
+                                            if (loc.getBlock().getType().isSolid()) {
+                                                targetLocation = loc.add(0, i + 1, 0);
+                                                break;
+                                            }
+                                        }
                                         player.teleport(loc);
                                         player.playSound(loc, Sound.ENTITY_ENDERMAN_TELEPORT, 0.5f, 0.5f);
                                     }
@@ -160,7 +167,6 @@ public class InfernoBlade implements Listener {
                 // Überprüfen, ob der Spieler weniger als 10 Blöcke entfernt ist
                 double distance = playerLocation.distance(nearestPlayerLocation);
                 if (distance < 10) {
-                    // Teleportieren zum höchsten Block
                     Location teleportLocation = nearestPlayerLocation.getWorld().getHighestBlockAt(nearestPlayerLocation).getLocation();
                     player.teleport(teleportLocation);
                     player.playSound(teleportLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
