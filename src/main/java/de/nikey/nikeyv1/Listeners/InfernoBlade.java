@@ -138,6 +138,7 @@ public class InfernoBlade implements Listener {
     }
 
     private void teleportAndRoot(Player player, List<LivingEntity> targets) {
+        Location loc = player.getLocation();
         Collections.sort(targets, Comparator.comparingDouble(entity -> entity.getLocation().distance(player.getLocation())));
 
         new BukkitRunnable() {
@@ -146,6 +147,7 @@ public class InfernoBlade implements Listener {
             @Override
             public void run() {
                 if (teleportCount >= 5 || targets.isEmpty()) {
+                    player.teleport(loc);
                     cancel();
                     return;
                 }
