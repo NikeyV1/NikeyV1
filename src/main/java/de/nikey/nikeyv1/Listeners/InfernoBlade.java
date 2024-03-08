@@ -179,8 +179,10 @@ public class InfernoBlade implements Listener {
         if (buffed) {
             ItemStack itemInHand = player.getItemInHand();
             if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.AQUA + "Inferno Blade") && event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN) {
-                Location eventTo = event.getTo();
-                eventTo.getWorld().createExplosion(eventTo,1.7F,false,false);
+                if (!red) {
+                    Location eventTo = event.getTo();
+                    eventTo.getWorld().createExplosion(eventTo,1.7F,false,false);
+                }
             }
         }
     }
