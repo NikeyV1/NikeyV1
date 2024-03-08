@@ -151,7 +151,7 @@ public class InfernoBlade implements Listener {
                 }
 
                 LivingEntity targetEntity = targets.get(teleportCount);
-                targetEntity.damage(8);
+                targetEntity.damage(14);
                 Location playerLocation = player.getLocation();
                 Location nearestPlayerLocation = targetEntity.getLocation();
 
