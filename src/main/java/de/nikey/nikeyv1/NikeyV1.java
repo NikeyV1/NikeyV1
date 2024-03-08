@@ -3,6 +3,7 @@ package de.nikey.nikeyv1;
 import de.nikey.nikeyv1.Anti_Exploits.Stone_Swapping;
 import de.nikey.nikeyv1.Commands.EffectCMD;
 import de.nikey.nikeyv1.Commands.stone;
+import de.nikey.nikeyv1.CustomMobs.MiniWitherListener;
 import de.nikey.nikeyv1.Listeners.*;
 import de.nikey.nikeyv1.Stones.*;
 import de.nikey.nikeyv1.Util.Items;
@@ -44,6 +45,7 @@ public final class NikeyV1 extends JavaPlugin{
         manager.registerEvents(new Tornado(),this);
         manager.registerEvents(new InfernoBlade(),this);
         manager.registerEvents(new Elementalstone(),this);
+        manager.registerEvents(new MiniWitherListener(),this);
         //Command
         getCommand("stone").setExecutor(new stone());
         getCommand("effect").setExecutor(new EffectCMD());

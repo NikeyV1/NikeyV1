@@ -8,10 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
@@ -82,8 +79,9 @@ public class Tornado implements Listener {
                 if (l.getBlock().getType() != Material.AIR && l.getBlock().getType() != Material.BEDROCK && l.getBlock().getType() != Material.DRAGON_EGG) {
 
                     Block b = l.getBlock();
-                    entity = l.getWorld().spawnFallingBlock(l, Material.STONE, b.getData());
-                    cleanStoneItemsAroundPlayer(entity);
+                    FallingBlock entity1 = l.getWorld().spawnFallingBlock(l, Material.STONE, b.getData());
+                    entity = entity1;
+                    entity1.setDropItem(false);
                     entity.getWorld().spawnParticle(Particle.DRIP_WATER,entity.getLocation(),10);
                     new BukkitRunnable() {
                         @Override
@@ -96,8 +94,9 @@ public class Tornado implements Listener {
                     removable = !spew;
                 }
                 else {
-                    entity = l.getWorld().spawnFallingBlock(l, m, d);
-                    cleanStoneItemsAroundPlayer(entity);
+                    FallingBlock entity1 = l.getWorld().spawnFallingBlock(l, m, d);
+                    entity = entity1;
+                    entity1.setDropItem(false);
 
                     new BukkitRunnable() {
                         @Override
@@ -268,16 +267,5 @@ public class Tornado implements Listener {
                 plugin.getServer().getScheduler().cancelTask(id);
             }
         }.runTaskLater(plugin, time);
-    }
-    @EventHandler
-    public void onBlockLand(EntityChangeBlockEvent event) {
-        if (event.getEntity() instanceof org.bukkit.entity.FallingBlock) {
-            org.bukkit.entity.FallingBlock fallingBlock = (org.bukkit.entity.FallingBlock) event.getEntity();
-            if (fallingBlock.getBlockData().getMaterial() == Material.STONE) {
-                event.setCancelled(true); // Cancel the event to prevent the block from landing
-                event.getBlock().setType(Material.AIR); // Set the block to air
-                fallingBlock.remove(); // Remove the falling block entity
-            }
-        }
     }
 }

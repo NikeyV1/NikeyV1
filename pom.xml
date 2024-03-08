@@ -58,7 +58,7 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <outputDirectory>C:\Users\NikeyV1\AppData\Roaming\.feather\player-server\servers\fe6d8fd1-e50c-4b19-80fd-8657a4e4597e\plugins</outputDirectory>
+                            <outputDirectory>C:\Users\nheid\AppData\Roaming\.feather\player-server\servers\83b97724-fd7f-4e22-aa06-a68b3387aa03\plugins</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -93,22 +93,17 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.elmakers.mine.bukkit</groupId>
-            <artifactId>EffectLib</artifactId>
-            <version>9.4</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.papermc.paper</groupId>
-            <artifactId>paper-api</artifactId>
-            <version>1.20-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>ca.bkaw</groupId>
             <artifactId>paper-nms</artifactId>
             <version>1.20.4-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.elmakers.mine.bukkit</groupId>
+            <artifactId>EffectLib</artifactId>
+            <version>9.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.destroystokyo.paper/paper -->
     </dependencies>
 </project>

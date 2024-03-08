@@ -1,6 +1,5 @@
 package de.nikey.nikeyv1.Listeners;
 
-import com.sun.jna.platform.win32.ShTypes;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
 import de.nikey.nikeyv1.Stones.Electrostone;

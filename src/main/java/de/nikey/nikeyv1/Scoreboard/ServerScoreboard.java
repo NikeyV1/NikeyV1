@@ -266,8 +266,11 @@ public class ServerScoreboard extends ScoreboardBuilder {
                     }
                     setScore("§7Stone: " + color + stone, 6);
                 }else {
-                    ChatColor newColor = getRandomColor(ChatColor.WHITE);
-                    setScore("§7Stone: " + newColor + "Elemental Stone", 6);
+                    if (InfernoBlade.red) {
+                        setScore("§7Stone: " +ChatColor.RED + "Elemental Stone", 6);
+                    }else {
+                        setScore("§7Stone: " +ChatColor.AQUA + "Elemental Stone", 6);
+                    }
                 }
             }
         }.runTaskTimer(NikeyV1.getPlugin(),0,120);

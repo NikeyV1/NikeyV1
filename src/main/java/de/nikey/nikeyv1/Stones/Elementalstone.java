@@ -1,13 +1,18 @@
 package de.nikey.nikeyv1.Stones;
 
+import de.nikey.nikeyv1.CustomMobs.MiniWither;
 import de.nikey.nikeyv1.NikeyV1;
 import de.slikey.effectlib.effect.TornadoEffect;
+import net.minecraft.server.level.ServerLevel;
 import org.bukkit.*;
+import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R3.metadata.WorldMetadataStore;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -68,6 +73,10 @@ public class Elementalstone implements Listener {
                             }
                         }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
                             if (!player.isSneaking()) {
+                                MiniWither miniWither = new MiniWither(player.getLocation());
+                                ServerLevel world = ((CraftWorld) player.getLocation().getWorld()).getHandle();
+                                world.addFreshEntity(miniWither, CreatureSpawnEvent.SpawnReason.CUSTOM);
+                                player.sendMessage("D");
                             }
                         }
                     }

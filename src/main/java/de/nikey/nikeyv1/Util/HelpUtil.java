@@ -53,6 +53,16 @@ public class HelpUtil {
         return blocks;
     }
 
+    public static List<Block> getNearbyBlocksNoY(Location location, int radius) {
+        List<Block> blocks = new ArrayList<Block>();
+        for(int x = location.getBlockX() - radius; x <= location.getBlockX() + radius; x++) {
+            for(int z = location.getBlockZ() - radius; z <= location.getBlockZ() + radius; z++) {
+                blocks.add(location.getWorld().getHighestBlockAt(x, z).getLocation().subtract(0,1,0).getBlock());
+            }
+        }
+        return blocks;
+    }
+
     public static void triggerEntityAggro(LivingEntity damagedEntity, Player p) {
         // Iteriere durch alle nahegelegenen Entitäten
         for (Entity nearbySummoned : damagedEntity.getWorld().getNearbyEntities(damagedEntity.getLocation(),200,200,200)) {

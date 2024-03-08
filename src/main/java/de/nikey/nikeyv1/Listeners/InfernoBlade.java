@@ -13,6 +13,8 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -28,6 +30,8 @@ public class InfernoBlade implements Listener {
     public static long remainingTime2;
 
     public static boolean red;
+
+    private HashMap<UUID, Long> frozenPlayers = new HashMap<>();
 
     private final Random random = new Random();
 
@@ -123,9 +127,9 @@ public class InfernoBlade implements Listener {
                                         Block b = player.getTargetBlock((Set)null, 8);
                                         Location loc = new Location(b.getWorld(), (double)b.getX(), (double)b.getY(), (double)b.getZ(), player.getLocation().getYaw(), player.getLocation().getPitch());
                                         for (int i = 0; i < 3; i++) {
-                                            Location loc = targetLocation.clone().subtract(0, i, 0);
-                                            if (loc.getBlock().getType().isSolid()) {
-                                                targetLocation = loc.add(0, i + 1, 0);
+                                            Location loca = loc.clone().subtract(0, i, 0);
+                                            if (loca.getBlock().getType().isSolid()) {
+                                                loc = loca.add(0, i + 1, 0);
                                                 break;
                                             }
                                         }
@@ -144,12 +148,12 @@ public class InfernoBlade implements Listener {
         }
     }
 
+    int teleportCount = 0;
     private void teleportAndRoot(Player player, List<LivingEntity> targets) {
         Location loc = player.getLocation();
         Collections.sort(targets, Comparator.comparingDouble(entity -> entity.getLocation().distance(player.getLocation())));
 
         new BukkitRunnable() {
-            int teleportCount = 0;
 
             @Override
             public void run() {
@@ -160,20 +164,71 @@ public class InfernoBlade implements Listener {
                 }
 
                 LivingEntity targetEntity = targets.get(teleportCount);
-                targetEntity.damage(14);
+                targetEntity.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,20*8,0));
                 Location playerLocation = player.getLocation();
                 Location nearestPlayerLocation = targetEntity.getLocation();
 
-                // Überprüfen, ob der Spieler weniger als 10 Blöcke entfernt ist
-                double distance = playerLocation.distance(nearestPlayerLocation);
-                if (distance < 10) {
-                    Location teleportLocation = nearestPlayerLocation.getWorld().getHighestBlockAt(nearestPlayerLocation).getLocation();
+                Location teleportLocation = nearestPlayerLocation.clone().subtract(nearestPlayerLocation.getDirection().multiply(2));
+                if (teleportLocation.getBlock().isEmpty()) {
                     player.teleport(teleportLocation);
-                    player.playSound(teleportLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
+                }else {
+                    teleportToNearestAirBlock(player,teleportLocation);
                 }
+                player.playSound(teleportLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
+                freezePlayer(targetEntity);
+                Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> unfreezePlayer(targetEntity), 50L);
                 teleportCount++;
             }
         }.runTaskTimer(NikeyV1.getPlugin(), 20, 20);
+    }
+
+
+
+    public static void teleportToNearestAirBlock(Player player, Location location) {
+        World world = location.getWorld();
+        int x = location.getBlockX();
+        int y = location.getBlockY();
+        int z = location.getBlockZ();
+
+        if (world != null) {
+            for (int xOffset = -1; xOffset <= 1; xOffset++) {
+                for (int yOffset = -1; yOffset <= 1; yOffset++) {
+                    for (int zOffset = -1; zOffset <= 1; zOffset++) {
+                        Block nearbyBlock = world.getBlockAt(x + xOffset, y + yOffset, z + zOffset);
+                        if (nearbyBlock.getType().equals(Material.AIR)) {
+                            player.teleport(nearbyBlock.getLocation());
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        // Überprüfen, ob der Spieler eingefroren ist
+        if (frozenPlayers.containsKey(player.getUniqueId())) {
+            // Überprüfen, ob die Einfrierzeit abgelaufen ist
+            if (System.currentTimeMillis() > frozenPlayers.get(player.getUniqueId())) {
+                // Entfrieren des Spielers, wenn die Einfrierzeit abgelaufen ist
+                unfreezePlayer(player);
+            } else {
+                // Verhindern, dass sich der Spieler bewegt, während er eingefroren ist
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    // Spieler einfrieren
+    private void freezePlayer(LivingEntity entity) {
+        frozenPlayers.put(entity.getUniqueId(), System.currentTimeMillis() + 2500);
+    }
+
+    // Spieler entfrieren
+    private void unfreezePlayer(LivingEntity entity) {
+        frozenPlayers.remove(entity.getUniqueId());
     }
 
 
@@ -187,7 +242,7 @@ public class InfernoBlade implements Listener {
             if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.AQUA + "Inferno Blade") && event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN) {
                 if (!red) {
                     Location eventTo = event.getTo();
-                    eventTo.getWorld().createExplosion(eventTo,1.7F,false,false);
+                    eventTo.getWorld().createExplosion(eventTo.add(0,0.3F,0),1.7F,false,false);
                 }
             }
         }
