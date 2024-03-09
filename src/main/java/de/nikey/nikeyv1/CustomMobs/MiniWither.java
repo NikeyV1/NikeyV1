@@ -26,7 +26,6 @@ public class MiniWither extends WitherBoss {
         this.setCustomName(Component.literal("Mini Wither")); // Optional: Namen setzen
         this.setCustomNameVisible(true); // Optional: Namen sichtbar machen
         this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.WITHER_SKELETON_SKULL)); // Optional: Kopf setzen
-
     }
 
     private void setWitherShootSpeed(Wither wither, double shootSpeed) {
