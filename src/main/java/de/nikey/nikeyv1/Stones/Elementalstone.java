@@ -3,6 +3,7 @@ package de.nikey.nikeyv1.Stones;
 import de.nikey.nikeyv1.CustomMobs.MiniWither;
 import de.nikey.nikeyv1.NikeyV1;
 import de.slikey.effectlib.effect.TornadoEffect;
+import net.kyori.adventure.text.Component;
 import net.minecraft.server.level.ServerLevel;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
@@ -18,6 +19,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -73,10 +75,9 @@ public class Elementalstone implements Listener {
                             }
                         }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
                             if (!player.isSneaking()) {
-                                MiniWither miniWither = new MiniWither(player.getLocation());
-                                ServerLevel world = ((CraftWorld) player.getLocation().getWorld()).getHandle();
-                                world.addFreshEntity(miniWither, CreatureSpawnEvent.SpawnReason.CUSTOM);
-                                player.sendMessage("D");
+                                Wither wither = (Wither) player.getWorld().spawnEntity(player.getLocation(), EntityType.WITHER);
+                                wither.customName(Component.text("Mini-Wither"));
+                                wither.getPersistentDataContainer().set(new NamespacedKey(NikeyV1.getPlugin(), "Spawner"), PersistentDataType.STRING, player.getName());
                             }
                         }
                     }
