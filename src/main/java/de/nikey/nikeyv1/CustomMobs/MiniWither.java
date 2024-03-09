@@ -19,10 +19,9 @@ public class MiniWither extends WitherBoss {
     public MiniWither(Location loc) {
         super(EntityType.WITHER, ((CraftWorld) loc.getWorld()).getHandle());
         this.setPos(loc.getX(), loc.getY(), loc.getZ());
-        //this.setBoundingBox();
-        this.setHealth(1); // Mini-Wither hat wenig Leben
-        this.setCustomName(Component.literal("Mini Wither")); // Optional: Namen setzen
+        this.setCustomName(Component.literal("Mini-Wither")); // Optional: Namen setzen
         this.setCustomNameVisible(true); // Optional: Namen sichtbar machen
-        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.WITHER_SKELETON_SKULL)); // Optional: Kopf setzen
+        this.goalSelector.getAvailableGoals().forEach(goal -> this.goalSelector.removeGoal(goal));
     }
+
 }

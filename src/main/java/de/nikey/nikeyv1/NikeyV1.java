@@ -67,6 +67,11 @@ public final class NikeyV1 extends JavaPlugin{
         }
         Holystone.auraTasks.clear();
         removeGiants();
+
+
+        if (MiniWitherListener.task != null) {
+            MiniWitherListener.task.cancel();
+        }
     }
 
     private void removeGiants() {
