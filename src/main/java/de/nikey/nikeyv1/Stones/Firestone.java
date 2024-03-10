@@ -668,31 +668,33 @@ public class Firestone implements Listener {
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
         if (event.getEntity() instanceof Fireball ) {
-            if (event.getEntity().getCustomName().equalsIgnoreCase("airstrike")) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        Location location = event.getEntity().getLocation();
-                        Fireball fireball = (Fireball) event.getEntity();
-                        Block highestBlockAt = fireball.getWorld().getHighestBlockAt(fireball.getLocation());
-                        Location exp = highestBlockAt.getLocation().add(0, 1, 0);
-                        fireball.getWorld().createExplosion(exp,3.4F,false,false);
-                        fireball.remove();
-                    }
-                }.runTaskLater(NikeyV1.getPlugin(),4);
-            } else if (event.getEntity().getCustomName().equals("strongairstrike")) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        Location location = event.getEntity().getLocation();
-                        Fireball fireball = (Fireball) event.getEntity();
-                        Block highestBlockAt = fireball.getWorld().getHighestBlockAt(fireball.getLocation());
-                        Location exp = highestBlockAt.getLocation().add(0, 1, 0);
-                        fireball.getWorld().createExplosion(exp,4.2F,false,false);
-                        fireball.getWorld().createExplosion(exp,1F,false,true);
-                        fireball.remove();
-                    }
-                }.runTaskLater(NikeyV1.getPlugin(),4);
+            if (event.getEntity().getCustomName() != null) {
+                if (event.getEntity().getCustomName().equalsIgnoreCase("airstrike")) {
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            Location location = event.getEntity().getLocation();
+                            Fireball fireball = (Fireball) event.getEntity();
+                            Block highestBlockAt = fireball.getWorld().getHighestBlockAt(fireball.getLocation());
+                            Location exp = highestBlockAt.getLocation().add(0, 1, 0);
+                            fireball.getWorld().createExplosion(exp,3.4F,false,false);
+                            fireball.remove();
+                        }
+                    }.runTaskLater(NikeyV1.getPlugin(),4);
+                } else if (event.getEntity().getCustomName().equals("strongairstrike")) {
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            Location location = event.getEntity().getLocation();
+                            Fireball fireball = (Fireball) event.getEntity();
+                            Block highestBlockAt = fireball.getWorld().getHighestBlockAt(fireball.getLocation());
+                            Location exp = highestBlockAt.getLocation().add(0, 1, 0);
+                            fireball.getWorld().createExplosion(exp,4.2F,false,false);
+                            fireball.getWorld().createExplosion(exp,1F,false,true);
+                            fireball.remove();
+                        }
+                    }.runTaskLater(NikeyV1.getPlugin(),4);
+                }
             }
         }
     }

@@ -4,6 +4,7 @@ import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import net.kyori.adventure.text.Component;
 import org.apache.logging.log4j.core.tools.picocli.CommandLine;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -14,16 +15,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 public class MiniWitherListener implements Listener {
 
@@ -111,6 +110,82 @@ public class MiniWitherListener implements Listener {
             }
         }
     }
+    
+    int timer = 200;
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        Entity entity = event.getEntity();
+        if (entity instanceof Wither && entity.getCustomName() != null) {
+            if (entity.getCustomName().equals("Mini-Wither")) {
+                Wither wither = (Wither) entity;
+                double damage = event.getDamage();
+                double health = wither.getHealth() + damage;
+                String spawnerName = wither.getPersistentDataContainer().get(new NamespacedKey(NikeyV1.getPlugin(), "Spawner"), PersistentDataType.STRING);
+                assert spawnerName != null;
+                Player player = Bukkit.getPlayer(spawnerName);
+                assert player != null;
+                player.sendMessage(String.valueOf(health));
+                if (health > 150 && wither.getHealth() < 150) {
+                    player.sendMessage("d");
+                    wither.setAI(false);
+                    wither.setInvulnerable(true);
+
+                    // Teleport the wither 10 blocks above the player
+                    wither.teleport(player.getLocation().add(0, 10, 0));
+
+                    // Schedule the wither to stay still for 10 seconds
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (timer == 0) {
+                                cancel();
+                            }else {
+                                Location eyeLocation = wither.getEyeLocation();
+                                Location spawnLocation1 = eyeLocation.add(eyeLocation.getDirection().normalize());
+                                Location spawnLocation2 = spawnLocation1.clone().add(0, -0.8D, 0);
+                                Location spawnLocation3 = spawnLocation1.clone().add(0.8D, 0, 0);
+                                Location spawnLocation4 = spawnLocation1.clone().add(0, 0.8D, 0);
+                                Location spawnLocation5 = spawnLocation1.clone().add(-0.8D, 0, 0);
+                                shootSkull(player,spawnLocation2,wither);
+                                shootSkull(player,spawnLocation3,wither);
+                                shootSkull(player,spawnLocation4,wither);
+                                shootSkull(player,spawnLocation5,wither);
+                                wither.setVelocity(new Vector(0, 0, 0));
+                            }
+                            timer--;
+                        }
+                    }.runTaskTimer(NikeyV1.getPlugin(), 0,10);
+                }
+            }
+        }
+    }
+
+    private void shootSkull(Player player, Location spawnLocation,Wither wither) {
+        Location[] nearestPlayersLocations = findNearestPlayersLocations(player.getLocation(), 2);
+        for (Location targetLocation : nearestPlayersLocations) {
+            Vector direction = targetLocation.toVector().subtract(wither.getLocation().toVector()).normalize();
+            WitherSkull skull = (WitherSkull) player.getWorld().spawnEntity(spawnLocation, EntityType.WITHER_SKULL);
+            skull.setVelocity(direction);
+        }
+    }
+
+    private boolean isPlayerWithinRadius(Location location, double radius) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.getLocation().distanceSquared(location) <= radius * radius) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Location[] findNearestPlayersLocations(Location location, int count) {
+        return Bukkit.getOnlinePlayers().stream()
+                .sorted(Comparator.comparingDouble(p -> p.getLocation().distanceSquared(location)))
+                .limit(count)
+                .map(Player::getLocation)
+                .toArray(Location[]::new);
+    }
 
     @EventHandler
     public void onWitherTarget(EntityTargetEvent event) {
@@ -190,13 +265,31 @@ public class MiniWitherListener implements Listener {
         }
     }
 
+    private static final int DISTANCE_THRESHOLD = 40;
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        Location playerLocation = player.getLocation();
+
+        for (Entity entity : playerLocation.getWorld().getNearbyEntities(playerLocation, DISTANCE_THRESHOLD, DISTANCE_THRESHOLD, DISTANCE_THRESHOLD)) {
+            if (entity.getType() == EntityType.WITHER && entity.getCustomName().equalsIgnoreCase("Mini-Wither")) {
+                Location witherLocation = entity.getLocation();
+                if (witherLocation.distance(playerLocation) >= DISTANCE_THRESHOLD) {
+                    Location loc = playerLocation.add(0, 2, 0);
+                    entity.teleport(loc);
+                }
+            }
+        }
+    }
+
     private void startVelocityUpdateTask(Wither wither, Player player) {
         task = new BukkitRunnable() {
             @Override
             public void run() {
                 if (!wither.isDead()) {
                     Vector direction = player.getLocation().getDirection();
-                    Vector velocity = direction.normalize().multiply(0.4); // Adjust the multiplier as needed
+                    Vector velocity = direction.normalize().multiply(0.365); // Adjust the multiplier as needed
                     wither.setVelocity(velocity);
                     wither.teleport(wither.getLocation().setDirection(direction));
                 }else {
