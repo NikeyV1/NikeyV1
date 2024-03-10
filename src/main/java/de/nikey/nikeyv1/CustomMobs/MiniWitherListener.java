@@ -24,6 +24,8 @@ import org.bukkit.util.Vector;
 
 import java.util.*;
 
+import static org.bukkit.Bukkit.getLogger;
+
 public class MiniWitherListener implements Listener {
 
     public static BukkitTask task;
@@ -133,8 +135,7 @@ public class MiniWitherListener implements Listener {
                 assert player != null;
                 player.sendMessage(String.valueOf(health));
                 if (health > 150 && wither.getHealth() < 150) {
-                    wither.setAI(false);
-                    wither.setInvulnerable(true);
+                    wither.enterInvulnerabilityPhase();
 
                     // Teleport the wither 10 blocks above the player
                     wither.teleport(player.getLocation().add(0, 10, 0));
@@ -144,7 +145,8 @@ public class MiniWitherListener implements Listener {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            if (timer == 0 || wither.isDead()) {
+                            if (wither.isDead()) cancel();
+                            if (timer == 0 ) {
                                 cancel();
                             }else {
                                 Location eyeLocation = wither.getEyeLocation();
@@ -172,8 +174,9 @@ public class MiniWitherListener implements Listener {
                 Vector direction = targetLocation.toVector().subtract(wither.getLocation().toVector()).normalize();
                 WitherSkull skull = wither.launchProjectile(WitherSkull.class);
                 skull.setShooter(wither);
-                skull.setVelocity(direction.multiply(1.1)); // Hier kannst du die Geschwindigkeit anpassen
-                skull.setYield(3);
+                skull.setVelocity(direction); // Hier kannst du die Geschwindigkeit anpassen
+                skull.setYield(4);
+                skull.setCharged(true);
                 i++;
             } else {
                 break; // Breche die Schleife ab, sobald die ersten beiden Spieler gefunden wurden

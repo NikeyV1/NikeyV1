@@ -78,6 +78,7 @@ public class Elementalstone implements Listener {
                                 Wither wither = (Wither) player.getWorld().spawnEntity(player.getLocation(), EntityType.WITHER);
                                 wither.customName(Component.text("Mini-Wither"));
                                 wither.getPersistentDataContainer().set(new NamespacedKey(NikeyV1.getPlugin(), "Spawner"), PersistentDataType.STRING, player.getName());
+                                wither.setInvulnerableTicks(30);
                             }
                         }
                     }
