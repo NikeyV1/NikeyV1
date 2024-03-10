@@ -28,6 +28,7 @@ public final class NikeyV1 extends JavaPlugin{
         em = new EffectManager(EffectLib.instance());
         //Effect manager
 
+
         PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents(new Player(),this);
         manager.registerEvents(new Firestone(),this);

@@ -117,7 +117,7 @@ public class MiniWitherListener implements Listener {
         }
     }
     
-    int timer = 200;
+    int timer;
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
@@ -133,46 +133,51 @@ public class MiniWitherListener implements Listener {
                 assert player != null;
                 player.sendMessage(String.valueOf(health));
                 if (health > 150 && wither.getHealth() < 150) {
-                    player.sendMessage("d");
                     wither.setAI(false);
                     wither.setInvulnerable(true);
 
                     // Teleport the wither 10 blocks above the player
                     wither.teleport(player.getLocation().add(0, 10, 0));
+                    timer = 60;
 
                     // Schedule the wither to stay still for 10 seconds
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            if (timer == 0) {
+                            if (timer == 0 || wither.isDead()) {
                                 cancel();
                             }else {
                                 Location eyeLocation = wither.getEyeLocation();
                                 Location spawnLocation1 = eyeLocation.add(eyeLocation.getDirection().normalize());
-                                Location spawnLocation2 = spawnLocation1.clone().add(0, -0.8D, 0);
                                 Location spawnLocation3 = spawnLocation1.clone().add(0.8D, 0, 0);
-                                Location spawnLocation4 = spawnLocation1.clone().add(0, 0.8D, 0);
                                 Location spawnLocation5 = spawnLocation1.clone().add(-0.8D, 0, 0);
-                                shootSkull(player,spawnLocation2,wither);
                                 shootSkull(player,spawnLocation3,wither);
-                                shootSkull(player,spawnLocation4,wither);
                                 shootSkull(player,spawnLocation5,wither);
                                 wither.setVelocity(new Vector(0, 0, 0));
                             }
                             timer--;
                         }
-                    }.runTaskTimer(NikeyV1.getPlugin(), 0,10);
+                    }.runTaskTimer(NikeyV1.getPlugin(), 0,5);
                 }
             }
         }
     }
 
-    private void shootSkull(Player player, Location spawnLocation,Wither wither) {
-        Location[] nearestPlayersLocations = findNearestPlayersLocations(player.getLocation(), 2);
+    private void shootSkull(Player player, Location spawnLocation, Wither wither) {
+        // Finde die zwei nächsten Spieler in der Nähe des Spawnstandorts
+        Location[] nearestPlayersLocations = findNearestPlayersLocations(spawnLocation, 2);
+        int i = 0;
         for (Location targetLocation : nearestPlayersLocations) {
-            Vector direction = targetLocation.toVector().subtract(wither.getLocation().toVector()).normalize();
-            WitherSkull skull = (WitherSkull) player.getWorld().spawnEntity(spawnLocation, EntityType.WITHER_SKULL);
-            skull.setVelocity(direction);
+            if (i < 2) { // Stelle sicher, dass nur die ersten beiden Spieler betrachtet werden
+                Vector direction = targetLocation.toVector().subtract(wither.getLocation().toVector()).normalize();
+                WitherSkull skull = wither.launchProjectile(WitherSkull.class);
+                skull.setShooter(wither);
+                skull.setVelocity(direction.multiply(1.1)); // Hier kannst du die Geschwindigkeit anpassen
+                skull.setYield(3);
+                i++;
+            } else {
+                break; // Breche die Schleife ab, sobald die ersten beiden Spieler gefunden wurden
+            }
         }
     }
 
@@ -271,7 +276,7 @@ public class MiniWitherListener implements Listener {
         }
     }
 
-    private static final int DISTANCE_THRESHOLD = 40;
+    private static final int DISTANCE_THRESHOLD = 35;
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
@@ -294,16 +299,25 @@ public class MiniWitherListener implements Listener {
             @Override
             public void run() {
                 if (!wither.isDead()) {
-                    Vector direction = player.getLocation().getDirection();
-                    Vector velocity = direction.normalize().multiply(0.365); // Adjust the multiplier as needed
-                    wither.setVelocity(velocity);
-                    wither.teleport(wither.getLocation().setDirection(direction));
-                    Bukkit.broadcast(Component.text("deeze"));
+                    String spawnerName = wither.getPersistentDataContainer().get(new NamespacedKey(NikeyV1.getPlugin(), "Spawner"), PersistentDataType.STRING);
+                    if (spawnerName.equals(player.getName()) && player.getVehicle() instanceof Wither) {
+                        if (!wither.isCharged()) {
+                            Vector direction = player.getLocation().getDirection();
+                            Vector velocity = direction.normalize().multiply(0.365); // Adjust the multiplier as needed
+                            wither.setVelocity(velocity);
+                            wither.teleport(wither.getLocation().setDirection(direction));
+                        }else {
+                            player.leaveVehicle();
+                            player.setVelocity(new Vector(0, 1, 0));
+                        }
+                    }else {
+                        cancel();
+                    }
                 }else {
                     cancel();
                 }
             }
-        }.runTaskTimer(NikeyV1.getPlugin(), 0L, 2L); // Run the task every tick
+        }.runTaskTimer(NikeyV1.getPlugin(), 0L, 3); // Run the task every tick
     }
 
     @EventHandler
