@@ -28,6 +28,9 @@ public class MiniWitherListener implements Listener {
 
     public static BukkitTask task;
 
+    private final HashMap<Player, Long> cooldowns = new HashMap<>();
+    private final long cooldownTimeMillis = 500; // Halbe Sekunde in Millisekunden
+
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
         if (event.getEntity() instanceof MiniWither) {
@@ -75,7 +78,6 @@ public class MiniWitherListener implements Listener {
             if (skull.customName() != null && skull.customName().equals("CustomWitherSkull")) {
                 if (event.getEntity() instanceof Player) {
                     Location location = event.getEntity().getLocation();
-                    location.getWorld().createExplosion(location, 2); // Create explosion with power 2
                     LivingEntity entity = (LivingEntity) event.getEntity();
                     entity.damage(8);
                 }
@@ -87,9 +89,13 @@ public class MiniWitherListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getAction().toString().contains("RIGHT_CLICK")) {
             Player player = event.getPlayer();
-            if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
-                if (player.getVehicle() instanceof Wither && Objects.equals(player.getVehicle().customName(), Component.text("Mini-Wither")))
-                    shootWitherHead(player, (Wither) player.getVehicle());
+            if (player.getInventory().getItemInMainHand().getType().isAir()) {
+                if (player.getVehicle() instanceof Wither && Objects.equals(player.getVehicle().getCustomName(), "Mini-Wither")) {
+                    if (checkCooldown(player)) {
+                        shootWitherHead(player, (Wither) player.getVehicle());
+                        cooldowns.put(player, System.currentTimeMillis());
+                    }
+                }
             }
         }
     }
@@ -292,11 +298,12 @@ public class MiniWitherListener implements Listener {
                     Vector velocity = direction.normalize().multiply(0.365); // Adjust the multiplier as needed
                     wither.setVelocity(velocity);
                     wither.teleport(wither.getLocation().setDirection(direction));
+                    Bukkit.broadcast(Component.text("deeze"));
                 }else {
                     cancel();
                 }
             }
-        }.runTaskTimer(NikeyV1.getPlugin(), 0L, 1L); // Run the task every tick
+        }.runTaskTimer(NikeyV1.getPlugin(), 0L, 2L); // Run the task every tick
     }
 
     @EventHandler
@@ -315,14 +322,20 @@ public class MiniWitherListener implements Listener {
         }
     }
 
+    private boolean checkCooldown(Player player) {
+        if (!cooldowns.containsKey(player)) return true;
+        long lastShootTime = cooldowns.get(player);
+        return System.currentTimeMillis() - lastShootTime >= cooldownTimeMillis;
+    }
+
     private void shootWitherHead(Player player, Wither wither) {
         Location eyeLoc = player.getEyeLocation();
         Vector direction = eyeLoc.getDirection();
         eyeLoc.add(direction);
 
-        WitherSkull witherSkull = (WitherSkull) player.getWorld().spawnEntity(eyeLoc, EntityType.WITHER_SKULL);
-        witherSkull.setVelocity(direction);
-        witherSkull.setYield(3);
+        WitherSkull witherSkull = wither.launchProjectile(WitherSkull.class);
+        witherSkull.setDirection(direction);
+        witherSkull.setYield(3.7F);
         witherSkull.setShooter(wither);
     }
 }
