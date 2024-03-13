@@ -14,16 +14,14 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +46,8 @@ public class Frozenstone implements Listener {
 
     public static HashMap<Player, Integer> arrowsShot = new HashMap<>();
 
+    public static BukkitRunnable runnable;
+
 
     private boolean isColdBiome(Biome biome) {
         // Define cold biomes (you can adjust this list based on your preferences)
@@ -64,6 +64,30 @@ public class Frozenstone implements Listener {
         return false;
     }
 
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        FileConfiguration config = NikeyV1.getPlugin().getConfig();
+        String stone = config.getString(player.getName() + ".stone");
+        if (stone.equalsIgnoreCase("Frozen")) {
+            if (config.getInt(player.getName()+".level") == 7) {
+                runnable = (BukkitRunnable) new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (player.isInPowderedSnow()) {
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20,0,true,true));
+                        }
+                    }
+                }.runTaskTimer(NikeyV1.getPlugin(), 0L, 20L);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        runnable.cancel();
+    }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
@@ -83,6 +107,8 @@ public class Frozenstone implements Listener {
             }
         }
     }
+
+
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
