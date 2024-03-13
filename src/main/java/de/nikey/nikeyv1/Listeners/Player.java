@@ -402,8 +402,10 @@ public class Player implements Listener {
                                                     timerBuild.start(p);
                                                     config.set(p.getName() + ".level", num + 1);
                                                     NikeyV1.getPlugin().saveConfig();
-                                                    if (contents.getAmount() >= amountToTax)
+                                                    if (contents.getAmount() >= amountToTax){
                                                         contents.setAmount(contents.getAmount() - amountToTax);
+                                                        break;
+                                                    }    
                                                     if (p.getGameMode() != GameMode.CREATIVE)
                                                         p.setLevel(p.getLevel() - 30);
                                                     p.sendMessage("§aUpgrading!");
