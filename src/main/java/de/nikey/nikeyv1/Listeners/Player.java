@@ -433,7 +433,7 @@ public class Player implements Listener {
                                             if (soul != null && soul.getType() == Material.SOUL_LANTERN && soul.getItemMeta().hasLore()) {
                                                 if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE) {
                                                     if (soul.getAmount() >= amountToTax){
-                                                        soul.setAmount(soul.getAmount() - 1
+                                                        soul.setAmount(soul.getAmount() - 1);
                                                         break;
                                                     }else {
                                                         p.getInventory().remove(soul);
@@ -465,7 +465,7 @@ public class Player implements Listener {
                                             if (soul != null && soul.getType() == Material.SOUL_LANTERN && soul.getItemMeta().hasLore()) {
                                                 if (p.getLevel() > 100 || p.getGameMode() == GameMode.CREATIVE) {
                                                     if (soul.getAmount() >= amountToTax){
-                                                        soul.setAmount(soul.getAmount() - 1
+                                                        soul.setAmount(soul.getAmount() - 1);
                                                         break;
                                                     }else {
                                                         p.getInventory().remove(soul);
