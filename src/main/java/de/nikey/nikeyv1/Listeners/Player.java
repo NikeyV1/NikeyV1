@@ -391,26 +391,19 @@ public class Player implements Listener {
                                     TimerBuild timerBuild = new TimerBuild();
                                     if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
                                         if (p.getLevel() > 30 || p.getGameMode() == GameMode.CREATIVE) {
-                                            for (ItemStack contents : p.getInventory().getContents()) {
-                                                if (contents != null && contents.getType() != Material.AIR) continue;
-                                                if (contents.getItemMeta().getDisplayName().equalsIgnoreCase("§3Soul of Strenght") && contents.getType() == Material.SOUL_LANTERN) {
-                                                    inventory.setItem(13, null);
-                                                    p.closeInventory();
-                                                    timerBuild.setLevel(num + 1);
-                                                    timerBuild.setStopTime(60 * 30);
-                                                    timerBuild.setTime(1);
-                                                    timerBuild.start(p);
-                                                    config.set(p.getName() + ".level", num + 1);
-                                                    NikeyV1.getPlugin().saveConfig();
-                                                    if (contents.getAmount() >= amountToTax){
-                                                        contents.setAmount(contents.getAmount() - amountToTax);
-                                                        break;
-                                                    }    
-                                                    if (p.getGameMode() != GameMode.CREATIVE)
-                                                        p.setLevel(p.getLevel() - 30);
-                                                    p.sendMessage("§aUpgrading!");
-                                                }
-                                            }
+                                                inventory.setItem(13, null);
+                                                p.closeInventory();
+                                                timerBuild.setLevel(num + 1);
+                                                timerBuild.setStopTime(60 * 30);
+                                                timerBuild.setTime(1);
+                                                timerBuild.start(p);
+                                                config.set(p.getName() + ".level", num + 1);
+                                                NikeyV1.getPlugin().saveConfig();
+                                                if (p.getGameMode() != GameMode.CREATIVE)
+                                                    p.setLevel(p.getLevel() - 30);
+                                                p.sendMessage("§aUpgrading!");
+                                            
+                                            
                                         } else {
                                             p.sendMessage("You dont have 30 levels!");
                                         }
