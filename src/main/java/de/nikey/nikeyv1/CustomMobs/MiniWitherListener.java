@@ -109,6 +109,7 @@ public class MiniWitherListener implements Listener {
             Wither wither = (Wither) event.getRightClicked();
             if (wither.getCustomName() != null && wither.getCustomName().equals("Mini-Wither")) {
                 String spawnerName = wither.getPersistentDataContainer().get(new NamespacedKey(NikeyV1.getPlugin(), "Spawner"), PersistentDataType.STRING);
+                assert spawnerName != null;
                 if (spawnerName.equals(player.getName())) {
                     if (!wither.isCharged()) {
                         wither.addPassenger(player);
@@ -136,6 +137,7 @@ public class MiniWitherListener implements Listener {
                 player.sendMessage(String.valueOf(health));
                 if (health > 150 && wither.getHealth() < 150) {
                     wither.enterInvulnerabilityPhase();
+                    wither.setAI(false);
 
                     // Teleport the wither 10 blocks above the player
                     wither.teleport(player.getLocation().add(0, 10, 0));
@@ -146,14 +148,15 @@ public class MiniWitherListener implements Listener {
                         public void run() {
                             if (wither.isDead()) cancel();
                             if (timer == 0 ) {
+                                wither.setAI(true);
                                 cancel();
                             }else {
                                 Location eyeLocation = wither.getEyeLocation();
                                 Location spawnLocation1 = eyeLocation.add(eyeLocation.getDirection().normalize());
                                 Location spawnLocation3 = spawnLocation1.clone().add(0.8D, 0, 0);
                                 Location spawnLocation5 = spawnLocation1.clone().add(-0.8D, 0, 0);
-                                shootSkull(player,spawnLocation3,wither);
-                                shootSkull(player,spawnLocation5,wither);
+                                shootSkull(spawnLocation3,wither);
+                                shootSkull(spawnLocation5,wither);
                                 wither.setVelocity(new Vector(0, 0, 0));
                             }
                             timer--;
@@ -164,17 +167,21 @@ public class MiniWitherListener implements Listener {
         }
     }
 
-    private void shootSkull(Player player, Location spawnLocation, Wither wither) {
+    private void witherSMASH(Player player,Wither wither) {
+        
+    }
+
+    private void shootSkull( Location spawnLocation, Wither wither) {
         // Finde die zwei nächsten Spieler in der Nähe des Spawnstandorts
         Location[] nearestPlayersLocations = findNearestPlayersLocations(spawnLocation, 2);
         int i = 0;
         for (Location targetLocation : nearestPlayersLocations) {
             if (i <= 2) { // Stelle sicher, dass nur die ersten beiden Spieler betrachtet werden
                 Vector direction = targetLocation.toVector().subtract(wither.getLocation().toVector()).normalize();
-                WitherSkull skull = wither.launchProjectile(WitherSkull.class);
+                WitherSkull skull = wither.getWorld().spawn(wither.getLocation(), WitherSkull.class, CreatureSpawnEvent.SpawnReason.CUSTOM);
                 skull.setShooter(wither);
                 skull.setVelocity(direction); // Hier kannst du die Geschwindigkeit anpassen
-                skull.setYield(4);
+                skull.setYield(5);
                 skull.setCharged(true);
                 i++;
             } else {
