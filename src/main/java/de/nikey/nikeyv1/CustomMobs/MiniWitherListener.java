@@ -141,7 +141,6 @@ public class MiniWitherListener implements Listener {
                     wither.teleport(player.getLocation().add(0, 10, 0));
                     timer = 60;
 
-                    // Schedule the wither to stay still for 10 seconds
                     new BukkitRunnable() {
                         @Override
                         public void run() {
@@ -170,7 +169,7 @@ public class MiniWitherListener implements Listener {
         Location[] nearestPlayersLocations = findNearestPlayersLocations(spawnLocation, 2);
         int i = 0;
         for (Location targetLocation : nearestPlayersLocations) {
-            if (i < 2) { // Stelle sicher, dass nur die ersten beiden Spieler betrachtet werden
+            if (i <= 2) { // Stelle sicher, dass nur die ersten beiden Spieler betrachtet werden
                 Vector direction = targetLocation.toVector().subtract(wither.getLocation().toVector()).normalize();
                 WitherSkull skull = wither.launchProjectile(WitherSkull.class);
                 skull.setShooter(wither);
@@ -179,7 +178,7 @@ public class MiniWitherListener implements Listener {
                 skull.setCharged(true);
                 i++;
             } else {
-                break; // Breche die Schleife ab, sobald die ersten beiden Spieler gefunden wurden
+                break;
             }
         }
     }
