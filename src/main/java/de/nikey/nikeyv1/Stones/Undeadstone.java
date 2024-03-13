@@ -12,6 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
@@ -727,7 +728,7 @@ public class Undeadstone implements Listener {
         return type == EntityType.ZOMBIE || type == EntityType.SKELETON || type == EntityType.ZOGLIN|| type == EntityType.ZOMBIFIED_PIGLIN|| type == EntityType.ZOMBIE_VILLAGER|| type == EntityType.PHANTOM || type == EntityType.DROWNED  || type == EntityType.WITHER_SKELETON || type == EntityType.STRAY || type == EntityType.HUSK;
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
@@ -739,18 +740,23 @@ public class Undeadstone implements Listener {
                 event.setDamage(reducedDamage);
             }
         }
-        if (event.getDamager() instanceof Player && event.getEntity() instanceof LivingEntity) {
+        event.getDamager().sendMessage("P");
+        if (event.getDamager() instanceof Player) {
+            event.getDamager().sendMessage("D");
             String stone = NikeyV1.getPlugin().getConfig().getString(event.getDamager().getName() + ".stone");
             int level = NikeyV1.getPlugin().getConfig().getInt(event.getDamager().getName() + ".level");
-            if (stone.equalsIgnoreCase("undead")) {
-                if (!(event.getEntity() instanceof Player)) {
+            if (stone.equalsIgnoreCase("Undead")) {
+                event.getDamager().sendMessage("S");
+                if (event.getEntity() instanceof LivingEntity) {
+                    event.getDamager().sendMessage("T");
                     double damage = event.getDamage();
                     if (level == 7) {
                         event.setDamage(event.getDamage()*1.075);
                     }else if (level == 8) {
-                        event.setDamage(event.getDamage()*1.01);
+                        event.setDamage(event.getDamage()*1.1);
                     }else if (level >= 9) {
-                        event.setDamage(event.getDamage()*1.0125);
+                        event.setDamage(event.getDamage()*1.125);
+                        event.getDamager().sendMessage(String.valueOf(event.getDamage()));
                     }
                 }
                 HelpUtil.triggerEntityAggro((LivingEntity) event.getEntity(), (Player) event.getDamager());
@@ -759,7 +765,7 @@ public class Undeadstone implements Listener {
                         event.setDamage(event.getDamage()+0.5F);
                     } else if (level == 4) {
                         event.setDamage(event.getDamage()+1);
-                    }else if (level == 5) {
+                    }else if (level >= 5) {
                         event.setDamage(event.getDamage()+1.5F);
                     }
                 }
@@ -823,10 +829,6 @@ public class Undeadstone implements Listener {
                         // Aggro-Mechanismus aktivieren
                         HelpUtil.triggerEntityAggro(damagedEntity,p);
                     }
-                }
-
-                if (entity.getCategory() == EntityCategory.UNDEAD && stone.equalsIgnoreCase("Undead")&&config.getInt(p.getName()+".level")>=5){
-                    event.setDamage(event.getFinalDamage()+1);
                 }
             }
             if (p.getInventory().getItemInMainHand().getItemMeta() == null)return;

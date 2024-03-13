@@ -42,12 +42,6 @@ public class Player implements Listener {
 
     public static Inventory inv = Bukkit.createInventory(null, 27, "Enchanted Anvil");
 
-    public void run(org.bukkit.entity.Player player){
-        if(player.isInWater()){
-            if(player.getVelocity().getX() <= 2 && player.getVelocity().getY() <= 2 && player.getVelocity().getZ() <= 2)//makes sure players don't move at speed of light
-                player.setVelocity(player.getVelocity().multiply(1.5));
-        }
-    }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -64,7 +58,6 @@ public class Player implements Listener {
             Integer level = config.getInt(p.getName() + ".level");
             p.setWalkSpeed(0.2F);
             p.setFlySpeed(0.1f);
-            if (stone.equalsIgnoreCase("Water")&&level >=5) run(p);
             if (stone.equalsIgnoreCase("Electric")) {
                 if (level == 3){
                     p.setWalkSpeed(0.2075F);
@@ -101,6 +94,7 @@ public class Player implements Listener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         FileConfiguration config = NikeyV1.getPlugin().getConfig();
         Entity damager = event.getDamager();
+        //damager.sendMessage(String.valueOf(event.getDamage()));
         Entity entity = event.getEntity();
         EntityDamageEvent.DamageCause cause = event.getCause();
         if (cause == EntityDamageEvent.DamageCause.FREEZE){

@@ -46,7 +46,6 @@ public class Frozenstone implements Listener {
 
     public static HashMap<Player, Integer> arrowsShot = new HashMap<>();
 
-    public static BukkitRunnable runnable;
 
 
     private boolean isColdBiome(Biome biome) {
@@ -71,23 +70,37 @@ public class Frozenstone implements Listener {
         String stone = config.getString(player.getName() + ".stone");
         if (stone.equalsIgnoreCase("Frozen")) {
             if (config.getInt(player.getName()+".level") == 7) {
-                runnable = (BukkitRunnable) new BukkitRunnable() {
+                new BukkitRunnable() {
                     @Override
                     public void run() {
-                        //code here
+                        if (!player.isOnline())cancel();
                         if (player.isInPowderedSnow()) {
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20,0,true,true));
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,22,0,true,false,true));
+                        }
+                    }
+                }.runTaskTimer(NikeyV1.getPlugin(), 0L, 20L);
+            } else if (config.getInt(player.getName() + ".level") == 8) {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (!player.isOnline())cancel();
+                        if (player.isInPowderedSnow()) {
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,22,1,true,false,true));
+                        }
+                    }
+                }.runTaskTimer(NikeyV1.getPlugin(), 0L, 20L);
+            }else if (config.getInt(player.getName() + ".level") >= 9) {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (!player.isOnline()) cancel();
+                        if (player.isInPowderedSnow()) {
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 222, 1, true, false,true));
                         }
                     }
                 }.runTaskTimer(NikeyV1.getPlugin(), 0L, 20L);
             }
         }
-    }
-
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        runnable.cancel();
     }
 
     @EventHandler
@@ -104,7 +117,13 @@ public class Frozenstone implements Listener {
                 player.setFlying(false);
             }
             if (isColdBiome(player.getWorld().getBiome(player.getLocation()))) {
-                player.setFlySpeed(player.getFlySpeed() * 1.3f);
+                if (player.getFlySpeed() != 0.14F) {
+                    player.setFlySpeed(0.14F);
+                }
+            }else {
+                if (player.getFlySpeed() == 0.14F) {
+                    player.setFlySpeed(0.1F);
+                }
             }
         }
     }
@@ -556,7 +575,7 @@ public class Frozenstone implements Listener {
         Projectile entity = event.getEntity();
         Entity hitEntity = event.getHitEntity();
         ProjectileSource shooter = entity.getShooter();
-        if ((entity instanceof Snowball) && entity.getCustomName().equalsIgnoreCase("B") && (shooter instanceof Player)){
+        if ((entity instanceof Snowball) && entity.getCustomName().equalsIgnoreCase("B") && (shooter instanceof Player) && event.getHitEntity() instanceof LivingEntity){
             Player p = (Player) shooter;
             LivingEntity e = (LivingEntity) hitEntity;
             int i = NikeyV1.getPlugin().getConfig().getInt(p.getName() + ".level");
