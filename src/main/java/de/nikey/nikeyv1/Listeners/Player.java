@@ -442,7 +442,13 @@ public class Player implements Listener {
                                         for (ItemStack soul : p.getInventory().getContents()) {
                                             if (soul != null && soul.getType() == Material.SOUL_LANTERN && soul.getItemMeta().hasLore()) {
                                                 if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE) {
-                                                    p.getInventory().remove(soul);
+                                                    if (soul.getAmount() >= amountToTax){
+                                                        soul.setAmount(soul.getAmount() - 1
+                                                        break;
+                                                    }else {
+                                                        p.getInventory().remove(soul);
+                                                        break;
+                                                    }
                                                     inventory.setItem(13, null);
                                                     p.closeInventory();
                                                     timerBuild.setLevel(num + 1);
