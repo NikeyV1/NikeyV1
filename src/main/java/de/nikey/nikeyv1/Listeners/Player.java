@@ -451,6 +451,7 @@ public class Player implements Listener {
                                                         p.setLevel(p.getLevel() - 50);
                                                     }
                                                     p.sendMessage("§aUpgrading!");
+                                                    new ServerScoreboard(p);
                                                 } else {
                                                     p.sendMessage("You dont have 50 levels!");
                                                 }
