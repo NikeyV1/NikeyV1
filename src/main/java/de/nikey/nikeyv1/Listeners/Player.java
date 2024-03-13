@@ -391,19 +391,17 @@ public class Player implements Listener {
                                     TimerBuild timerBuild = new TimerBuild();
                                     if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
                                         if (p.getLevel() > 30 || p.getGameMode() == GameMode.CREATIVE) {
-                                                inventory.setItem(13, null);
-                                                p.closeInventory();
-                                                timerBuild.setLevel(num + 1);
-                                                timerBuild.setStopTime(60 * 30);
-                                                timerBuild.setTime(1);
-                                                timerBuild.start(p);
-                                                config.set(p.getName() + ".level", num + 1);
-                                                NikeyV1.getPlugin().saveConfig();
-                                                if (p.getGameMode() != GameMode.CREATIVE)
-                                                    p.setLevel(p.getLevel() - 30);
-                                                p.sendMessage("§aUpgrading!");
-                                            
-                                            
+                                            inventory.setItem(13, null);
+                                            p.closeInventory();
+                                            timerBuild.setLevel(num + 1);
+                                            timerBuild.setStopTime(60 * 30);
+                                            timerBuild.setTime(1);
+                                            timerBuild.start(p);
+                                            config.set(p.getName() + ".level", num + 1);
+                                            NikeyV1.getPlugin().saveConfig();
+                                            if (p.getGameMode() != GameMode.CREATIVE)
+                                                p.setLevel(p.getLevel() - 30);
+                                            p.sendMessage("§aUpgrading!");
                                         } else {
                                             p.sendMessage("You dont have 30 levels!");
                                         }
@@ -431,7 +429,6 @@ public class Player implements Listener {
                                 } else if (num == 16 || num == 17 || num == 18 || num == 19) {
                                     TimerBuild timerBuild = new TimerBuild();
                                     if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
-                                        // Durchlaufe das Inventar des Spielers und entferne die Soul of Strenght
                                         for (ItemStack soul : p.getInventory().getContents()) {
                                             if (soul != null && soul.getType() == Material.SOUL_LANTERN && soul.getItemMeta().hasLore()) {
                                                 if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE) {
