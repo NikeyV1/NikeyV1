@@ -169,6 +169,10 @@ public class InfernoBlade implements Listener {
                 Location nearestPlayerLocation = targetEntity.getLocation();
 
                 Location teleportLocation = nearestPlayerLocation.clone().subtract(nearestPlayerLocation.getDirection().multiply(2));
+                for (Entity entity : teleportLocation.getWorld().getNearbyEntities(teleportLocation, 2, 2, 2)) {
+                    Vector direction = playerLocation.toVector().subtract(entity.getLocation().toVector()).normalize();
+                    entity.setVelocity(direction.multiply(2)); // Adjust the multiplier for the strength of attraction
+                }
                 if (teleportLocation.getBlock().isEmpty()) {
                     player.teleport(teleportLocation);
                 }else {
