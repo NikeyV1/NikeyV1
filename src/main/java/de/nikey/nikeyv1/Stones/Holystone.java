@@ -74,7 +74,7 @@ public class Holystone implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-            Player p = (Player) event.getEntity();
+            Player p =  event.getPlayer();
             String stone = NikeyV1.getPlugin().getConfig().getString(p.getName() + ".stone");
             int level = NikeyV1.getPlugin().getConfig().getInt(p.getName() + ".level");
             if (stone.equalsIgnoreCase("Holy")){
@@ -82,13 +82,23 @@ public class Holystone implements Listener {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            repairArmor(player);
+                            repairArmor(p);
                         }
-                    }.runTaskTimer(NikeyV1.getPlugin(),20,20);
+                    }.runTaskTimer(NikeyV1.getPlugin(),200,200);
                 }else if (level == 8){
-                    
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            repairArmor(p);
+                        }
+                    }.runTaskTimer(NikeyV1.getPlugin(),140,140);
                 }else if (level >= 9){
-                    
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            repairArmor(p);
+                        }
+                    }.runTaskTimer(NikeyV1.getPlugin(),100,100);
                 }
             }
     }
