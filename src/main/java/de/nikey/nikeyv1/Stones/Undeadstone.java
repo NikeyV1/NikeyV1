@@ -740,15 +740,12 @@ public class Undeadstone implements Listener {
                 event.setDamage(reducedDamage);
             }
         }
-        event.getDamager().sendMessage("P");
         if (event.getDamager() instanceof Player) {
-            event.getDamager().sendMessage("D");
             String stone = NikeyV1.getPlugin().getConfig().getString(event.getDamager().getName() + ".stone");
             int level = NikeyV1.getPlugin().getConfig().getInt(event.getDamager().getName() + ".level");
             if (stone.equalsIgnoreCase("Undead")) {
                 event.getDamager().sendMessage("S");
-                if (event.getEntity() instanceof LivingEntity) {
-                    event.getDamager().sendMessage("T");
+                if (!(entity instanceof Player)) {
                     double damage = event.getDamage();
                     if (level == 7) {
                         event.setDamage(event.getDamage()*1.075);
@@ -756,7 +753,6 @@ public class Undeadstone implements Listener {
                         event.setDamage(event.getDamage()*1.1);
                     }else if (level >= 9) {
                         event.setDamage(event.getDamage()*1.125);
-                        event.getDamager().sendMessage(String.valueOf(event.getDamage()));
                     }
                 }
                 HelpUtil.triggerEntityAggro((LivingEntity) event.getEntity(), (Player) event.getDamager());
