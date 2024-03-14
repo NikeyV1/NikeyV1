@@ -73,6 +73,27 @@ public class Holystone implements Listener {
     }
 
     @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        FileConfiguration config = NikeyV1.getPlugin().getConfig();
+        if (event.getEntity() instanceof Player){
+            Player p = (Player) event.getEntity();
+            String stone = config.getString(p.getName() + ".stone");
+            int level = NikeyV1.getPlugin().getConfig().getInt(p.getName() + ".level");
+            if (stone.equalsIgnoreCase("Holy")){
+                if (level == 3){
+                    event.setAmount(event.getAmount()+0.2);
+                }else if (level == 4){
+                    event.setAmount(event.getAmount()+0.3);
+                }else if (level == 5){
+                    event.setAmount(event.getAmount()+0.4);
+                }else if (level == 6){
+                    event.setAmount(event.getAmount()+0.5);
+                }
+            }
+        }
+    }
+
+    @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player p = event.getPlayer();
         ItemStack item = event.getItem();
@@ -699,6 +720,20 @@ public class Holystone implements Listener {
             vanishedPlayers.remove(player);
         }
     }
+    private void repairArmor(Player player) {
+        for (ItemStack armorPiece : player.getInventory().getArmorContents()) {
+            if (armorPiece == null) continue;
+            short maxDurability = armorPiece.getType().getMaxDurability();
+            short currentDurability = armorPiece.getDurability();
 
+            // Berechnet die verbleibende Haltbarkeit
+            short remainingDurability = (short) (maxDurability - currentDurability);
 
+            // Fügt dem aktuellen Rüstungsstück Haltbarkeit hinzu
+            if (remainingDurability > 0) {
+                short repairAmount = (short) Math.min(20, remainingDurability); // Repariert bis zu 1 Punkt pro Sekunde
+                armorPiece.setDurability((short) (currentDurability - repairAmount));
+            }
+        }
+    }
 }
