@@ -2,6 +2,7 @@ package de.nikey.nikeyv1.Listeners;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.slikey.effectlib.effect.BleedEffect;
+import io.papermc.paper.event.entity.EntityMoveEvent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -31,7 +32,7 @@ public class InfernoBlade implements Listener {
 
     public static boolean red;
 
-    private HashMap<UUID, Long> frozenPlayers = new HashMap<>();
+    private HashMap<LivingEntity, Long> frozenPlayers = new HashMap<>();
 
     private final Random random = new Random();
 
@@ -92,7 +93,7 @@ public class InfernoBlade implements Listener {
                                         }.runTaskLater(NikeyV1.getPlugin(),20*80);
                                         red = true;
                                         //Cooldown-Ability
-                                        List<Entity> nearbyEntities = player.getNearbyEntities(12, 12, 12);
+                                        List<Entity> nearbyEntities = player.getNearbyEntities(15, 12, 15);
                                         List<LivingEntity> targets = new ArrayList<>();
                                         for (Entity entity : nearbyEntities) {
                                             if ((entity instanceof Player || entity instanceof LivingEntity) && !entity.equals(player)) {
@@ -169,16 +170,26 @@ public class InfernoBlade implements Listener {
                 Location nearestPlayerLocation = targetEntity.getLocation();
 
                 Location teleportLocation = nearestPlayerLocation.clone().subtract(nearestPlayerLocation.getDirection().multiply(2));
+                teleportLocation.getWorld().playEffect(teleportLocation,Effect.ENDER_SIGNAL,null);
                 for (Entity entity : teleportLocation.getWorld().getNearbyEntities(teleportLocation, 2, 2, 2)) {
-                    Vector direction = playerLocation.toVector().subtract(entity.getLocation().toVector()).normalize();
-                    entity.setVelocity(direction.multiply(2)); // Adjust the multiplier for the strength of attraction
+                    if (entity instanceof LivingEntity) {
+                        Vector direction = playerLocation.toVector().subtract(entity.getLocation().toVector()).normalize();
+                        entity.setVelocity(direction.multiply(2)); // Adjust the multiplier for the strength of attraction
+                        entity.teleport(teleportLocation);
+                        LivingEntity livingEntity = (LivingEntity) entity;
+                        livingEntity.damage(20,player);
+                    }
                 }
                 if (teleportLocation.getBlock().isEmpty()) {
                     player.teleport(teleportLocation);
+                    player.playSound(teleportLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
                 }else {
                     teleportToNearestAirBlock(player,teleportLocation);
+                    player.playSound(teleportLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
                 }
-                player.playSound(teleportLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
+                List<Block> excludedBlocks = new ArrayList<>();
+                excludedBlocks.add(player.getLocation().getBlock());
+                player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, teleportLocation, 2);
                 freezePlayer(targetEntity);
                 Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> unfreezePlayer(targetEntity), 50L);
                 teleportCount++;
@@ -210,12 +221,12 @@ public class InfernoBlade implements Listener {
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
-        Player player = event.getPlayer();
+    public void onPlayerMove(EntityMoveEvent event) {
+        LivingEntity player = event.getEntity();
         // Überprüfen, ob der Spieler eingefroren ist
-        if (frozenPlayers.containsKey(player.getUniqueId())) {
+        if (frozenPlayers.containsKey(player)) {
             // Überprüfen, ob die Einfrierzeit abgelaufen ist
-            if (System.currentTimeMillis() > frozenPlayers.get(player.getUniqueId())) {
+            if (System.currentTimeMillis() > frozenPlayers.get(player)) {
                 // Entfrieren des Spielers, wenn die Einfrierzeit abgelaufen ist
                 unfreezePlayer(player);
             } else {
@@ -227,12 +238,12 @@ public class InfernoBlade implements Listener {
 
     // Spieler einfrieren
     private void freezePlayer(LivingEntity entity) {
-        frozenPlayers.put(entity.getUniqueId(), System.currentTimeMillis() + 2500);
+        frozenPlayers.put(entity, System.currentTimeMillis() + 2500);
     }
 
     // Spieler entfrieren
     private void unfreezePlayer(LivingEntity entity) {
-        frozenPlayers.remove(entity.getUniqueId());
+        frozenPlayers.remove(entity);
     }
 
 

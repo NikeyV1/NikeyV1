@@ -25,8 +25,8 @@ public final class NikeyV1 extends JavaPlugin{
     @Override
     public void onEnable() {
         plugin = this;
-        em = new EffectManager(EffectLib.instance());
         //Effect manager
+        em = new EffectManager(EffectLib.instance());
 
 
         PluginManager manager = Bukkit.getPluginManager();
@@ -47,6 +47,7 @@ public final class NikeyV1 extends JavaPlugin{
         manager.registerEvents(new InfernoBlade(),this);
         manager.registerEvents(new Elementalstone(),this);
         manager.registerEvents(new MiniWitherListener(),this);
+        manager.registerEvents(new UndeadStoneListener(),this);
         //Command
         getCommand("stone").setExecutor(new stone());
         getCommand("effect").setExecutor(new EffectCMD());

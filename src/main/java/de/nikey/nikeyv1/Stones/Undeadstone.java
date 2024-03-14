@@ -4,6 +4,7 @@ import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.slikey.effectlib.effect.SmokeEffect;
 import io.papermc.paper.event.entity.EntityMoveEvent;
+import io.papermc.paper.tag.EntityTags;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
@@ -730,33 +731,33 @@ public class Undeadstone implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        FileConfiguration config = NikeyV1.getPlugin().getConfig();
         if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            // Check if the damage source is an undead monster
-            if (isUndead((LivingEntity) event.getDamager())) {
-                double damageReductionPercentage = 7.5; // 7.5% damage reduction
-                double damage = event.getDamage();
-                double reducedDamage = damage - (damage * (damageReductionPercentage / 100));
-                event.setDamage(reducedDamage);
+            Player p = (Player) event.getEntity();
+            String stone = config.getString(p.getName() + ".stone");
+            if (stone.equalsIgnoreCase("Undead")) {
+                Monster damager = (Monster) event.getDamager();
+                if (damager != null) {
+                    HelpUtil.triggerEntityAggro(damager,p);
+                }
+            }
+
+            int level = NikeyV1.getPlugin().getConfig().getInt(p.getName() + ".level");
+            if (stone.equalsIgnoreCase("Undead") && level >= 6) {
+                if (isUndead((LivingEntity) event.getDamager())) {
+                    double damageReductionPercentage = 7.5; // 7.5% damage reduction
+                    double damage = event.getDamage();
+                    double reducedDamage = damage - (damage * (damageReductionPercentage / 100));
+                    event.setDamage(reducedDamage);
+                }
             }
         }
         if (event.getDamager() instanceof Player) {
-            String stone = NikeyV1.getPlugin().getConfig().getString(event.getDamager().getName() + ".stone");
             int level = NikeyV1.getPlugin().getConfig().getInt(event.getDamager().getName() + ".level");
+            HelpUtil.triggerEntityAggro((LivingEntity) event.getEntity(), (Player) event.getDamager());
+            String stone = config.getString(event.getDamager().getName() + ".stone");
             if (stone.equalsIgnoreCase("Undead")) {
-                event.getDamager().sendMessage("S");
-                if (!(entity instanceof Player)) {
-                    double damage = event.getDamage();
-                    if (level == 7) {
-                        event.setDamage(event.getDamage()*1.075);
-                    }else if (level == 8) {
-                        event.setDamage(event.getDamage()*1.1);
-                    }else if (level >= 9) {
-                        event.setDamage(event.getDamage()*1.125);
-                    }
-                }
-                HelpUtil.triggerEntityAggro((LivingEntity) event.getEntity(), (Player) event.getDamager());
-                if (isUndead((LivingEntity) event.getEntity()) ) {
+                if (EntityTags.UNDEADS.isTagged(event.getEntityType())) {
                     if (level == 3) {
                         event.setDamage(event.getDamage()+0.5F);
                     } else if (level == 4) {
@@ -797,25 +798,11 @@ public class Undeadstone implements Listener {
                 }
             }
         }
-        if (event.getEntity() instanceof Player) {
-            Player p = (Player) event.getEntity();
-            FileConfiguration config = NikeyV1.getPlugin().getConfig();
-            String stone = config.getString(p.getName() + ".stone");
-            if (stone.equalsIgnoreCase("Undead")) {
-                Monster damager = (Monster) event.getDamager();
-                // Überprüfen, ob der Spieler von einen Entity geschlagen wurde
-                if (damager != null) {
-                    // Aggro-Mechanismus aktivieren
-                    HelpUtil.triggerEntityAggro(damager,p);
-                }
-            }
-        }
 
         if (event.getDamager() instanceof Player){
             Player p = (Player) event.getDamager();
             if (event.getEntity() instanceof LivingEntity){
                 LivingEntity entity = (LivingEntity) event.getEntity();
-                FileConfiguration config = NikeyV1.getPlugin().getConfig();
                 String stone = config.getString(p.getName() + ".stone");
 
                 if (stone.equalsIgnoreCase("Undead")) {

@@ -19,6 +19,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -84,21 +85,21 @@ public class Holystone implements Listener {
                         public void run() {
                             repairRandomArmorPiece(p);
                         }
-                    }.runTaskTimer(NikeyV1.getPlugin(),200,200);
+                    }.runTaskTimer(NikeyV1.getPlugin(),200,160);
                 }else if (level == 8){
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             repairRandomArmorPiece(p);
                         }
-                    }.runTaskTimer(NikeyV1.getPlugin(),140,140);
+                    }.runTaskTimer(NikeyV1.getPlugin(),140,100);
                 }else if (level >= 9){
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             repairRandomArmorPiece(p);
                         }
-                    }.runTaskTimer(NikeyV1.getPlugin(),100,100);
+                    }.runTaskTimer(NikeyV1.getPlugin(),100,60);
                 }
             }
     }

@@ -87,16 +87,6 @@ public class Elementalstone implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
-            Player attacker = (Player) event.getDamager();
-            Player victim = (Player) event.getEntity();
-            //useForce(attacker, victim);
-            //telekinesisTargets.put(victim.getUniqueId(), attacker);
-        }
-    }
-
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
