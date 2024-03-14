@@ -82,21 +82,21 @@ public class Holystone implements Listener {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            repairArmor(p);
+                            repairRandomArmorPiece(p);
                         }
                     }.runTaskTimer(NikeyV1.getPlugin(),200,200);
                 }else if (level == 8){
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            repairArmor(p);
+                            repairRandomArmorPiece(p);
                         }
                     }.runTaskTimer(NikeyV1.getPlugin(),140,140);
                 }else if (level >= 9){
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            repairArmor(p);
+                            repairRandomArmorPiece(p);
                         }
                     }.runTaskTimer(NikeyV1.getPlugin(),100,100);
                 }
@@ -730,20 +730,36 @@ public class Holystone implements Listener {
             vanishedPlayers.remove(player);
         }
     }
-    private void repairArmor(Player player) {
-        for (ItemStack armorPiece : player.getInventory().getArmorContents()) {
-            if (armorPiece == null) continue;
-            short maxDurability = armorPiece.getType().getMaxDurability();
-            short currentDurability = armorPiece.getDurability();
 
-            // Berechnet die verbleibende Haltbarkeit
-            short remainingDurability = (short) (maxDurability - currentDurability);
+    private void repairRandomArmorPiece(Player player) {
+        ItemStack[] armorContents = player.getInventory().getArmorContents();
+        ItemStack[] nonRepairedArmorPieces = getNonRepairedArmorPieces(armorContents);
 
-            // Fügt dem aktuellen Rüstungsstück Haltbarkeit hinzu
-            if (remainingDurability > 0) {
-                short repairAmount = (short) Math.min(20, remainingDurability); // Repariert bis zu 1 Punkt pro Sekunde
-                armorPiece.setDurability((short) (currentDurability - repairAmount));
+        if (nonRepairedArmorPieces.length == 0) {
+            // Alle Rüstungsteile sind bereits vollständig repariert
+            return;
+        }
+
+        // Wähle ein zufälliges nicht repariertes Rüstungsteil aus
+        Random random = new Random();
+        ItemStack armorToRepair = nonRepairedArmorPieces[random.nextInt(nonRepairedArmorPieces.length)];
+
+        // Repariere das ausgewählte Rüstungsteil um 1 Haltbarkeitspunkt
+        short currentDurability = armorToRepair.getDurability();
+        short maxDurability = armorToRepair.getType().getMaxDurability();
+        if (currentDurability < maxDurability) {
+            armorToRepair.setDurability((short) (currentDurability - 1));
+        }
+    }
+
+    // Methode zum Abrufen der nicht reparierten Rüstungsteile eines Spielers
+    private ItemStack[] getNonRepairedArmorPieces(ItemStack[] armorContents) {
+        List<ItemStack> nonRepairedPieces = new ArrayList<>();
+        for (ItemStack armorPiece : armorContents) {
+            if (armorPiece != null && armorPiece.getDurability() < armorPiece.getType().getMaxDurability()) {
+                nonRepairedPieces.add(armorPiece);
             }
         }
+        return nonRepairedPieces.toArray(new ItemStack[0]);
     }
 }
