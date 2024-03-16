@@ -503,7 +503,7 @@ public class Holystone implements Listener {
                         public void run() {
                             hitted.remove(event.getEntity());
                         }
-                    }.runTaskLater(NikeyV1.getPlugin(),20*5);
+                    }.runTaskLater(NikeyV1.getPlugin(),20*3);
 
                     new BukkitRunnable() {
                         @Override
@@ -515,7 +515,7 @@ public class Holystone implements Listener {
                             entity.getWorld().spawnParticle(Particle.TOWN_AURA,location,5);
                             particle--;
                         }
-                    }.runTaskTimer(NikeyV1.getPlugin(),0,5);
+                    }.runTaskTimer(NikeyV1.getPlugin(),0,3);
                 }
                 double healingMultiplier = 0.04;
 
