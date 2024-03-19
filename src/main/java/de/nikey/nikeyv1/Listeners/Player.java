@@ -96,10 +96,6 @@ public class Player implements Listener {
         Entity damager = event.getDamager();
         //damager.sendMessage(String.valueOf(event.getDamage()));
         Entity entity = event.getEntity();
-        EntityDamageEvent.DamageCause cause = event.getCause();
-        if (cause == EntityDamageEvent.DamageCause.FREEZE){
-            event.setDamage(event.getDamage()+1.5);
-        }
         if (Electrostone.stunned.contains(entity)){
             Integer i = config.getInt(damager.getName() + ".level");
             if (i == 15) {
@@ -274,6 +270,9 @@ public class Player implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
+        if (event.getCause() == EntityDamageEvent.DamageCause.FREEZE){
+            event.setDamage(event.getDamage()+1.5);
+        }
         if (event.getEntityType() == EntityType.PLAYER ){
             org.bukkit.entity.Player p = (org.bukkit.entity.Player) event.getEntity();
             if (event.getCause() == EntityDamageEvent.DamageCause.FREEZE){

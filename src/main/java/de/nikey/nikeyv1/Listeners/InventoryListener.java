@@ -9,6 +9,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 
+import java.util.Objects;
+
 @SuppressWarnings("deprecation")
 public class InventoryListener implements Listener {
     @EventHandler
@@ -16,15 +18,17 @@ public class InventoryListener implements Listener {
         Inventory top = event.getView().getTopInventory();
         Inventory bottom = event.getView().getBottomInventory();
         InventoryAction action = event.getAction();
-        if (event.getCurrentItem().getType() == Material.FIREWORK_STAR && event.getCurrentItem().getItemMeta().hasLore()) {
-            String[] arr = event.getCurrentItem().getLore().get(1).split(":");
-            String a = arr[0];
-            if (!(top.getType() == InventoryType.CRAFTING)){
-                if (!event.getView().getTitle().equalsIgnoreCase("Enchanted Anvil")) {
-                    event.setCancelled(true);
-                }
-                if (event.getInventory().getType() == InventoryType.ENDER_CHEST) {
-                    event.setCancelled(true);
+        if (event.getCurrentItem() != null) {
+            if (event.getCurrentItem().getType() == Material.FIREWORK_STAR && event.getCurrentItem().getItemMeta().hasLore()) {
+                String[] arr = Objects.requireNonNull(event.getCurrentItem().getLore()).get(1).split(":");
+                String a = arr[0];
+                if (!(top.getType() == InventoryType.CRAFTING)){
+                    if (!event.getView().getTitle().equalsIgnoreCase("Enchanted Anvil")) {
+                        event.setCancelled(true);
+                    }
+                    if (event.getInventory().getType() == InventoryType.ENDER_CHEST) {
+                        event.setCancelled(true);
+                    }
                 }
             }
         }

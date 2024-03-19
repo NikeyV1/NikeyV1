@@ -93,7 +93,7 @@ public class InfernoBlade implements Listener {
                                         }.runTaskLater(NikeyV1.getPlugin(),20*80);
                                         red = true;
                                         //Cooldown-Ability
-                                        List<Entity> nearbyEntities = player.getNearbyEntities(15, 12, 15);
+                                        List<Entity> nearbyEntities = player.getNearbyEntities(20, 15, 20);
                                         List<LivingEntity> targets = new ArrayList<>();
                                         for (Entity entity : nearbyEntities) {
                                             if ((entity instanceof Player || entity instanceof LivingEntity) && !entity.equals(player)) {
@@ -177,6 +177,7 @@ public class InfernoBlade implements Listener {
                         entity.setVelocity(direction.multiply(2)); // Adjust the multiplier for the strength of attraction
                         entity.teleport(teleportLocation);
                         LivingEntity livingEntity = (LivingEntity) entity;
+                        player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, teleportLocation, 2);
                         livingEntity.damage(20,player);
                     }
                 }
@@ -187,9 +188,6 @@ public class InfernoBlade implements Listener {
                     teleportToNearestAirBlock(player,teleportLocation);
                     player.playSound(teleportLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
                 }
-                List<Block> excludedBlocks = new ArrayList<>();
-                excludedBlocks.add(player.getLocation().getBlock());
-                player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, teleportLocation, 2);
                 freezePlayer(targetEntity);
                 Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> unfreezePlayer(targetEntity), 50L);
                 teleportCount++;

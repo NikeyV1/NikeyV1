@@ -85,21 +85,21 @@ public class Holystone implements Listener {
                         public void run() {
                             repairRandomArmorPiece(p);
                         }
-                    }.runTaskTimer(NikeyV1.getPlugin(),200,160);
+                    }.runTaskTimer(NikeyV1.getPlugin(),0,160);
                 }else if (level == 8){
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             repairRandomArmorPiece(p);
                         }
-                    }.runTaskTimer(NikeyV1.getPlugin(),140,100);
+                    }.runTaskTimer(NikeyV1.getPlugin(),0,100);
                 }else if (level >= 9){
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             repairRandomArmorPiece(p);
                         }
-                    }.runTaskTimer(NikeyV1.getPlugin(),100,60);
+                    }.runTaskTimer(NikeyV1.getPlugin(),0,60);
                 }
             }
     }
@@ -493,37 +493,34 @@ public class Holystone implements Listener {
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player ) {
             Player damager = (Player) event.getDamager();
+            damager.sendMessage(String.valueOf(event.getFinalDamage()));
             if (selectedPlayers.contains(damager.getUniqueId())) {
-                if (!hitted.contains((Player) event.getEntity())) {
-                    LivingEntity entity = (LivingEntity) event.getEntity();
-                    particle=20;
-                    hitted.add((Player) event.getEntity());
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            hitted.remove(event.getEntity());
-                        }
-                    }.runTaskLater(NikeyV1.getPlugin(),20*3);
-
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if (particle == 0){
-                                cancel();
+                if (event.getEntity() instanceof Player) {
+                    if (!hitted.contains((Player) event.getEntity())) {
+                        LivingEntity entity = (LivingEntity) event.getEntity();
+                        particle=20;
+                        hitted.add((Player) event.getEntity());
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                hitted.remove(event.getEntity());
                             }
-                            Location location = entity.getLocation().add(0,2.5F,0);
-                            entity.getWorld().spawnParticle(Particle.TOWN_AURA,location,5);
-                            particle--;
-                        }
-                    }.runTaskTimer(NikeyV1.getPlugin(),0,3);
+                        }.runTaskLater(NikeyV1.getPlugin(),20*3);
+
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                if (particle == 0){
+                                    cancel();
+                                }
+                                Location location = entity.getLocation().add(0,2.5F,0);
+                                entity.getWorld().spawnParticle(Particle.TOWN_AURA,location,5);
+                                particle--;
+                            }
+                        }.runTaskTimer(NikeyV1.getPlugin(),0,3);
+                    }
+                    damager.setHealth(damager.getHealth() + event.getFinalDamage()*0.5);
                 }
-                double healingMultiplier = 0.04;
-
-                double damage = event.getDamage();
-                double healingAmount = damage * healingMultiplier;
-
-                // Heilung des Angreifers
-                damager.setHealth(Math.min(damager.getHealth() + healingAmount, damager.getMaxHealth()));
             }
         }
     }
