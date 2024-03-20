@@ -94,7 +94,6 @@ public class Player implements Listener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         FileConfiguration config = NikeyV1.getPlugin().getConfig();
         Entity damager = event.getDamager();
-        //damager.sendMessage(String.valueOf(event.getDamage()));
         Entity entity = event.getEntity();
         if (Electrostone.stunned.contains(entity)){
             Integer i = config.getInt(damager.getName() + ".level");
@@ -246,17 +245,19 @@ public class Player implements Listener {
         if (i > 1){
             config.set(player.getName() +".level",i-1);
             for (ItemStack item : player.getInventory().getContents()) {
-                if (item != null && item.getType() == Material.FIREWORK_STAR || item.getType() == Material.NETHERITE_SWORD && item.getItemMeta().hasLore()) {
-                    // Stone entfernen
-                    event.getDrops().remove(item);
-                    boolean buffed = config.getBoolean(player.getName() + ".buffed");
-                    if (buffed) {
-                        config.set(player.getName() + ".buffed", false);
-                        NikeyV1.getPlugin().saveConfig();
-                        ItemStack itemStack = new ItemStack(Material.DRAGON_EGG);
-                        Item spawn = player.getWorld().spawn(player.getLocation(), Item.class);
-                        spawn.setThrower(player.getUniqueId());
-                        spawn.setItemStack(itemStack);
+                if (item != null) {
+                    if (item.getType() == Material.FIREWORK_STAR || item.getType() == Material.NETHERITE_SWORD && item.getItemMeta().hasLore()) {
+                        // Stone entfernen
+                        event.getDrops().remove(item);
+                        boolean buffed = config.getBoolean(player.getName() + ".buffed");
+                        if (buffed) {
+                            config.set(player.getName() + ".buffed", false);
+                            NikeyV1.getPlugin().saveConfig();
+                            ItemStack itemStack = new ItemStack(Material.DRAGON_EGG);
+                            Item spawn = player.getWorld().spawn(player.getLocation(), Item.class);
+                            spawn.setThrower(player.getUniqueId());
+                            spawn.setItemStack(itemStack);
+                        }
                     }
                 }
             }

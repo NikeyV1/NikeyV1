@@ -11,7 +11,6 @@ public class UndeadStoneListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
-            event.getDamager().sendMessage(String.valueOf(event.getDamage()));
             String stone = NikeyV1.getPlugin().getConfig().getString(event.getDamager().getName() + ".stone");
             int level = NikeyV1.getPlugin().getConfig().getInt(event.getDamager().getName() + ".level");
             if (stone.equalsIgnoreCase("Undead")) {

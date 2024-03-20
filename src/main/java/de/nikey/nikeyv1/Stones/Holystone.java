@@ -493,7 +493,6 @@ public class Holystone implements Listener {
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player ) {
             Player damager = (Player) event.getDamager();
-            damager.sendMessage(String.valueOf(event.getFinalDamage()));
             if (selectedPlayers.contains(damager.getUniqueId())) {
                 if (event.getEntity() instanceof Player) {
                     if (!hitted.contains((Player) event.getEntity())) {
