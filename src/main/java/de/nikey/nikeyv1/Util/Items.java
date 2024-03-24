@@ -3,13 +3,17 @@ package de.nikey.nikeyv1.Util;
 import de.nikey.nikeyv1.NikeyV1;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
@@ -56,9 +60,10 @@ public class Items {
     
     public static void Firestone(Player player , Integer level){
         ItemStack lavastein = new ItemStack(Material.FIREWORK_STAR);
-        ItemMeta meta =  lavastein.getItemMeta();
+        ItemMeta meta = lavastein.getItemMeta();
         meta.setDisplayName(ChatColor.of("#e66b63")+"Fire Stone");
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
         lavastein.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         ArrayList<String> lore = new ArrayList<>();
         lore.add("§7As hot as §clava");

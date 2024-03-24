@@ -1,14 +1,23 @@
 package de.nikey.nikeyv1.CustomMobs;
 
+import com.destroystokyo.paper.entity.ai.PaperCustomGoal;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import net.kyori.adventure.text.Component;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.PathNavigationRegion;
+import net.minecraft.world.level.pathfinder.PathFinder;
 import org.apache.logging.log4j.core.tools.picocli.CommandLine;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftWither;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,53 +33,17 @@ import org.bukkit.util.Vector;
 
 import java.util.*;
 
-import static org.bukkit.Bukkit.getLogger;
-
 public class MiniWitherListener implements Listener {
 
     public static BukkitTask task;
 
     private final HashMap<Player, Long> cooldowns = new HashMap<>();
-    private final long cooldownTimeMillis = 500; // Halbe Sekunde in Millisekunden
+    private final long cooldownTimeMillis = 400; // Halbe Sekunde in Millisekunden
 
-    @EventHandler
-    public void onEntityDeath(EntityDeathEvent event) {
-        if (event.getEntity() instanceof MiniWither) {
-            Location location = event.getEntity().getLocation();
-            Entity crystal = event.getEntity().getWorld().spawnEntity(location.add(0, 2, 0), EntityType.ENDER_CRYSTAL);
-
-            new BukkitRunnable() {
-
-                int count = 0;
-                Vector movement = null;
-                List<Block> blocks = HelpUtil.getNearbyBlocksNoY(location,20);
-                List<FallingBlock> fblocks = new ArrayList<>();
-                @Override
-                public void run() {
-                    if (count == 300) {
-                        cancel();
-                        crystal.remove();
-                        TNTPrimed tnt = crystal.getWorld().spawn(crystal.getLocation(),TNTPrimed.class);
-                        tnt.setFuseTicks(0);
-                        for (FallingBlock b : fblocks) {
-                            b.setGravity(true);
-                        }
-                        return;
-                    }
-                    Random random = new Random();
-                    Block block = blocks.get(random.nextInt(blocks.size() - 0));
-                    FallingBlock fblock = location.getWorld().spawnFallingBlock(block.getLocation(),block.getBlockData());
-                    fblock.setVelocity((fblock.getLocation().toVector().subtract(crystal.getLocation().toVector()).multiply(-10).normalize()));
-                    fblock.setGravity(false);
-                    fblock.setHurtEntities(true);
-
-                    fblocks.add(fblock);
-
-                    count++;
-                }
-            }.runTaskTimer(NikeyV1.getPlugin(),0,0);
-        }
-    }
+    private final int RADIUS = 25;
+    private final int FLAG_DURATION_SECONDS = 20;
+    private Location flagLocation;
+    private Set<LivingEntity> restrictedPlayers = new HashSet<>();
 
 
     @EventHandler
@@ -123,24 +96,73 @@ public class MiniWitherListener implements Listener {
     int timer;
 
     @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        Location playerLocation = player.getLocation();
+
+        for (Entity entity : playerLocation.getWorld().getNearbyEntities(playerLocation, DISTANCE_THRESHOLD, DISTANCE_THRESHOLD, DISTANCE_THRESHOLD)) {
+            if (entity.getType() == EntityType.WITHER && entity.getCustomName().equalsIgnoreCase("Mini-Wither")) {
+                Location witherLocation = entity.getLocation();
+                if (witherLocation.distance(playerLocation) >= DISTANCE_THRESHOLD) {
+                    Location loc = playerLocation.add(0, 2, 0);
+                    entity.teleport(loc);
+                }
+            }
+        }
+
+        if (flagLocation != null && event.getFrom().distance(flagLocation) > RADIUS && event.getTo().distance(flagLocation) <= RADIUS) {
+            restrictedPlayers.add(event.getPlayer());
+        }
+
+        if (flagLocation != null && restrictedPlayers.contains(event.getPlayer())) {
+            Location to = event.getTo();
+            Location from = event.getFrom();
+            if (to.getWorld() == flagLocation.getWorld() && from.distanceSquared(flagLocation) > RADIUS * RADIUS) {
+                double angle = Math.atan2(from.getZ() - flagLocation.getZ(), from.getX() - flagLocation.getX());
+                double offsetX = Math.cos(angle) * (RADIUS - 1);
+                double offsetZ = Math.sin(angle) * (RADIUS - 1);
+                Location newLocation = flagLocation.clone().add(offsetX, 0, offsetZ);
+                event.setTo(newLocation);
+                event.getPlayer().sendMessage(ChatColor.RED + "You cannot leave the radius of the flag!");
+            }
+        }
+    }
+    int op;
+
+    @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
         if (entity instanceof Wither && entity.getCustomName() != null) {
             if (entity.getCustomName().equals("Mini-Wither")) {
                 Wither wither = (Wither) entity;
-                double damage = event.getDamage();
-                double health = wither.getHealth() + damage;
                 String spawnerName = wither.getPersistentDataContainer().get(new NamespacedKey(NikeyV1.getPlugin(), "Spawner"), PersistentDataType.STRING);
                 assert spawnerName != null;
                 Player player = Bukkit.getPlayer(spawnerName);
                 assert player != null;
-                player.sendMessage(String.valueOf(health));
-                if (health > 150 && wither.getHealth() < 150) {
+                if (wither.getHealth() - event.getFinalDamage() < 150) {
                     wither.enterInvulnerabilityPhase();
                     wither.setAI(false);
+                    //cage
+                    flagLocation = wither.getLocation().clone().add(0,10,0);
+                    Bukkit.broadcastMessage(ChatColor.GREEN + "The Mini-Wither locked you in a cage");
 
-                    // Teleport the wither 10 blocks above the player
-                    wither.teleport(player.getLocation().add(0, 10, 0));
+                    op = 20;
+                    List<Chunk> surroundingChunks = getChunksInRadius(wither.getWorld(), flagLocation.getBlockX(), flagLocation.getBlockZ(), 50);
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+
+                            // Speichere alle lebenden Entitäten in den umliegenden Chunks
+                            List<LivingEntity> livingEntities = getLivingEntitiesInChunks(surroundingChunks);
+                            restrictedPlayers.add((Player) livingEntities);
+                        }
+                    }.runTaskTimer(NikeyV1.getPlugin(),20,20);
+                    Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
+                        flagLocation = null;
+                        restrictedPlayers.clear();
+                        Bukkit.broadcastMessage(ChatColor.GREEN + "The Cage broke!");
+                    }, FLAG_DURATION_SECONDS * 20L); // Convert seconds to ticks
+
                     timer = 60;
 
                     new BukkitRunnable() {
@@ -167,9 +189,33 @@ public class MiniWitherListener implements Listener {
         }
     }
 
-    private void witherSMASH(Player player,Wither wither) {
-        
+    private List<Chunk> getChunksInRadius(World world, int centerX, int centerZ, int radius) {
+        List<Chunk> chunksInRadius = new ArrayList<>();
+        int chunkRadius = radius >> 4;
+
+        for (int x = -chunkRadius; x <= chunkRadius; x++) {
+            for (int z = -chunkRadius; z <= chunkRadius; z++) {
+                Chunk chunk = world.getChunkAt(centerX + x, centerZ + z);
+                chunksInRadius.add(chunk);
+            }
+        }
+
+        return chunksInRadius;
     }
+
+    // Methode zum Sammeln aller lebenden Entitäten in den Chunks
+    private List<LivingEntity> getLivingEntitiesInChunks(List<Chunk> chunks) {
+        List<LivingEntity> livingEntities = new ArrayList<>();
+        for (Chunk chunk : chunks) {
+            for (Entity entity : chunk.getEntities()) {
+                if (entity instanceof LivingEntity) {
+                    livingEntities.add((LivingEntity) entity);
+                }
+            }
+        }
+        return livingEntities;
+    }
+
 
     private void shootSkull( Location spawnLocation, Wither wither) {
         // Finde die zwei nächsten Spieler in der Nähe des Spawnstandorts
@@ -272,36 +318,7 @@ public class MiniWitherListener implements Listener {
         }
     }
 
-    private void setAlternateTarget(Wither wither) {
-        // Set alternate target to another player
-
-        for (Entity entitys : wither.getNearbyEntities(100,50,100)) {
-            if (entitys instanceof Player) {
-                if (!entitys.getName().equalsIgnoreCase(wither.getPersistentDataContainer().get(new NamespacedKey(NikeyV1.getPlugin(), "Spawner"), PersistentDataType.STRING))) {
-                    wither.setTarget((LivingEntity) entitys);
-                    return;
-                }
-            }
-        }
-    }
-
     private static final int DISTANCE_THRESHOLD = 35;
-
-    @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
-        Player player = event.getPlayer();
-        Location playerLocation = player.getLocation();
-
-        for (Entity entity : playerLocation.getWorld().getNearbyEntities(playerLocation, DISTANCE_THRESHOLD, DISTANCE_THRESHOLD, DISTANCE_THRESHOLD)) {
-            if (entity.getType() == EntityType.WITHER && entity.getCustomName().equalsIgnoreCase("Mini-Wither")) {
-                Location witherLocation = entity.getLocation();
-                if (witherLocation.distance(playerLocation) >= DISTANCE_THRESHOLD) {
-                    Location loc = playerLocation.add(0, 2, 0);
-                    entity.teleport(loc);
-                }
-            }
-        }
-    }
 
     private void startVelocityUpdateTask(Wither wither, Player player) {
         task = new BukkitRunnable() {

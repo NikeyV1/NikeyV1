@@ -26,7 +26,6 @@ public final class NikeyV1 extends JavaPlugin{
     public void onEnable() {
         plugin = this;
         //Effect manager
-        em = new EffectManager(EffectLib.instance());
 
 
         PluginManager manager = Bukkit.getPluginManager();
@@ -58,8 +57,6 @@ public final class NikeyV1 extends JavaPlugin{
         saveDefaultConfig();
 
         //Code
-
-        Elementalstone.startDamageScheduler();
     }
 
     @Override

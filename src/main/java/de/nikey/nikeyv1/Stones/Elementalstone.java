@@ -1,20 +1,12 @@
 package de.nikey.nikeyv1.Stones;
 
-import de.nikey.nikeyv1.CustomMobs.MiniWither;
 import de.nikey.nikeyv1.NikeyV1;
-import de.slikey.effectlib.effect.TornadoEffect;
 import net.kyori.adventure.text.Component;
-import net.minecraft.server.level.ServerLevel;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R3.metadata.WorldMetadataStore;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -78,7 +70,7 @@ public class Elementalstone implements Listener {
                                 Wither wither = (Wither) player.getWorld().spawnEntity(player.getLocation(), EntityType.WITHER);
                                 wither.customName(Component.text("Mini-Wither"));
                                 wither.getPersistentDataContainer().set(new NamespacedKey(NikeyV1.getPlugin(), "Spawner"), PersistentDataType.STRING, player.getName());
-                                wither.setInvulnerableTicks(30);
+
                             }
                         }
                     }

@@ -11,6 +11,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -22,6 +23,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -599,20 +601,23 @@ public class Firestone implements Listener {
                             int z = (int) (selectedPlayer.getLocation().getZ());
                             int randomX = ThreadLocalRandom.current().nextInt(x-6, x+6);
                             int randomZ = ThreadLocalRandom.current().nextInt(z-6, z+6);
-                            int randomY = selectedPlayer.getWorld().getHighestBlockYAt(randomX,randomZ);
                             if (selectedPlayer.getLocation().getZ() > 50) {
-                                Location location = new Location(selectedPlayer.getWorld(),randomX,randomY+20,randomZ);
+                                Location location = new Location(selectedPlayer.getWorld(),randomX,selectedPlayer.getLocation().getY()+20,randomZ);
                                 Fireball fireball = (Fireball) location.getWorld().spawnEntity(location, EntityType.FIREBALL);
+                                Vector fromLocation = location.toVector();
+                                Vector toLocation = selectedPlayer.getLocation().toVector();
+                                Vector direction = toLocation.clone().subtract(fromLocation).normalize();
                                 fireball.setShooter(launcherPlayer);
-                                fireball.setVelocity(new org.bukkit.util.Vector(0, -0.8, 0)); // Adjust the fireball trajectory
-                                fireball.setIsIncendiary(false);
                                 fireball.setCustomName("airstrike");
                                 fireball.setCustomNameVisible(false);
                             }else {
-                                Location location = new Location(selectedPlayer.getWorld(),randomX,randomY+40,randomZ);
-                                Fireball fireball = (Fireball) location.getWorld().spawnEntity(location, EntityType.FIREBALL);
+                                Location location = new Location(selectedPlayer.getWorld(),randomX,selectedPlayer.getLocation().getY()+40,randomZ);
+                                Fireball fireball = (Fireball) location.getWorld().spawn(location, Fireball.class, CreatureSpawnEvent.SpawnReason.CUSTOM);
+                                Vector fromLocation = location.toVector();
+                                Vector toLocation = selectedPlayer.getLocation().toVector();
+                                Vector direction = toLocation.clone().subtract(fromLocation).normalize();
+                                fireball.setDirection(direction);
                                 fireball.setShooter(launcherPlayer);
-                                fireball.setVelocity(new org.bukkit.util.Vector(0, -0.8, 0)); // Adjust the fireball trajectory
                                 fireball.setCustomName("airstrike");
                                 fireball.setCustomNameVisible(false);
                             }
@@ -636,24 +641,31 @@ public class Firestone implements Listener {
                             int randomZ = ThreadLocalRandom.current().nextInt(z - 6, z + 6);
                             int randomY = selectedPlayer.getWorld().getHighestBlockYAt(randomX, randomZ);
                             if (selectedPlayer.getLocation().getZ() > 50) {
-                                Location location = new Location(selectedPlayer.getWorld(), randomX, randomY + 20, randomZ);
-                                Fireball fireball = (Fireball) location.getWorld().spawnEntity(location, EntityType.FIREBALL);
+                                Location location = new Location(selectedPlayer.getWorld(),randomX,selectedPlayer.getLocation().getY()+20,randomZ);
+                                Fireball fireball = (Fireball) location.getWorld().spawn(location, Fireball.class, CreatureSpawnEvent.SpawnReason.CUSTOM);
+                                fireball.setVelocity(new Vector(0, 0, 0));
                                 fireball.setShooter(launcherPlayer);
-                                fireball.setVelocity(new org.bukkit.util.Vector(0, -0.8, 0)); // Adjust the fireball trajectory
-                                fireball.setIsIncendiary(false);
+                                Vector fromLocation = location.toVector();
+                                Vector toLocation = selectedPlayer.getLocation().toVector();
+                                Vector direction = toLocation.clone().subtract(fromLocation).normalize();
+                                fireball.setDirection(direction);
                                 fireball.setCustomName("strongairstrike");
                                 fireball.setCustomNameVisible(false);
 
                             } else {
-                                Location location = new Location(selectedPlayer.getWorld(), randomX, randomY + 40, randomZ);
-                                Fireball fireball = (Fireball) location.getWorld().spawnEntity(location, EntityType.FIREBALL);
+                                Location location = new Location(selectedPlayer.getWorld(),randomX,selectedPlayer.getLocation().getY()+40,randomZ);
+                                Fireball fireball = (Fireball) location.getWorld().spawn(location, Fireball.class, CreatureSpawnEvent.SpawnReason.CUSTOM);
+                                fireball.setVelocity(new Vector(0, 0, 0));
+                                Vector fromLocation = location.toVector();
+                                Vector toLocation = selectedPlayer.getLocation().toVector();
+
+                                // Calculate the direction vector from "fromEntity" to "toEntity"
+                                Vector direction = toLocation.clone().subtract(fromLocation).normalize();
+                                fireball.setDirection(direction);
                                 fireball.setShooter(launcherPlayer);
-                                fireball.setVelocity(new org.bukkit.util.Vector(0, -0.8, 0)); // Adjust the fireball trajectory
                                 fireball.setCustomName("strongairstrike");
                                 fireball.setCustomNameVisible(false);
                             }
-
-
                             if (timecooldown == 0) {
                                 cancel();
                                 return;
@@ -677,7 +689,7 @@ public class Firestone implements Listener {
                             Fireball fireball = (Fireball) event.getEntity();
                             Block highestBlockAt = fireball.getWorld().getHighestBlockAt(fireball.getLocation());
                             Location exp = highestBlockAt.getLocation().add(0, 1, 0);
-                            fireball.getWorld().createExplosion(exp,3.4F,false,false);
+                            fireball.getWorld().createExplosion(exp,3.3F,false,false);
                             fireball.remove();
                         }
                     }.runTaskLater(NikeyV1.getPlugin(),4);
@@ -689,7 +701,7 @@ public class Firestone implements Listener {
                             Fireball fireball = (Fireball) event.getEntity();
                             Block highestBlockAt = fireball.getWorld().getHighestBlockAt(fireball.getLocation());
                             Location exp = highestBlockAt.getLocation().add(0, 1, 0);
-                            fireball.getWorld().createExplosion(exp,4.2F,false,false);
+                            fireball.getWorld().createExplosion(exp,4.1F,false,false);
                             fireball.getWorld().createExplosion(exp,1.3F,false,true);
                             fireball.remove();
                         }

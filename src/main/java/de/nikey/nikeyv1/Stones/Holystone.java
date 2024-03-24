@@ -655,7 +655,6 @@ public class Holystone implements Listener {
                     for (UUID selectedPlayerUUID : selectedPlayers) {
                         Player selectedPlayer = Bukkit.getPlayer(selectedPlayerUUID);
                         if (selectedPlayer != null) {
-                            //startAura(selectedPlayer,level);
                             onlinePlayer.hidePlayer(NikeyV1.getPlugin(), selectedPlayer);
                             selectedPlayer.sendMessage(ChatColor.BLUE+player.getName()+ChatColor.GREEN+" buffed you");
                             if (level == 20) {
@@ -678,42 +677,6 @@ public class Holystone implements Listener {
                     }
                 }
             }
-        }
-    }
-
-    private void startAura(Player player, int level) {
-        BukkitRunnable auraTask = new BukkitRunnable() {
-            int ticks = 0;
-
-            @Override
-            public void run() {
-                ticks++;
-                if (level == 20) {
-                    if (ticks >= 20*20) {
-                        cancel();
-                        auraTasks.remove(player);
-                    }
-                }else if (level == 21) {
-                    if (ticks >= 20*30) {
-                        cancel();
-                        auraTasks.remove(player);
-                    }
-                }
-                Location loc = player.getLocation().clone();
-                spawnParticleCircle(loc);
-            }
-        };
-        auraTask.runTaskTimer(NikeyV1.getPlugin(), 0, 1); // Run every tick
-        auraTasks.put(player, auraTask);
-    }
-
-    private void spawnParticleCircle(Location center) {
-        double radius = 2.0;
-        double x, z;
-        for (double theta = 0; theta <= 2 * Math.PI; theta += Math.PI / 16) {
-            x = radius * Math.cos(theta);
-            z = radius * Math.sin(theta);
-            center.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, center.getX() + x, center.getY(), center.getZ() + z, 1);
         }
     }
 

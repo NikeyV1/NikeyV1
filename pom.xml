@@ -104,6 +104,5 @@
             <version>9.4</version>
             <scope>compile</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.destroystokyo.paper/paper -->
     </dependencies>
 </project>

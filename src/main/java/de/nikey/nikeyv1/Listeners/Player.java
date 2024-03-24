@@ -112,22 +112,23 @@ public class Player implements Listener {
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        Item itemDrop = event.getItemDrop();
-        org.bukkit.entity.Player player = event.getPlayer();
-        PlayerInventory inventory = player.getInventory();
-        if (itemDrop.getItemStack().getType() == Material.FIREWORK_STAR){
-            event.setCancelled(true);
-            player.sendMessage(String.valueOf(isInventoryFull(player)));
-            if (!isInventoryFull(player)) {
+        if (event.getItemDrop() != null) {
+            Item itemDrop = event.getItemDrop();
+            org.bukkit.entity.Player player = event.getPlayer();
+            PlayerInventory inventory = player.getInventory();
+            if (itemDrop.getItemStack().getType() == Material.FIREWORK_STAR){
                 event.setCancelled(true);
+                if (!isInventoryFull(player)) {
+                    event.setCancelled(true);
+                }else {
+                    ItemStack droppedItem = event.getItemDrop().getItemStack();
+                    player.getInventory().setItemInOffHand(droppedItem);
+                    event.setCancelled(true);
+                }
             }else {
-                ItemStack droppedItem = event.getItemDrop().getItemStack();
-                player.getInventory().setItemInOffHand(droppedItem);
-                event.setCancelled(true);
-            }
-        }else {
-            if (itemDrop.getItemStack().getType() == Material.NETHERITE_SWORD && itemDrop.getItemStack().getItemMeta().hasLore()) {
-                event.setCancelled(true);
+                if (itemDrop.getItemStack().getType() == Material.NETHERITE_SWORD && itemDrop.getItemStack().getItemMeta().hasLore()) {
+                    event.setCancelled(true);
+                }
             }
         }
     }
@@ -136,8 +137,6 @@ public class Player implements Listener {
         Inventory inv = player.getInventory();
         for (ItemStack item : inv.getContents()) {
             if (item == null || item.getType().isAir()) {
-                Material type = item.getType();
-                player.sendMessage(String.valueOf(type));
                 return false;
             }
         }
