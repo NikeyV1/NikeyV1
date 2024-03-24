@@ -607,6 +607,8 @@ public class Firestone implements Listener {
                                 Vector fromLocation = location.toVector();
                                 Vector toLocation = selectedPlayer.getLocation().toVector();
                                 Vector direction = toLocation.clone().subtract(fromLocation).normalize();
+                                double speed = 2.0; // Du kannst diesen Wert anpassen, um die Geschwindigkeit anzupassen
+                                direction.multiply(speed);
                                 fireball.setShooter(launcherPlayer);
                                 fireball.setCustomName("airstrike");
                                 fireball.setCustomNameVisible(false);
@@ -616,6 +618,8 @@ public class Firestone implements Listener {
                                 Vector fromLocation = location.toVector();
                                 Vector toLocation = selectedPlayer.getLocation().toVector();
                                 Vector direction = toLocation.clone().subtract(fromLocation).normalize();
+                                double speed = 2.0; // Du kannst diesen Wert anpassen, um die Geschwindigkeit anzupassen
+                                direction.multiply(speed);
                                 fireball.setDirection(direction);
                                 fireball.setShooter(launcherPlayer);
                                 fireball.setCustomName("airstrike");
@@ -648,6 +652,8 @@ public class Firestone implements Listener {
                                 Vector fromLocation = location.toVector();
                                 Vector toLocation = selectedPlayer.getLocation().toVector();
                                 Vector direction = toLocation.clone().subtract(fromLocation).normalize();
+                                double speed = 2.0;
+                                direction.multiply(speed);
                                 fireball.setDirection(direction);
                                 fireball.setCustomName("strongairstrike");
                                 fireball.setCustomNameVisible(false);
@@ -658,9 +664,9 @@ public class Firestone implements Listener {
                                 fireball.setVelocity(new Vector(0, 0, 0));
                                 Vector fromLocation = location.toVector();
                                 Vector toLocation = selectedPlayer.getLocation().toVector();
-
-                                // Calculate the direction vector from "fromEntity" to "toEntity"
                                 Vector direction = toLocation.clone().subtract(fromLocation).normalize();
+                                double speed = 2.0; // Du kannst diesen Wert anpassen, um die Geschwindigkeit anzupassen
+                                direction.multiply(speed);
                                 fireball.setDirection(direction);
                                 fireball.setShooter(launcherPlayer);
                                 fireball.setCustomName("strongairstrike");
@@ -689,7 +695,7 @@ public class Firestone implements Listener {
                             Fireball fireball = (Fireball) event.getEntity();
                             Block highestBlockAt = fireball.getWorld().getHighestBlockAt(fireball.getLocation());
                             Location exp = highestBlockAt.getLocation().add(0, 1, 0);
-                            fireball.getWorld().createExplosion(exp,3.3F,false,false);
+                            fireball.getWorld().createExplosion(exp,3.4F,false,false);
                             fireball.remove();
                         }
                     }.runTaskLater(NikeyV1.getPlugin(),4);
@@ -701,7 +707,7 @@ public class Firestone implements Listener {
                             Fireball fireball = (Fireball) event.getEntity();
                             Block highestBlockAt = fireball.getWorld().getHighestBlockAt(fireball.getLocation());
                             Location exp = highestBlockAt.getLocation().add(0, 1, 0);
-                            fireball.getWorld().createExplosion(exp,4.1F,false,false);
+                            fireball.getWorld().createExplosion(exp,4.2F,false,false);
                             fireball.getWorld().createExplosion(exp,1.3F,false,true);
                             fireball.remove();
                         }
