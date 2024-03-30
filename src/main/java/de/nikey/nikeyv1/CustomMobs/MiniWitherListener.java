@@ -129,7 +129,7 @@ public class MiniWitherListener implements Listener {
     }
     int op;
 
-    @EventHandler
+    //@EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
         if (entity instanceof Wither && entity.getCustomName() != null) {
@@ -236,14 +236,6 @@ public class MiniWitherListener implements Listener {
         }
     }
 
-    private boolean isPlayerWithinRadius(Location location, double radius) {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.getLocation().distanceSquared(location) <= radius * radius) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     private Location[] findNearestPlayersLocations(Location location, int count) {
         return Bukkit.getOnlinePlayers().stream()
@@ -269,7 +261,7 @@ public class MiniWitherListener implements Listener {
                     // Überprüfen, ob ein Spieler in der Nähe des Withers ist
                     for (Entity entity : wither.getNearbyEntities(60, 30, 60)) { // Ändere die Zahlen entsprechend dem Abstand, den du berücksichtigen möchtest
                         // Wenn ein Spieler in der Nähe ist
-                        if (entity instanceof Player) {
+                        if (entity instanceof Player && ((Player) entity).getGameMode() == GameMode.SURVIVAL) {
                             // Das Ziel des Events auf den Spieler setzen
                             event.setTarget(entity);
                             // Variable setzen, um anzuzeigen, dass ein Spieler in der Nähe gefunden wurde
@@ -288,16 +280,18 @@ public class MiniWitherListener implements Listener {
                         event.setCancelled(true); // Cancel targeting if the target is the spawner player
                         // Let the Wither target another player
                         for (Player player : wither.getWorld().getPlayers()) {
-                            if (!player.getName().equals(spawnerName)) {
-                                wither.setTarget(player);
-                                break;
+                            if (!player.getName().equals(spawnerName) ) {
+                                if (player.getGameMode() == GameMode.SURVIVAL) {
+                                    wither.setTarget(player);
+                                    break;
+                                }
                             }else {
                                 event.setCancelled(true);
                                 boolean playerNearby = false;
                                 // Überprüfen, ob ein Spieler in der Nähe des Withers ist
                                 for (Entity entity : wither.getNearbyEntities(60, 30, 60)) { // Ändere die Zahlen entsprechend dem Abstand, den du berücksichtigen möchtest
                                     // Wenn ein Spieler in der Nähe ist
-                                    if (entity instanceof Player) {
+                                    if (entity instanceof Player && player.getGameMode() == GameMode.SURVIVAL) {
                                         // Das Ziel des Events auf den Spieler setzen
                                         event.setTarget(entity);
                                         // Variable setzen, um anzuzeigen, dass ein Spieler in der Nähe gefunden wurde

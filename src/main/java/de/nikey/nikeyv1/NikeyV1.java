@@ -4,6 +4,7 @@ import de.nikey.nikeyv1.Anti_Exploits.Stone_Swapping;
 import de.nikey.nikeyv1.Commands.EffectCMD;
 import de.nikey.nikeyv1.Commands.stone;
 import de.nikey.nikeyv1.CustomMobs.MiniWitherListener;
+import de.nikey.nikeyv1.CustomMobs.WitherDash;
 import de.nikey.nikeyv1.Listeners.*;
 import de.nikey.nikeyv1.Stones.*;
 import de.nikey.nikeyv1.Util.Items;
@@ -26,7 +27,7 @@ public final class NikeyV1 extends JavaPlugin{
     public void onEnable() {
         plugin = this;
         //Effect manager
-
+        em = new EffectManager(EffectLib.instance());
 
         PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents(new Player(),this);
@@ -47,6 +48,7 @@ public final class NikeyV1 extends JavaPlugin{
         manager.registerEvents(new Elementalstone(),this);
         manager.registerEvents(new MiniWitherListener(),this);
         manager.registerEvents(new UndeadStoneListener(),this);
+        manager.registerEvents(new WitherDash(),this);
         //Command
         getCommand("stone").setExecutor(new stone());
         getCommand("effect").setExecutor(new EffectCMD());

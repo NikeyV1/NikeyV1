@@ -1,9 +1,11 @@
 package de.nikey.nikeyv1.Util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -77,6 +79,28 @@ public class HelpUtil {
         }
     }
 
+    public static Player getNearestPlayer(Player player) {
+        Player nearestPlayer = null;
+        double nearestDistanceSquared = Double.MAX_VALUE;
+
+        for (Player otherPlayer : Bukkit.getServer().getOnlinePlayers()) {
+            if (otherPlayer.equals(player)) continue;
+
+            double distanceSquared = player.getLocation().distanceSquared(otherPlayer.getLocation());
+            if (distanceSquared < nearestDistanceSquared && distanceSquared <= 50 * 50) {
+                nearestPlayer = otherPlayer;
+                nearestDistanceSquared = distanceSquared;
+            }
+        }
+
+        return nearestPlayer;
+    }
+
+    public static void boostEntityTowards(Entity entity, Entity targetEntity, double boostStrength) {
+        Vector direction = targetEntity.getLocation().toVector().subtract(entity.getLocation().toVector()).normalize();
+        Vector boost = direction.multiply(boostStrength);
+        entity.setVelocity(boost);
+    }
 }
 
 
