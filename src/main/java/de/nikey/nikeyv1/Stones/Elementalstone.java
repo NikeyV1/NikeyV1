@@ -67,10 +67,7 @@ public class Elementalstone implements Listener {
                             }
                         }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
                             if (!player.isSneaking()) {
-                                Wither wither = (Wither) player.getWorld().spawnEntity(player.getLocation(), EntityType.WITHER);
-                                wither.customName(Component.text("Mini-Wither"));
-                                wither.getPersistentDataContainer().set(new NamespacedKey(NikeyV1.getPlugin(), "Spawner"), PersistentDataType.STRING, player.getName());
-
+                                
                             }
                         }
                     }
@@ -79,57 +76,7 @@ public class Elementalstone implements Listener {
         }
     }
 
-    @EventHandler
-    public void onEntityDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player) {
-            Player victim = (Player) event.getEntity();
-            if (telekinesisTargets.containsKey(victim.getUniqueId())) {
-                Player attacker = telekinesisTargets.get(victim.getUniqueId());
-                if (attacker != null && event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK && event.getCause() != EntityDamageEvent.DamageCause.CUSTOM) {
-                    event.setCancelled(true);
-                }
-            }
-        }
-    }
 
-    public static void startDamageScheduler() {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (Map.Entry<UUID, Player> entry : telekinesisTargets.entrySet()) {
-                    Player victim = Bukkit.getPlayer(entry.getKey());
-                    if (victim != null && victim.isOnline()) {
-                        victim.damage(1.0); // Adjust the damage value as needed
-                    } else {
-                        telekinesisTargets.remove(entry.getKey());
-                    }
-                }
-            }
-        }.runTaskTimer(NikeyV1.getPlugin(),10,10);
-    }
-
-    private void useForce(Player attacker, Player victim) {
-        Location attackerLocation = attacker.getLocation();
-        Location victimLocation = victim.getLocation();
-
-        Vector direction = attackerLocation.toVector().subtract(victimLocation.toVector()).normalize();
-
-        double forceMultiplier = 2.0; // Adjust this value to change the force of the telekinesis
-
-        Vector force = direction.multiply(forceMultiplier);
-
-        //
-        // victim.setVelocity(force);
-
-        // Play sound and visual effects
-        attacker.getWorld().playSound(attacker.getLocation(), "entity.enderman.teleport", 1.0f, 1.0f);
-        attacker.getWorld().spawnParticle(org.bukkit.Particle.PORTAL, attacker.getLocation(), 50, 1, 1, 1);
-
-        // Optionally, you can also lift the victim slightly off the ground
-        double liftHeight = 1.5;
-        victimLocation.setY(victimLocation.getY() + liftHeight);
-        victim.teleport(victimLocation);
-    }
 
     private int pg =200;
 
