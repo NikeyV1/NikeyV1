@@ -9,6 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -16,9 +18,12 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static java.lang.Math.*;
 
 @SuppressWarnings("ALL")
 public class Elementalstone implements Listener {
@@ -61,13 +66,56 @@ public class Elementalstone implements Listener {
                                     }
                                 }.runTaskLater(NikeyV1.getPlugin(), 20 * 120);
                                 //Ability
-                                player.getWorld().setThundering(true);
+                                player.getWorld().setStorm(true);
                                 player.getWorld().setWeatherDuration(20*60);
                                 startLightningTask(player.getWorld(),player);
                             }
                         }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
                             if (!player.isSneaking()) {
-                                
+                                int health;
+                                for (Entity entitys : player.getNearbyEntities(22,6,22)) {
+                                    if (entitys instanceof LivingEntity) {
+                                        LivingEntity living = (LivingEntity) entitys;
+                                        living.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,20*20,1));
+                                        living.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*20,4));
+
+                                        if (living instanceof Player) {
+                                            double damageMultiplier = getArmorStrengthMultiplier((Player) living);
+                                            living.damage(10*damageMultiplier,player);
+
+                                            reduceArmorDurability((Player) living);
+                                        }
+                                    }
+                                }
+                                new BukkitRunnable(){
+                                    double t = Math.PI/4;
+                                    Location loc = player.getLocation().clone();
+                                    public void run(){
+                                        t = t + 0.1*Math.PI;
+                                        for (double theta = 0; theta <= 2*Math.PI; theta = theta + Math.PI/32){
+                                            double x = t*cos(theta);
+                                            double y = 2*Math.exp(-0.1*t) * sin(t) + 1.5;
+                                            double z = t*sin(theta);
+                                            loc.add(x,y,z);
+                                            Particle.DustOptions dust = new Particle.DustOptions(Color.fromRGB((int) 5, (int) 5, (int) 5), 1);
+                                            player.spawnParticle(Particle.REDSTONE, loc, 0, 0, 0, 0,dust);
+                                            loc.subtract(x,y,z);
+
+                                            theta = theta + Math.PI/64;
+
+                                            x = t*cos(theta);
+                                            y = 2*Math.exp(-0.1*t) * sin(t) + 1.5;
+                                            z = t*sin(theta);
+                                            loc.add(x,y,z);
+                                            loc.getWorld().spawnParticle(Particle.SPELL_WITCH,loc,0,0,0,0);
+                                            loc.subtract(x,y,z);
+                                        }
+                                        if (t > 20){
+                                            this.cancel();
+                                        }
+                                    }
+
+                                }.runTaskTimer(NikeyV1.getPlugin(), 0, 1);
                             }
                         }
                     }
@@ -76,6 +124,82 @@ public class Elementalstone implements Listener {
         }
     }
 
+    private double getArmorStrengthMultiplier(final Player player) {
+        double armorValue = 0.0;
+        for (final ItemStack item : player.getInventory().getArmorContents()) {
+            if (item != null) {
+                armorValue += calculateArmorValue(item);
+            }
+        }
+        final double damageMultiplier = armorValue * 0.36;
+        player.sendMessage(String.valueOf(damageMultiplier));
+        return Math.max(10.0, damageMultiplier);
+    }
+
+    private double calculateArmorValue(final ItemStack armorPiece) {
+        switch (armorPiece.getType()) {
+            case NETHERITE_HELMET:
+            case NETHERITE_CHESTPLATE:
+            case NETHERITE_LEGGINGS:
+            case NETHERITE_BOOTS: {
+                return 22.0;
+            }
+            case DIAMOND_HELMET:
+            case DIAMOND_CHESTPLATE:
+            case DIAMOND_LEGGINGS:
+            case DIAMOND_BOOTS: {
+                return 18.0;
+            }
+            case IRON_HELMET:
+            case IRON_CHESTPLATE:
+            case IRON_LEGGINGS:
+            case IRON_BOOTS: {
+                return 12.0;
+            }
+            case GOLDEN_HELMET:
+            case GOLDEN_CHESTPLATE:
+            case GOLDEN_LEGGINGS:
+            case GOLDEN_BOOTS: {
+                return 5.0;
+            }
+            case CHAINMAIL_HELMET:
+            case CHAINMAIL_CHESTPLATE:
+            case CHAINMAIL_LEGGINGS:
+            case CHAINMAIL_BOOTS: {
+                return 7.0;
+            }
+            case LEATHER_HELMET:
+            case LEATHER_CHESTPLATE:
+            case LEATHER_LEGGINGS:
+            case LEATHER_BOOTS: {
+                return 4.0;
+            }
+            default: {
+                return 0.0;
+            }
+        }
+    }
+
+    private void reduceArmorDurability(final Player player) {
+        for (final ItemStack armorPiece : player.getInventory().getArmorContents()) {
+            if (armorPiece != null && armorPiece.getDurability() < armorPiece.getType().getMaxDurability()) {
+                final double maxDurability = armorPiece.getType().getMaxDurability();
+                final double currentDurability = maxDurability - armorPiece.getDurability();
+                final double remove = currentDurability - armorPiece.getDurability() + (int)(0.4 * maxDurability);
+                final double durabilityPercentage = currentDurability / maxDurability;
+                player.sendMessage("after remove: "+String.valueOf(remove));
+                player.sendMessage("current: "+String.valueOf(currentDurability));
+                if (currentDurability >= 20.0) {
+                    if (remove < 20.0) {
+                        armorPiece.setDurability((short)(maxDurability - 20.0));
+                    }
+                    else {
+                        armorPiece.setDurability((short)(armorPiece.getDurability() + (int)(0.4 * maxDurability)));
+                    }
+                }
+            }
+        }
+    }
 
 
     private int pg =200;

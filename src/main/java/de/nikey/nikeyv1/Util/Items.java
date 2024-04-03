@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -75,14 +76,17 @@ public class Items {
     public static void Electrostone(Player player , Integer level){
         ItemStack elektrostein = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  elektrostein.getItemMeta();
-        meta.setDisplayName("§eElectric Stone");
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        FireworkEffectMeta metaFw = (FireworkEffectMeta) meta;
+        FireworkEffect aa = FireworkEffect.builder().withColor(Color.YELLOW).build();
+        metaFw.setEffect(aa);
+        metaFw.setDisplayName("§eElectric Stone");
+        metaFw.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         elektrostein.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         ArrayList<String> lore = new ArrayList<>();
         lore.add(ChatColor.of("#B1A012")+ "Overloaded with electricity");
         lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
-        meta.setLore(lore);
-        elektrostein.setItemMeta(meta);
+        metaFw.setLore(lore);
+        elektrostein.setItemMeta(metaFw);
         player.getInventory().addItem(elektrostein);
     }
     public static void Waterstone(Player player , Integer level){

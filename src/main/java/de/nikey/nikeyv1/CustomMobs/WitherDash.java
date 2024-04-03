@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -87,7 +88,7 @@ public class WitherDash implements Listener {
                 for (int z = -3; z <= 3; z++) {
                     Location blockLocation = witherLocation.clone().add(x, y, z);
                     if (blockLocation.getBlock().getType() != Material.OBSIDIAN || blockLocation.getBlock().getType() != Material.BEDROCK || blockLocation.getBlock().getType() != Material.END_PORTAL_FRAME) {
-                        blockLocation.getBlock().setType(Material.AIR); // Destroy the block
+                        blockLocation.getBlock().breakNaturally(new ItemStack(Material.NETHERITE_PICKAXE));
                     }
                 }
             }

@@ -103,7 +103,10 @@ public class MiniWitherListener implements Listener {
         for (Entity entity : playerLocation.getWorld().getNearbyEntities(playerLocation, DISTANCE_THRESHOLD, DISTANCE_THRESHOLD, DISTANCE_THRESHOLD)) {
             if (entity.getType() == EntityType.WITHER && entity.getCustomName().equalsIgnoreCase("Mini-Wither")) {
                 Location witherLocation = entity.getLocation();
-                if (witherLocation.distance(playerLocation) >= DISTANCE_THRESHOLD) {
+                String spawnerName = entity.getPersistentDataContainer().get(new NamespacedKey(NikeyV1.getPlugin(), "Spawner"), PersistentDataType.STRING);
+                assert spawnerName != null;
+                Player player1 = Bukkit.getPlayer(spawnerName);
+                if (witherLocation.distance(playerLocation) >= DISTANCE_THRESHOLD && player == player1) {
                     Location loc = playerLocation.add(0, 2, 0);
                     entity.teleport(loc);
                 }
