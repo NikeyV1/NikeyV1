@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -27,8 +28,8 @@ public final class NikeyV1 extends JavaPlugin{
     @Override
     public void onEnable() {
         plugin = this;
-        //effect manager
-        em = new EffectManager(EffectLib.instance());
+        //Effect Manager
+        em = new EffectManager(this);
 
         PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents(new Player(),this);
@@ -65,6 +66,9 @@ public final class NikeyV1 extends JavaPlugin{
 
     @Override
     public void onDisable() {
+        em.disposeAll();
+        HandlerList.unregisterAll();
+
         for (BukkitRunnable task : Holystone.auraTasks.values()) {
             task.cancel();
         }
