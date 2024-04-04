@@ -41,6 +41,8 @@ public class Elementalstone implements Listener {
 
     public static ArrayList<LivingEntity> livingEntitiesList= new ArrayList<>();
     double dmg = 0;
+
+    private double damageCount;
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -78,6 +80,7 @@ public class Elementalstone implements Listener {
                             if (!player.isSneaking()) {
                                 livingEntitiesList.clear();
                                 dmg = 0;
+                                damageCount = 1;
                                 new BukkitRunnable(){
                                     double t = PI/4;
                                     final Location loc = player.getLocation();
@@ -90,24 +93,32 @@ public class Elementalstone implements Listener {
                                             loc.add(x,y,z);
                                             Particle.DustOptions dust = new Particle.DustOptions(Color.BLACK, 1);
                                             player.spawnParticle(Particle.REDSTONE, loc, 0, 0, 0, 0,dust);
-                                            for (Entity e : loc.getNearbyEntities(2,2,2)) {
-                                                if (e instanceof LivingEntity && e != player) {
-                                                    LivingEntity living = (LivingEntity) e;
-                                                    double damageMultiplier = getArmorStrengthMultiplier(living);
-                                                    if (living instanceof Player){
-                                                        living.damage(damageMultiplier,player);
-                                                        dmg += damageMultiplier*0.5;
-                                                    }else {
-                                                        double health = living.getHealth();
-                                                        health = health * 0.625;
-                                                        living.setHealth(health);
-                                                        dmg += health*0.5;
+                                            if (damageCount < 5) {
+                                                player.sendMessage("PPP");
+                                                for (Entity e : loc.getNearbyEntities(2,2,2)) {
+                                                    if (e == player) return;
+                                                    if (e instanceof LivingEntity ) {
+                                                        player.sendMessage("PPPEEE");
+                                                        LivingEntity living = (LivingEntity) e;
+                                                        double damageMultiplier = getArmorStrengthMultiplier(living);
+                                                        player.sendMessage(String.valueOf(damageMultiplier));
+                                                        if (living instanceof Player){
+                                                            player.sendMessage("PPPEEENNN");
+                                                            living.damage(damageMultiplier*1.5,player);
+                                                            dmg += damageMultiplier*0.5;
+                                                        }else {
+                                                            double health = living.getHealth();
+                                                            health = health * 0.625;
+                                                            living.setHealth(health);
+                                                            dmg += health*0.5;
+                                                        }
+                                                        player.sendMessage("PPPEEENNNIS");
+                                                        reduceArmorDurability(living);
+                                                        livingEntitiesList.add(living);
                                                     }
-                                                    reduceArmorDurability(living);
-                                                    livingEntitiesList.add(living);
                                                     break;
                                                 }
-                                                break;
+                                                damageCount++; // Inkrementieren Sie den Zähler
                                             }
                                             loc.subtract(x,y,z);
 
@@ -157,6 +168,7 @@ public class Elementalstone implements Listener {
                                             player.setHealth(player.getMaxHealth());
                                             player.sendMessage(String.valueOf(dmg));
                                             double baseValue = player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).getBaseValue();
+                                            dmg = dmg *0.5;
                                             player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).setBaseValue(dmg);
                                             player.setAbsorptionAmount(dmg);
                                             new BukkitRunnable() {
@@ -169,7 +181,7 @@ public class Elementalstone implements Listener {
                                             player.setHealth(health + dmg);
                                         }
                                     }
-                                }.runTaskLater(NikeyV1.getPlugin(),20*3);
+                                }.runTaskLater(NikeyV1.getPlugin(),20*4);
                             }
                         }
                     }
@@ -185,7 +197,7 @@ public class Elementalstone implements Listener {
                 armorValue += calculateArmorValue(item);
             }
         }
-        return Math.max(10.0, armorValue);
+        return armorValue;
     }
 
     private double calculateArmorValue(ItemStack armorPiece) {
