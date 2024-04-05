@@ -1,6 +1,8 @@
 package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
@@ -39,8 +41,9 @@ public class Elementalstone implements Listener {
     public static long remainingTime1;
     public static long remainingTime3;
 
-    public static ArrayList<LivingEntity> livingEntitiesList= new ArrayList<>();
     double dmg = 0;
+
+    Map<Entity, Integer> executionCountMap = new HashMap<>();
 
     private double damageCount;
     @EventHandler
@@ -78,7 +81,6 @@ public class Elementalstone implements Listener {
                             }
                         }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
                             if (!player.isSneaking()) {
-                                livingEntitiesList.clear();
                                 dmg = 0;
                                 damageCount = 1;
                                 new BukkitRunnable(){
@@ -93,32 +95,30 @@ public class Elementalstone implements Listener {
                                             loc.add(x,y,z);
                                             Particle.DustOptions dust = new Particle.DustOptions(Color.BLACK, 1);
                                             player.spawnParticle(Particle.REDSTONE, loc, 0, 0, 0, 0,dust);
-                                            if (damageCount < 5) {
-                                                player.sendMessage("PPP");
-                                                for (Entity e : loc.getNearbyEntities(2,2,2)) {
-                                                    if (e == player) return;
-                                                    if (e instanceof LivingEntity ) {
-                                                        player.sendMessage("PPPEEE");
-                                                        LivingEntity living = (LivingEntity) e;
-                                                        double damageMultiplier = getArmorStrengthMultiplier(living);
-                                                        player.sendMessage(String.valueOf(damageMultiplier));
+                                            for (Entity e : loc.getNearbyEntities(2,2,2)) {
+                                                if (e instanceof LivingEntity && e != player) {
+                                                    LivingEntity living = (LivingEntity) e;
+                                                    int executionCount = executionCountMap.getOrDefault(living, 0);
+                                                    if (executionCount < 5) {
+                                                        if (executionCount == 0) {
+                                                            damageArmor(living);
+                                                        }
                                                         if (living instanceof Player){
-                                                            player.sendMessage("PPPEEENNN");
-                                                            living.damage(damageMultiplier*1.5,player);
-                                                            dmg += damageMultiplier*0.5;
-                                                        }else {
+                                                            double damage = getArmorStrengthMultiplier(living);
+                                                            living.damage(damage*1.5,player);
+                                                            dmg += damage*0.5;
+                                                        }else if (executionCount == 0){
                                                             double health = living.getHealth();
-                                                            health = health * 0.625;
-                                                            living.setHealth(health);
+                                                            health = health * 0.65;
+                                                            living.setHealth(living.getHealth() * 0.65);
+                                                            player.sendMessage(String.valueOf(living.getHealth() * 0.65));
                                                             dmg += health*0.5;
                                                         }
-                                                        player.sendMessage("PPPEEENNNIS");
-                                                        reduceArmorDurability(living);
-                                                        livingEntitiesList.add(living);
+                                                        executionCountMap.put(living, executionCount + 1);
+                                                        damageCount++;
                                                     }
-                                                    break;
                                                 }
-                                                damageCount++; // Inkrementieren Sie den Zähler
+                                                break;
                                             }
                                             loc.subtract(x,y,z);
 
@@ -136,6 +136,7 @@ public class Elementalstone implements Listener {
                                                     LivingEntity living = (LivingEntity) e;
                                                     living.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,20*20,1));
                                                     living.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*20,4));
+                                                    living.playSound(Sound.sound(Key.key("block.beacon.deactivate"), Sound.Source.BLOCK,1,1));
                                                 }
                                                 break;
                                             }
@@ -157,6 +158,7 @@ public class Elementalstone implements Listener {
                                     }
 
                                 }.runTaskTimer(NikeyV1.getPlugin(), 0, 1);
+
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
@@ -166,7 +168,6 @@ public class Elementalstone implements Listener {
                                         if (dmg > missinghealth) {
                                             dmg -= missinghealth;
                                             player.setHealth(player.getMaxHealth());
-                                            player.sendMessage(String.valueOf(dmg));
                                             double baseValue = player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).getBaseValue();
                                             dmg = dmg *0.5;
                                             player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).setBaseValue(dmg);
@@ -182,6 +183,7 @@ public class Elementalstone implements Listener {
                                         }
                                     }
                                 }.runTaskLater(NikeyV1.getPlugin(),20*4);
+                                executionCountMap.clear();
                             }
                         }
                     }
@@ -190,7 +192,7 @@ public class Elementalstone implements Listener {
         }
     }
 
-    private double getArmorStrengthMultiplier(final LivingEntity living) {
+    private double getArmorStrengthMultiplier(LivingEntity living) {
         double armorValue = 0.0;
         for (ItemStack item : living.getEquipment().getArmorContents()) {
             if (item != null) {
@@ -244,35 +246,36 @@ public class Elementalstone implements Listener {
         }
     }
 
-    private void reduceArmorDurability(LivingEntity entity) {
-        for (final ItemStack armorPiece : entity.getEquipment().getArmorContents()) {
-            if (armorPiece != null && armorPiece.getDurability() < armorPiece.getType().getMaxDurability()) {
-                if (!livingEntitiesList.contains(entity)) {
-                    Damageable armordamage = (Damageable) armorPiece;
-                    int damage = armordamage.getDamage();
-                    final double maxDurability = armorPiece.getType().getMaxDurability();
-                    final double currentDurability = maxDurability - armorPiece.getDurability();
-                    final double remove = currentDurability - armorPiece.getDurability() + (int)(0.4 * maxDurability);
-                    final double durabilityPercentage = currentDurability / maxDurability;
-                    entity.sendMessage(String.valueOf(damage));
-                    entity.sendMessage("after remove: "+String.valueOf(remove));
-                    entity.sendMessage("current: "+String.valueOf(currentDurability));
-                    if (currentDurability > 20) {
-                        if (remove < 20.0) {
-                            armorPiece.setDurability((short)(maxDurability - 20.0));
-                        }
-                        else {
-                            armorPiece.setDurability((short)(armorPiece.getDurability() + (int)(0.4 * maxDurability)));
-                        }
-                    }
-                }
+    public static void damageArmor(LivingEntity entity) {
+        EntityEquipment equipment = entity.getEquipment();
+
+
+        if (equipment == null) {
+            return; // Das Entity hat keine Ausrüstung
+        }
+
+        // Überprüfe jede Rüstungseinheit
+        for (ItemStack armorPiece : equipment.getArmorContents()) {
+            if (armorPiece == null || armorPiece.getType().isAir()) {
+                continue; // Überspringe leere Slots
+            }
+
+
+            int maxDurability = armorPiece.getType().getMaxDurability();
+            int currentDurability = armorPiece.getDurability();
+
+            // Berechne den Schaden um 40%, berücksichtige aber die Mindesthaltbarkeit
+            int damage = (int) Math.ceil(0.4 * (maxDurability - currentDurability));
+            int minDurability = maxDurability / 10; // 10%
+
+            short s = (short) (currentDurability + damage);
+            if (currentDurability < minDurability) {
+                armorPiece.setDurability((short) (currentDurability + damage));
             }
         }
     }
 
-
     private int pg =200;
-
 
     private void startLightningTask(World world, Player p) {
         radius = 20;

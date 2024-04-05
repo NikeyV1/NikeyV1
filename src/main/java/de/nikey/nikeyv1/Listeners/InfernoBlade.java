@@ -163,6 +163,12 @@ public class InfernoBlade implements Listener {
                     cancel();
                     return;
                 }
+                if (targets.get(teleportCount) == null) {
+                    loc.getWorld().playEffect(loc,Effect.ENDER_SIGNAL,null);
+                    player.playSound(loc, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
+                    player.teleport(loc);
+                    cancel();
+                }
 
                 LivingEntity targetEntity = targets.get(teleportCount);
                 targetEntity.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,20*8,0));
@@ -173,9 +179,6 @@ public class InfernoBlade implements Listener {
                 teleportLocation.getWorld().playEffect(teleportLocation,Effect.ENDER_SIGNAL,null);
                 for (Entity entity : teleportLocation.getWorld().getNearbyEntities(teleportLocation, 2, 2, 2)) {
                     if (entity instanceof LivingEntity) {
-                        Vector direction = playerLocation.toVector().subtract(entity.getLocation().toVector()).normalize();
-                        entity.setVelocity(direction.multiply(2)); // Adjust the multiplier for the strength of attraction
-                        entity.teleport(teleportLocation);
                         LivingEntity livingEntity = (LivingEntity) entity;
                         player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, teleportLocation, 2);
                         livingEntity.damage(20,player);
