@@ -44,6 +44,7 @@ public class Waterstone implements Listener {
     public static long remainingTime1;
     public static long remainingTime2;
     public static long remainingTime3;
+
     @EventHandler
     public void onEntityAirChange(EntityAirChangeEvent event) {
         Entity entity = event.getEntity();

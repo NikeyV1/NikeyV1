@@ -1,16 +1,19 @@
 package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
+import de.slikey.effectlib.effect.FlameEffect;
+import io.papermc.paper.event.entity.EntityMoveEvent;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
-import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -46,6 +49,9 @@ public class Elementalstone implements Listener {
     Map<Entity, Integer> executionCountMap = new HashMap<>();
 
     private double damageCount;
+
+    public static ArrayList<Entity> stunned = new ArrayList<>();
+
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -100,9 +106,25 @@ public class Elementalstone implements Listener {
                                                     LivingEntity living = (LivingEntity) e;
                                                     int executionCount = executionCountMap.getOrDefault(living, 0);
                                                     if (executionCount < 5) {
+
+                                                        if (!stunned.contains(living)) {
+                                                            stunned.add(living);
+                                                        }
+
+
                                                         if (executionCount == 0) {
                                                             damageArmor(living);
+                                                            FlameEffect effect = new FlameEffect(NikeyV1.em);
+                                                            effect.duration = 4500;
+                                                            effect.particle = Particle.WAX_ON;
+                                                            effect.visibleRange = 60;
+                                                            effect.setLocation(living.getLocation());
+                                                            effect.start();
                                                         }
+
+                                                        transferPositiveEffects(living,player);
+
+
                                                         if (living instanceof Player){
                                                             double damage = getArmorStrengthMultiplier(living);
                                                             living.damage(damage*1.5,player);
@@ -111,7 +133,6 @@ public class Elementalstone implements Listener {
                                                             double health = living.getHealth();
                                                             health = health * 0.65;
                                                             living.setHealth(living.getHealth() * 0.65);
-                                                            player.sendMessage(String.valueOf(living.getHealth() * 0.65));
                                                             dmg += health*0.5;
                                                         }
                                                         executionCountMap.put(living, executionCount + 1);
@@ -168,22 +189,30 @@ public class Elementalstone implements Listener {
                                         if (dmg > missinghealth) {
                                             dmg -= missinghealth;
                                             player.setHealth(player.getMaxHealth());
-                                            double baseValue = player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).getBaseValue();
                                             dmg = dmg *0.5;
-                                            player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).setBaseValue(dmg);
-                                            player.setAbsorptionAmount(dmg);
-                                            new BukkitRunnable() {
-                                                @Override
-                                                public void run() {
-                                                    player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).setBaseValue(baseValue);
-                                                }
-                                            }.runTaskLater(NikeyV1.getPlugin(),20*240);
+                                            if (!(player.getAbsorptionAmount() > dmg)) {
+                                                double baseValue = player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).getBaseValue();
+                                                player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).setBaseValue(dmg);
+                                                player.setAbsorptionAmount(dmg);
+                                                new BukkitRunnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).setBaseValue(baseValue);
+                                                    }
+                                                }.runTaskLater(NikeyV1.getPlugin(),20*120);
+                                            }
                                         }else {
                                             player.setHealth(health + dmg);
                                         }
                                     }
                                 }.runTaskLater(NikeyV1.getPlugin(),20*4);
                                 executionCountMap.clear();
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        stunned.clear();
+                                    }
+                                }.runTaskLater(NikeyV1.getPlugin(),20*5);
                             }
                         }
                     }
@@ -191,6 +220,38 @@ public class Elementalstone implements Listener {
             }
         }
     }
+
+
+    public void transferPositiveEffects(Entity entity, Player player) {
+        if (entity instanceof LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity) entity;
+            // Überprüfe, ob das Entity positive Potion-Effekte hat
+            for (PotionEffect effect : livingEntity.getActivePotionEffects()) {
+                // Überprüfe, ob der Effekt als "gut" betrachtet werden kann
+                if (isGoodEffect(effect)) {
+                    // Entferne den positiven Effekt vom Entity
+                    livingEntity.removePotionEffect(effect.getType());
+                    // Gib den positiven Effekt dem Spieler, wenn er ihn noch nicht hat oder der Effekt länger anhält und stärker ist
+                    if (!player.hasPotionEffect(effect.getType()) || isEffectStronger(effect, player)) {
+                        player.addPotionEffect(new PotionEffect(effect.getType(), effect.getDuration(), effect.getAmplifier()));
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean isGoodEffect(PotionEffect effect) {
+        PotionEffectType type = effect.getType();
+        // Hier können Sie die Potion-Effekte definieren, die als "gut" betrachtet werden sollen
+        return type.equals(PotionEffectType.INCREASE_DAMAGE) || type.equals(PotionEffectType.HEAL) || type.equals(PotionEffectType.REGENERATION)|| type.equals(PotionEffectType.INVISIBILITY) || type.equals(PotionEffectType.WATER_BREATHING) || type.equals(PotionEffectType.DAMAGE_RESISTANCE) || type.equals(PotionEffectType.SPEED)|| type.equals(PotionEffectType.HEALTH_BOOST);
+    }
+
+    private boolean isEffectStronger(PotionEffect effect, Player player) {
+        PotionEffect playerEffect = player.getPotionEffect(effect.getType());
+        return (playerEffect != null && playerEffect.getDuration() <= effect.getDuration() && playerEffect.getAmplifier() <= effect.getAmplifier());
+    }
+
+
 
     private double getArmorStrengthMultiplier(LivingEntity living) {
         double armorValue = 0.0;
@@ -267,11 +328,7 @@ public class Elementalstone implements Listener {
             // Berechne den Schaden um 40%, berücksichtige aber die Mindesthaltbarkeit
             int damage = (int) Math.ceil(0.4 * (maxDurability - currentDurability));
             int minDurability = maxDurability / 10; // 10%
-
-            short s = (short) (currentDurability + damage);
-            if (currentDurability < minDurability) {
-                armorPiece.setDurability((short) (currentDurability + damage));
-            }
+            armorPiece.setDurability((short) (currentDurability + damage));
         }
     }
 
@@ -326,4 +383,29 @@ public class Elementalstone implements Listener {
         // Apply the effect to the player
         entity.addPotionEffect(new PotionEffect(effectType, 260, 3));
     }
+
+    @EventHandler
+    public void onEntityDeath(EntityDeathEvent event) {
+        LivingEntity entity = event.getEntity();
+        if (stunned.contains(entity)){
+            stunned.remove(entity);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityMove(EntityMoveEvent event) {
+        LivingEntity entity = event.getEntity();
+        if (stunned.contains(entity)){
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerMove(PlayerMoveEvent event) {
+        Player entity = event.getPlayer();
+        if (stunned.contains(entity)){
+            event.setCancelled(true);
+        }
+    }
+
 }

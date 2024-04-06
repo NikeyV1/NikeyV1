@@ -62,15 +62,18 @@ public class Items {
     public static void Firestone(Player player , Integer level){
         ItemStack lavastein = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta = lavastein.getItemMeta();
-        meta.setDisplayName(ChatColor.of("#e66b63")+"Fire Stone");
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        FireworkEffectMeta metaFw = (FireworkEffectMeta) meta;
+        FireworkEffect aa = FireworkEffect.builder().withColor(Color.fromRGB(230,107,99)).build();
+        metaFw.setEffect(aa);
+        metaFw.setDisplayName(ChatColor.of("#e66b63")+"Fire Stone");
+        metaFw.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         lavastein.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         ArrayList<String> lore = new ArrayList<>();
         lore.add("§7As hot as §clava");
         lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
-        meta.setLore(lore);
-        lavastein.setItemMeta(meta);
+        metaFw.setLore(lore);
+        lavastein.setItemMeta(metaFw);
         player.getInventory().addItem(lavastein);
     }
     public static void Electrostone(Player player , Integer level){
@@ -92,53 +95,65 @@ public class Items {
     public static void Waterstone(Player player , Integer level){
         ItemStack waterstone = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  waterstone.getItemMeta();
-        meta.setDisplayName("§9Water Stone");
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        FireworkEffectMeta metaFw = (FireworkEffectMeta) meta;
+        FireworkEffect aa = FireworkEffect.builder().withColor(Color.BLUE).build();
+        metaFw.setEffect(aa);
+        metaFw.setDisplayName("§9Water Stone");
+        metaFw.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         waterstone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         ArrayList<String> lore = new ArrayList<>();
         lore.add("§1A storm rages in this stone");
         lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
-        meta.setLore(lore);
-        waterstone.setItemMeta(meta);
+        metaFw.setLore(lore);
+        waterstone.setItemMeta(metaFw);
         player.getInventory().addItem(waterstone);
     }
     public static void Frozenstone(Player player , Integer level){
         ItemStack frozenstone = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  frozenstone.getItemMeta();
-        meta.setDisplayName("§3Frozen Stone");
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        FireworkEffectMeta metaFw = (FireworkEffectMeta) meta;
+        FireworkEffect aa = FireworkEffect.builder().withColor(Color.fromRGB(43690)).build();
+        metaFw.setEffect(aa);
+        metaFw.setDisplayName("§3Frozen Stone");
+        metaFw.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         frozenstone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         ArrayList<String> lore = new ArrayList<>();
         lore.add("§bCold enough to freeze fire");
         lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
-        meta.setLore(lore);
-        frozenstone.setItemMeta(meta);
+        metaFw.setLore(lore);
+        frozenstone.setItemMeta(metaFw);
         player.getInventory().addItem(frozenstone);
     }
     public static void Undeadstone(Player player , Integer level){
         ItemStack undeadstone = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  undeadstone.getItemMeta();
-        meta.setDisplayName(ChatColor.of("#100613")+"Undead Stone");
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        FireworkEffectMeta metaFw = (FireworkEffectMeta) meta;
+        FireworkEffect aa = FireworkEffect.builder().withColor(Color.fromRGB(16,6,19)).build();
+        metaFw.setEffect(aa);
+        metaFw.setDisplayName(ChatColor.of("#100613")+"Undead Stone");
+        metaFw.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         undeadstone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         ArrayList<String> lore = new ArrayList<>();
         lore.add(ChatColor.of("#221726")+"Souls wander around in this stone");
         lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
-        meta.setLore(lore);
-        undeadstone.setItemMeta(meta);
+        metaFw.setLore(lore);
+        undeadstone.setItemMeta(metaFw);
         player.getInventory().addItem(undeadstone);
     }
     public static void Holystone(Player player , Integer level){
         ItemStack holystone = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  holystone.getItemMeta();
-        meta.setDisplayName("§aHoly Stone");
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        FireworkEffectMeta metaFw = (FireworkEffectMeta) meta;
+        FireworkEffect aa = FireworkEffect.builder().withColor(Color.fromRGB(5635925)).build();
+        metaFw.setEffect(aa);
+        metaFw.setDisplayName("§aHoly Stone");
+        metaFw.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         holystone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         ArrayList<String> lore = new ArrayList<>();
         lore.add("§2Forged by Farys");
         lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
-        meta.setLore(lore);
-        holystone.setItemMeta(meta);
+        metaFw.setLore(lore);
+        holystone.setItemMeta(metaFw);
         player.getInventory().addItem(holystone);
     }
 
