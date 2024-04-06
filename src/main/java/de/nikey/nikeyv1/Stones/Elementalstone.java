@@ -87,132 +87,148 @@ public class Elementalstone implements Listener {
                             }
                         }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
                             if (!player.isSneaking()) {
-                                dmg = 0;
-                                damageCount = 1;
-                                new BukkitRunnable(){
-                                    double t = PI/4;
-                                    final Location loc = player.getLocation();
-                                    public void run(){
-                                        t = t + 0.1* PI;
-                                        for (double theta = 0; theta <= 2* PI; theta = theta + PI/32){
-                                            double x = t*cos(theta);
-                                            double y = 1.5* exp(-0.1*t) * sin(t) + 1.5;
-                                            double z = t*sin(theta);
-                                            loc.add(x,y,z);
-                                            Particle.DustOptions dust = new Particle.DustOptions(Color.BLACK, 1);
-                                            player.spawnParticle(Particle.REDSTONE, loc, 0, 0, 0, 0,dust);
-                                            for (Entity e : loc.getNearbyEntities(2,2,2)) {
-                                                if (e instanceof LivingEntity && e != player) {
-                                                    LivingEntity living = (LivingEntity) e;
-                                                    int executionCount = executionCountMap.getOrDefault(living, 0);
-                                                    if (executionCount < 5) {
+                                if (cooldown2.containsKey(player.getUniqueId()) && cooldown2.get(player.getUniqueId()) > System.currentTimeMillis()){
+                                    event.setCancelled(true);
+                                    player.updateInventory();
+                                    remainingTime3 = cooldown2.get(player.getUniqueId()) - System.currentTimeMillis();
+                                }else {
+                                    cooldown2.put(player.getUniqueId(),System.currentTimeMillis() + (150*1000));
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            cooldown2.remove(player.getUniqueId());
+                                            cancel();
+                                            return;
+                                        }
+                                    }.runTaskLater(NikeyV1.getPlugin(),20*150);
 
-                                                        if (!stunned.contains(living)) {
-                                                            stunned.add(living);
+                                    dmg = 0;
+                                    damageCount = 1;
+                                    new BukkitRunnable(){
+                                        double t = PI/4;
+                                        final Location loc = player.getLocation();
+                                        public void run(){
+                                            t = t + 0.1* PI;
+                                            for (double theta = 0; theta <= 2* PI; theta = theta + PI/32){
+                                                double x = t*cos(theta);
+                                                double y = 1.5* exp(-0.1*t) * sin(t) + 1.5;
+                                                double z = t*sin(theta);
+                                                loc.add(x,y,z);
+                                                Particle.DustOptions dust = new Particle.DustOptions(Color.BLACK, 1);
+                                                player.spawnParticle(Particle.REDSTONE, loc, 0, 0, 0, 0,dust);
+                                                for (Entity e : loc.getNearbyEntities(2,2,2)) {
+                                                    if (e instanceof LivingEntity && e != player) {
+                                                        LivingEntity living = (LivingEntity) e;
+                                                        int executionCount = executionCountMap.getOrDefault(living, 0);
+                                                        if (executionCount < 5) {
+
+                                                            if (!stunned.contains(living)) {
+                                                                stunned.add(living);
+                                                            }
+
+
+                                                            if (executionCount == 0) {
+                                                                damageArmor(living);
+                                                                FlameEffect effect = new FlameEffect(NikeyV1.em);
+                                                                effect.duration = 4500;
+                                                                effect.particle = Particle.WAX_ON;
+                                                                effect.visibleRange = 60;
+                                                                effect.setLocation(living.getLocation());
+                                                                effect.start();
+                                                            }
+
+                                                            transferPositiveEffects(living,player);
+
+
+                                                            if (living instanceof Player){
+                                                                double damage = getArmorStrengthMultiplier(living);
+                                                                living.damage(damage*1.5,player);
+                                                                dmg += damage*0.5;
+                                                            }else if (executionCount == 0){
+                                                                double health = living.getHealth();
+                                                                health = health * 0.65;
+                                                                living.setHealth(living.getHealth() * 0.65);
+                                                                dmg += health*0.5;
+                                                            }
+                                                            executionCountMap.put(living, executionCount + 1);
+                                                            damageCount++;
                                                         }
-
-
-                                                        if (executionCount == 0) {
-                                                            damageArmor(living);
-                                                            FlameEffect effect = new FlameEffect(NikeyV1.em);
-                                                            effect.duration = 4500;
-                                                            effect.particle = Particle.WAX_ON;
-                                                            effect.visibleRange = 60;
-                                                            effect.setLocation(living.getLocation());
-                                                            effect.start();
-                                                        }
-
-                                                        transferPositiveEffects(living,player);
-
-
-                                                        if (living instanceof Player){
-                                                            double damage = getArmorStrengthMultiplier(living);
-                                                            living.damage(damage*1.5,player);
-                                                            dmg += damage*0.5;
-                                                        }else if (executionCount == 0){
-                                                            double health = living.getHealth();
-                                                            health = health * 0.65;
-                                                            living.setHealth(living.getHealth() * 0.65);
-                                                            dmg += health*0.5;
-                                                        }
-                                                        executionCountMap.put(living, executionCount + 1);
-                                                        damageCount++;
                                                     }
+                                                    break;
                                                 }
-                                                break;
-                                            }
-                                            loc.subtract(x,y,z);
+                                                loc.subtract(x,y,z);
 
-                                            theta = theta + PI/64;
+                                                theta = theta + PI/64;
 
-                                            x = t*cos(theta);
-                                            y = 1.5* exp(-0.1*t) * sin(t) + 1.5;
-                                            z = t*sin(theta);
-                                            loc.add(x,y,z);
-                                            Particle.DustTransition transition= new Particle.DustTransition(Color.AQUA, Color.BLACK,1);
-                                            loc.getWorld().spawnParticle(Particle.REDSTONE,loc,0,0,0,0,transition);
+                                                x = t*cos(theta);
+                                                y = 1.5* exp(-0.1*t) * sin(t) + 1.5;
+                                                z = t*sin(theta);
+                                                loc.add(x,y,z);
+                                                Particle.DustTransition transition= new Particle.DustTransition(Color.AQUA, Color.BLACK,1);
+                                                loc.getWorld().spawnParticle(Particle.REDSTONE,loc,0,0,0,0,transition);
 
-                                            for (Entity e : loc.getNearbyEntities(2,2,2)) {
-                                                if (e instanceof LivingEntity && e != player) {
-                                                    LivingEntity living = (LivingEntity) e;
-                                                    living.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,20*20,1));
-                                                    living.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*20,4));
-                                                    living.playSound(Sound.sound(Key.key("block.beacon.deactivate"), Sound.Source.BLOCK,1,1));
-                                                }
-                                                break;
-                                            }
-                                            loc.subtract(x,y,z);
-
-                                            theta = theta + PI/64;
-
-                                            x = t*cos(theta);
-                                            y = 1.5* exp(-0.1*t) * sin(t) + 1.5;
-                                            z = t*sin(theta);
-                                            loc.add(x,y,z);
-                                            Particle.DustOptions orp= new Particle.DustOptions(Color.BLACK,1);
-                                            loc.getWorld().spawnParticle(Particle.REDSTONE,loc,0,0,0,0,orp);
-                                            loc.subtract(x,y,z);
-                                        }
-                                        if (t > 20){
-                                            this.cancel();
-                                        }
-                                    }
-
-                                }.runTaskTimer(NikeyV1.getPlugin(), 0, 1);
-
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        double health = player.getHealth();
-                                        double maxHealth = player.getMaxHealth();
-                                        double missinghealth = maxHealth-health;
-                                        if (dmg > missinghealth) {
-                                            dmg -= missinghealth;
-                                            player.setHealth(player.getMaxHealth());
-                                            dmg = dmg *0.5;
-                                            if (!(player.getAbsorptionAmount() > dmg)) {
-                                                double baseValue = player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).getBaseValue();
-                                                player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).setBaseValue(dmg);
-                                                player.setAbsorptionAmount(dmg);
-                                                new BukkitRunnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).setBaseValue(baseValue);
+                                                for (Entity e : loc.getNearbyEntities(2,2,2)) {
+                                                    if (e instanceof LivingEntity && e != player) {
+                                                        LivingEntity living = (LivingEntity) e;
+                                                        living.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,20*20,1));
+                                                        living.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*20,4));
+                                                        living.playSound(Sound.sound(Key.key("block.beacon.deactivate"), Sound.Source.BLOCK,1,1));
                                                     }
-                                                }.runTaskLater(NikeyV1.getPlugin(),20*120);
+                                                    break;
+                                                }
+                                                loc.subtract(x,y,z);
+
+                                                theta = theta + PI/64;
+
+                                                x = t*cos(theta);
+                                                y = 1.5* exp(-0.1*t) * sin(t) + 1.5;
+                                                z = t*sin(theta);
+                                                loc.add(x,y,z);
+                                                Particle.DustOptions orp= new Particle.DustOptions(Color.BLACK,1);
+                                                loc.getWorld().spawnParticle(Particle.REDSTONE,loc,0,0,0,0,orp);
+                                                loc.subtract(x,y,z);
                                             }
-                                        }else {
-                                            player.setHealth(health + dmg);
+                                            if (t > 20){
+                                                this.cancel();
+                                            }
                                         }
-                                    }
-                                }.runTaskLater(NikeyV1.getPlugin(),20*4);
-                                executionCountMap.clear();
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        stunned.clear();
-                                    }
-                                }.runTaskLater(NikeyV1.getPlugin(),20*5);
+
+                                    }.runTaskTimer(NikeyV1.getPlugin(), 0, 1);
+
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            double health = player.getHealth();
+                                            double maxHealth = player.getMaxHealth();
+                                            double missinghealth = maxHealth-health;
+                                            if (dmg > missinghealth) {
+                                                dmg -= missinghealth;
+                                                player.setHealth(player.getMaxHealth());
+                                                dmg = dmg *0.5;
+                                                if (!(player.getAbsorptionAmount() > dmg)) {
+                                                    double baseValue = player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).getBaseValue();
+                                                    player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).setBaseValue(dmg);
+                                                    player.setAbsorptionAmount(dmg);
+                                                    new BukkitRunnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).setBaseValue(baseValue);
+                                                        }
+                                                    }.runTaskLater(NikeyV1.getPlugin(),20*120);
+                                                }
+                                            }else {
+                                                player.setHealth(health + dmg);
+                                            }
+                                        }
+                                    }.runTaskLater(NikeyV1.getPlugin(),20*4);
+                                    executionCountMap.clear();
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            stunned.clear();
+                                        }
+                                    }.runTaskLater(NikeyV1.getPlugin(),20*5);
+                                }
                             }
                         }
                     }

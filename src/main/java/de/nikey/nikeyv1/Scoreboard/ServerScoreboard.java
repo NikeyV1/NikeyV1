@@ -69,12 +69,14 @@ public class ServerScoreboard extends ScoreboardBuilder {
                     boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
                     if (!buffed) {
                         remainingTime3 = getMasterCooldown(player,stone);
+                        int a = (int) ((remainingTime3 - System.currentTimeMillis()) / 1000);
+                        setScore("§7Master Ability: " + (a <= 0 ? "§aReady" : "§c" + a + "/300"), 2);
                     }else {
                         remainingTime3 = getElementalUltimate(player);
+                        int a = (int) ((remainingTime3 - System.currentTimeMillis()) / 1000);
+                        setScore("§7Master Ability: " + (a <= 0 ? "§aReady" : "§c" + a + "/150"), 2);
                     }
                 }
-                int a = (int) ((remainingTime3 - System.currentTimeMillis()) / 1000);
-                setScore("§7Master Ability: " + (a <= 0 ? "§aReady" : "§c" + a + "/300"), 2);
             }
         }.runTaskTimer(NikeyV1.getPlugin(), 10, 10);
     }
