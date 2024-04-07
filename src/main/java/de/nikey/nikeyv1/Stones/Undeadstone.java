@@ -38,7 +38,8 @@ public class Undeadstone implements Listener {
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> ability = new HashMap<>();
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
-    private int timer;
+
+    private HashMap<Player, Integer> timer = new HashMap<>();
     public static long remainingTime1;
     public static long remainingTime2;
     public static long remainingTime3;
@@ -157,13 +158,12 @@ public class Undeadstone implements Listener {
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //cooldown-ability
-                            timer = 40;
+                            timer.put(player,40);
                             player = p;
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    timer--;
-                                    if (timer == 0){
+                                    if (timer.get(player) == 0){
                                         cancel();
                                         return;
                                     }else {
@@ -201,6 +201,7 @@ public class Undeadstone implements Listener {
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }
                                     }
+                                    timer.replace(player,timer.get(player)-1);
                                 }
                             }.runTaskTimer(NikeyV1.getPlugin(),10,10);
                         }
