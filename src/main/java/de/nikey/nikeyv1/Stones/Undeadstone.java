@@ -531,11 +531,9 @@ public class Undeadstone implements Listener {
 
 
     private void spawnRidingHusk(Player player) {
-        World world = getServer().getWorld("world"); // world has to be names "world"
-        if (world != null) {
             Location added = player.getLocation().getWorld().getHighestBlockAt(player.getLocation()).getLocation();
             Location l = added.clone().add(0,1,0);
-            Giant giant = (Giant) world.spawnEntity(l, EntityType.GIANT);
+            Giant giant = (Giant) player.getLocation().getWorld().spawnEntity(l, EntityType.GIANT);
             giant.setMaxHealth(500);
             giant.setHealth(500);
             int i = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
@@ -554,7 +552,8 @@ public class Undeadstone implements Listener {
             if (i == 21) {
                 giant.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,PotionEffect.INFINITE_DURATION,1));
             }
-            Husk husk = (Husk) world.spawnEntity(player.getLocation(), EntityType.HUSK);
+            Husk husk = (Husk) player.getLocation().getWorld().spawnEntity(player.getLocation(), EntityType.HUSK);
+            husk.getEquipment().setItemInMainHand(null);
             husk.setInvisible(true);
             husk.setMaxHealth(500);
             husk.setHealth(500);
@@ -577,9 +576,6 @@ public class Undeadstone implements Listener {
                     giant.remove();
                 }
             }.runTaskLater(NikeyV1.getPlugin(),20*60*10);
-        } else {
-            getLogger().warning("A world called world was not found.");
-        }
     }
 
 
@@ -597,10 +593,12 @@ public class Undeadstone implements Listener {
                     if (nearbyEntity instanceof LivingEntity) {
                         giant.getWorld().playSound(giant,Sound.ENTITY_WITHER_BREAK_BLOCK,1,1);
                         LivingEntity player = (LivingEntity) nearbyEntity;
-                        Vector dir = player.getLocation().toVector().subtract(giant.getLocation().toVector()).normalize();
-                        player.setVelocity(dir.multiply(-2.5F).add(new Vector(0,1.5F,0))); // Spieler zum von dem Giant schleudern
-                        double health = player.getHealth();
-                        player.damage(20+health,giant);
+                        if (!giant.getName().contains(player.getName()+"'s")) {
+                            Vector dir = player.getLocation().toVector().subtract(giant.getLocation().toVector()).normalize();
+                            player.setVelocity(dir.multiply(-2.5F).add(new Vector(0,1.5F,0))); // Spieler zum von dem Giant schleudern
+                            double health = player.getHealth();
+                            player.damage(20+health,giant);
+                        }
                         event.setDamage(0);
                         giant.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,PotionEffect.INFINITE_DURATION,0));
                         giant.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,PotionEffect.INFINITE_DURATION,0));
@@ -623,41 +621,43 @@ public class Undeadstone implements Listener {
                         double distance = husk.getLocation().distance(player.getLocation());
                         if (distance <= 13 && player.getLocation().add(0,-1,0).getBlock().getType() != Material.AIR) {
                             String[] arr = entity.getCustomName().split("'");
-                            int level = NikeyV1.getPlugin().getConfig().getInt(arr[0] + ".level");
-                            if (!entity.getCustomName().contains("low")) {
-                                if (!entity.getCustomName().contains("strong")) {
-                                    if (player instanceof Player) {
-                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                        armor = armor*0.15;
-                                        player.damage(armor+1.5F);
-                                    }else {
-                                        player.damage(2.5F);
+                            if (!entity.getName().contains(player.getName()+"'s")) {
+                                int level = NikeyV1.getPlugin().getConfig().getInt(arr[0] + ".level");
+                                if (!entity.getCustomName().contains("low")) {
+                                    if (!entity.getCustomName().contains("strong")) {
+                                        if (player instanceof Player) {
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*0.15;
+                                            player.damage(armor+1.5F);
+                                        }else {
+                                            player.damage(2.5F);
+                                        }
+                                    }else{
+                                        if (player instanceof Player) {
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*0.15;
+                                            player.damage(armor+3.5F);
+                                        }else {
+                                            player.damage(4.5F);
+                                        }
                                     }
-                                }else{
-                                    if (player instanceof Player) {
-                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                        armor = armor*0.15;
-                                        player.damage(armor+3.5F);
-                                    }else {
-                                        player.damage(4.5F);
-                                    }
-                                }
-                            }else {
-                                if (!entity.getCustomName().contains("strong")) {
-                                    if (player instanceof Player) {
-                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                        armor = armor*0.2;
-                                        player.damage(armor+2.5F);
-                                    }else {
-                                        player.damage(3.5F);
-                                    }
-                                }else{
-                                    if (player instanceof Player) {
-                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                        armor = armor*0.2;
-                                        player.damage(armor+4.5F);
-                                    }else {
-                                        player.damage(5.5F);
+                                }else {
+                                    if (!entity.getCustomName().contains("strong")) {
+                                        if (player instanceof Player) {
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*0.2;
+                                            player.damage(armor+2.5F);
+                                        }else {
+                                            player.damage(3.5F);
+                                        }
+                                    }else{
+                                        if (player instanceof Player) {
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*0.2;
+                                            player.damage(armor+4.5F);
+                                        }else {
+                                            player.damage(5.5F);
+                                        }
                                     }
                                 }
                             }
