@@ -37,7 +37,7 @@ public class Firestone implements Listener {
     private ArrayList<Entity> player = new ArrayList<>();
     private int timer;
     private int time;
-    private int timecooldown;
+    private HashMap<Player , Integer> timecooldown = new HashMap<>();
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> ability = new HashMap<>();
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
@@ -592,11 +592,11 @@ public class Firestone implements Listener {
             @Override
             public void run() {
                 if (level == 20) {
-                    timecooldown=38;
+                    timecooldown.put(launcherPlayer,38);
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            timecooldown--;
+                            timecooldown.replace(launcherPlayer,timecooldown.get(player)-1);
                             int x = (int) (selectedPlayer.getLocation().getX());
                             int z = (int) (selectedPlayer.getLocation().getZ());
                             int randomX = ThreadLocalRandom.current().nextInt(x-6, x+6);
@@ -627,18 +627,19 @@ public class Firestone implements Listener {
                             }
 
 
-                            if (timecooldown == 0) {
+                            if (timecooldown.get(launcherPlayer) == 0) {
+                                timecooldown.remove(player);
                                 cancel();
                                 return;
                             }
                         }
                     }.runTaskTimer(NikeyV1.getPlugin(),0,4);
                 } else if (level == 21) {
-                    timecooldown = 45;
+                    timecooldown.put(launcherPlayer,45);
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            timecooldown--;
+                            timecooldown.replace(launcherPlayer,timecooldown.get(launcherPlayer)-1);
                             int x = (int) (selectedPlayer.getLocation().getX());
                             int z = (int) (selectedPlayer.getLocation().getZ());
                             int randomX = ThreadLocalRandom.current().nextInt(x - 6, x + 6);
@@ -672,7 +673,8 @@ public class Firestone implements Listener {
                                 fireball.setCustomName("strongairstrike");
                                 fireball.setCustomNameVisible(false);
                             }
-                            if (timecooldown == 0) {
+                            if (timecooldown.get(launcherPlayer) == 0) {
+                                timecooldown.remove(player);
                                 cancel();
                                 return;
                             }

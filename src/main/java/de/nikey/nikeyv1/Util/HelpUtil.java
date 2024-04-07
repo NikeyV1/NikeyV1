@@ -1,10 +1,13 @@
 package de.nikey.nikeyv1.Util;
 
+import de.nikey.nikeyv1.NikeyV1;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -15,33 +18,33 @@ import java.util.Set;
 @SuppressWarnings("ALL")
 public class HelpUtil {
     public static Entity getNearestEntityInSight(Player player, int range) {
-        ArrayList<Entity> entities = new ArrayList<>(player.getNearbyEntities(range, range, range));
-        ArrayList<Block> sightBlock = new ArrayList<>(player.getLineOfSight((Set<Material>) null, range));
-        ArrayList<Location> sight = new ArrayList<>();
+        final Entity[] e = {null};
+        new BukkitRunnable(){
+            double t = 0;
+            Location loc = player.getEyeLocation();
+            Vector direction = loc.getDirection().normalize();
 
-        for (Block block : sightBlock) {
-            // Überprüfe, ob der Block Wasser ist und ignoriere ihn in diesem Fall
-            //Dosnt work :(
-            if (block.getType() == Material.WATER) {
-                continue;
-            }
-            sight.add(block.getLocation());
-        }
+            public void run(){
+                t += 1;
+                double x = direction.getX() * t;
+                double y = direction.getY();
+                double z = direction.getZ() * t;
+                loc.add(x,y,z);
+                for (Entity entity : loc.getNearbyEntities(1,1,1)) {
+                    if (entity != player) {
+                        e[0] = entity;
+                        cancel();
+                    }
+                }
+                //loc.subtract(x,y,z);
 
-        for (Location location : sight) {
-            for (Entity entity : entities) {
-                double xDiff = Math.abs(entity.getLocation().getX() - location.getX());
-                double yDiff = Math.abs(entity.getLocation().getY() - location.getY());
-                double zDiff = Math.abs(entity.getLocation().getZ() - location.getZ());
-
-                // Überprüfe die Nähe unter Berücksichtigung von Wasser
-                if (xDiff < 1.3 && yDiff < 1.5 && zDiff < 1.3) {
-                    return entity;
+                loc.getWorld().spawnParticle(Particle.FIREWORKS_SPARK,loc,1);
+                if (t > range){
+                    this.cancel();
                 }
             }
-        }
-
-        return null; // Rückgabe von null, wenn keine Entity gefunden wurde
+        }.runTaskTimer(NikeyV1.getPlugin(), 0, 1);
+        return e[0];
     }
     public static List<Block> getNearbyBlocks(Location location, int radius) {
         List<Block> blocks = new ArrayList<Block>();

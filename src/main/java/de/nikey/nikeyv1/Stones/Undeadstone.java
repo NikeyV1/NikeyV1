@@ -164,6 +164,7 @@ public class Undeadstone implements Listener {
                                 @Override
                                 public void run() {
                                     if (timer.get(player) == 0){
+                                        timer.remove(player);
                                         cancel();
                                         return;
                                     }else {
@@ -221,13 +222,13 @@ public class Undeadstone implements Listener {
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //cooldown-ability
-                            timer = 40;
+                            timer.put(player,40);
                             player = p;
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    timer--;
-                                    if (timer == 0){
+                                    if (timer.get(player) == 0){
+                                        timer.remove(player);
                                         cancel();
                                         return;
                                     }else {
@@ -271,6 +272,7 @@ public class Undeadstone implements Listener {
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }
                                     }
+                                    timer.replace(player,timer.get(player)-1);
                                 }
                             }.runTaskTimer(NikeyV1.getPlugin(),10,10);
                         }
@@ -290,13 +292,13 @@ public class Undeadstone implements Listener {
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //cooldown-ability
-                            timer = 40;
+                            timer.put(player,40);
                             player = p;
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    timer--;
-                                    if (timer == 0){
+                                    if (timer.get(player) == 0){
+                                        timer.remove(player);
                                         cancel();
                                         return;
                                     }else {
@@ -340,6 +342,7 @@ public class Undeadstone implements Listener {
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }
                                     }
+                                    timer.replace(player,timer.get(player)-1);
                                 }
                             }.runTaskTimer(NikeyV1.getPlugin(),10,10);
                         }
@@ -359,13 +362,13 @@ public class Undeadstone implements Listener {
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //cooldown-ability
-                            timer = 60;
+                            timer.put(player,60);
                             player = p;
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    timer--;
-                                    if (timer == 0){
+                                    if (timer.get(player) == 0){
+                                        timer.remove(player);
                                         cancel();
                                         return;
                                     }else {
@@ -409,6 +412,7 @@ public class Undeadstone implements Listener {
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }
                                     }
+                                    timer.replace(player,timer.get(player)-1);
                                 }
                             }.runTaskTimer(NikeyV1.getPlugin(),10,10);
                         }
@@ -428,13 +432,13 @@ public class Undeadstone implements Listener {
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //cooldown-ability
-                            timer = 60;
+                            timer.put(player,60);
                             player = p;
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    timer--;
-                                    if (timer == 0){
+                                    if (timer.get(player) == 0){
+                                        timer.remove(player);
                                         cancel();
                                         return;
                                     }else {
@@ -486,6 +490,7 @@ public class Undeadstone implements Listener {
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }
                                     }
+                                    timer.replace(player,timer.get(player)-1);
                                 }
                             }.runTaskTimer(NikeyV1.getPlugin(),10,10);
                         }
