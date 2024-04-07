@@ -10,41 +10,57 @@ import org.bukkit.entity.*;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @SuppressWarnings("ALL")
 public class HelpUtil {
     public static Entity getNearestEntityInSight(Player player, int range) {
-        final Entity[] e = {null};
-        new BukkitRunnable(){
-            double t = 0;
-            Location loc = player.getEyeLocation();
-            Vector direction = loc.getDirection().normalize();
 
-            public void run(){
-                t += 1;
-                double x = direction.getX() * t;
-                double y = direction.getY();
-                double z = direction.getZ() * t;
-                loc.add(x,y,z);
-                for (Entity entity : loc.getNearbyEntities(1,1,1)) {
-                    if (entity != player) {
-                        e[0] = entity;
-                        cancel();
-                    }
-                }
-                //loc.subtract(x,y,z);
+        Set<Material> durchlauffaehigeMaterialien = new HashSet<>();
 
-                loc.getWorld().spawnParticle(Particle.FIREWORKS_SPARK,loc,1);
-                if (t > range){
-                    this.cancel();
+        // Hinzufügen aller Materialien, durch die ein Spieler durchlaufen kann
+        durchlauffaehigeMaterialien.add(Material.AIR);
+        durchlauffaehigeMaterialien.add(Material.WATER);
+        durchlauffaehigeMaterialien.add(Material.WATER);
+        durchlauffaehigeMaterialien.add(Material.TALL_GRASS);
+        durchlauffaehigeMaterialien.add(Material.SHORT_GRASS);
+        durchlauffaehigeMaterialien.add(Material.DANDELION);
+        durchlauffaehigeMaterialien.add(Material.POPPY);
+        durchlauffaehigeMaterialien.add(Material.BLUE_ORCHID);
+        durchlauffaehigeMaterialien.add(Material.ALLIUM);
+        durchlauffaehigeMaterialien.add(Material.AZURE_BLUET);
+        durchlauffaehigeMaterialien.add(Material.RED_TULIP);
+        durchlauffaehigeMaterialien.add(Material.ORANGE_TULIP);
+        durchlauffaehigeMaterialien.add(Material.WHITE_TULIP);
+        durchlauffaehigeMaterialien.add(Material.PINK_TULIP);
+        durchlauffaehigeMaterialien.add(Material.OXEYE_DAISY);
+        durchlauffaehigeMaterialien.add(Material.SUNFLOWER);
+        durchlauffaehigeMaterialien.add(Material.LILAC);
+        durchlauffaehigeMaterialien.add(Material.ROSE_BUSH);
+        durchlauffaehigeMaterialien.add(Material.PEONY);
+
+        ArrayList<Entity> entities = new ArrayList<>(player.getNearbyEntities(range, range, range));
+        ArrayList<Block> sightBlock = new ArrayList<>(player.getLineOfSight(durchlauffaehigeMaterialien, range));
+        ArrayList<Location> sight = new ArrayList<>();
+
+        for (Block block : sightBlock) {
+            sight.add(block.getLocation());
+        }
+
+        for (Location location : sight) {
+            for (Entity entity : entities) {
+                double xDiff = Math.abs(entity.getLocation().getX() - location.getX());
+                double yDiff = Math.abs(entity.getLocation().getY() - location.getY());
+                double zDiff = Math.abs(entity.getLocation().getZ() - location.getZ());
+
+                // Überprüfe die Nähe unter Berücksichtigung von Wasser
+                if (xDiff < 1.3 && yDiff < 1.5 && zDiff < 1.3) {
+                    return entity;
                 }
             }
-        }.runTaskTimer(NikeyV1.getPlugin(), 0, 1);
-        return e[0];
+        }
+
+        return null; // Rückgabe von null, wenn keine Entity gefunden wurde
     }
     public static List<Block> getNearbyBlocks(Location location, int radius) {
         List<Block> blocks = new ArrayList<Block>();
