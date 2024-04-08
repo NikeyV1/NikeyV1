@@ -559,7 +559,7 @@ public class Undeadstone implements Listener {
                 giant.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,PotionEffect.INFINITE_DURATION,1));
             }
             Husk husk = (Husk) player.getLocation().getWorld().spawnEntity(player.getLocation(), EntityType.HUSK);
-            husk.getEquipment().setItemInMainHand(null);
+            husk.getEquipment().clear();
             husk.setInvisible(true);
             husk.setMaxHealth(500);
             husk.setHealth(500);
