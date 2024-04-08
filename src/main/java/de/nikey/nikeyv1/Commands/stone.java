@@ -58,7 +58,8 @@ public class stone implements CommandExecutor {
                         p.sendMessage("§cTake a Number");
                     }
                 }else if (stone.equalsIgnoreCase("Elemental")){
-                    
+                    Items.GiveInfernoBlade(p);
+                    Items.GiveElementalStone(p);
                 }
             }else {
                 p.sendMessage("§cThat doesnt work like so!");
