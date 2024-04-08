@@ -250,4 +250,45 @@ public class Items {
         elementalstone.setItemMeta(meta);
         player.getInventory().addItem(elementalstone);
     }
+
+    public static void PowerBeacon(){
+        ItemStack beacon = new ItemStack(Material.BEACON);
+        ItemMeta bmeta = beacon.getItemMeta();
+        bmeta.setDisplayName(ChatColor.of("#f59542")+"Power Beacon");
+        beacon.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        bmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        ArrayList<String> plore = new ArrayList<>();
+        plore.add("§aA friend of every stone");
+        bmeta.setLore(plore);
+        beacon.setItemMeta(bmeta);
+        //
+        ItemStack soul = new ItemStack(Material.SOUL_LANTERN);
+        ItemMeta meta = soul.getItemMeta();
+        meta.setDisplayName("§3Soul of Strenght");
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add("§7A §3Soul §7that contains the §cStrenght §7of 1000 Players");
+        meta.setLore(lore);
+        soul.setItemMeta(meta);
+        //
+        ShapedRecipe recipe = new ShapedRecipe(beacon);
+        recipe.shape("SHS","SBS","SES");
+        recipe.setIngredient('H',Material.HEART_OF_THE_SEA);
+        recipe.setIngredient('E',Material.END_CRYSTAL);
+        recipe.setIngredient('B',Material.BEACON);
+        recipe.setIngredient('S', new RecipeChoice.ExactChoice(soul));
+        NikeyV1.getPlugin().getServer().addRecipe(recipe);
+    }
+
+    public static void GivePowerBeacon(Player player){
+        ItemStack beacon = new ItemStack(Material.BEACON);
+        ItemMeta bmeta = beacon.getItemMeta();
+        bmeta.setDisplayName(ChatColor.of("#f59542")+"Power Beacon");
+        beacon.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        bmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        ArrayList<String> plore = new ArrayList<>();
+        plore.add("§aA friend of every stone");
+        bmeta.setLore(plore);
+        beacon.setItemMeta(bmeta);
+        player.getInventory().addItem(beacon);
+    }
 }

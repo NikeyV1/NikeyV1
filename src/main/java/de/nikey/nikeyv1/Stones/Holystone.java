@@ -265,9 +265,9 @@ public class Holystone implements Listener {
                                     double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                     armor = armor*2;
                                     int players = p.getNearbyEntities(20, 20, 20).size();
-                                    if (players <= 2){
+                                    if (players == 1){
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                                    } else if (players  == 3||players == 4 || players == 5) {
+                                    } else if (players  == 2 || players == 3 || players == 4) {
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
                                     }else {
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
@@ -302,9 +302,9 @@ public class Holystone implements Listener {
                                     double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                     armor = armor*2;
                                     int players = p.getNearbyEntities(25, 25, 25).size();
-                                    if (players <= 2){
+                                    if (players == 1){
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                                    } else if (players  == 3||players == 4 || players == 5) {
+                                    } else if (players  == 2 || players == 3 || players == 4) {
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
                                     }else {
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
@@ -339,9 +339,9 @@ public class Holystone implements Listener {
                                     double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                     armor = armor*2;
                                     int players = p.getNearbyEntities(25, 25, 25).size();
-                                    if (players <= 2){
+                                    if (players == 1){
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                                    } else if (players  == 3||players == 4 || players == 5) {
+                                    } else if (players  == 2 || players == 3 || players == 4) {
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
                                     }else {
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
@@ -376,9 +376,9 @@ public class Holystone implements Listener {
                                     double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                     armor = armor*2.45;
                                     int players = p.getNearbyEntities(25, 25, 25).size();
-                                    if (players <= 2){
+                                    if (players == 1){
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                                    } else if (players  == 3||players == 4 || players == 5) {
+                                    } else if (players  == 2 || players == 3 || players == 4) {
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
                                     }else {
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
@@ -413,12 +413,12 @@ public class Holystone implements Listener {
                                     double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                     armor = armor*2.45;
                                     int players = p.getNearbyEntities(25, 25, 25).size();
-                                    if (players <= 2){
+                                    if (players == 1){
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                    } else if (players  == 2 || players == 3 || players == 4) {
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
-                                    } else if (players  == 3||players == 4 || players == 5) {
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
                                     }else {
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,3));
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
                                     }
                                     player.damage(armor+18,p);
                                 }

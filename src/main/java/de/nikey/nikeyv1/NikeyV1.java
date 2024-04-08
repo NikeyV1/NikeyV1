@@ -52,6 +52,7 @@ public final class NikeyV1 extends JavaPlugin{
         manager.registerEvents(new UndeadStoneListener(),this);
         manager.registerEvents(new WitherDash(),this);
         manager.registerEvents(new WitherCage(),this);
+        manager.registerEvents(new PowerBeacon(),this);
         //Command
         getCommand("stone").setExecutor(new stone());
         getCommand("effect").setExecutor(new EffectCMD());
@@ -59,6 +60,7 @@ public final class NikeyV1 extends JavaPlugin{
         Items.EnchantedAnvil();
         Items.Soulrecepie();
         Items.switcher();
+        Items.PowerBeacon();
         saveDefaultConfig();
 
         //Code

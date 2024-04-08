@@ -34,8 +34,11 @@ public class CommandChenges implements Listener {
                     }else if (args[2].equalsIgnoreCase("InfernoBlade") && player.isOp()) {
                         Items.GiveInfernoBlade(player);
                         event.setCancelled(true);
+                    }else if (args[2].equalsIgnoreCase("PowerBeacon") && player.isOp()) {
+                        Items.GivePowerBeacon(player);
+                        event.setCancelled(true);
                     }
-            }
+                }
             }
         }
     }

@@ -240,6 +240,7 @@ public class Player implements Listener {
         List<ItemStack> drops = event.getDrops();
         FileConfiguration config = NikeyV1.getPlugin().getConfig();
         int i = config.getInt(player.getName() + ".level");
+        //Changes to only drop if level is higher than 10
         if (player.getKiller() != null&&player.getKiller() instanceof org.bukkit.entity.Player)Items.SoulofStrenght(player.getKiller());
         if (i > 1){
             config.set(player.getName() +".level",i-1);
@@ -261,10 +262,19 @@ public class Player implements Listener {
                 }
             }
         }else {
+            for (ItemStack item : player.getInventory().getContents()) {
+                if (item != null) {
+                    if (item.getType() == Material.FIREWORK_STAR || item.getType() == Material.NETHERITE_SWORD) {
+                        if (item.getItemMeta().hasLore()) {
+                            event.getDrops().remove(item);
+                        }
+                    }
+                }
+            }
+            player.getInventory().clear();
             player.kickPlayer("§cYour stone is out of strength!");
             Date date = new Date(System.currentTimeMillis()+1440*60*1000);
             Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), "§cYour stone is out of strength!",date,"Game");
-            player.getInventory().clear();
         }
     }
 

@@ -158,7 +158,7 @@ public class Undeadstone implements Listener {
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //cooldown-ability
-                            timer.put(player,40);
+                            timer.put(p,40);
                             player = p;
                             new BukkitRunnable() {
                                 @Override
@@ -222,7 +222,7 @@ public class Undeadstone implements Listener {
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //cooldown-ability
-                            timer.put(player,40);
+                            timer.put(p,40);
                             player = p;
                             new BukkitRunnable() {
                                 @Override
@@ -292,7 +292,7 @@ public class Undeadstone implements Listener {
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //cooldown-ability
-                            timer.put(player,40);
+                            timer.put(p,40);
                             player = p;
                             new BukkitRunnable() {
                                 @Override
@@ -362,7 +362,7 @@ public class Undeadstone implements Listener {
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //cooldown-ability
-                            timer.put(player,60);
+                            timer.put(p,60);
                             player = p;
                             new BukkitRunnable() {
                                 @Override
@@ -432,13 +432,13 @@ public class Undeadstone implements Listener {
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //cooldown-ability
-                            timer.put(player,60);
+                            timer.put(p,60);
                             player = p;
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    if (timer.get(player) == 0){
-                                        timer.remove(player);
+                                    if (timer.get(p) == 0){
+                                        timer.remove(p);
                                         cancel();
                                         return;
                                     }else {
@@ -490,7 +490,7 @@ public class Undeadstone implements Listener {
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }
                                     }
-                                    timer.replace(player,timer.get(player)-1);
+                                    timer.replace(p,timer.get(p)-1);
                                 }
                             }.runTaskTimer(NikeyV1.getPlugin(),10,10);
                         }
