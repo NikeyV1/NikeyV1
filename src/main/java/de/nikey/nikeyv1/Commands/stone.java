@@ -57,6 +57,8 @@ public class stone implements CommandExecutor {
                     }catch (NumberFormatException e){
                         p.sendMessage("§cTake a Number");
                     }
+                }else if (stone.equalsIgnoreCase("Elemental")){
+                    
                 }
             }else {
                 p.sendMessage("§cThat doesnt work like so!");
