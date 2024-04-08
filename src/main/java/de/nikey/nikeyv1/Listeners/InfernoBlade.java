@@ -158,6 +158,8 @@ public class InfernoBlade implements Listener {
 
             @Override
             public void run() {
+                teleportCount++;
+
                 if (teleportCount >= 5 || targets.isEmpty()) {
                     player.teleport(loc);
                     cancel();
@@ -168,6 +170,7 @@ public class InfernoBlade implements Listener {
                     player.playSound(loc, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
                     player.teleport(loc);
                     cancel();
+                    return;
                 }
 
                 LivingEntity targetEntity = targets.get(teleportCount);
@@ -193,7 +196,6 @@ public class InfernoBlade implements Listener {
                 }
                 freezePlayer(targetEntity);
                 Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> unfreezePlayer(targetEntity), 50L);
-                teleportCount++;
             }
         }.runTaskTimer(NikeyV1.getPlugin(), 20, 20);
     }

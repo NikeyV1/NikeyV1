@@ -15,7 +15,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -23,15 +22,17 @@ public class PowerBeacon implements Listener {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        player.sendMessage("ol");
         ItemStack itemInHand = event.getItemInHand();
         ItemMeta meta = event.getItemInHand().getItemMeta();
         if (meta.getDisplayName().equalsIgnoreCase(ChatColor.of("#f59542")+"Power Beacon")) {
-            player.sendMessage("12");
-            itemInHand.setAmount(itemInHand.getAmount()-1);
-            openBanMenu(player);
-            event.setCancelled(true);
-            player.sendMessage("odddwqdwq");
+            Set<OfflinePlayer> bannedPlayers = Bukkit.getBannedPlayers();
+            if (!bannedPlayers.isEmpty()) {
+                itemInHand.setAmount(itemInHand.getAmount()-1);
+                openBanMenu(player);
+                event.setCancelled(true);
+            }else {
+                event.setCancelled(true);
+            }
         }
     }
 
@@ -53,8 +54,10 @@ public class PowerBeacon implements Listener {
                     if (banList.isBanned(targetPlayer.getName())) {
                         banList.pardon(targetPlayer.getName());
                         Bukkit.broadcast(Component.text(targetPlayer.getName()+"`s stone got power again"));
+                        event.setCancelled(true);
                     } else {
                         player.sendMessage("Der Spieler " + targetPlayer.getName() + " ist nicht gebannt.");
+                        event.setCancelled(true);
                     }
 
                     player.closeInventory();
@@ -64,15 +67,14 @@ public class PowerBeacon implements Listener {
     }
 
     private void openBanMenu(Player player) {
-        BanList<?> banList = Bukkit.getBanList(BanList.Type.PROFILE);
-        @NotNull Set<BanEntry> bannedPlayers = banList.getBanEntries();
+        Set<OfflinePlayer> bannedPlayers = Bukkit.getBannedPlayers();
 
         int size = Math.min(54, (bannedPlayers.size() / 9 + 1) * 9); // Dynamically adjust inventory size
         String title = "Gebannte Spieler";
         Inventory menu = Bukkit.createInventory(player, size, title);
 
-        for (OfflinePlayer bannedPlayer : bannedPlayers) {
-            ItemStack head = getPlayerHead(bannedPlayer.getName());
+        for (OfflinePlayer banned : Bukkit.getBannedPlayers()) {
+            ItemStack head = getPlayerHead(banned.getName());
             menu.addItem(head);
         }
 
