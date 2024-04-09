@@ -43,24 +43,25 @@ public class PowerBeacon implements Listener {
 
         if (clickedInventory != null && clickedInventory.equals(event.getView().getTopInventory())) {
             ItemStack clickedItem = event.getCurrentItem();
+            if (event.getView().getTitle().equalsIgnoreCase("§cBanned Player's")) {
+                if (clickedItem != null && clickedItem.getType() == Material.PLAYER_HEAD) {
+                    SkullMeta skullMeta = (SkullMeta) clickedItem.getItemMeta();
+                    OfflinePlayer targetPlayer = skullMeta.getOwningPlayer();
 
-            if (clickedItem != null && clickedItem.getType() == Material.PLAYER_HEAD) {
-                SkullMeta skullMeta = (SkullMeta) clickedItem.getItemMeta();
-                OfflinePlayer targetPlayer = skullMeta.getOwningPlayer();
+                    if (targetPlayer != null) {
+                        BanList<?> banList = Bukkit.getBanList(BanList.Type.PROFILE);
 
-                if (targetPlayer != null) {
-                    BanList<?> banList = Bukkit.getBanList(BanList.Type.PROFILE);
+                        if (banList.isBanned(targetPlayer.getName())) {
+                            banList.pardon(targetPlayer.getName());
+                            Bukkit.broadcast(Component.text(targetPlayer.getName()+"`s stone got power again"));
+                            event.setCancelled(true);
+                        } else {
+                            player.sendMessage("Der Spieler " + targetPlayer.getName() + " ist nicht gebannt.");
+                            event.setCancelled(true);
+                        }
 
-                    if (banList.isBanned(targetPlayer.getName())) {
-                        banList.pardon(targetPlayer.getName());
-                        Bukkit.broadcast(Component.text(targetPlayer.getName()+"`s stone got power again"));
-                        event.setCancelled(true);
-                    } else {
-                        player.sendMessage("Der Spieler " + targetPlayer.getName() + " ist nicht gebannt.");
-                        event.setCancelled(true);
+                        player.closeInventory();
                     }
-
-                    player.closeInventory();
                 }
             }
         }
@@ -70,7 +71,7 @@ public class PowerBeacon implements Listener {
         Set<OfflinePlayer> bannedPlayers = Bukkit.getBannedPlayers();
 
         int size = Math.min(54, (bannedPlayers.size() / 9 + 1) * 9); // Dynamically adjust inventory size
-        String title = "Gebannte Spieler";
+        String title = "§cBanned Player's";
         Inventory menu = Bukkit.createInventory(player, size, title);
 
         for (OfflinePlayer banned : Bukkit.getBannedPlayers()) {

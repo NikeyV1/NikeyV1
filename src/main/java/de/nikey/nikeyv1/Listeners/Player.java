@@ -26,6 +26,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -181,8 +182,18 @@ public class Player implements Listener {
             for (ItemStack contents : inventory.getContents()){
                 if(contents == null || contents.getType() == Material.AIR || contents.getItemMeta().getDisplayName().equalsIgnoreCase("§dUpgrade") || contents.getType() == Material.PURPLE_STAINED_GLASS_PANE) continue;
                 org.bukkit.entity.Player player = (org.bukkit.entity.Player) event.getPlayer();
-                player.getInventory().addItem(contents);
-                inventory.clear();
+                if (contents.getType() == Material.FIREWORK_STAR && contents.getItemMeta().hasLore()) {
+                    int i = player.getInventory().firstEmpty();
+                    if (i == -1) {
+                        player.getInventory().setItemInOffHand(contents);
+                    }else {
+                        player.getInventory().addItem(contents);
+                    }
+                    inventory.clear();
+                }else {
+                    player.getInventory().addItem(contents);
+                    inventory.clear();
+                }
             }
         }
     }
