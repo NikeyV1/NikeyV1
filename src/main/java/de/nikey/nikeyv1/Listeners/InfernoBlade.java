@@ -135,7 +135,7 @@ public class InfernoBlade implements Listener {
                                             }
                                         }
                                         player.teleport(loc);
-                                        player.playSound(loc, Sound.ENTITY_ENDERMAN_TELEPORT, 0.5f, 0.5f);
+                                        player.playSound(loc, Sound.ENTITY_PLAYER_TELEPORT, 0.5f, 0.5f);
                                     }
                                 }
                             }else if (meta.getDisplayName().equalsIgnoreCase("§dInferno Blade")){
@@ -167,7 +167,7 @@ public class InfernoBlade implements Listener {
                 }
                 if (targets.get(teleportCount) == null) {
                     loc.getWorld().playEffect(loc,Effect.ENDER_SIGNAL,null);
-                    player.playSound(loc, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
+                    player.playSound(loc, Sound.ENTITY_PLAYER_TELEPORT, 1.0f, 1.0f);
                     player.teleport(loc);
                     cancel();
                     return;
@@ -189,10 +189,10 @@ public class InfernoBlade implements Listener {
                 }
                 if (teleportLocation.getBlock().isEmpty()) {
                     player.teleport(teleportLocation);
-                    player.playSound(teleportLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
+                    player.playSound(teleportLocation, Sound.ENTITY_PLAYER_TELEPORT, 1.0f, 1.0f);
                 }else {
                     teleportToNearestAirBlock(player,teleportLocation);
-                    player.playSound(teleportLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
+                    player.playSound(teleportLocation, Sound.ENTITY_PLAYER_TELEPORT, 1.0f, 1.0f);
                 }
                 freezePlayer(targetEntity);
                 Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> unfreezePlayer(targetEntity), 50L);

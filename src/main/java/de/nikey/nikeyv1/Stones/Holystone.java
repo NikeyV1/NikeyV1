@@ -200,6 +200,7 @@ public class Holystone implements Listener {
                             p.removePotionEffect(PotionEffectType.BLINDNESS);
                             p.removePotionEffect(PotionEffectType.SLOW);
                             p.removePotionEffect(PotionEffectType.CONFUSION);
+                            p.removePotionEffect(PotionEffectType.WITHER);
                             p.setMaxHealth(22+players);
                             p.setHealth(20);
                             Location location = p.getLocation().add(0,2,0);
@@ -224,6 +225,7 @@ public class Holystone implements Listener {
                             p.removePotionEffect(PotionEffectType.BLINDNESS);
                             p.removePotionEffect(PotionEffectType.SLOW);
                             p.removePotionEffect(PotionEffectType.CONFUSION);
+                            p.removePotionEffect(PotionEffectType.WITHER);
                             p.setMaxHealth(22+players);
                             p.setHealth(20);
                             Location location = p.getLocation().add(0,2,0);

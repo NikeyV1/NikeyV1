@@ -94,6 +94,18 @@ public class HelpUtil {
                     // Setze das Ziel des Entitys auf den Spieler, der das ursprünglichen Entity geschlagen hat
                     monster.setTarget(damagedEntity);
                 }
+            }else if (nearbySummoned instanceof Warden) {
+                Warden entity = (Warden) nearbySummoned;
+                if (entity.getName().contains(p.getName()+"'s")) {
+                    entity.setAnger(damagedEntity,150);
+                    entity.increaseAnger(damagedEntity,80);
+                    entity.setTarget(damagedEntity);
+                }
+            }else if (nearbySummoned instanceof IronGolem) {
+                IronGolem entity = (IronGolem) nearbySummoned;
+                if (entity.getName().contains(p.getName()+"'s")) {
+                    entity.setTarget(damagedEntity);
+                }
             }
         }
     }

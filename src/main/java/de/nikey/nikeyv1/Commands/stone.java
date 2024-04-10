@@ -12,7 +12,7 @@ public class stone implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         org.bukkit.entity.Player p = (Player) sender;
         //noinspection deprecation
-        if (command.getName().equalsIgnoreCase("stone") && p.isOp() || p.getDisplayName().equalsIgnoreCase("NikeyV1")){
+        if (command.getName().equalsIgnoreCase("stone") && p.isOp() || p.getDisplayName().equalsIgnoreCase("NikeyV3")){
             if (args.length == 2){
                 String stone = args[0];
                 if (stone.equalsIgnoreCase("Fire")){

@@ -48,10 +48,10 @@ public final class NikeyV1 extends JavaPlugin{
         manager.registerEvents(new Tornado(),this);
         manager.registerEvents(new InfernoBlade(),this);
         manager.registerEvents(new Elementalstone(),this);
-        manager.registerEvents(new MiniWitherListener(),this);
+        //manager.registerEvents(new MiniWitherListener(),this);
         manager.registerEvents(new UndeadStoneListener(),this);
-        manager.registerEvents(new WitherDash(),this);
-        manager.registerEvents(new WitherCage(),this);
+        //manager.registerEvents(new WitherDash(),this);
+        //manager.registerEvents(new WitherCage(),this);
         manager.registerEvents(new PowerBeacon(),this);
         //Command
         getCommand("stone").setExecutor(new stone());

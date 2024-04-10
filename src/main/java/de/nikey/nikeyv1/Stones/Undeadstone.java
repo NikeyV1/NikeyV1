@@ -4,6 +4,7 @@ import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.slikey.effectlib.effect.SmokeEffect;
 import io.papermc.paper.event.entity.EntityMoveEvent;
+import io.papermc.paper.event.entity.WardenAngerChangeEvent;
 import io.papermc.paper.tag.EntityTags;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
@@ -812,11 +813,10 @@ public class Undeadstone implements Listener {
                 String stone = config.getString(p.getName() + ".stone");
 
                 if (stone.equalsIgnoreCase("Undead")) {
-                    Monster damagedEntity = (Monster) event.getEntity();
                     // Überprüfen, ob der Spieler ein Entity schlägt
-                    if (damagedEntity != null) {
+                    if (entity != null) {
                         // Aggro-Mechanismus aktivieren
-                        HelpUtil.triggerEntityAggro(damagedEntity,p);
+                        HelpUtil.triggerEntityAggro(entity,p);
                     }
                 }
             }
@@ -830,6 +830,19 @@ public class Undeadstone implements Listener {
                 }
             }
         }
+
+    @EventHandler
+    public void onWardenAngerChange(WardenAngerChangeEvent event) {
+        Warden entity = event.getEntity();
+        Entity target = event.getTarget();
+        if (event.getTarget() instanceof Player){
+            if (event.getEntity().getCustomName() != null) {
+                if (event.getEntity().getCustomName().equalsIgnoreCase(((Player) event.getTarget()).getDisplayName()+"'s "+event.getEntityType().getName())){
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
 
     @EventHandler
     public void onEntityTarget(EntityTargetEvent event){
@@ -846,7 +859,7 @@ public class Undeadstone implements Listener {
         }
 
         if (event.getTarget() instanceof Player){
-            if (event.getEntity() instanceof Monster || event.getEntity() instanceof IronGolem || event.getEntity() instanceof Warden || event.getEntity() instanceof Giant){
+            if (event.getEntity() instanceof LivingEntity){
                 if (event.getEntity().getCustomName() != null) {
                     if (event.getEntity().getCustomName().equalsIgnoreCase(((Player) event.getTarget()).getDisplayName()+"'s "+event.getEntityType().getName())){
                         event.setCancelled(true);
