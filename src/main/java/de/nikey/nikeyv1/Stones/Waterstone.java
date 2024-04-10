@@ -130,8 +130,8 @@ public class Waterstone implements Listener {
                             FountainEffect effect = new FountainEffect(NikeyV1.em);
                             effect.setLocation(location);
                             effect.duration = 20000;
-                            effect.particlesStrand = 50;
-                            effect.particlesSpout = 70;
+                            effect.particlesStrand = 30;
+                            effect.particlesSpout = 50;
                             effect.start();
                             //Ability
                             new BukkitRunnable() {
@@ -160,8 +160,8 @@ public class Waterstone implements Listener {
                             FountainEffect effect = new FountainEffect(NikeyV1.em);
                             effect.setLocation(location);
                             effect.duration = 20000;
-                            effect.particlesStrand = 50;
-                            effect.particlesSpout = 70;
+                            effect.particlesStrand = 30;
+                            effect.particlesSpout = 50;
                             effect.start();
                             //Ability
                             new BukkitRunnable() {
@@ -190,8 +190,8 @@ public class Waterstone implements Listener {
                             FountainEffect effect = new FountainEffect(NikeyV1.em);
                             effect.setLocation(location);
                             effect.duration = 20000;
-                            effect.particlesStrand = 50;
-                            effect.particlesSpout = 70;
+                            effect.particlesStrand = 30;
+                            effect.particlesSpout = 50;
                             effect.start();
                             //Ability
                             new BukkitRunnable() {
@@ -220,8 +220,8 @@ public class Waterstone implements Listener {
                             FountainEffect effect = new FountainEffect(NikeyV1.em);
                             effect.setLocation(location);
                             effect.duration = 20000;
-                            effect.particlesStrand = 50;
-                            effect.particlesSpout = 70;
+                            effect.particlesStrand = 30;
+                            effect.particlesSpout = 50;
                             effect.start();
                             //Ability
                             new BukkitRunnable() {
@@ -250,8 +250,8 @@ public class Waterstone implements Listener {
                             FountainEffect effect = new FountainEffect(NikeyV1.em);
                             effect.setLocation(location);
                             effect.duration = 20000;
-                            effect.particlesStrand = 50;
-                            effect.particlesSpout = 70;
+                            effect.particlesStrand = 30;
+                            effect.particlesSpout = 50;
                             effect.start();
                             //Ability
                             new BukkitRunnable() {

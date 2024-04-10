@@ -429,7 +429,7 @@ public class Electrostone implements Listener {
             NikeyV1.getPlugin().saveConfig();
             String stone = config.getString(p.getName() + ".stone");
             if (i == 20 ){
-                mtimer =80;
+                mtimer =40;
                 if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
                     p.updateInventory();
                     remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
@@ -472,7 +472,7 @@ public class Electrostone implements Listener {
                                 return;
                             }
                         }
-                    }.runTaskTimer(NikeyV1.getPlugin(),0,7);
+                    }.runTaskTimer(NikeyV1.getPlugin(),0,10);
                 }
             } else if (i == 21) {
                 mtimer = 105;
@@ -493,7 +493,7 @@ public class Electrostone implements Listener {
                     effect.radius = 10;
                     effect.sphere = true;
                     effect.setEntity(p);
-                    effect.duration = 20000;
+                    effect.duration = 26250;
                     effect.particle = Particle.SCRAPE;
                     effect.particles = 50;
                     effect.start();

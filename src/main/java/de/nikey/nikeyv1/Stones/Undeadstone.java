@@ -78,8 +78,8 @@ public class Undeadstone implements Listener {
                         } else if (i == 11) {
                             LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
                             summoned.setCustomName(p.getDisplayName()+"'s "+type.getName());
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,PotionEffect.INFINITE_DURATION,1));
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,PotionEffect.INFINITE_DURATION,1));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,1));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
                             Soul.clear();
                             p.getWorld().playSound(p.getLocation(),Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
                             ItemStack hand = p.getInventory().getItemInMainHand();
@@ -92,9 +92,9 @@ public class Undeadstone implements Listener {
                         } else if (i == 12){
                             LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
                             summoned.setCustomName(p.getDisplayName()+"'s "+type.getName());
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,PotionEffect.INFINITE_DURATION,1));
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,PotionEffect.INFINITE_DURATION,1));
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,1));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,19200,0));
                             Soul.clear();
                             p.getWorld().playSound(p.getLocation(),Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
                             ItemStack hand = p.getInventory().getItemInMainHand();
@@ -107,9 +107,9 @@ public class Undeadstone implements Listener {
                         }else if (i == 13){
                             LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
                             summoned.setCustomName(p.getDisplayName()+"'s "+type.getName());
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,PotionEffect.INFINITE_DURATION,1));
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,PotionEffect.INFINITE_DURATION,1));
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,1));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,19200,0));
                             summoned.setAbsorptionAmount(4);
                             Soul.clear();
                             p.getWorld().playSound(p.getLocation(),Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
@@ -125,8 +125,8 @@ public class Undeadstone implements Listener {
                             summoned.setCustomName(p.getDisplayName()+"'s "+type.getName());
                             summoned.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,1));
                             summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,PotionEffect.INFINITE_DURATION,0));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,19200,0));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,19200,0));
                             summoned.setAbsorptionAmount(4);
                             Soul.clear();
                             p.getWorld().playSound(p.getLocation(),Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
@@ -606,8 +606,8 @@ public class Undeadstone implements Listener {
                             player.damage(20+health,giant);
                         }
                         event.setDamage(0);
-                        giant.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,PotionEffect.INFINITE_DURATION,0));
-                        giant.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,PotionEffect.INFINITE_DURATION,0));
+                        giant.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,18000,0));
+                        giant.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,18000,0));
                     }
                 }
             }
@@ -741,7 +741,7 @@ public class Undeadstone implements Listener {
         if (event.getEntity() instanceof Player) {
             Player p = (Player) event.getEntity();
             String stone = config.getString(p.getName() + ".stone");
-            if (stone.equalsIgnoreCase("Undead")) {
+            if (stone.equalsIgnoreCase("Undead") && event.getDamager() instanceof LivingEntity) {
                 Monster damager = (Monster) event.getDamager();
                 if (damager != null) {
                     HelpUtil.triggerEntityAggro(damager,p);

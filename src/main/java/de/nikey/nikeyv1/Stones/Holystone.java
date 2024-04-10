@@ -46,7 +46,7 @@ public class Holystone implements Listener {
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
     private int timer;
 
-    private int particle;
+    private HashMap<Player, Integer> particle = new HashMap<>();
     public static long remainingTime1;
     public static long remainingTime2;
     public static long remainingTime3;
@@ -496,25 +496,26 @@ public class Holystone implements Listener {
             if (selectedPlayers.contains(damager.getUniqueId())) {
                 if (event.getEntity() instanceof Player) {
                     if (!hitted.contains((Player) event.getEntity())) {
-                        LivingEntity entity = (LivingEntity) event.getEntity();
-                        particle=20;
-                        hitted.add((Player) event.getEntity());
+                        Player entity = (Player) event.getEntity();
+                        particle.put(entity,20);
+                        hitted.add(entity);
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                hitted.remove(event.getEntity());
+                                hitted.remove(entity);
                             }
                         }.runTaskLater(NikeyV1.getPlugin(),20*3);
 
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                if (particle == 0){
+                                if (particle.get(entity) == 0){
                                     cancel();
+                                    return;
                                 }
                                 Location location = entity.getLocation().add(0,2.5F,0);
                                 entity.getWorld().spawnParticle(Particle.TOWN_AURA,location,5);
-                                particle--;
+                                particle.replace(entity,particle.get(entity)-1);
                             }
                         }.runTaskTimer(NikeyV1.getPlugin(),0,3);
                     }
