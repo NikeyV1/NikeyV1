@@ -73,7 +73,14 @@ public class Waterstone implements Listener {
         String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
         if (stone.equalsIgnoreCase("water") && level >= 6) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE,PotionEffect.INFINITE_DURATION,0,true,false,false));
-        }
+        }else {
+            PotionEffect dolphinGrace = player.getPotionEffect(PotionEffectType.DOLPHINS_GRACE);
+            if (dolphinGrace != null) {
+                if (dolphinGrace.getDuration() == PotionEffect.INFINITE_DURATION) {
+                    player.removePotionEffect(PotionEffectType.DOLPHINS_GRACE);
+                }
+            }
+        }    
     }
 
     @EventHandler
