@@ -20,8 +20,6 @@ public class InventoryListener implements Listener {
         InventoryAction action = event.getAction();
         if (event.getCurrentItem() != null) {
             if (event.getCurrentItem().getType() == Material.FIREWORK_STAR && event.getCurrentItem().getItemMeta().hasLore()) {
-                String[] arr = Objects.requireNonNull(event.getCurrentItem().getLore()).get(1).split(":");
-                String a = arr[0];
                 if (!(top.getType() == InventoryType.CRAFTING)){
                     if (!event.getView().getTitle().equalsIgnoreCase("Enchanted Anvil")) {
                         event.setCancelled(true);
