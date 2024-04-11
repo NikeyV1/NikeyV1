@@ -321,25 +321,25 @@ public class Undeadstone implements Listener {
                                             Zombie zombie = location.getWorld().spawn(location, Zombie.class);
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
                                             zombie.setCustomName(p.getDisplayName()+"'s "+zombie.getType().getName());
                                         }else if (r ==1){
                                             ZombieVillager spawn = location.getWorld().spawn(location, ZombieVillager.class);
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }else if (r == 2){
                                             WitherSkeleton spawn = location.getWorld().spawn(location, WitherSkeleton.class);
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }else{
                                             Zombie spawn = location.getWorld().spawn(location, Zombie.class);
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }
                                     }
@@ -391,25 +391,25 @@ public class Undeadstone implements Listener {
                                             Zombie zombie = location.getWorld().spawn(location, Zombie.class);
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
                                             zombie.setCustomName(p.getDisplayName()+"'s "+zombie.getType().getName());
                                         }else if (r ==1){
                                             ZombieVillager spawn = location.getWorld().spawn(location, ZombieVillager.class);
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }else if (r == 2){
                                             WitherSkeleton spawn = location.getWorld().spawn(location, WitherSkeleton.class);
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }else{
                                             Zombie spawn = location.getWorld().spawn(location, Zombie.class);
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }
                                     }
@@ -462,7 +462,7 @@ public class Undeadstone implements Listener {
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
                                             zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
                                             zombie.setCustomName(p.getDisplayName()+"'s "+zombie.getType().getName());
                                         }else if (r ==1){
@@ -470,7 +470,7 @@ public class Undeadstone implements Listener {
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }else if (r == 2){
@@ -478,7 +478,7 @@ public class Undeadstone implements Listener {
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }else{
@@ -486,7 +486,7 @@ public class Undeadstone implements Listener {
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,400,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,PotionEffect.INFINITE_DURATION,0));
+                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
                                             spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
                                             spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
                                         }
@@ -550,14 +550,14 @@ public class Undeadstone implements Listener {
                 giant.setCustomName(player.getName()+"'s "+giant.getType().getName()+" strong");
             }
             giant.setCustomNameVisible(true);
-            giant.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,PotionEffect.INFINITE_DURATION,1,false,false));
-            giant.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,PotionEffect.INFINITE_DURATION,4,false,false));
+            giant.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,12000,1,false,false));
+            giant.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,12000,4,false,false));
             AttributeInstance attribute = giant.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
             if (attribute != null) {
                 attribute.setBaseValue(1);
             }
             if (i == 21) {
-                giant.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,PotionEffect.INFINITE_DURATION,1));
+                giant.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,12000,1));
             }
             Husk husk = (Husk) player.getLocation().getWorld().spawnEntity(player.getLocation(), EntityType.HUSK);
             husk.getEquipment().clear();
