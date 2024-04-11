@@ -252,7 +252,11 @@ public class Player implements Listener {
         FileConfiguration config = NikeyV1.getPlugin().getConfig();
         int i = config.getInt(player.getName() + ".level");
         //Changes to only drop if level is higher than 10
-        if (player.getKiller() != null&&player.getKiller() instanceof org.bukkit.entity.Player)Items.SoulofStrenght(player.getKiller());
+        if (player.getKiller() != null&&player.getKiller() instanceof org.bukkit.entity.Player){
+            if (i >= 15) {
+                Items.SoulofStrenght(player.getKiller());
+            }
+        }
         if (i > 1){
             config.set(player.getName() +".level",i-1);
             for (ItemStack item : player.getInventory().getContents()) {
