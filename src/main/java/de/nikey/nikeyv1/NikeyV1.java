@@ -5,12 +5,10 @@ import de.nikey.nikeyv1.Commands.EffectCMD;
 import de.nikey.nikeyv1.Commands.stone;
 import de.nikey.nikeyv1.CustomMobs.MiniWitherListener;
 import de.nikey.nikeyv1.CustomMobs.WitherCage;
-import de.nikey.nikeyv1.CustomMobs.WitherDash;
 import de.nikey.nikeyv1.Listeners.*;
 import de.nikey.nikeyv1.Stones.*;
 import de.nikey.nikeyv1.Util.Items;
 import de.nikey.nikeyv1.Util.Tornado;
-import de.slikey.effectlib.EffectLib;
 import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -53,6 +51,7 @@ public final class NikeyV1 extends JavaPlugin{
         //manager.registerEvents(new WitherDash(),this);
         //manager.registerEvents(new WitherCage(),this);
         manager.registerEvents(new PowerBeacon(),this);
+        manager.registerEvents(new ResourcePack(),this);
         //Command
         getCommand("stone").setExecutor(new stone());
         getCommand("effect").setExecutor(new EffectCMD());

@@ -1,6 +1,5 @@
 package de.nikey.nikeyv1.Listeners;
 
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,14 +8,11 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 
-import java.util.Objects;
-
 @SuppressWarnings("deprecation")
 public class InventoryListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Inventory top = event.getView().getTopInventory();
-        Inventory bottom = event.getView().getBottomInventory();
         InventoryAction action = event.getAction();
         if (event.getCurrentItem() != null) {
             if (event.getCurrentItem().getType() == Material.FIREWORK_STAR && event.getCurrentItem().getItemMeta().hasLore()) {
