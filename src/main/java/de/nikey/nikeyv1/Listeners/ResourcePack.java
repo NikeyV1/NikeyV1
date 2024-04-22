@@ -13,7 +13,6 @@ public class ResourcePack implements Listener {
             @Override
             public void run() {
                 event.getPlayer().setResourcePack("https://download.mc-packs.net/pack/1ae3a52c4b0096559c567b176d433b59af81a588.zip","1ae3a52c4b0096559c567b176d433b59af81a588");
-                event.getPlayer().sendMessage("p");
             }
         }.runTaskLater(NikeyV1.getPlugin(),10);
     }

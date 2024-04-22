@@ -4,6 +4,7 @@ import de.nikey.nikeyv1.NikeyV1;
 import de.slikey.effectlib.effect.CylinderEffect;
 import de.slikey.effectlib.effect.ShieldEffect;
 import de.slikey.effectlib.effect.TornadoEffect;
+import io.papermc.paper.configuration.type.fallback.FallbackValue;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
@@ -34,7 +35,7 @@ public class Electrostone implements Listener {
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
     private int timer;
 
-    private int mtimer;
+    public static HashMap<Player, Integer> mtimer = new HashMap<>();
     public static long remainingTime1;
     public static long remainingTime2;
     public static long remainingTime3;
@@ -429,7 +430,7 @@ public class Electrostone implements Listener {
             NikeyV1.getPlugin().saveConfig();
             String stone = config.getString(p.getName() + ".stone");
             if (i == 20 ){
-                mtimer =40;
+                mtimer.put(p,40);
                 if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
                     p.updateInventory();
                     remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
@@ -455,7 +456,7 @@ public class Electrostone implements Listener {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            mtimer--;
+                            mtimer.replace(p,mtimer.get(p)-1);
                             for (Entity entity : p.getNearbyEntities(5, 5, 5)) {
                                 if (entity instanceof LivingEntity) {
                                     LivingEntity target = (LivingEntity) entity;
@@ -467,7 +468,7 @@ public class Electrostone implements Listener {
                                 }
                             }
 
-                            if (mtimer == 0) {
+                            if (mtimer.get(p) == 0) {
                                 cancel();
                                 return;
                             }
@@ -475,7 +476,7 @@ public class Electrostone implements Listener {
                     }.runTaskTimer(NikeyV1.getPlugin(),0,10);
                 }
             } else if (i == 21) {
-                mtimer = 105;
+                mtimer.put(p,105);
                 if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
                     p.updateInventory();
                     remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
@@ -500,7 +501,7 @@ public class Electrostone implements Listener {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            mtimer--;
+                            mtimer.replace(p,mtimer.get(p)-1);
                             for (Entity entity : p.getNearbyEntities(9, 9, 9)) {
                                 if (entity instanceof LivingEntity) {
                                     LivingEntity target = (LivingEntity) entity;
@@ -511,7 +512,7 @@ public class Electrostone implements Listener {
                                 }
                             }
 
-                            if (mtimer == 0) {
+                            if (mtimer.get(p) == 0) {
                                 cancel();
                                 return;
                             }

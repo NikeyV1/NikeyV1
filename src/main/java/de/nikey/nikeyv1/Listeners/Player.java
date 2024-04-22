@@ -3,6 +3,7 @@ package de.nikey.nikeyv1.Listeners;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
 import de.nikey.nikeyv1.Stones.Electrostone;
+import de.nikey.nikeyv1.Stones.Holystone;
 import de.nikey.nikeyv1.Timer.TimerBuild;
 import de.nikey.nikeyv1.Util.Items;
 import io.papermc.paper.event.entity.EntityMoveEvent;
@@ -62,6 +63,7 @@ public class Player implements Listener {
                     p.setWalkSpeed(0.2225F);
                 }else if (level >= 6) p.setWalkSpeed(0.23F);
             }
+            Holystone.hitted.remove(p);
             p.setMaxHealth(20);
             TimerBuild timerBuild = new TimerBuild();
             if (config.getBoolean(p.getName()+".time")){

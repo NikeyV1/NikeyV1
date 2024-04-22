@@ -44,9 +44,7 @@ public class Holystone implements Listener {
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> ability = new HashMap<>();
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
-    private int timer;
 
-    private HashMap<Player, Integer> particle = new HashMap<>();
     public static long remainingTime1;
     public static long remainingTime2;
     public static long remainingTime3;
@@ -499,28 +497,29 @@ public class Holystone implements Listener {
                 if (event.getEntity() instanceof Player) {
                     if (!hitted.contains((Player) event.getEntity())) {
                         Player entity = (Player) event.getEntity();
-                        particle.put(entity,20);
                         hitted.add(entity);
                         new BukkitRunnable() {
                             @Override
                             public void run() {
                                 hitted.remove(entity);
+                                cancel();
                             }
                         }.runTaskLater(NikeyV1.getPlugin(),20*3);
 
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                if (particle.get(entity) == 0){
+                                if (!hitted.contains(entity)){
                                     cancel();
                                     return;
+                                }else {
+                                    Location location = entity.getLocation().add(0,2.5F,0);
+                                    entity.getWorld().spawnParticle(Particle.TOWN_AURA,location,5);
                                 }
-                                Location location = entity.getLocation().add(0,2.5F,0);
-                                entity.getWorld().spawnParticle(Particle.TOWN_AURA,location,5);
-                                particle.replace(entity,particle.get(entity)-1);
                             }
                         }.runTaskTimer(NikeyV1.getPlugin(),0,3);
                     }
+                    hitted.remove(event.getEntity());
                     damager.setHealth(damager.getHealth() + event.getFinalDamage()*0.5);
                 }
             }

@@ -35,7 +35,7 @@ public class Frozenstone implements Listener {
     public static HashMap<UUID, Long> ability = new HashMap<>();
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
     public static ArrayList<LivingEntity> notp = new ArrayList<>();
-    private int timer;
+    public static HashMap<Player, Integer> timer = new HashMap<>();
     public static long remainingTime1;
     public static long remainingTime2;
     public static long remainingTime3;
@@ -190,12 +190,12 @@ public class Frozenstone implements Listener {
                             }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
                             //cooldown-ability
                             if (i ==10){
-                                timer = 4;
+                                timer.put(p,4);
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        timer--;
-                                        if (timer ==0){
+                                        timer.replace(p,timer.get(p)-1);
+                                        if (timer.get(p) ==0){
                                             cancel();
                                         }else {
                                             Snowball snowball = p.launchProjectile(Snowball.class);
@@ -206,12 +206,12 @@ public class Frozenstone implements Listener {
                                     }
                                 }.runTaskTimer(NikeyV1.getPlugin(),15,15);
                             } else if (i == 11) {
-                                timer = 4;
+                                timer.put(p,4);
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        timer--;
-                                        if (timer ==0){
+                                        timer.replace(p,timer.get(p)-1);
+                                        if (timer.get(p) ==0){
                                             cancel();
                                         }else {
                                             Snowball snowball = p.launchProjectile(Snowball.class);
@@ -222,12 +222,12 @@ public class Frozenstone implements Listener {
                                     }
                                 }.runTaskTimer(NikeyV1.getPlugin(),15,15);
                             } else if (i >= 12) {
-                                timer = 4;
+                                timer.put(p,4);
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        timer--;
-                                        if (timer ==0){
+                                        timer.replace(p,timer.get(p)-1);
+                                        if (timer.get(p) ==0){
                                             cancel();
                                         }else {
                                             Snowball snowball = p.launchProjectile(Snowball.class);
