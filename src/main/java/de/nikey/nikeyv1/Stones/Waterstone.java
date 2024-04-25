@@ -320,7 +320,7 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else {
-                                        entity.setHealth(0);
+                                        entity.setHealth(1);
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -359,7 +359,7 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else {
-                                        entity.setHealth(0);
+                                        entity.setHealth(1);
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -398,7 +398,7 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else {
-                                        entity.setHealth(0);
+                                        entity.setHealth(1);
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -437,7 +437,7 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else {
-                                        entity.setHealth(0);
+                                        entity.setHealth(1);
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -476,7 +476,7 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else {
-                                        entity.setHealth(0);
+                                        entity.setHealth(1);
                                     }
                                     entity.setVisualFire(false);
                                 }

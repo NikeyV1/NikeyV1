@@ -258,7 +258,6 @@ public class Frozenstone implements Listener {
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //Cooldown-Ability
-
                             for (Entity e : p.getNearbyEntities(40,40,40)){
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
