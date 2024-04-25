@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.damage.DamageSource;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -320,7 +321,8 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else {
-                                        entity.setHealth(1);
+                                         
+                                         entity.damage(10000, p);
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -359,7 +361,8 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else {
-                                        entity.setHealth(1);
+                                         
+                                         entity.damage(10000, p);
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -398,7 +401,7 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else {
-                                        entity.setHealth(1);
+                                         entity.damage(10000, p);
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -437,7 +440,7 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else {
-                                        entity.setHealth(1);
+                                         entity.damage(10000, p);
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -476,7 +479,7 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else {
-                                        entity.setHealth(1);
+                                         entity.damage(10000, p);
                                     }
                                     entity.setVisualFire(false);
                                 }

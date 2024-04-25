@@ -272,7 +272,7 @@ public class Holystone implements Listener {
                                     }else {
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
                                     }
-                                    player.damage(armor+10,p);
+                                    player.damage(armor+5,p);
                                 }
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
@@ -309,7 +309,7 @@ public class Holystone implements Listener {
                                     }else {
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
                                     }
-                                    player.damage(armor+10,p);
+                                    player.damage(armor+5,p);
                                 }
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
@@ -346,7 +346,7 @@ public class Holystone implements Listener {
                                     }else {
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
                                     }
-                                    player.damage(armor+18,p);
+                                    player.damage(armor+10,p);
                                 }
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
@@ -383,7 +383,7 @@ public class Holystone implements Listener {
                                     }else {
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
                                     }
-                                    player.damage(armor+18,p);
+                                    player.damage(armor+10,p);
                                 }
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
@@ -420,7 +420,7 @@ public class Holystone implements Listener {
                                     }else {
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
                                     }
-                                    player.damage(armor+18,p);
+                                    player.damage(armor+10,p);
                                 }
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;

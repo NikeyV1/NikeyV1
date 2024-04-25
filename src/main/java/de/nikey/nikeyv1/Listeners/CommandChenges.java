@@ -20,9 +20,12 @@ public class CommandChenges implements Listener {
                     event.setCancelled(true);
                     player.sendMessage("§aYou reloaded your scoreboard");
                     new ServerScoreboard(player);
-                } else if (args[1].equalsIgnoreCase("Pack")) player.setResourcePack("https://download.mc-packs.net/pack/4c8d208dff3e41fe8f7b4236035b2b7b1a0cacd2.zip");
+                } else if (args[1].equalsIgnoreCase("Pack")){
+                    event.setCancelled(true);
+                    event.getPlayer().setResourcePack("https://download.mc-packs.net/pack/1ae3a52c4b0096559c567b176d433b59af81a588.zip","1ae3a52c4b0096559c567b176d433b59af81a588");
+                }
              }
-        }else if (cmd.startsWith("/give") ||cmd.startsWith("7give")) {
+        }else if (cmd.startsWith("/give")) {
             if(player.isOp()) {
                 if (args.length == 3) {
                     if (args[2].equalsIgnoreCase("Soulofstrenght") && player.isOp()){

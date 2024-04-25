@@ -635,4 +635,10 @@ public class Player implements Listener {
         LivingEntity entity = event.getEntity();
         if (entity.isInWaterOrRain())entity.setVisualFire(false);
     }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        org.bukkit.entity.Player entity = event.getPlayer();
+        if (entity.isInWaterOrRain())entity.setVisualFire(false);
+    }
 }
