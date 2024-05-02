@@ -476,7 +476,7 @@ public class Electrostone implements Listener {
                     }.runTaskTimer(NikeyV1.getPlugin(),0,10);
                 }
             } else if (i == 21) {
-                mtimer.put(p,105);
+                mtimer.put(p,100);
                 if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
                     p.updateInventory();
                     remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
