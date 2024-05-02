@@ -116,13 +116,15 @@ public class Frozenstone implements Listener {
                 player.setAllowFlight(false);
                 player.setFlying(false);
             }
-            if (isColdBiome(player.getWorld().getBiome(player.getLocation()))) {
-                if (player.getFlySpeed() != 0.14F) {
-                    player.setFlySpeed(0.14F);
-                }
-            }else {
-                if (player.getFlySpeed() == 0.14F) {
-                    player.setFlySpeed(0.1F);
+            if (config.getInt(player.getName()+".level") >=6) {
+                if (isColdBiome(player.getWorld().getBiome(player.getLocation()))) {
+                    if (player.getFlySpeed() != 0.14F) {
+                        player.setFlySpeed(0.14F);
+                    }
+                }else {
+                    if (player.getFlySpeed() == 0.14F) {
+                        player.setFlySpeed(0.1F);
+                    }
                 }
             }
         }
