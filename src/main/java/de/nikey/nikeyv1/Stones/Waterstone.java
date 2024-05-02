@@ -252,7 +252,7 @@ public class Waterstone implements Listener {
                                     }
                                 }
                             }.runTaskTimer(NikeyV1.getPlugin(), 30,30);
-                        }else if (i >= 12) {
+                        }else if (i >= 14) {
                             timer = 15;
                             Location location = p.getLocation();
                             FountainEffect effect = new FountainEffect(NikeyV1.em);
