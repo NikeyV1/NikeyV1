@@ -55,7 +55,7 @@ public class PowerBeacon implements Listener {
                             banList.pardon(targetPlayer.getName());
                             Bukkit.broadcast(Component.text(targetPlayer.getName()+"`s stone got power again"));
                             for (Player players : Bukkit.getOnlinePlayers()) {
-                                players.playSound(players.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1, 1)
+                                players.playSound(players.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1.5F, 1);
                             }
                             event.setCancelled(true);
                         } else {
