@@ -7,8 +7,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-public class CommandChenges implements Listener {
-    @EventHandler(ignoreCancelled = true)
+public class CommandChanges implements Listener {
+    @EventHandler
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         final Player player = event.getPlayer();
         final String cmd = event.getMessage();
@@ -22,7 +22,8 @@ public class CommandChenges implements Listener {
                     new ServerScoreboard(player);
                 } else if (args[1].equalsIgnoreCase("Pack")){
                     event.setCancelled(true);
-                    event.getPlayer().setResourcePack("https://download.mc-packs.net/pack/1ae3a52c4b0096559c567b176d433b59af81a588.zip","1ae3a52c4b0096559c567b176d433b59af81a588");
+                    event.getPlayer().setResourcePack("https://download.mc-packs.net/pack/1ae3a52c4b0096559c567b176d433b59af81a588.zip","1ae3a52c4b0096559c567b176d433b59af81a588",false);
+                    event.getPlayer().sendMessage("§aYou reloaded your Resource Pack");
                 }
              }
         }else if (cmd.startsWith("/give")) {
