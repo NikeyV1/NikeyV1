@@ -90,7 +90,7 @@ public class TimerBuild  {
                             }
                         }else {
                             System.out.println(player.getName()+" left while upgrading!");
-                            System.out.println("Was eine bitch");
+                            System.out.println("Was eine b*tch");
                             cancel();
                             return;
                         }

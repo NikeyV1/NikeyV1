@@ -11,6 +11,6 @@ commands:
   stone:
     description: gives you a stone
     usage: </stone [stone] [level]>
-  effect:
+  peffect:
     description: Plays a particle effect
-    usage: </effect [effect name]>
+    usage: </peffect [effect name]>

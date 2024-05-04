@@ -2,13 +2,12 @@ package de.nikey.nikeyv1.Commands;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.slikey.effectlib.effect.*;
-import org.bukkit.Particle;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class EffectCMD implements CommandExecutor {
+public class PEffectCMD implements CommandExecutor {
     @Override
     public boolean onCommand( CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
