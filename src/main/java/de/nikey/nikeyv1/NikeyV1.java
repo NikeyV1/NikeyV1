@@ -3,8 +3,6 @@ package de.nikey.nikeyv1;
 import de.nikey.nikeyv1.Anti_Exploits.Stone_Swapping;
 import de.nikey.nikeyv1.Commands.EffectCMD;
 import de.nikey.nikeyv1.Commands.stone;
-import de.nikey.nikeyv1.CustomMobs.MiniWitherListener;
-import de.nikey.nikeyv1.CustomMobs.WitherCage;
 import de.nikey.nikeyv1.Listeners.*;
 import de.nikey.nikeyv1.Stones.*;
 import de.nikey.nikeyv1.Util.Items;
@@ -46,10 +44,7 @@ public final class NikeyV1 extends JavaPlugin{
         manager.registerEvents(new Tornado(),this);
         manager.registerEvents(new InfernoBlade(),this);
         manager.registerEvents(new Elementalstone(),this);
-        //manager.registerEvents(new MiniWitherListener(),this);
         manager.registerEvents(new UndeadStoneListener(),this);
-        //manager.registerEvents(new WitherDash(),this);
-        //manager.registerEvents(new WitherCage(),this);
         manager.registerEvents(new PowerBeacon(),this);
         manager.registerEvents(new ResourcePack(),this);
         //Command
@@ -76,12 +71,6 @@ public final class NikeyV1 extends JavaPlugin{
         Holystone.auraTasks.clear();
         removeGiants();
 
-        WitherCage.lockedChunks.clear();
-
-
-        if (MiniWitherListener.task != null) {
-            MiniWitherListener.task.cancel();
-        }
     }
 
     private void removeGiants() {
