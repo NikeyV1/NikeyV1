@@ -322,7 +322,7 @@ public class Waterstone implements Listener {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else {
                                          
-                                         entity.damage(10000, p);
+                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -362,7 +362,7 @@ public class Waterstone implements Listener {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else {
                                          
-                                         entity.damage(10000, p);
+                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -401,7 +401,7 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else {
-                                         entity.damage(10000, p);
+                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -440,7 +440,7 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else {
-                                         entity.damage(10000, p);
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -479,7 +479,7 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else {
-                                         entity.damage(10000, p);
+                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
                                     }
                                     entity.setVisualFire(false);
                                 }
