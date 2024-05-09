@@ -263,7 +263,7 @@ public class Holystone implements Listener {
                                 if (e instanceof Player) {
                                     Player player =(Player) e;
                                     double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                    armor = armor*1.4;
+                                    armor = armor*1.7;
                                     int players = p.getNearbyEntities(20, 20, 20).size();
                                     if (players == 1){
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
@@ -300,7 +300,7 @@ public class Holystone implements Listener {
                                 if (e instanceof Player) {
                                     Player player =(Player) e;
                                     double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                    armor = armor*1.4;
+                                    armor = armor*1.7;
                                     int players = p.getNearbyEntities(25, 25, 25).size();
                                     if (players == 1){
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
@@ -337,7 +337,7 @@ public class Holystone implements Listener {
                                 if (e instanceof Player) {
                                     Player player =(Player) e;
                                     double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                    armor = armor*1.4;
+                                    armor = armor*1.7;
                                     int players = p.getNearbyEntities(25, 25, 25).size();
                                     if (players == 1){
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
@@ -519,7 +519,6 @@ public class Holystone implements Listener {
                             }
                         }.runTaskTimer(NikeyV1.getPlugin(),0,3);
                     }
-                    hitted.remove(event.getEntity());
                     damager.setHealth(damager.getHealth() + event.getFinalDamage()*0.5);
                 }
             }
