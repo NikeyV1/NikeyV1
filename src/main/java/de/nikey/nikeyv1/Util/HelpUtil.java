@@ -1,13 +1,9 @@
 package de.nikey.nikeyv1.Util;
 
-import de.nikey.nikeyv1.NikeyV1;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -131,6 +127,15 @@ public class HelpUtil {
         Vector direction = targetEntity.getLocation().toVector().subtract(entity.getLocation().toVector()).normalize();
         Vector boost = direction.multiply(boostStrength);
         entity.setVelocity(boost);
+    }
+
+    public static Set<OfflinePlayer> getTeamMembers(Player player) {
+
+        Team team = player.getScoreboard().getPlayerTeam(player);
+
+        Set<OfflinePlayer> players = team.getPlayers();
+
+        return players;
     }
 }
 

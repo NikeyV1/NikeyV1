@@ -1,6 +1,7 @@
 package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
+import de.nikey.nikeyv1.Util.HelpUtil;
 import de.slikey.effectlib.effect.*;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
@@ -124,7 +125,7 @@ public class Firestone implements Listener {
                                         if (e instanceof LivingEntity) {
                                             LivingEntity entity = (LivingEntity) e;
                                             entities.add(entity);
-                                            if (entity != p) {
+                                            if (entity != p && entity != HelpUtil.getTeamMembers(p)) {
                                                 e.setVisualFire(true);
                                                 entity.damage(2);
                                             }
@@ -157,7 +158,7 @@ public class Firestone implements Listener {
                                         if (e instanceof LivingEntity) {
                                             LivingEntity entity = (LivingEntity) e;
                                             entities.add(entity);
-                                            if (entity != p) {
+                                            if (entity != p && entity != HelpUtil.getTeamMembers(p)) {
                                                 e.setVisualFire(true);
                                                 entity.damage(2.5F);
                                             }
@@ -190,7 +191,7 @@ public class Firestone implements Listener {
                                         if (e instanceof LivingEntity) {
                                             LivingEntity entity = (LivingEntity) e;
                                             entities.add(entity);
-                                            if (entity != p) {
+                                            if (entity != p && entity != HelpUtil.getTeamMembers(p)) {
                                                 e.setVisualFire(true);
                                                 entity.damage(2.5);
                                             }
@@ -223,7 +224,7 @@ public class Firestone implements Listener {
                                         if (e instanceof LivingEntity) {
                                             LivingEntity entity = (LivingEntity) e;
                                             entities.add(entity);
-                                            if (entity != p) {
+                                            if (entity != p && entity != HelpUtil.getTeamMembers(p)) {
                                                 e.setVisualFire(true);
                                                 entity.damage(3);
                                             }
@@ -276,7 +277,7 @@ public class Firestone implements Listener {
                                         return;
                                     }else {
                                         double health = p.getHealth();
-                                        if (p.getHealth() <=18 )p.setHealth(health+1.2);
+                                        if (p.getHealth() <=18 && !p.isDead())p.setHealth(health+1.2);
                                     }
                                     time--;
                                 }
@@ -308,7 +309,7 @@ public class Firestone implements Listener {
                                         return;
                                     }else {
                                         double health = p.getHealth();
-                                        if (p.getHealth() <=18 )p.setHealth(health+1.2);
+                                        if (p.getHealth() <=18 && !p.isDead())p.setHealth(health+1.2);
                                     }
                                     time--;
                                 }

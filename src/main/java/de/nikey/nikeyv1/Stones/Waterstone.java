@@ -152,7 +152,7 @@ public class Waterstone implements Listener {
                                     }
                                     for (Entity e : location.getNearbyEntities(8,8,8)){
                                         if (e == p){
-                                            if (p.getHealth() < 18)p.setHealth(p.getHealth()+3);
+                                            if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
                                         } else {
                                             if (e instanceof LivingEntity){
                                                 LivingEntity entity = (LivingEntity) e;
@@ -182,7 +182,7 @@ public class Waterstone implements Listener {
                                     }
                                     for (Entity e : location.getNearbyEntities(10,8,10)){
                                         if (e == p){
-                                            if (p.getHealth() < 18)p.setHealth(p.getHealth()+3);
+                                            if (p.getHealth() < 18&& !p.isDead())p.setHealth(p.getHealth()+3);
                                         } else {
                                             if (e instanceof LivingEntity){
                                                 LivingEntity entity = (LivingEntity) e;
@@ -212,7 +212,7 @@ public class Waterstone implements Listener {
                                     }
                                     for (Entity e : location.getNearbyEntities(10,8,10)){
                                         if (e == p){
-                                            if (p.getHealth() < 18)p.setHealth(p.getHealth()+3);
+                                            if (p.getHealth() < 18&& !p.isDead())p.setHealth(p.getHealth()+3);
                                         } else {
                                             if (e instanceof LivingEntity){
                                                 LivingEntity entity = (LivingEntity) e;
@@ -242,7 +242,7 @@ public class Waterstone implements Listener {
                                     }
                                     for (Entity e : location.getNearbyEntities(10,8,10)){
                                         if (e == p){
-                                            if (p.getHealth() < 18)p.setHealth(p.getHealth()+4);
+                                            if (p.getHealth() < 18&& !p.isDead())p.setHealth(p.getHealth()+4);
                                         } else {
                                             if (e instanceof LivingEntity){
                                                 LivingEntity entity = (LivingEntity) e;
@@ -273,7 +273,7 @@ public class Waterstone implements Listener {
                                     for (Entity e : location.getNearbyEntities(10,8,10)){
                                         if (e == p){
                                             p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
-                                            if (p.getHealth() < 18)p.setHealth(p.getHealth()+4);
+                                            if (p.getHealth() < 18&& !p.isDead())p.setHealth(p.getHealth()+4);
                                         } else {
                                             if (e instanceof LivingEntity){
                                                 LivingEntity entity = (LivingEntity) e;
@@ -321,7 +321,6 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else {
-                                         
                                          entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
                                     }
                                     entity.setVisualFire(false);
