@@ -355,7 +355,7 @@ public class Electrostone implements Listener {
                                         player.damage(8,p);
                                         stunned.add(player);
                                     }
-                                }else {
+                                }else if (e instanceof LivingEntity){
                                     LivingEntity livingEntity = (LivingEntity) e;
                                     livingEntity.damage(8,p);
                                     stunned.add(livingEntity);
@@ -397,7 +397,7 @@ public class Electrostone implements Listener {
                                         player.damage(8,p);
                                         stunned.add(player);
                                     }
-                                }else {
+                                }else if (e instanceof LivingEntity){
                                     LivingEntity livingEntity = (LivingEntity) e;
                                     livingEntity.damage(8,p);
                                     stunned.add(livingEntity);
@@ -439,7 +439,7 @@ public class Electrostone implements Listener {
                                         player.damage(8,p);
                                         stunned.add(player);
                                     }
-                                }else {
+                                }else if (e instanceof LivingEntity){
                                     LivingEntity livingEntity = (LivingEntity) e;
                                     livingEntity.damage(8,p);
                                     stunned.add(livingEntity);
