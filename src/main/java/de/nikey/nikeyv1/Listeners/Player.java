@@ -560,14 +560,16 @@ public class Player implements Listener {
 
 
             if (bottom.getType() == InventoryType.PLAYER) {
-                if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.FIREWORK_STAR ||event.getCurrentItem().getType() == Material.NETHERITE_SWORD && event.getCurrentItem().getItemMeta().hasLore()) {
-                    if (top.getType() == InventoryType.CHEST  || event.getInventory().getType() == InventoryType.ANVIL|| event.getInventory().getType() == InventoryType.BARREL|| event.getInventory().getType() == InventoryType.BEACON|| event.getInventory().getType() == InventoryType.BLAST_FURNACE|| event.getInventory().getType() == InventoryType.BREWING|| event.getInventory().getType() == InventoryType.CARTOGRAPHY|| event.getInventory().getType() == InventoryType.LOOM
-                            || event.getInventory().getType() == InventoryType.SMOKER|| event.getInventory().getType() == InventoryType.ENDER_CHEST|| event.getInventory().getType() == InventoryType.STONECUTTER|| event.getInventory().getType() == InventoryType.SHULKER_BOX|| event.getInventory().getType() == InventoryType.SMITHING|| event.getInventory().getType() == InventoryType.GRINDSTONE|| event.getInventory().getType() == InventoryType.FURNACE|| event.getInventory().getType() == InventoryType.ENCHANTING|| event.getInventory().getType() == InventoryType.HOPPER|| event.getInventory().getType() == InventoryType.DROPPER|| event.getInventory().getType() == InventoryType.DISPENSER
-                    ) {
-                        if (event.getRawSlot() > 26) {
-                            event.setCancelled(true);
-                            player.damage(4);
-                            player.sendMessage("§cYou are not allowed to do that!");
+                if (event.getCurrentItem() != null) {
+                    if ( event.getCurrentItem().getType() == Material.FIREWORK_STAR ||event.getCurrentItem().getType() == Material.NETHERITE_SWORD && event.getCurrentItem().getItemMeta().hasLore()) {
+                        if (top.getType() == InventoryType.CHEST  || event.getInventory().getType() == InventoryType.ANVIL|| event.getInventory().getType() == InventoryType.BARREL|| event.getInventory().getType() == InventoryType.BEACON|| event.getInventory().getType() == InventoryType.BLAST_FURNACE|| event.getInventory().getType() == InventoryType.BREWING|| event.getInventory().getType() == InventoryType.CARTOGRAPHY|| event.getInventory().getType() == InventoryType.LOOM
+                                || event.getInventory().getType() == InventoryType.SMOKER|| event.getInventory().getType() == InventoryType.ENDER_CHEST|| event.getInventory().getType() == InventoryType.STONECUTTER|| event.getInventory().getType() == InventoryType.SHULKER_BOX|| event.getInventory().getType() == InventoryType.SMITHING|| event.getInventory().getType() == InventoryType.GRINDSTONE|| event.getInventory().getType() == InventoryType.FURNACE|| event.getInventory().getType() == InventoryType.ENCHANTING|| event.getInventory().getType() == InventoryType.HOPPER|| event.getInventory().getType() == InventoryType.DROPPER|| event.getInventory().getType() == InventoryType.DISPENSER
+                        ) {
+                            if (event.getRawSlot() > 26) {
+                                event.setCancelled(true);
+                                player.damage(4);
+                                player.sendMessage("§cYou are not allowed to do that!");
+                            }
                         }
                     }
                 }
