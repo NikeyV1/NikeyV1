@@ -197,8 +197,8 @@ public class Player implements Listener {
     @EventHandler
     public void onEnchantItem(EnchantItemEvent event) {
         Random rand = new Random();
-        int nextInt = rand.nextInt(25);
-        if (nextInt == 20){
+        int nextInt = rand.nextInt(20);
+        if (nextInt == 15){
             org.bukkit.entity.Player p = event.getEnchanter();
             ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
             ItemMeta meta = essence.getItemMeta();
@@ -384,7 +384,7 @@ public class Player implements Listener {
                                 } else if (num == 3 || num == 4 || num == 5) {
                                     TimerBuild timerBuild = new TimerBuild();
                                     if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
-                                        if (p.getLevel() > 20 || p.getGameMode() == GameMode.CREATIVE) {
+                                        if (p.getLevel() >= 20 || p.getGameMode() == GameMode.CREATIVE) {
                                             inventory.setItem(13, null);
                                             p.closeInventory();
                                             timerBuild.setLevel(num + 1);
@@ -404,7 +404,7 @@ public class Player implements Listener {
                                 } else if (num == 6 || num == 7 || num == 8 || num == 9 || num == 10) {
                                     TimerBuild timerBuild = new TimerBuild();
                                     if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
-                                        if (p.getLevel() > 30 || p.getGameMode() == GameMode.CREATIVE) {
+                                        if (p.getLevel() >= 30 || p.getGameMode() == GameMode.CREATIVE) {
                                             inventory.setItem(13, null);
                                             p.closeInventory();
                                             timerBuild.setLevel(num + 1);
@@ -423,7 +423,7 @@ public class Player implements Listener {
                                 } else if (num == 11 || num == 12 || num == 13 || num == 14 || num == 15) {
                                     TimerBuild timerBuild = new TimerBuild();
                                     if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
-                                        if (p.getLevel() > 40 || p.getGameMode() == GameMode.CREATIVE) {
+                                        if (p.getLevel() >= 40 || p.getGameMode() == GameMode.CREATIVE) {
                                             inventory.setItem(13, null);
                                             p.closeInventory();
                                             timerBuild.setLevel(num + 1);
@@ -445,7 +445,7 @@ public class Player implements Listener {
                                     if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
                                         for (ItemStack soul : p.getInventory().getContents()) {
                                             if (soul != null && soul.getType() == Material.SOUL_LANTERN && soul.getItemMeta().hasLore()) {
-                                                if (p.getLevel() > 50 || p.getGameMode() == GameMode.CREATIVE) {
+                                                if (p.getLevel() >= 50 || p.getGameMode() == GameMode.CREATIVE) {
                                                     inventory.setItem(13, null);
                                                     p.closeInventory();
                                                     timerBuild.setLevel(num + 1);
@@ -478,7 +478,7 @@ public class Player implements Listener {
                                         // Durchlaufe das Inventar des Spielers und entferne die Soul of Strenght
                                         for (ItemStack soul : p.getInventory().getContents()) {
                                             if (soul != null && soul.getType() == Material.SOUL_LANTERN && soul.getItemMeta().hasLore()) {
-                                                if (p.getLevel() > 100 || p.getGameMode() == GameMode.CREATIVE) {
+                                                if (p.getLevel() >= 100 || p.getGameMode() == GameMode.CREATIVE) {
                                                     inventory.setItem(13, null);
                                                     p.closeInventory();
                                                     timerBuild.setLevel(num + 1);

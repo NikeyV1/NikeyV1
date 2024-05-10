@@ -30,7 +30,11 @@ public class Items {
         lore.add("§7A §3Soul §7that contains the §cStrenght §7of 1000 Players");
         meta.setLore(lore);
         soul.setItemMeta(meta);
-        player.getInventory().addItem(soul);
+        if (player.getInventory().firstEmpty() != -1) {
+            player.getInventory().addItem(soul);
+        }else {
+            player.getWorld().dropItem(player.getLocation(),soul);
+        }
         
     }
     public static void Soulrecepie(){
@@ -74,7 +78,11 @@ public class Items {
         lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
         metaFw.setLore(lore);
         lavastein.setItemMeta(metaFw);
-        player.getInventory().addItem(lavastein);
+        if (player.getInventory().firstEmpty() != -1) {
+            player.getInventory().addItem(lavastein);
+        }else {
+            player.getInventory().setItemInOffHand(lavastein);
+        }
     }
     public static void Electrostone(Player player , Integer level){
         ItemStack elektrostein = new ItemStack(Material.FIREWORK_STAR);
@@ -90,7 +98,11 @@ public class Items {
         lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
         metaFw.setLore(lore);
         elektrostein.setItemMeta(metaFw);
-        player.getInventory().addItem(elektrostein);
+        if (player.getInventory().firstEmpty() != -1) {
+            player.getInventory().addItem(elektrostein);
+        }else {
+            player.getInventory().setItemInOffHand(elektrostein);
+        }
     }
     public static void Waterstone(Player player , Integer level){
         ItemStack waterstone = new ItemStack(Material.FIREWORK_STAR);
@@ -106,7 +118,11 @@ public class Items {
         lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
         metaFw.setLore(lore);
         waterstone.setItemMeta(metaFw);
-        player.getInventory().addItem(waterstone);
+        if (player.getInventory().firstEmpty() != -1) {
+            player.getInventory().addItem(waterstone);
+        }else {
+            player.getInventory().setItemInOffHand(waterstone);
+        }
     }
     public static void Frozenstone(Player player , Integer level){
         ItemStack frozenstone = new ItemStack(Material.FIREWORK_STAR);
@@ -122,7 +138,11 @@ public class Items {
         lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
         metaFw.setLore(lore);
         frozenstone.setItemMeta(metaFw);
-        player.getInventory().addItem(frozenstone);
+        if (player.getInventory().firstEmpty() != -1) {
+            player.getInventory().addItem(frozenstone);
+        }else {
+            player.getInventory().setItemInOffHand(frozenstone);
+        }
     }
     public static void Undeadstone(Player player , Integer level){
         ItemStack undeadstone = new ItemStack(Material.FIREWORK_STAR);
@@ -138,7 +158,11 @@ public class Items {
         lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
         metaFw.setLore(lore);
         undeadstone.setItemMeta(metaFw);
-        player.getInventory().addItem(undeadstone);
+        if (player.getInventory().firstEmpty() != -1) {
+            player.getInventory().addItem(undeadstone);
+        }else {
+            player.getInventory().setItemInOffHand(undeadstone);
+        }
     }
     public static void Holystone(Player player , Integer level){
         ItemStack holystone = new ItemStack(Material.FIREWORK_STAR);
@@ -154,7 +178,11 @@ public class Items {
         lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
         metaFw.setLore(lore);
         holystone.setItemMeta(metaFw);
-        player.getInventory().addItem(holystone);
+        if (player.getInventory().firstEmpty() != -1) {
+            player.getInventory().addItem(holystone);
+        }else {
+            player.getInventory().setItemInOffHand(holystone);
+        }
     }
 
     public static void switcher() {

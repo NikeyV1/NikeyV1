@@ -70,7 +70,6 @@ public class TimerBuild  {
                                 config.set(player.getName()+".time",false);
                                 NikeyV1.getPlugin().saveConfig();
                                 setRunning(false);
-                                cancel();
                                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent(ChatColor.RED+"Time is up!"));
                                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,2,1);
                                 new ServerScoreboard(player);
@@ -87,6 +86,7 @@ public class TimerBuild  {
                                 }else if (getStone(player).equalsIgnoreCase("Holy")){
                                     Items.Holystone(player,getLevel());
                                 }
+                                cancel();
                             }
                         }else {
                             System.out.println(player.getName()+" left while upgrading!");

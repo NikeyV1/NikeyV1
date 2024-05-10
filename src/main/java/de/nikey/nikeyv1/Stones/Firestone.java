@@ -99,8 +99,8 @@ public class Firestone implements Listener {
                                                         e.setVisualFire(true);
                                                         entity.damage(2.5);
                                                     }
-                                                }else if (entity instanceof Monster) {
-                                                    e.setVisualFire(true);
+                                                }else {
+                                                    entity.setFireTicks(20);
                                                     entity.damage(2.5);
                                                 }
                                             }
@@ -140,8 +140,8 @@ public class Firestone implements Listener {
                                                         e.setVisualFire(true);
                                                         entity.damage(2.5);
                                                     }
-                                                }else if (entity instanceof Monster) {
-                                                    e.setVisualFire(true);
+                                                }else{
+                                                    entity.setFireTicks(20);
                                                     entity.damage(2.5);
                                                 }
                                             }
@@ -181,8 +181,8 @@ public class Firestone implements Listener {
                                                         e.setVisualFire(true);
                                                         entity.damage(2.5);
                                                     }
-                                                }else if (entity instanceof Monster) {
-                                                    e.setVisualFire(true);
+                                                }else {
+                                                    entity.setFireTicks(20);
                                                     entity.damage(2.5);
                                                 }
                                             }
@@ -222,8 +222,8 @@ public class Firestone implements Listener {
                                                         e.setVisualFire(true);
                                                         entity.damage(2.5);
                                                     }
-                                                }else if (entity instanceof Monster) {
-                                                    e.setVisualFire(true);
+                                                }else{
+                                                    entity.setFireTicks(20);
                                                     entity.damage(2.5);
                                                 }
                                             }
@@ -263,8 +263,8 @@ public class Firestone implements Listener {
                                                         e.setVisualFire(true);
                                                         entity.damage(3);
                                                     }
-                                                }else if (entity instanceof Monster) {
-                                                    e.setVisualFire(true);
+                                                }else{
+                                                    entity.setFireTicks(20);
                                                     entity.damage(3);
                                                 }
                                             }

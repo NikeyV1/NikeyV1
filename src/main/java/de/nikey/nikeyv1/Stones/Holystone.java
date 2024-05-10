@@ -1,6 +1,7 @@
 package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
+import de.nikey.nikeyv1.Util.HelpUtil;
 import de.slikey.effectlib.effect.CircleEffect;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
@@ -261,18 +262,21 @@ public class Holystone implements Listener {
                             p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
                             for (Entity e : p.getNearbyEntities(20,20,20)){
                                 if (e instanceof Player) {
-                                    Player player =(Player) e;
-                                    double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                    armor = armor*1.9;
-                                    int players = p.getNearbyEntities(20, 20, 20).size();
-                                    if (players == 1){
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                                    } else if (players  == 2 || players == 3 || players == 4) {
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
-                                    }else {
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                    if (!playersInSameTeam.contains(e)) {
+                                        Player player =(Player) e;
+                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                        armor = armor*1.9;
+                                        int players = p.getNearbyEntities(20, 20, 20).size();
+                                        if (players == 1){
+                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                        } else if (players  == 2 || players == 3 || players == 4) {
+                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                        }else {
+                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                        }
+                                        player.damage(armor+5,p);
                                     }
-                                    player.damage(armor+5,p);
                                 }
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
@@ -298,18 +302,21 @@ public class Holystone implements Listener {
                             p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
                             for (Entity e : p.getNearbyEntities(25,25,25)){
                                 if (e instanceof Player) {
-                                    Player player =(Player) e;
-                                    double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                    armor = armor*1.9;
-                                    int players = p.getNearbyEntities(25, 25, 25).size();
-                                    if (players == 1){
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                                    } else if (players  == 2 || players == 3 || players == 4) {
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
-                                    }else {
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                    if (!playersInSameTeam.contains(e)) {
+                                        Player player =(Player) e;
+                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                        armor = armor*1.9;
+                                        int players = p.getNearbyEntities(25, 25, 25).size();
+                                        if (players == 1){
+                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                        } else if (players  == 2 || players == 3 || players == 4) {
+                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                        }else {
+                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                        }
+                                        player.damage(armor+5,p);
                                     }
-                                    player.damage(armor+5,p);
                                 }
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
@@ -335,18 +342,21 @@ public class Holystone implements Listener {
                             p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
                             for (Entity e : p.getNearbyEntities(25,25,25)){
                                 if (e instanceof Player) {
-                                    Player player =(Player) e;
-                                    double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                    armor = armor*1.9;
-                                    int players = p.getNearbyEntities(25, 25, 25).size();
-                                    if (players == 1){
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                                    } else if (players  == 2 || players == 3 || players == 4) {
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
-                                    }else {
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                    if (!playersInSameTeam.contains(e)) {
+                                        Player player =(Player) e;
+                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                        armor = armor*1.9;
+                                        int players = p.getNearbyEntities(25, 25, 25).size();
+                                        if (players == 1){
+                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                        } else if (players  == 2 || players == 3 || players == 4) {
+                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                        }else {
+                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                        }
+                                        player.damage(armor+10,p);
                                     }
-                                    player.damage(armor+10,p);
                                 }
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
@@ -372,18 +382,21 @@ public class Holystone implements Listener {
                             p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
                             for (Entity e : p.getNearbyEntities(25,25,25)){
                                 if (e instanceof Player) {
-                                    Player player =(Player) e;
-                                    double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                    armor = armor*2.2;
-                                    int players = p.getNearbyEntities(25, 25, 25).size();
-                                    if (players == 1){
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                                    } else if (players  == 2 || players == 3 || players == 4) {
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
-                                    }else {
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                    if (!playersInSameTeam.contains(e)) {
+                                        Player player =(Player) e;
+                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                        armor = armor*2.2;
+                                        int players = p.getNearbyEntities(25, 25, 25).size();
+                                        if (players == 1){
+                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                        } else if (players  == 2 || players == 3 || players == 4) {
+                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                        }else {
+                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                        }
+                                        player.damage(armor+10,p);
                                     }
-                                    player.damage(armor+10,p);
                                 }
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
@@ -409,18 +422,21 @@ public class Holystone implements Listener {
                             p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
                             for (Entity e : p.getNearbyEntities(25,25,25)){
                                 if (e instanceof Player) {
-                                    Player player =(Player) e;
-                                    double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                    armor = armor*2.2;
-                                    int players = p.getNearbyEntities(25, 25, 25).size();
-                                    if (players == 1){
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
-                                    } else if (players  == 2 || players == 3 || players == 4) {
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
-                                    }else {
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,3));
+                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                    if (!playersInSameTeam.contains(e)) {
+                                        Player player =(Player) e;
+                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                        armor = armor*2.2;
+                                        int players = p.getNearbyEntities(25, 25, 25).size();
+                                        if (players == 1){
+                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                        } else if (players  == 2 || players == 3 || players == 4) {
+                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                        }else {
+                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,3));
+                                        }
+                                        player.damage(armor+10,p);
                                     }
-                                    player.damage(armor+10,p);
                                 }
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;

@@ -32,6 +32,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -151,9 +152,17 @@ public class Waterstone implements Listener {
                                         return;
                                     }
                                     for (Entity e : location.getNearbyEntities(8,8,8)){
-                                        if (e == p){
-                                            if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
-                                        } else {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (e instanceof Player) {
+                                            Player player = (Player) e;
+                                            if (playersInSameTeam.contains(player)) {
+                                                if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
+                                            }
+
+                                            if (e == p){
+                                                if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
+                                            }
+                                        }else {
                                             if (e instanceof LivingEntity){
                                                 LivingEntity entity = (LivingEntity) e;
                                                 entity.damage(2);
@@ -181,9 +190,17 @@ public class Waterstone implements Listener {
                                         return;
                                     }
                                     for (Entity e : location.getNearbyEntities(10,8,10)){
-                                        if (e == p){
-                                            if (p.getHealth() < 18&& !p.isDead())p.setHealth(p.getHealth()+3);
-                                        } else {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (e instanceof Player) {
+                                            Player player = (Player) e;
+                                            if (playersInSameTeam.contains(player)) {
+                                                if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
+                                            }
+
+                                            if (e == p){
+                                                if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
+                                            }
+                                        }else {
                                             if (e instanceof LivingEntity){
                                                 LivingEntity entity = (LivingEntity) e;
                                                 entity.damage(2);
@@ -211,9 +228,14 @@ public class Waterstone implements Listener {
                                         return;
                                     }
                                     for (Entity e : location.getNearbyEntities(10,8,10)){
-                                        if (e == p){
-                                            if (p.getHealth() < 18&& !p.isDead())p.setHealth(p.getHealth()+3);
-                                        } else {
+
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (e instanceof Player) {
+                                            Player player = (Player) e;
+                                            if (playersInSameTeam.contains(player) || e == p) {
+                                                if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
+                                            }
+                                        }else {
                                             if (e instanceof LivingEntity){
                                                 LivingEntity entity = (LivingEntity) e;
                                                 entity.damage(4);
@@ -241,9 +263,14 @@ public class Waterstone implements Listener {
                                         return;
                                     }
                                     for (Entity e : location.getNearbyEntities(10,8,10)){
-                                        if (e == p){
-                                            if (p.getHealth() < 18&& !p.isDead())p.setHealth(p.getHealth()+4);
-                                        } else {
+
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (e instanceof Player) {
+                                            Player player = (Player) e;
+                                            if (playersInSameTeam.contains(player) || e == p) {
+                                                if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+4);
+                                            }
+                                        }else {
                                             if (e instanceof LivingEntity){
                                                 LivingEntity entity = (LivingEntity) e;
                                                 entity.damage(4);
@@ -271,10 +298,15 @@ public class Waterstone implements Listener {
                                         return;
                                     }
                                     for (Entity e : location.getNearbyEntities(10,8,10)){
-                                        if (e == p){
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
-                                            if (p.getHealth() < 18&& !p.isDead())p.setHealth(p.getHealth()+4);
-                                        } else {
+
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (e instanceof Player) {
+                                            Player player = (Player) e;
+                                            if (playersInSameTeam.contains(player) || e == p) {
+                                                player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
+                                                if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
+                                            }
+                                        }else {
                                             if (e instanceof LivingEntity){
                                                 LivingEntity entity = (LivingEntity) e;
                                                 entity.damage(4);

@@ -57,6 +57,7 @@ public class PowerBeacon implements Listener {
                             for (Player players : Bukkit.getOnlinePlayers()) {
                                 players.playSound(players.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1.5F, 1);
                             }
+                            player.playEffect(EntityEffect.TOTEM_RESURRECT);
                             event.setCancelled(true);
                         } else {
                             player.sendMessage("Der Spieler " + targetPlayer.getName() + " ist nicht gebannt.");
