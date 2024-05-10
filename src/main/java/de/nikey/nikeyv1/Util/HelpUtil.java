@@ -3,6 +3,7 @@ package de.nikey.nikeyv1.Util;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
+import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
@@ -129,13 +130,21 @@ public class HelpUtil {
         entity.setVelocity(boost);
     }
 
-    public static Set<OfflinePlayer> getTeamMembers(Player player) {
+    public static List<Player> getPlayersInSameTeam(Player player) {
+        List<Player> playersInSameTeam = new ArrayList<>();
+        Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+        Team playerTeam = scoreboard.getEntryTeam(player.getName());
 
-        Team team = player.getScoreboard().getPlayerTeam(player);
+        if (playerTeam != null) {
+            for (String entry : playerTeam.getEntries()) {
+                Player teamPlayer = Bukkit.getPlayer(entry);
+                if (teamPlayer != null) {
+                    playersInSameTeam.add(teamPlayer);
+                }
+            }
+        }
 
-        Set<OfflinePlayer> players = team.getPlayers();
-
-        return players;
+        return playersInSameTeam;
     }
 }
 

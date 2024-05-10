@@ -1,6 +1,7 @@
 package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
+import de.nikey.nikeyv1.Util.HelpUtil;
 import de.slikey.effectlib.effect.CylinderEffect;
 import de.slikey.effectlib.effect.ShieldEffect;
 import de.slikey.effectlib.effect.TornadoEffect;
@@ -23,6 +24,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -52,7 +54,14 @@ public class Electrostone implements Listener {
             if (e instanceof LivingEntity){
                 LivingEntity entity = (LivingEntity) e;
                 if (entity != p){
-                    entity.damage(10,lightningStrike);
+                    if (entity instanceof Player){
+                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                        if (!playersInSameTeam.contains(entity)) {
+                            entity.damage(10,lightningStrike);
+                        }
+                    }else {
+                        entity.damage(10,lightningStrike);
+                    }
                 }
             }
         }
@@ -79,8 +88,16 @@ public class Electrostone implements Listener {
             if (e instanceof LivingEntity){
                 LivingEntity entity = (LivingEntity) e;
                 if (entity != p){
-                    entity.damage(10,lightningStrike);
-                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
+                    if (entity instanceof Player){
+                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                        if (!playersInSameTeam.contains(entity)) {
+                            entity.damage(10,lightningStrike);
+                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
+                        }
+                    }else {
+                        entity.damage(10,lightningStrike);
+                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
+                    }
                 }
             }
         }
@@ -107,8 +124,16 @@ public class Electrostone implements Listener {
             if (e instanceof LivingEntity){
                 LivingEntity entity = (LivingEntity) e;
                 if (entity != p){
-                    entity.damage(14,lightningStrike);
-                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
+                    if (entity instanceof Player){
+                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                        if (!playersInSameTeam.contains(entity)) {
+                            entity.damage(14,lightningStrike);
+                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
+                        }
+                    }else {
+                        entity.damage(14,lightningStrike);
+                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
+                    }
                 }
             }
         }
@@ -135,8 +160,16 @@ public class Electrostone implements Listener {
             if (e instanceof LivingEntity){
                 LivingEntity entity = (LivingEntity) e;
                 if (entity != p){
-                    entity.damage(14,lightningStrike);
-                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
+                    if (entity instanceof Player){
+                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                        if (!playersInSameTeam.contains(entity)) {
+                            entity.damage(14,lightningStrike);
+                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
+                        }
+                    }else {
+                        entity.damage(14,lightningStrike);
+                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
+                    }
                 }
             }
         }
@@ -315,10 +348,17 @@ public class Electrostone implements Listener {
                         for (Entity e : entity.getNearbyEntities(1,1,1)){
                             if (e != p){
                                 e.getWorld().strikeLightningEffect(e.getLocation());
-                                stunned.add(e);
-                                if (e instanceof LivingEntity) {
+                                if (e instanceof Player){
+                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                    if (!playersInSameTeam.contains(e)) {
+                                        Player player = (Player) e;
+                                        player.damage(8,p);
+                                        stunned.add(player);
+                                    }
+                                }else {
                                     LivingEntity livingEntity = (LivingEntity) e;
                                     livingEntity.damage(8,p);
+                                    stunned.add(livingEntity);
                                 }
                             }
                         }
@@ -350,10 +390,17 @@ public class Electrostone implements Listener {
                         for (Entity e : entity.getNearbyEntities(2,2,2)){
                             if (e != p){
                                 e.getWorld().strikeLightningEffect(e.getLocation());
-                                stunned.add(e);
-                                if (e instanceof LivingEntity) {
+                                if (e instanceof Player){
+                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                    if (!playersInSameTeam.contains(e)) {
+                                        Player player = (Player) e;
+                                        player.damage(8,p);
+                                        stunned.add(player);
+                                    }
+                                }else {
                                     LivingEntity livingEntity = (LivingEntity) e;
                                     livingEntity.damage(8,p);
+                                    stunned.add(livingEntity);
                                 }
                             }
                         }
@@ -385,7 +432,18 @@ public class Electrostone implements Listener {
                         for (Entity e : entity.getNearbyEntities(2,2,2)){
                             if (e != p){
                                 e.getWorld().strikeLightningEffect(e.getLocation());
-                                stunned.add(e);
+                                if (e instanceof Player){
+                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                    if (!playersInSameTeam.contains(e)) {
+                                        Player player = (Player) e;
+                                        player.damage(8,p);
+                                        stunned.add(player);
+                                    }
+                                }else {
+                                    LivingEntity livingEntity = (LivingEntity) e;
+                                    livingEntity.damage(8,p);
+                                    stunned.add(livingEntity);
+                                }
                             }
                         }
                     }
@@ -461,9 +519,16 @@ public class Electrostone implements Listener {
                                 if (entity instanceof LivingEntity) {
                                     LivingEntity target = (LivingEntity) entity;
                                     if (target != p) {
-
-                                        target.damage(3);
-                                        target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
+                                        if (target instanceof Player){
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                            if (!playersInSameTeam.contains(target)) {
+                                                target.damage(3);
+                                                target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
+                                            }
+                                        }else {
+                                            target.damage(3);
+                                            target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
+                                        }
                                     }
                                 }
                             }
@@ -506,8 +571,16 @@ public class Electrostone implements Listener {
                                 if (entity instanceof LivingEntity) {
                                     LivingEntity target = (LivingEntity) entity;
                                     if (target != p) {
-                                        target.damage(6);
-                                        target.setVelocity(target.getLocation().getDirection().multiply(-2));
+                                        if (target instanceof Player){
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                            if (!playersInSameTeam.contains(target)) {
+                                                target.damage(6);
+                                                target.setVelocity(target.getLocation().getDirection().multiply(-2));
+                                            }
+                                        }else {
+                                            target.damage(6);
+                                            target.setVelocity(target.getLocation().getDirection().multiply(-2));
+                                        }
                                     }
                                 }
                             }
