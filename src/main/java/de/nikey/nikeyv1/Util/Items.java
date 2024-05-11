@@ -320,4 +320,49 @@ public class Items {
         beacon.setItemMeta(bmeta);
         player.getInventory().addItem(beacon);
     }
+
+    public static void GiveUpgradeToken(Player player){
+        ItemStack beacon = new ItemStack(Material.PRISMARINE_SHARD);
+        ItemMeta bmeta = beacon.getItemMeta();
+        bmeta.setDisplayName(ChatColor.of("#D0B4F4")+"Upgrade Token");
+        beacon.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        bmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        ArrayList<String> plore = new ArrayList<>();
+        plore.add("§6The strenght core");
+        bmeta.setLore(plore);
+        beacon.setItemMeta(bmeta);
+        player.getInventory().addItem(beacon);
+    }
+
+    public static void UpgradeToken(){
+        ItemStack beacon = new ItemStack(Material.PRISMARINE_SHARD);
+        ItemMeta bmeta = beacon.getItemMeta();
+        bmeta.setDisplayName(ChatColor.of("#D0B4F4")+"Upgrade Token");
+        beacon.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        bmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        ArrayList<String> plore = new ArrayList<>();
+        plore.add("§6The strenght core");
+        bmeta.setLore(plore);
+        beacon.setItemMeta(bmeta);
+
+        ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
+        ItemMeta smeta = essence.getItemMeta();
+        smeta.setDisplayName("§dEnchanted Essence");
+        essence.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        smeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        essence.setItemMeta(smeta);
+
+        ShapedRecipe recipe = new ShapedRecipe(beacon);
+        recipe.shape("ACE","GSI","LQR");
+        recipe.setIngredient('A',Material.AMETHYST_SHARD);
+        recipe.setIngredient('C',Material.COPPER_INGOT);
+        recipe.setIngredient('E',Material.EMERALD);
+        recipe.setIngredient('G',Material.GOLD_INGOT);
+        recipe.setIngredient('I',Material.IRON_INGOT);
+        recipe.setIngredient('L',Material.LAPIS_LAZULI);
+        recipe.setIngredient('Q',Material.QUARTZ);
+        recipe.setIngredient('R',Material.REDSTONE);
+        recipe.setIngredient('S', new RecipeChoice.ExactChoice(essence));
+        NikeyV1.getPlugin().getServer().addRecipe(recipe);
+    }
 }

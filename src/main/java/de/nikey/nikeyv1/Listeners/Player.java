@@ -384,60 +384,93 @@ public class Player implements Listener {
                                 } else if (num == 3 || num == 4 || num == 5) {
                                     TimerBuild timerBuild = new TimerBuild();
                                     if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
-                                        if (p.getLevel() >= 20 || p.getGameMode() == GameMode.CREATIVE) {
-                                            inventory.setItem(13, null);
-                                            p.closeInventory();
-                                            timerBuild.setLevel(num + 1);
-                                            timerBuild.setStopTime(60 * 20);
-                                            timerBuild.setTime(1);
-                                            timerBuild.start(p);
-                                            config.set(p.getName() + ".level", num + 1);
-                                            NikeyV1.getPlugin().saveConfig();
-                                            if (p.getGameMode() != GameMode.CREATIVE) {
-                                                p.setLevel(p.getLevel() - 20);
+                                        for (ItemStack soul : p.getInventory().getContents()) {
+                                            if (soul != null && soul.getType() == Material.PRISMARINE_SHARD && soul.getItemMeta().hasLore()) {
+                                                if (p.getLevel() >= 20 || p.getGameMode() == GameMode.CREATIVE) {
+                                                    inventory.setItem(13, null);
+                                                    p.closeInventory();
+                                                    timerBuild.setLevel(num + 1);
+                                                    timerBuild.setStopTime(60 * 20);
+                                                    timerBuild.setTime(1);
+                                                    timerBuild.start(p);
+                                                    config.set(p.getName() + ".level", num + 1);
+                                                    NikeyV1.getPlugin().saveConfig();
+                                                    if (p.getGameMode() != GameMode.CREATIVE) {
+                                                        p.setLevel(p.getLevel() - 20);
+                                                    }
+                                                    p.sendMessage("§aUpgrading!");
+                                                    if (soul.getAmount() >= amountToTax){
+                                                        soul.setAmount(soul.getAmount() - 1);
+                                                        break;
+                                                    }else {
+                                                        p.getInventory().remove(soul);
+                                                        break;
+                                                    }
+                                                } else {
+                                                    p.sendMessage("You dont have 20 levels!");
+                                                }
                                             }
-                                            p.sendMessage("§aUpgrading!");
-                                        } else {
-                                            p.sendMessage("You dont have 20 levels!");
                                         }
                                     }
                                 } else if (num == 6 || num == 7 || num == 8 || num == 9 || num == 10) {
                                     TimerBuild timerBuild = new TimerBuild();
                                     if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
-                                        if (p.getLevel() >= 30 || p.getGameMode() == GameMode.CREATIVE) {
-                                            inventory.setItem(13, null);
-                                            p.closeInventory();
-                                            timerBuild.setLevel(num + 1);
-                                            timerBuild.setStopTime(60 * 30);
-                                            timerBuild.setTime(1);
-                                            timerBuild.start(p);
-                                            config.set(p.getName() + ".level", num + 1);
-                                            NikeyV1.getPlugin().saveConfig();
-                                            if (p.getGameMode() != GameMode.CREATIVE)
-                                                p.setLevel(p.getLevel() - 30);
-                                            p.sendMessage("§aUpgrading!");
-                                        } else {
-                                            p.sendMessage("You dont have 30 levels!");
+                                        for (ItemStack soul : p.getInventory().getContents()) {
+                                            if (soul != null && soul.getType() == Material.PRISMARINE_SHARD && soul.getItemMeta().hasLore()) {
+                                                if (p.getLevel() >= 30 || p.getGameMode() == GameMode.CREATIVE) {
+                                                    inventory.setItem(13, null);
+                                                    p.closeInventory();
+                                                    timerBuild.setLevel(num + 1);
+                                                    timerBuild.setStopTime(60 * 30);
+                                                    timerBuild.setTime(1);
+                                                    timerBuild.start(p);
+                                                    config.set(p.getName() + ".level", num + 1);
+                                                    NikeyV1.getPlugin().saveConfig();
+                                                    if (p.getGameMode() != GameMode.CREATIVE)
+                                                        p.setLevel(p.getLevel() - 30);
+                                                    p.sendMessage("§aUpgrading!");
+                                                    if (soul.getAmount() >= amountToTax){
+                                                        soul.setAmount(soul.getAmount() - 1);
+                                                        break;
+                                                    }else {
+                                                        p.getInventory().remove(soul);
+                                                        break;
+                                                    }
+                                                } else {
+                                                    p.sendMessage("You dont have 30 levels!");
+                                                }
+                                            }
                                         }
                                     }
                                 } else if (num == 11 || num == 12 || num == 13 || num == 14 || num == 15) {
                                     TimerBuild timerBuild = new TimerBuild();
                                     if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
-                                        if (p.getLevel() >= 40 || p.getGameMode() == GameMode.CREATIVE) {
-                                            inventory.setItem(13, null);
-                                            p.closeInventory();
-                                            timerBuild.setLevel(num + 1);
-                                            timerBuild.setStopTime(60 * 40);
-                                            timerBuild.setTime(1);
-                                            timerBuild.start(p);
-                                            config.set(p.getName() + ".level", num + 1);
-                                            NikeyV1.getPlugin().saveConfig();
-                                            if (p.getGameMode() != GameMode.CREATIVE) {
-                                                p.setLevel(p.getLevel() - 40);
+                                        for (ItemStack soul : p.getInventory().getContents()) {
+                                            if (soul != null && soul.getType() == Material.PRISMARINE_SHARD && soul.getItemMeta().hasLore()) {
+                                                if (p.getLevel() >= 40 || p.getGameMode() == GameMode.CREATIVE) {
+                                                    inventory.setItem(13, null);
+                                                    p.closeInventory();
+                                                    timerBuild.setLevel(num + 1);
+                                                    timerBuild.setStopTime(60 * 40);
+                                                    timerBuild.setTime(1);
+                                                    timerBuild.start(p);
+                                                    config.set(p.getName() + ".level", num + 1);
+                                                    NikeyV1.getPlugin().saveConfig();
+                                                    if (p.getGameMode() != GameMode.CREATIVE) {
+                                                        p.setLevel(p.getLevel() - 40);
+                                                    }
+                                                    p.sendMessage("§aUpgrading!");
+                                                    if (soul.getAmount() >= amountToTax){
+                                                        soul.setAmount(soul.getAmount() - 1);
+                                                        break;
+                                                    }else {
+                                                        p.getInventory().remove(soul);
+                                                        break;
+                                                    }
+                                                } else {
+                                                    p.sendMessage("You dont have 40 levels!");
+                                                }
                                             }
-                                            p.sendMessage("§aUpgrading!");
-                                        } else {
-                                            p.sendMessage("You dont have 40 levels!");
                                         }
                                     }
                                 } else if (num == 16 || num == 17 || num == 18 || num == 19) {
