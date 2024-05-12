@@ -219,19 +219,24 @@ public class Player implements Listener {
             FileConfiguration config = NikeyV1.getPlugin().getConfig();
             String stone = config.getString(player.getName() + ".stone");
             int level = config.getInt(player.getName() + ".level");
-            if (stone.equalsIgnoreCase("Fire")) {
-                Items.Firestone(player,level);
-            }else if (stone.equalsIgnoreCase("Electric")){
-                Items.Electrostone(player,level);
-            }else if (stone.equalsIgnoreCase("Water")){
-                Items.Waterstone(player,level);
-            }else if (stone.equalsIgnoreCase("Frozen")){
-                Items.Frozenstone(player,level);
-            }else if (stone.equalsIgnoreCase("Undead")){
-                Items.Undeadstone(player,level);
-            }else if (stone.equalsIgnoreCase("Holy")){
-                Items.Holystone(player,level);
+            boolean o = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".time");
+            if (!o) {
+                if (stone.equalsIgnoreCase("Fire")) {
+                    Items.Firestone(player,level);
+                }else if (stone.equalsIgnoreCase("Electric")){
+                    Items.Electrostone(player,level);
+                }else if (stone.equalsIgnoreCase("Water")){
+                    Items.Waterstone(player,level);
+                }else if (stone.equalsIgnoreCase("Frozen")){
+                    Items.Frozenstone(player,level);
+                }else if (stone.equalsIgnoreCase("Undead")){
+                    Items.Undeadstone(player,level);
+                }else if (stone.equalsIgnoreCase("Holy")){
+                    Items.Holystone(player,level);
+                }
             }
+
+
             new BukkitRunnable() {
                 @Override
                 public void run() {

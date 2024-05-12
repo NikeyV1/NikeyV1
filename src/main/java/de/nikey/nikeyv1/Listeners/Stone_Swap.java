@@ -22,9 +22,7 @@ public class Stone_Swap implements Listener {
         ItemStack mainHand = player.getInventory().getItemInMainHand();
         ItemStack offHand = player.getInventory().getItemInOffHand();
         if (event.getAction() == Action.RIGHT_CLICK_AIR) {
-            // Überprüfen, ob der Spieler Efficiency-Verzauberung auf dem Papier in der Haupt-Hand und Feuerwerksstern in der Neben-Hand hat
             if (mainHand.getType() == Material.PAPER && offHand.getType() == Material.FIREWORK_STAR && mainHand.getItemMeta().getDisplayName().equalsIgnoreCase("§3Stone Switcher") && offHand.getItemMeta().hasLore()) {
-                // Papier um eins reduzieren
                 if (mainHand.getAmount() > 1) {
                     mainHand.setAmount(mainHand.getAmount() - 1);
                 } else {

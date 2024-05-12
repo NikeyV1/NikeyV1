@@ -764,11 +764,13 @@ public class Undeadstone implements Listener {
 
             int level = NikeyV1.getPlugin().getConfig().getInt(p.getName() + ".level");
             if (stone.equalsIgnoreCase("Undead") && level >= 6) {
-                if (isUndead((LivingEntity) event.getDamager())) {
-                    double damageReductionPercentage = 7.5; // 7.5% damage reduction
-                    double damage = event.getDamage();
-                    double reducedDamage = damage - (damage * (damageReductionPercentage / 100));
-                    event.setDamage(reducedDamage);
+                if (event.getDamager() instanceof LivingEntity) {
+                    if (isUndead((LivingEntity) event.getDamager())) {
+                        double damageReductionPercentage = 7.5; // 7.5% damage reduction
+                        double damage = event.getDamage();
+                        double reducedDamage = damage - (damage * (damageReductionPercentage / 100));
+                        event.setDamage(reducedDamage);
+                    }
                 }
             }
         }
