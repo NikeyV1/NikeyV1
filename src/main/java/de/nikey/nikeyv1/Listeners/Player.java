@@ -413,7 +413,7 @@ public class Player implements Listener {
                                                 }
                                             }
                                         }
-                                    } else if (num == 6 || num == 7 || num == 8 || num == 9 || num == 10) {
+                                    } else if (num == 6 || num == 7 || num == 8 || num == 9) {
                                         TimerBuild timerBuild = new TimerBuild();
                                         if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
                                             for (ItemStack soul : p.getInventory().getContents()) {
@@ -443,7 +443,7 @@ public class Player implements Listener {
                                                 }
                                             }
                                         }
-                                    } else if (num == 11 || num == 12 || num == 13 || num == 14 || num == 15) {
+                                    } else if (num == 10 ||num == 11 || num == 12 || num == 13 || num == 14) {
                                         TimerBuild timerBuild = new TimerBuild();
                                         if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
                                             for (ItemStack soul : p.getInventory().getContents()) {
@@ -474,7 +474,7 @@ public class Player implements Listener {
                                                 }
                                             }
                                         }
-                                    } else if (num == 16 || num == 17 || num == 18 || num == 19) {
+                                    } else if (num == 15 ||  num == 16 || num == 17 || num == 18 || num == 19) {
                                         TimerBuild timerBuild = new TimerBuild();
                                         if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
                                             for (ItemStack soul : p.getInventory().getContents()) {
