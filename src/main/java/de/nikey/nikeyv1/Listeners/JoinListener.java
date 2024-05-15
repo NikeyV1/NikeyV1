@@ -57,7 +57,6 @@ public class JoinListener implements Listener {
                 config.set(p.getName()+".level",3);
                 NikeyV1.getPlugin().saveConfig();
             }
-
             config.set(p.getName()+".det","all");
             NikeyV1.getPlugin().saveConfig();
         }
