@@ -2,6 +2,7 @@ package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
+import de.nikey.nikeyv1.api.EntityTypeDamage;
 import de.slikey.effectlib.effect.CircleEffect;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
@@ -9,6 +10,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -243,6 +245,7 @@ public class Holystone implements Listener {
                     }            
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR){
+                String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
                 if (!p.isSneaking()) {
                     if (i == 15){
                         if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
@@ -261,26 +264,72 @@ public class Holystone implements Listener {
                             //Cooldown-Ability
                             p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
                             for (Entity e : p.getNearbyEntities(20,20,20)){
-                                if (e instanceof Player) {
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                    if (!playersInSameTeam.contains(e)) {
-                                        Player player =(Player) e;
-                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                        armor = armor*1.9;
-                                        int players = p.getNearbyEntities(20, 20, 20).size();
-                                        if (players == 1){
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                                        } else if (players  == 2 || players == 3 || players == 4) {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
-                                        }else {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+
+                                if (damageEntityType.equalsIgnoreCase("all")) {
+                                    if (e instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (!playersInSameTeam.contains(e)) {
+                                            Player player =(Player) e;
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*1.9;
+                                            int players = p.getNearbyEntities(20, 20, 20).size();
+                                            if (players == 1){
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                            } else if (players  == 2 || players == 3 || players == 4) {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                            }else {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                            }
+                                            player.damage(armor+5,p);
                                         }
-                                        player.damage(armor+5,p);
+                                    }else if (e instanceof LivingEntity){
+                                        LivingEntity entity = (LivingEntity) e;
+                                        entity.damage(12,p);
                                     }
-                                }
-                                if (e instanceof LivingEntity){
-                                    LivingEntity entity = (LivingEntity) e;
-                                    entity.damage(12,p);
+                                }else if (damageEntityType.equalsIgnoreCase("players")) {
+                                    if (e instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (!playersInSameTeam.contains(e)) {
+                                            Player player =(Player) e;
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*1.9;
+                                            int players = p.getNearbyEntities(20, 20, 20).size();
+                                            if (players == 1){
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                            } else if (players  == 2 || players == 3 || players == 4) {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                            }else {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                            }
+                                            player.damage(armor+5,p);
+                                        }
+                                    }
+                                }else if (damageEntityType.equalsIgnoreCase("monsters")) {
+                                    if (e instanceof Monster){
+                                        LivingEntity entity = (LivingEntity) e;
+                                        entity.damage(12,p);
+                                    }
+                                }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
+                                    if (e instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (!playersInSameTeam.contains(e)) {
+                                            Player player =(Player) e;
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*1.9;
+                                            int players = p.getNearbyEntities(20, 20, 20).size();
+                                            if (players == 1){
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                            } else if (players  == 2 || players == 3 || players == 4) {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                            }else {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                            }
+                                            player.damage(armor+5,p);
+                                        }
+                                    }else if (e instanceof Monster){
+                                        LivingEntity entity = (LivingEntity) e;
+                                        entity.damage(12,p);
+                                    }
                                 }
                             }
                         }
@@ -301,26 +350,72 @@ public class Holystone implements Listener {
                             //Cooldown-Ability
                             p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
                             for (Entity e : p.getNearbyEntities(25,25,25)){
-                                if (e instanceof Player) {
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                    if (!playersInSameTeam.contains(e)) {
-                                        Player player =(Player) e;
-                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                        armor = armor*1.9;
-                                        int players = p.getNearbyEntities(25, 25, 25).size();
-                                        if (players == 1){
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                                        } else if (players  == 2 || players == 3 || players == 4) {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
-                                        }else {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+
+                                if (damageEntityType.equalsIgnoreCase("all")) {
+                                    if (e instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (!playersInSameTeam.contains(e)) {
+                                            Player player =(Player) e;
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*1.9;
+                                            int players = p.getNearbyEntities(25, 25, 25).size();
+                                            if (players == 1){
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                            } else if (players  == 2 || players == 3 || players == 4) {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                            }else {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                            }
+                                            player.damage(armor+5,p);
                                         }
-                                        player.damage(armor+5,p);
+                                    }else if (e instanceof LivingEntity){
+                                        LivingEntity entity = (LivingEntity) e;
+                                        entity.damage(12,p);
                                     }
-                                }
-                                if (e instanceof LivingEntity){
-                                    LivingEntity entity = (LivingEntity) e;
-                                    entity.damage(12,p);
+                                }else if (damageEntityType.equalsIgnoreCase("players")) {
+                                    if (e instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (!playersInSameTeam.contains(e)) {
+                                            Player player =(Player) e;
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*1.9;
+                                            int players = p.getNearbyEntities(25, 25, 25).size();
+                                            if (players == 1){
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                            } else if (players  == 2 || players == 3 || players == 4) {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                            }else {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                            }
+                                            player.damage(armor+5,p);
+                                        }
+                                    }
+                                }else if (damageEntityType.equalsIgnoreCase("monsters")) {
+                                    if (e instanceof Monster){
+                                        LivingEntity entity = (LivingEntity) e;
+                                        entity.damage(12,p);
+                                    }
+                                }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
+                                    if (e instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (!playersInSameTeam.contains(e)) {
+                                            Player player =(Player) e;
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*1.9;
+                                            int players = p.getNearbyEntities(25, 25, 25).size();
+                                            if (players == 1){
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                            } else if (players  == 2 || players == 3 || players == 4) {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                            }else {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                            }
+                                            player.damage(armor+5,p);
+                                        }
+                                    }else if (e instanceof Monster){
+                                        LivingEntity entity = (LivingEntity) e;
+                                        entity.damage(12,p);
+                                    }
                                 }
                             }
                         }
@@ -341,26 +436,72 @@ public class Holystone implements Listener {
                             //Cooldown-Ability
                             p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
                             for (Entity e : p.getNearbyEntities(25,25,25)){
-                                if (e instanceof Player) {
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                    if (!playersInSameTeam.contains(e)) {
-                                        Player player =(Player) e;
-                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                        armor = armor*1.9;
-                                        int players = p.getNearbyEntities(25, 25, 25).size();
-                                        if (players == 1){
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                                        } else if (players  == 2 || players == 3 || players == 4) {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
-                                        }else {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+
+                                if (damageEntityType.equalsIgnoreCase("all")) {
+                                    if (e instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (!playersInSameTeam.contains(e)) {
+                                            Player player =(Player) e;
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*1.9;
+                                            int players = p.getNearbyEntities(25, 25, 25).size();
+                                            if (players == 1){
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                            } else if (players  == 2 || players == 3 || players == 4) {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                            }else {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                            }
+                                            player.damage(armor+10,p);
                                         }
-                                        player.damage(armor+10,p);
+                                    }else if (e instanceof LivingEntity){
+                                        LivingEntity entity = (LivingEntity) e;
+                                        entity.damage(15,p);
                                     }
-                                }
-                                if (e instanceof LivingEntity){
-                                    LivingEntity entity = (LivingEntity) e;
-                                    entity.damage(15,p);
+                                }else if (damageEntityType.equalsIgnoreCase("players")) {
+                                    if (e instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (!playersInSameTeam.contains(e)) {
+                                            Player player =(Player) e;
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*1.9;
+                                            int players = p.getNearbyEntities(25, 25, 25).size();
+                                            if (players == 1){
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                            } else if (players  == 2 || players == 3 || players == 4) {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                            }else {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                            }
+                                            player.damage(armor+10,p);
+                                        }
+                                    }
+                                }else if (damageEntityType.equalsIgnoreCase("monsters")) {
+                                    if (e instanceof Monster){
+                                        LivingEntity entity = (LivingEntity) e;
+                                        entity.damage(15,p);
+                                    }
+                                }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
+                                    if (e instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (!playersInSameTeam.contains(e)) {
+                                            Player player =(Player) e;
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*1.9;
+                                            int players = p.getNearbyEntities(25, 25, 25).size();
+                                            if (players == 1){
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                            } else if (players  == 2 || players == 3 || players == 4) {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                            }else {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                            }
+                                            player.damage(armor+10,p);
+                                        }
+                                    }else if (e instanceof Monster){
+                                        LivingEntity entity = (LivingEntity) e;
+                                        entity.damage(15,p);
+                                    }
                                 }
                             }
                         }
@@ -381,26 +522,72 @@ public class Holystone implements Listener {
                             //Cooldown-Ability
                             p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
                             for (Entity e : p.getNearbyEntities(25,25,25)){
-                                if (e instanceof Player) {
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                    if (!playersInSameTeam.contains(e)) {
-                                        Player player =(Player) e;
-                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                        armor = armor*2.2;
-                                        int players = p.getNearbyEntities(25, 25, 25).size();
-                                        if (players == 1){
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                                        } else if (players  == 2 || players == 3 || players == 4) {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
-                                        }else {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+
+                                if (damageEntityType.equalsIgnoreCase("all")) {
+                                    if (e instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (!playersInSameTeam.contains(e)) {
+                                            Player player =(Player) e;
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*2.2;
+                                            int players = p.getNearbyEntities(25, 25, 25).size();
+                                            if (players == 1){
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                            } else if (players  == 2 || players == 3 || players == 4) {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                            }else {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                            }
+                                            player.damage(armor+10,p);
                                         }
-                                        player.damage(armor+10,p);
+                                    }else if (e instanceof LivingEntity){
+                                        LivingEntity entity = (LivingEntity) e;
+                                        entity.damage(15,p);
                                     }
-                                }
-                                if (e instanceof LivingEntity){
-                                    LivingEntity entity = (LivingEntity) e;
-                                    entity.damage(15,p);
+                                }else if (damageEntityType.equalsIgnoreCase("players")) {
+                                    if (e instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (!playersInSameTeam.contains(e)) {
+                                            Player player =(Player) e;
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*2.2;
+                                            int players = p.getNearbyEntities(25, 25, 25).size();
+                                            if (players == 1){
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                            } else if (players  == 2 || players == 3 || players == 4) {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                            }else {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                            }
+                                            player.damage(armor+10,p);
+                                        }
+                                    }
+                                }else if (damageEntityType.equalsIgnoreCase("monsters")) {
+                                    if (e instanceof Monster){
+                                        LivingEntity entity = (LivingEntity) e;
+                                        entity.damage(15,p);
+                                    }
+                                }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
+                                    if (e instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (!playersInSameTeam.contains(e)) {
+                                            Player player =(Player) e;
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*2.2;
+                                            int players = p.getNearbyEntities(25, 25, 25).size();
+                                            if (players == 1){
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
+                                            } else if (players  == 2 || players == 3 || players == 4) {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                            }else {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                            }
+                                            player.damage(armor+10,p);
+                                        }
+                                    }else if (e instanceof Monster){
+                                        LivingEntity entity = (LivingEntity) e;
+                                        entity.damage(15,p);
+                                    }
                                 }
                             }
                         }
@@ -421,26 +608,72 @@ public class Holystone implements Listener {
                             //Cooldown-Ability
                             p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
                             for (Entity e : p.getNearbyEntities(25,25,25)){
-                                if (e instanceof Player) {
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                    if (!playersInSameTeam.contains(e)) {
-                                        Player player =(Player) e;
-                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                        armor = armor*2.2;
-                                        int players = p.getNearbyEntities(25, 25, 25).size();
-                                        if (players == 1){
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
-                                        } else if (players  == 2 || players == 3 || players == 4) {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
-                                        }else {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,3));
+
+                                if (damageEntityType.equalsIgnoreCase("all")) {
+                                    if (e instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (!playersInSameTeam.contains(e)) {
+                                            Player player =(Player) e;
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*2.2;
+                                            int players = p.getNearbyEntities(25, 25, 25).size();
+                                            if (players == 1){
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                            } else if (players  == 2 || players == 3 || players == 4) {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                            }else {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,3));
+                                            }
+                                            player.damage(armor+10,p);
                                         }
-                                        player.damage(armor+10,p);
+                                    }else if (e instanceof LivingEntity){
+                                        LivingEntity entity = (LivingEntity) e;
+                                        entity.damage(15,p);
                                     }
-                                }
-                                if (e instanceof LivingEntity){
-                                    LivingEntity entity = (LivingEntity) e;
-                                    entity.damage(15,p);
+                                }else if (damageEntityType.equalsIgnoreCase("players")) {
+                                    if (e instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (!playersInSameTeam.contains(e)) {
+                                            Player player =(Player) e;
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*2.2;
+                                            int players = p.getNearbyEntities(25, 25, 25).size();
+                                            if (players == 1){
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                            } else if (players  == 2 || players == 3 || players == 4) {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                            }else {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,3));
+                                            }
+                                            player.damage(armor+10,p);
+                                        }
+                                    }
+                                }else if (damageEntityType.equalsIgnoreCase("monsters")) {
+                                    if (e instanceof Monster){
+                                        LivingEntity entity = (LivingEntity) e;
+                                        entity.damage(15,p);
+                                    }
+                                }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
+                                    if (e instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (!playersInSameTeam.contains(e)) {
+                                            Player player =(Player) e;
+                                            double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                            armor = armor*2.2;
+                                            int players = p.getNearbyEntities(25, 25, 25).size();
+                                            if (players == 1){
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
+                                            } else if (players  == 2 || players == 3 || players == 4) {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
+                                            }else {
+                                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,3));
+                                            }
+                                            player.damage(armor+10,p);
+                                        }
+                                    }else if (e instanceof Monster){
+                                        LivingEntity entity = (LivingEntity) e;
+                                        entity.damage(15,p);
+                                    }
                                 }
                             }
                         }
@@ -483,7 +716,7 @@ public class Holystone implements Listener {
             config.set(p.getName()+".level",i);
             NikeyV1.getPlugin().saveConfig();
             String stone = config.getString(p.getName() + ".stone");
-            if (i == 20 || i==21){
+            if (i == 20 || i == 21){
                 if (p.isSneaking()) {
                     if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
                         p.updateInventory();

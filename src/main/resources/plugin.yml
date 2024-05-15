@@ -14,3 +14,8 @@ commands:
   peffect:
     description: Plays a particle effect
     usage: </peffect [effect name]>
+  attack:
+    description: Allows you to set what entity-types are damaged with ability's
+    usage: </damageentitytype [Players,Monsters,Monsters-Players,All]>
+    aliases:
+      - det

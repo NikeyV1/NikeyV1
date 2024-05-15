@@ -2,6 +2,7 @@ package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
+import de.nikey.nikeyv1.api.EntityTypeDamage;
 import de.slikey.effectlib.effect.CylinderEffect;
 import de.slikey.effectlib.effect.ShieldEffect;
 import de.slikey.effectlib.effect.TornadoEffect;
@@ -54,13 +55,36 @@ public class Electrostone implements Listener {
             if (e instanceof LivingEntity){
                 LivingEntity entity = (LivingEntity) e;
                 if (entity != p){
-                    if (entity instanceof Player){
-                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                        if (!playersInSameTeam.contains(entity)) {
+                    String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
+                    if (damageEntityType.equalsIgnoreCase("all")) {
+                        if (entity instanceof Player){
+                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                            if (!playersInSameTeam.contains(entity)) {
+                                entity.damage(10,lightningStrike);
+                            }
+                        }else {
                             entity.damage(10,lightningStrike);
                         }
-                    }else {
-                        entity.damage(10,lightningStrike);
+                    }else if (damageEntityType.equalsIgnoreCase("players")) {
+                        if (entity instanceof Player){
+                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                            if (!playersInSameTeam.contains(entity)) {
+                                entity.damage(10,lightningStrike);
+                            }
+                        }
+                    }else if (damageEntityType.equalsIgnoreCase("monsters")) {
+                        if (e instanceof Monster) {
+                            entity.damage(10,lightningStrike);
+                        }
+                    }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
+                        if (entity instanceof Player){
+                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                            if (!playersInSameTeam.contains(entity)) {
+                                entity.damage(10,lightningStrike);
+                            }
+                        }else if (e instanceof Monster){
+                            entity.damage(10,lightningStrike);
+                        }
                     }
                 }
             }
@@ -88,15 +112,43 @@ public class Electrostone implements Listener {
             if (e instanceof LivingEntity){
                 LivingEntity entity = (LivingEntity) e;
                 if (entity != p){
-                    if (entity instanceof Player){
-                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                        if (!playersInSameTeam.contains(entity)) {
+
+                    String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
+                    if (damageEntityType.equalsIgnoreCase("all")) {
+                        if (entity instanceof Player){
+                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                            if (!playersInSameTeam.contains(entity)) {
+                                entity.damage(10,lightningStrike);
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
+                            }
+                        }else {
                             entity.damage(10,lightningStrike);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
-                    }else {
-                        entity.damage(10,lightningStrike);
-                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
+                    }else if (damageEntityType.equalsIgnoreCase("players")) {
+                        if (entity instanceof Player){
+                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                            if (!playersInSameTeam.contains(entity)) {
+                                entity.damage(10,lightningStrike);
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
+                            }
+                        }
+                    }else if (damageEntityType.equalsIgnoreCase("monsters")) {
+                        if (e instanceof Monster) {
+                            entity.damage(10,lightningStrike);
+                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
+                        }
+                    }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
+                        if (entity instanceof Player){
+                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                            if (!playersInSameTeam.contains(entity)) {
+                                entity.damage(10,lightningStrike);
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
+                            }
+                        }else if (entity instanceof Monster){
+                            entity.damage(10,lightningStrike);
+                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
+                        }
                     }
                 }
             }
@@ -124,15 +176,42 @@ public class Electrostone implements Listener {
             if (e instanceof LivingEntity){
                 LivingEntity entity = (LivingEntity) e;
                 if (entity != p){
-                    if (entity instanceof Player){
-                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                        if (!playersInSameTeam.contains(entity)) {
+                    String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
+                    if (damageEntityType.equalsIgnoreCase("all")) {
+                        if (entity instanceof Player){
+                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                            if (!playersInSameTeam.contains(entity)) {
+                                entity.damage(14,lightningStrike);
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
+                            }
+                        }else {
                             entity.damage(14,lightningStrike);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
-                    }else {
-                        entity.damage(14,lightningStrike);
-                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
+                    }else if (damageEntityType.equalsIgnoreCase("players")) {
+                        if (entity instanceof Player){
+                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                            if (!playersInSameTeam.contains(entity)) {
+                                entity.damage(14,lightningStrike);
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
+                            }
+                        }
+                    }else if (damageEntityType.equalsIgnoreCase("monsters")) {
+                        if (e instanceof Monster) {
+                            entity.damage(14,lightningStrike);
+                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
+                        }
+                    }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
+                        if (entity instanceof Player){
+                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                            if (!playersInSameTeam.contains(entity)) {
+                                entity.damage(14,lightningStrike);
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
+                            }
+                        }else if (entity instanceof Monster){
+                            entity.damage(14,lightningStrike);
+                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
+                        }
                     }
                 }
             }
@@ -160,15 +239,43 @@ public class Electrostone implements Listener {
             if (e instanceof LivingEntity){
                 LivingEntity entity = (LivingEntity) e;
                 if (entity != p){
-                    if (entity instanceof Player){
-                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                        if (!playersInSameTeam.contains(entity)) {
+
+                    String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
+                    if (damageEntityType.equalsIgnoreCase("all")) {
+                        if (entity instanceof Player){
+                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                            if (!playersInSameTeam.contains(entity)) {
+                                entity.damage(14,lightningStrike);
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
+                            }
+                        }else {
                             entity.damage(14,lightningStrike);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                         }
-                    }else {
-                        entity.damage(14,lightningStrike);
-                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
+                    }else if (damageEntityType.equalsIgnoreCase("players")) {
+                        if (entity instanceof Player){
+                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                            if (!playersInSameTeam.contains(entity)) {
+                                entity.damage(14,lightningStrike);
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
+                            }
+                        }
+                    }else if (damageEntityType.equalsIgnoreCase("monsters")) {
+                        if (e instanceof Monster) {
+                            entity.damage(14,lightningStrike);
+                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
+                        }
+                    }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
+                        if (entity instanceof Player){
+                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                            if (!playersInSameTeam.contains(entity)) {
+                                entity.damage(14,lightningStrike);
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
+                            }
+                        }else if (entity instanceof Monster){
+                            entity.damage(14,lightningStrike);
+                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
+                        }
                     }
                 }
             }
@@ -519,15 +626,43 @@ public class Electrostone implements Listener {
                                 if (entity instanceof LivingEntity) {
                                     LivingEntity target = (LivingEntity) entity;
                                     if (target != p) {
-                                        if (target instanceof Player){
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (!playersInSameTeam.contains(target)) {
+
+                                        String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
+                                        if (damageEntityType.equalsIgnoreCase("all")) {
+                                            if (target instanceof Player){
+                                                List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                                if (!playersInSameTeam.contains(target)) {
+                                                    target.damage(3);
+                                                    target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
+                                                }
+                                            }else {
                                                 target.damage(3);
                                                 target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
                                             }
-                                        }else {
-                                            target.damage(3);
-                                            target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
+                                        }else if (damageEntityType.equalsIgnoreCase("players")) {
+                                            if (target instanceof Player){
+                                                List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                                if (!playersInSameTeam.contains(target)) {
+                                                    target.damage(3);
+                                                    target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
+                                                }
+                                            }
+                                        }else if (damageEntityType.equalsIgnoreCase("monsters")) {
+                                            if (target instanceof Monster) {
+                                                target.damage(3);
+                                                target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
+                                            }
+                                        }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
+                                            if (target instanceof Player){
+                                                List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                                if (!playersInSameTeam.contains(target)) {
+                                                    target.damage(3);
+                                                    target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
+                                                }
+                                            }else if (target instanceof Monster){
+                                                target.damage(3);
+                                                target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
+                                            }
                                         }
                                     }
                                 }
@@ -571,15 +706,43 @@ public class Electrostone implements Listener {
                                 if (entity instanceof LivingEntity) {
                                     LivingEntity target = (LivingEntity) entity;
                                     if (target != p) {
-                                        if (target instanceof Player){
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (!playersInSameTeam.contains(target)) {
+
+                                        String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
+                                        if (damageEntityType.equalsIgnoreCase("all")) {
+                                            if (target instanceof Player){
+                                                List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                                if (!playersInSameTeam.contains(target)) {
+                                                    target.damage(6);
+                                                    target.setVelocity(target.getLocation().getDirection().multiply(-2));
+                                                }
+                                            }else {
                                                 target.damage(6);
                                                 target.setVelocity(target.getLocation().getDirection().multiply(-2));
                                             }
-                                        }else {
-                                            target.damage(6);
-                                            target.setVelocity(target.getLocation().getDirection().multiply(-2));
+                                        }else if (damageEntityType.equalsIgnoreCase("players")) {
+                                            if (target instanceof Player){
+                                                List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                                if (!playersInSameTeam.contains(target)) {
+                                                    target.damage(6);
+                                                    target.setVelocity(target.getLocation().getDirection().multiply(-2));
+                                                }
+                                            }
+                                        }else if (damageEntityType.equalsIgnoreCase("monsters")) {
+                                            if (target instanceof Monster) {
+                                                target.damage(6);
+                                                target.setVelocity(target.getLocation().getDirection().multiply(-2));
+                                            }
+                                        }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
+                                            if (target instanceof Player){
+                                                List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                                if (!playersInSameTeam.contains(target)) {
+                                                    target.damage(6);
+                                                    target.setVelocity(target.getLocation().getDirection().multiply(-2));
+                                                }
+                                            }else if (target instanceof Monster){
+                                                target.damage(6);
+                                                target.setVelocity(target.getLocation().getDirection().multiply(-2));
+                                            }
                                         }
                                     }
                                 }

@@ -4,6 +4,7 @@ import com.sun.jna.platform.win32.ShTypes;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.Util.Tornado;
+import de.nikey.nikeyv1.api.EntityTypeDamage;
 import de.slikey.effectlib.effect.EquationEffect;
 import de.slikey.effectlib.effect.FountainEffect;
 import org.bukkit.Location;
@@ -14,6 +15,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -152,18 +154,54 @@ public class Waterstone implements Listener {
                                         return;
                                     }
                                     for (Entity e : location.getNearbyEntities(8,8,8)){
-                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                        if (e instanceof Player) {
-                                            Player player = (Player) e;
-                                            if (playersInSameTeam.contains(player)) {
-                                                if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
-                                            }
 
-                                            if (e == p){
-                                                if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
+                                        String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
+                                        if (damageEntityType.equalsIgnoreCase("all")) {
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                            if (e instanceof Player) {
+                                                Player player = (Player) e;
+                                                if (playersInSameTeam.contains(player)) {
+                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
+                                                }
+
+                                                if (e == p){
+                                                    if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
+                                                }
+                                            }else {
+                                                if (e instanceof LivingEntity){
+                                                    LivingEntity entity = (LivingEntity) e;
+                                                    entity.damage(2);
+                                                }
                                             }
-                                        }else {
-                                            if (e instanceof LivingEntity){
+                                        }else if (damageEntityType.equalsIgnoreCase("players")) {
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                            if (e instanceof Player) {
+                                                Player player = (Player) e;
+                                                if (playersInSameTeam.contains(player)) {
+                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
+                                                }
+
+                                                if (e == p){
+                                                    if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
+                                                }
+                                            }
+                                        }else if (damageEntityType.equalsIgnoreCase("monsters")) {
+                                            if (e instanceof Monster) {
+                                                LivingEntity entity = (LivingEntity) e;
+                                                entity.damage(2);
+                                            }
+                                        }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                            if (e instanceof Player) {
+                                                Player player = (Player) e;
+                                                if (playersInSameTeam.contains(player)) {
+                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
+                                                }
+
+                                                if (e == p){
+                                                    if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
+                                                }
+                                            }else if (e instanceof Monster){
                                                 LivingEntity entity = (LivingEntity) e;
                                                 entity.damage(2);
                                             }
@@ -190,18 +228,54 @@ public class Waterstone implements Listener {
                                         return;
                                     }
                                     for (Entity e : location.getNearbyEntities(10,8,10)){
-                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                        if (e instanceof Player) {
-                                            Player player = (Player) e;
-                                            if (playersInSameTeam.contains(player)) {
-                                                if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
-                                            }
 
-                                            if (e == p){
-                                                if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
+                                        String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
+                                        if (damageEntityType.equalsIgnoreCase("all")) {
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                            if (e instanceof Player) {
+                                                Player player = (Player) e;
+                                                if (playersInSameTeam.contains(player)) {
+                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
+                                                }
+
+                                                if (e == p){
+                                                    if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
+                                                }
+                                            }else {
+                                                if (e instanceof LivingEntity){
+                                                    LivingEntity entity = (LivingEntity) e;
+                                                    entity.damage(2);
+                                                }
                                             }
-                                        }else {
-                                            if (e instanceof LivingEntity){
+                                        }else if (damageEntityType.equalsIgnoreCase("players")) {
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                            if (e instanceof Player) {
+                                                Player player = (Player) e;
+                                                if (playersInSameTeam.contains(player)) {
+                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
+                                                }
+
+                                                if (e == p){
+                                                    if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
+                                                }
+                                            }
+                                        }else if (damageEntityType.equalsIgnoreCase("monsters")) {
+                                            if (e instanceof Monster) {
+                                                LivingEntity entity = (LivingEntity) e;
+                                                entity.damage(2);
+                                            }
+                                        }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                            if (e instanceof Player) {
+                                                Player player = (Player) e;
+                                                if (playersInSameTeam.contains(player)) {
+                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
+                                                }
+
+                                                if (e == p){
+                                                    if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
+                                                }
+                                            }else if (e instanceof Monster){
                                                 LivingEntity entity = (LivingEntity) e;
                                                 entity.damage(2);
                                             }
@@ -229,16 +303,56 @@ public class Waterstone implements Listener {
                                     }
                                     for (Entity e : location.getNearbyEntities(10,8,10)){
 
-                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                        if (e instanceof Player) {
-                                            Player player = (Player) e;
-                                            if (playersInSameTeam.contains(player) || e == p) {
-                                                if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
+
+                                        String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
+                                        if (damageEntityType.equalsIgnoreCase("all")) {
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                            if (e instanceof Player) {
+                                                Player player = (Player) e;
+                                                if (playersInSameTeam.contains(player)) {
+                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
+                                                }
+
+                                                if (e == p){
+                                                    if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
+                                                }
+                                            }else {
+                                                if (e instanceof LivingEntity){
+                                                    LivingEntity entity = (LivingEntity) e;
+                                                    entity.damage(2);
+                                                }
                                             }
-                                        }else {
-                                            if (e instanceof LivingEntity){
+                                        }else if (damageEntityType.equalsIgnoreCase("players")) {
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                            if (e instanceof Player) {
+                                                Player player = (Player) e;
+                                                if (playersInSameTeam.contains(player)) {
+                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
+                                                }
+
+                                                if (e == p){
+                                                    if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
+                                                }
+                                            }
+                                        }else if (damageEntityType.equalsIgnoreCase("monsters")) {
+                                            if (e instanceof Monster) {
                                                 LivingEntity entity = (LivingEntity) e;
-                                                entity.damage(4);
+                                                entity.damage(2);
+                                            }
+                                        }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                            if (e instanceof Player) {
+                                                Player player = (Player) e;
+                                                if (playersInSameTeam.contains(player)) {
+                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
+                                                }
+
+                                                if (e == p){
+                                                    if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
+                                                }
+                                            }else if (e instanceof Monster){
+                                                LivingEntity entity = (LivingEntity) e;
+                                                entity.damage(2);
                                             }
                                         }
                                     }
@@ -264,16 +378,46 @@ public class Waterstone implements Listener {
                                     }
                                     for (Entity e : location.getNearbyEntities(10,8,10)){
 
-                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                        if (e instanceof Player) {
-                                            Player player = (Player) e;
-                                            if (playersInSameTeam.contains(player) || e == p) {
-                                                if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+4);
+                                        String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
+                                        if (damageEntityType.equalsIgnoreCase("all")) {
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                            if (e instanceof Player) {
+                                                Player player = (Player) e;
+                                                if (playersInSameTeam.contains(player) || e == p) {
+                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+4);
+                                                }
+                                            }else {
+                                                if (e instanceof LivingEntity){
+                                                    LivingEntity entity = (LivingEntity) e;
+                                                    entity.damage(4);
+                                                }
                                             }
-                                        }else {
-                                            if (e instanceof LivingEntity){
+                                        }else if (damageEntityType.equalsIgnoreCase("players")) {
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                            if (e instanceof Player) {
+                                                Player player = (Player) e;
+                                                if (playersInSameTeam.contains(player) || e == p) {
+                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+4);
+                                                }
+                                            }
+                                        }else if (damageEntityType.equalsIgnoreCase("monsters")) {
+                                            if (e instanceof Monster) {
                                                 LivingEntity entity = (LivingEntity) e;
                                                 entity.damage(4);
+                                            }
+                                        }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                            if (e instanceof Player) {
+                                                Player player = (Player) e;
+                                                if (playersInSameTeam.contains(player) || e == p) {
+                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+4);
+                                                }
+
+                                            }else {
+                                                if (e instanceof Monster){
+                                                    LivingEntity entity = (LivingEntity) e;
+                                                    entity.damage(4);
+                                                }
                                             }
                                         }
                                     }
@@ -299,17 +443,48 @@ public class Waterstone implements Listener {
                                     }
                                     for (Entity e : location.getNearbyEntities(10,8,10)){
 
-                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                        if (e instanceof Player) {
-                                            Player player = (Player) e;
-                                            if (playersInSameTeam.contains(player) || e == p) {
-                                                player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
-                                                if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
+                                        String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
+                                        if (damageEntityType.equalsIgnoreCase("all")) {
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                            if (e instanceof Player) {
+                                                Player player = (Player) e;
+                                                if (playersInSameTeam.contains(player) || e == p) {
+                                                    player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
+                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
+                                                }
+                                            }else {
+                                                if (e instanceof LivingEntity){
+                                                    LivingEntity entity = (LivingEntity) e;
+                                                    entity.damage(4);
+                                                }
                                             }
-                                        }else {
-                                            if (e instanceof LivingEntity){
+                                        }else if (damageEntityType.equalsIgnoreCase("players")) {
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                            if (e instanceof Player) {
+                                                Player player = (Player) e;
+                                                if (playersInSameTeam.contains(player) || e == p) {
+                                                    player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
+                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
+                                                }
+                                            }
+                                        }else if (damageEntityType.equalsIgnoreCase("monsters")) {
+                                            if (e instanceof Monster) {
                                                 LivingEntity entity = (LivingEntity) e;
                                                 entity.damage(4);
+                                            }
+                                        }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                            if (e instanceof Player) {
+                                                Player player = (Player) e;
+                                                if (playersInSameTeam.contains(player) || e == p) {
+                                                    player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
+                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+4);
+                                                }
+                                            }else {
+                                                if (e instanceof Monster){
+                                                    LivingEntity entity = (LivingEntity) e;
+                                                    entity.damage(4);
+                                                }
                                             }
                                         }
                                     }

@@ -1,6 +1,7 @@
 package de.nikey.nikeyv1;
 
 import de.nikey.nikeyv1.Anti_Exploits.Stone_Swapping;
+import de.nikey.nikeyv1.Commands.DamageEntityType;
 import de.nikey.nikeyv1.Commands.PEffectCMD;
 import de.nikey.nikeyv1.Commands.stone;
 import de.nikey.nikeyv1.Listeners.*;
@@ -50,6 +51,8 @@ public final class NikeyV1 extends JavaPlugin{
         //Command
         getCommand("stone").setExecutor(new stone());
         getCommand("peffect").setExecutor(new PEffectCMD());
+        getCommand("attack").setExecutor(new DamageEntityType());
+        getCommand("attack").setTabCompleter(new DamageEntityType());
         //resipes
         Items.EnchantedAnvil();
         Items.Soulrecepie();
