@@ -18,9 +18,9 @@ public class UndeadStoneListener implements Listener {
                     if (level == 7) {
                         event.setDamage(event.getDamage() * 1.075);
                     } else if (level == 8) {
-                        event.setDamage(event.getDamage() * 1.1);
+                        event.setDamage(event.getDamage() * 1.15);
                     } else if (level >= 9) {
-                        event.setDamage(event.getDamage() * 1.125);
+                        event.setDamage(event.getDamage() * 1.225);
                     }
                 }
             }

@@ -766,7 +766,7 @@ public class Undeadstone implements Listener {
             if (stone.equalsIgnoreCase("Undead") && level >= 6) {
                 if (event.getDamager() instanceof LivingEntity) {
                     if (isUndead((LivingEntity) event.getDamager())) {
-                        double damageReductionPercentage = 7.5; // 7.5% damage reduction
+                        double damageReductionPercentage = 15; // 7.5% damage reduction
                         double damage = event.getDamage();
                         double reducedDamage = damage - (damage * (damageReductionPercentage / 100));
                         event.setDamage(reducedDamage);
@@ -828,9 +828,7 @@ public class Undeadstone implements Listener {
                 String stone = config.getString(p.getName() + ".stone");
 
                 if (stone.equalsIgnoreCase("Undead")) {
-                    // Überprüfen, ob der Spieler ein Entity schlägt
                     if (entity != null) {
-                        // Aggro-Mechanismus aktivieren
                         HelpUtil.triggerEntityAggro(entity,p);
                     }
                 }

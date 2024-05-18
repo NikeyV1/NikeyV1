@@ -189,7 +189,7 @@ public class Holystone implements Listener {
                                 public void run() {
                                     p.setMaxHealth(20);
                                 }
-                            }.runTaskLater(NikeyV1.getPlugin(),30*40);
+                            }.runTaskLater(NikeyV1.getPlugin(),30*30);
                         }else if (i == 13) {
                             World world = p.getWorld();
                             int players = p.getNearbyEntities(25, 25, 25).size();
@@ -241,7 +241,6 @@ public class Holystone implements Listener {
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(),20*40);
                         }
-                        //Ability End
                     }            
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR){

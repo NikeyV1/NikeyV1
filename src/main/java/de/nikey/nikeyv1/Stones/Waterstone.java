@@ -764,11 +764,11 @@ public class Waterstone implements Listener {
             if (stone.equalsIgnoreCase("Water") && player.isInWater()) {
                 double damage = event.getDamage();
                 if (level == 7) {
-                    event.setDamage(damage *1.075);
+                    event.setDamage(damage *1.08);
                 }else if (level == 8) {
-                    event.setDamage(damage *1.1);
+                    event.setDamage(damage *1.16);
                 }else if (level >= 9) {
-                    event.setDamage(damage *1.125);
+                    event.setDamage(damage *1.24);
                 }
             }
         }

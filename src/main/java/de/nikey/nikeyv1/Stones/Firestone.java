@@ -670,13 +670,17 @@ public class Firestone implements Listener {
 
             // Check if the player is in the Nether
             if (stone.equalsIgnoreCase("Fire")&&world.getEnvironment() == World.Environment.NETHER) {
-                if (level ==5) {
-                    double originalDamage = event.getDamage();
-                    double boostedDamage = originalDamage * 1.05; // Increase damage by 5%
-                    event.setDamage(boostedDamage);
-                } else if (level >= 6) {
+                if (level == 5) {
                     double originalDamage = event.getDamage();
                     double boostedDamage = originalDamage * 1.075; // Increase damage by 7.5%
+                    event.setDamage(boostedDamage);
+                } else if (level == 6) {
+                    double originalDamage = event.getDamage();
+                    double boostedDamage = originalDamage * 1.15; // Increase damage by 7.5%
+                    event.setDamage(boostedDamage);
+                }else if (level >= 7) {
+                    double originalDamage = event.getDamage();
+                    double boostedDamage = originalDamage * 1.225; // Increase damage by 7.5%
                     event.setDamage(boostedDamage);
                 }
             }
@@ -746,12 +750,10 @@ public class Firestone implements Listener {
                         event.setCancelled(true);
                     }
                 } else if (event.getCause() == EntityDamageEvent.DamageCause.LAVA) {
-                    if (i == 7) {
-                        event.setDamage(event.getDamage()*0.85);
-                    }else if (i == 8) {
-                        event.setDamage(event.getDamage()*0.70);
+                    if (i == 8) {
+                        event.setDamage(event.getDamage()*0.8);
                     }else if (i >= 9) {
-                        event.setDamage(event.getDamage()*0.55);
+                        event.setDamage(event.getDamage()*0.6);
                     }
                 }
             }

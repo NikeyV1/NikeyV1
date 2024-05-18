@@ -51,6 +51,7 @@ public class Electrostone implements Listener {
         int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
         Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
         LightningStrike lightningStrike = p.getWorld().strikeLightning(location);
+        lightningStrike.setCausingPlayer(p);
         for (Entity e : location.getWorld().getNearbyEntities(location,4,4,4)){
             if (e instanceof LivingEntity){
                 LivingEntity entity = (LivingEntity) e;
@@ -108,6 +109,7 @@ public class Electrostone implements Listener {
         int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
         Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
         LightningStrike lightningStrike = p.getWorld().strikeLightning(location);
+        lightningStrike.setCausingPlayer(p);
         for (Entity e : location.getWorld().getNearbyEntities(location,4,4,4)){
             if (e instanceof LivingEntity){
                 LivingEntity entity = (LivingEntity) e;
@@ -172,6 +174,7 @@ public class Electrostone implements Listener {
         int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
         Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
         LightningStrike lightningStrike = p.getWorld().strikeLightning(location);
+        lightningStrike.setCausingPlayer(p);
         for (Entity e : location.getWorld().getNearbyEntities(location,4,4,4)){
             if (e instanceof LivingEntity){
                 LivingEntity entity = (LivingEntity) e;
@@ -235,6 +238,7 @@ public class Electrostone implements Listener {
         int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
         Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
         LightningStrike lightningStrike = p.getWorld().strikeLightning(location);
+        lightningStrike.setCausingPlayer(p);
         for (Entity e : location.getWorld().getNearbyEntities(location,4,4,4)){
             if (e instanceof LivingEntity){
                 LivingEntity entity = (LivingEntity) e;
