@@ -23,7 +23,7 @@ public class DamageEntityType implements CommandExecutor , TabCompleter {
         Player player = (Player) sender;
 
         if (args.length != 1) {
-            player.sendMessage("§cThat doesn't work like that: " + "/§adamageentitytype [Players,Monsters,Monsters-Players,All]");
+            player.sendMessage("§cThat doesn't work like that: " + "/§aattack [Players,Monsters,Monsters-Players,All]");
             return false;
         }
 
@@ -47,7 +47,7 @@ public class DamageEntityType implements CommandExecutor , TabCompleter {
             NikeyV1.getPlugin().saveConfig();
             player.sendMessage("§aYour stone now attacks everything");
         }else {
-            player.sendMessage("§cThat doesn't work like that: " + "§a/damageentitytype [Players,Monsters,Monsters-Players,All]");
+            player.sendMessage("§cThat doesn't work like that: " + "§a/attack [Players,Monsters,Monsters-Players,All]");
             return false;
         }
 

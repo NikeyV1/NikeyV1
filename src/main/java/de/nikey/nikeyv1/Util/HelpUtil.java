@@ -86,9 +86,7 @@ public class HelpUtil {
         for (Entity nearbySummoned : damagedEntity.getWorld().getNearbyEntities(damagedEntity.getLocation(),200,200,200)) {
             if (nearbySummoned instanceof Monster || nearbySummoned instanceof Giant || nearbySummoned instanceof Husk ) {
                 Monster monster = (Monster) nearbySummoned;
-                // Überprüfen, ob die Entität ein gespawntes Entity ist
                 if (monster.getName().contains(p.getName()+"'s")) {
-                    // Setze das Ziel des Entitys auf den Spieler, der das ursprünglichen Entity geschlagen hat
                     monster.setTarget(damagedEntity);
                 }
             }else if (nearbySummoned instanceof Warden) {

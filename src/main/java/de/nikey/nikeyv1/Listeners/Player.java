@@ -37,11 +37,6 @@ public class Player implements Listener {
     int a;
     int b;
     int times;
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        org.bukkit.entity.Player p = event.getPlayer();
-    }
-
     public static Inventory inv = Bukkit.createInventory(null, 27, "Enchanted Anvil");
 
 
@@ -206,7 +201,11 @@ public class Player implements Listener {
             essence.addUnsafeEnchantment(Enchantment.CHANNELING,1);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             essence.setItemMeta(meta);
-            p.getInventory().addItem(essence);
+            if (p.getInventory().firstEmpty() != -1){
+                p.getInventory().addItem(essence);
+            }else {
+                p.getWorld().dropItem(p.getLocation(),essence);
+            }
             p.playSound(p.getLocation(), Sound.ENTITY_BAT_TAKEOFF,1,1);
         }
     }
@@ -254,7 +253,7 @@ public class Player implements Listener {
         int i = config.getInt(player.getName() + ".level");
         //Changes to only drop if level is higher than 10
         if (player.getKiller() != null&&player.getKiller() instanceof org.bukkit.entity.Player){
-            if (i >= 15) {
+            if (i > 15) {
                 Items.SoulofStrenght(player.getKiller());
             }
         }
@@ -370,7 +369,7 @@ public class Player implements Listener {
                                     if (num == 1 || num == 2) {
                                         TimerBuild timerBuild = new TimerBuild();
                                         if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
-                                            if (p.getLevel() > 10 || p.getGameMode() == GameMode.CREATIVE) {
+                                            if (p.getLevel() >= 10 || p.getGameMode() == GameMode.CREATIVE) {
                                                 inventory.setItem(13, null);
                                                 p.closeInventory();
                                                 timerBuild.setLevel(num + 1);
@@ -577,7 +576,6 @@ public class Player implements Listener {
             Inventory clickedInventory = event.getClickedInventory();
             Material itemMaterial = event.getCursor().getType();
 
-            // Überprüfen, ob es sich um ein Hopper- oder Trichter-Minecart-Inventar handelt
             if (isMinecartInventory(clickedInventory)) {
                 if (itemMaterial == Material.FIREWORK_STAR || itemMaterial == Material.NETHERITE_SWORD && event.getCursor().getItemMeta().hasLore()) {
                     event.setCancelled(true);

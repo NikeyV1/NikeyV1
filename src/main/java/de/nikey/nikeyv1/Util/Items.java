@@ -9,10 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
-import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -352,17 +349,16 @@ public class Items {
         smeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         essence.setItemMeta(smeta);
 
-        ShapedRecipe recipe = new ShapedRecipe(beacon);
-        recipe.shape("ACE","GSI","LQR");
-        recipe.setIngredient('A',Material.AMETHYST_SHARD);
-        recipe.setIngredient('C',Material.COPPER_INGOT);
-        recipe.setIngredient('E',Material.EMERALD);
-        recipe.setIngredient('G',Material.GOLD_INGOT);
-        recipe.setIngredient('I',Material.IRON_INGOT);
-        recipe.setIngredient('L',Material.LAPIS_LAZULI);
-        recipe.setIngredient('Q',Material.QUARTZ);
-        recipe.setIngredient('R',Material.REDSTONE);
-        recipe.setIngredient('S', new RecipeChoice.ExactChoice(essence));
+        ShapelessRecipe recipe = new ShapelessRecipe(beacon);
+        recipe.addIngredient(Material.AMETHYST_SHARD);
+        recipe.addIngredient(Material.COPPER_INGOT);
+        recipe.addIngredient(Material.EMERALD);
+        recipe.addIngredient(Material.GOLD_INGOT);
+        recipe.addIngredient(Material.IRON_INGOT);
+        recipe.addIngredient(Material.LAPIS_LAZULI);
+        recipe.addIngredient(Material.QUARTZ);
+        recipe.addIngredient(Material.REDSTONE);
+        recipe.addIngredient(new RecipeChoice.ExactChoice(essence));
         NikeyV1.getPlugin().getServer().addRecipe(recipe);
     }
 }

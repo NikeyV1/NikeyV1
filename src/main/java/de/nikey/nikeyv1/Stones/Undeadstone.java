@@ -873,6 +873,22 @@ public class Undeadstone implements Listener {
             }
         }
 
+
+        if (event.getTarget() instanceof Player && event.getEntity() instanceof LivingEntity) {
+            if (event.getEntity().getCustomName() != null) {
+                LivingEntity entity = (LivingEntity) event.getEntity();
+                String[] arr = entity.getCustomName().split("'");
+                Player player = Bukkit.getPlayer(arr[0]);
+                if (player == null) {
+                    return;
+                }
+                List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
+                if (playersInSameTeam.contains(event.getTarget())) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+
         if (event.getTarget() instanceof Player){
             if (event.getEntity() instanceof LivingEntity){
                 if (event.getEntity().getCustomName() != null) {
