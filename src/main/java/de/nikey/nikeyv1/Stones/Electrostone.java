@@ -445,7 +445,7 @@ public class Electrostone implements Listener {
                         stunned.add(entity);
                         CylinderEffect effect = new CylinderEffect(NikeyV1.em);
                         effect.setEntity(entity);
-                        effect.duration = 6000;
+                        effect.duration = 5000;
                         effect.particles = 30;
                         effect.particle = Particle.ELECTRIC_SPARK;
                         effect.visibleRange = 100;
@@ -487,7 +487,7 @@ public class Electrostone implements Listener {
                         stunned.add(entity);
                         CylinderEffect effect = new CylinderEffect(NikeyV1.em);
                         effect.setEntity(entity);
-                        effect.duration = 6000;
+                        effect.duration = 5000;
                         effect.particles = 30;
                         effect.particle = Particle.ELECTRIC_SPARK;
                         effect.visibleRange = 100;
@@ -529,7 +529,7 @@ public class Electrostone implements Listener {
                         stunned.add(entity);
                         CylinderEffect effect = new CylinderEffect(NikeyV1.em);
                         effect.setEntity(entity);
-                        effect.duration = 6000;
+                        effect.duration = 8000;
                         effect.particles = 30;
                         effect.particle = Particle.ELECTRIC_SPARK;
                         effect.visibleRange = 100;
