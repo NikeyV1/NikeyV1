@@ -90,7 +90,7 @@ public class InfernoBlade implements Listener {
                                                 cancel();
                                                 return;
                                             }
-                                        }.runTaskLater(NikeyV1.getPlugin(),20*80);
+                                        }.runTaskLater(NikeyV1.getPlugin(),20*45);
                                         red = true;
                                         //Cooldown-Ability
                                         List<Entity> nearbyEntities = player.getNearbyEntities(20, 15, 20);

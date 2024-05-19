@@ -29,17 +29,20 @@ public class CommandChanges implements Listener {
         }else if (cmd.startsWith("/give")) {
             if(player.isOp()) {
                 if (args.length == 3) {
-                    if (args[2].equalsIgnoreCase("Soulofstrenght") && player.isOp()){
+                    if (args[2].equalsIgnoreCase("Soulofstrenght")){
                         Items.SoulofStrenght(player);
                         event.setCancelled(true);
-                    } else if (args[2].equalsIgnoreCase("EnchantedAnvil") && player.isOp()) {
+                    } else if (args[2].equalsIgnoreCase("EnchantedAnvil")) {
                         Items.GiveEnchantedAnvil(player);
                         event.setCancelled(true);
-                    }else if (args[2].equalsIgnoreCase("InfernoBlade") && player.isOp()) {
+                    }else if (args[2].equalsIgnoreCase("InfernoBlade")) {
                         Items.GiveInfernoBlade(player);
                         event.setCancelled(true);
-                    }else if (args[2].equalsIgnoreCase("PowerBeacon") && player.isOp()) {
+                    }else if (args[2].equalsIgnoreCase("PowerBeacon")) {
                         Items.GivePowerBeacon(player);
+                        event.setCancelled(true);
+                    }else if (args[2].equalsIgnoreCase("UpgradeToken")) {
+                        Items.GiveUpgradeToken(player);
                         event.setCancelled(true);
                     }
                 }

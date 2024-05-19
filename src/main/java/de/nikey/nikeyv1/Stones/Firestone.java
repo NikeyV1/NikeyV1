@@ -836,7 +836,7 @@ public class Firestone implements Listener {
             config.set(p.getName()+".level",i);
             NikeyV1.getPlugin().saveConfig();
             String stone = config.getString(p.getName() + ".stone");
-            if (i == 20 || i==21){
+            if (i == 20 || i == 21){
                 if (p.isSneaking()) {
                     if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
                         p.updateInventory();

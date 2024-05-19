@@ -92,8 +92,8 @@ public class HelpUtil {
             }else if (nearbySummoned instanceof Warden) {
                 Warden entity = (Warden) nearbySummoned;
                 if (entity.getName().contains(p.getName()+"'s")) {
+                    entity.clearAnger(damagedEntity);
                     entity.setAnger(damagedEntity,150);
-                    entity.increaseAnger(damagedEntity,80);
                     entity.setTarget(damagedEntity);
                 }
             }else if (nearbySummoned instanceof IronGolem) {

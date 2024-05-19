@@ -13,7 +13,6 @@ public class InventoryListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Inventory top = event.getView().getTopInventory();
-        InventoryAction action = event.getAction();
         if (event.getCurrentItem() != null) {
             if (event.getCurrentItem().getType() == Material.FIREWORK_STAR && event.getCurrentItem().getItemMeta().hasLore()) {
                 if (!(top.getType() == InventoryType.CRAFTING)){
