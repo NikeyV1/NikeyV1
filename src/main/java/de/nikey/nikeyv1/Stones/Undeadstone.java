@@ -754,7 +754,7 @@ public class Undeadstone implements Listener {
         if (event.getEntity() instanceof Player) {
             Player p = (Player) event.getEntity();
             String stone = config.getString(p.getName() + ".stone");
-            if (stone.equalsIgnoreCase("Undead") && event.getDamager() instanceof LivingEntity) {
+            if (stone.equalsIgnoreCase("Undead") && event.getDamager() instanceof Monster) {
                 Monster damager = (Monster) event.getDamager();
                 if (damager != null) {
                     HelpUtil.triggerEntityAggro(damager,p);

@@ -50,7 +50,7 @@ public class Electrostone implements Listener {
         int randomZ = ThreadLocalRandom.current().nextInt(z-10, z+10);
         int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
         Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
-        LightningStrike lightningStrike = p.getWorld().strikeLightning(location);
+        LightningStrike lightningStrike = p.getWorld().strikeLightningEffect(location);
         lightningStrike.setCausingPlayer(p);
         for (Entity e : location.getWorld().getNearbyEntities(location,4,4,4)){
             if (e instanceof LivingEntity){
@@ -62,29 +62,35 @@ public class Electrostone implements Listener {
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
                                 entity.damage(10,lightningStrike);
+                                entity.setFireTicks(20*8);
                             }
                         }else {
                             entity.damage(10,lightningStrike);
+                            entity.setFireTicks(20*8);
                         }
                     }else if (damageEntityType.equalsIgnoreCase("players")) {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
                                 entity.damage(10,lightningStrike);
+                                entity.setFireTicks(20*8);
                             }
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters")) {
                         if (e instanceof Monster) {
                             entity.damage(10,lightningStrike);
+                            entity.setFireTicks(20*8);
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
                                 entity.damage(10,lightningStrike);
+                                entity.setFireTicks(20*8);
                             }
                         }else if (e instanceof Monster){
                             entity.damage(10,lightningStrike);
+                            entity.setFireTicks(20*8);
                         }
                     }
                 }
@@ -108,7 +114,7 @@ public class Electrostone implements Listener {
         int randomZ = ThreadLocalRandom.current().nextInt(z-10, z+10);
         int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
         Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
-        LightningStrike lightningStrike = p.getWorld().strikeLightning(location);
+        LightningStrike lightningStrike = p.getWorld().strikeLightningEffect(location);
         lightningStrike.setCausingPlayer(p);
         for (Entity e : location.getWorld().getNearbyEntities(location,4,4,4)){
             if (e instanceof LivingEntity){
@@ -121,10 +127,12 @@ public class Electrostone implements Listener {
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
                                 entity.damage(10,lightningStrike);
+                                entity.setFireTicks(20*8);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }else {
                             entity.damage(10,lightningStrike);
+                            entity.setFireTicks(20*8);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
                     }else if (damageEntityType.equalsIgnoreCase("players")) {
@@ -132,12 +140,14 @@ public class Electrostone implements Listener {
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
                                 entity.damage(10,lightningStrike);
+                                entity.setFireTicks(20*8);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters")) {
                         if (e instanceof Monster) {
                             entity.damage(10,lightningStrike);
+                            entity.setFireTicks(20*8);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
@@ -145,10 +155,12 @@ public class Electrostone implements Listener {
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
                                 entity.damage(10,lightningStrike);
+                                entity.setFireTicks(20*8);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }else if (entity instanceof Monster){
                             entity.damage(10,lightningStrike);
+                            entity.setFireTicks(20*8);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
                     }
@@ -173,7 +185,7 @@ public class Electrostone implements Listener {
         int randomZ = ThreadLocalRandom.current().nextInt(z-10, z+10);
         int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
         Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
-        LightningStrike lightningStrike = p.getWorld().strikeLightning(location);
+        LightningStrike lightningStrike = p.getWorld().strikeLightningEffect(location);
         lightningStrike.setCausingPlayer(p);
         for (Entity e : location.getWorld().getNearbyEntities(location,4,4,4)){
             if (e instanceof LivingEntity){
@@ -185,10 +197,12 @@ public class Electrostone implements Listener {
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
                                 entity.damage(14,lightningStrike);
+                                entity.setFireTicks(20*8);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }else {
                             entity.damage(14,lightningStrike);
+                            entity.setFireTicks(20*8);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
                     }else if (damageEntityType.equalsIgnoreCase("players")) {
@@ -196,12 +210,14 @@ public class Electrostone implements Listener {
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
                                 entity.damage(14,lightningStrike);
+                                entity.setFireTicks(20*8);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters")) {
                         if (e instanceof Monster) {
                             entity.damage(14,lightningStrike);
+                            entity.setFireTicks(20*8);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
@@ -209,10 +225,12 @@ public class Electrostone implements Listener {
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
                                 entity.damage(14,lightningStrike);
+                                entity.setFireTicks(20*8);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }else if (entity instanceof Monster){
                             entity.damage(14,lightningStrike);
+                            entity.setFireTicks(20*8);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
                     }
@@ -237,7 +255,7 @@ public class Electrostone implements Listener {
         int randomZ = ThreadLocalRandom.current().nextInt(z-10, z+10);
         int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
         Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
-        LightningStrike lightningStrike = p.getWorld().strikeLightning(location);
+        LightningStrike lightningStrike = p.getWorld().strikeLightningEffect(location);
         lightningStrike.setCausingPlayer(p);
         for (Entity e : location.getWorld().getNearbyEntities(location,4,4,4)){
             if (e instanceof LivingEntity){
@@ -250,10 +268,12 @@ public class Electrostone implements Listener {
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
                                 entity.damage(14,lightningStrike);
+                                entity.setFireTicks(20*8);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                             }
                         }else {
                             entity.damage(14,lightningStrike);
+                            entity.setFireTicks(20*8);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                         }
                     }else if (damageEntityType.equalsIgnoreCase("players")) {
@@ -261,12 +281,14 @@ public class Electrostone implements Listener {
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
                                 entity.damage(14,lightningStrike);
+                                entity.setFireTicks(20*8);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                             }
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters")) {
                         if (e instanceof Monster) {
                             entity.damage(14,lightningStrike);
+                            entity.setFireTicks(20*8);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
@@ -274,10 +296,12 @@ public class Electrostone implements Listener {
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
                                 entity.damage(14,lightningStrike);
+                                entity.setFireTicks(20*8);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                             }
                         }else if (entity instanceof Monster){
                             entity.damage(14,lightningStrike);
+                            entity.setFireTicks(20*8);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                         }
                     }
