@@ -591,7 +591,7 @@ public class Undeadstone implements Listener {
         if (entity.getType() == EntityType.GIANT) {
             Giant giant = (Giant) entity;
             if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-                if (event.getFinalDamage() >12) {
+                if (event.getFinalDamage() > 12) {
                     event.setDamage(12);
                 }
             } else if (event.getCause() == EntityDamageEvent.DamageCause.FALL && giant.getCustomName().contains("low")) {
@@ -601,7 +601,7 @@ public class Undeadstone implements Listener {
                         LivingEntity player = (LivingEntity) nearbyEntity;
                         if (!giant.getName().contains(player.getName()+"'s")) {
                             Vector dir = player.getLocation().toVector().subtract(giant.getLocation().toVector()).normalize();
-                            player.setVelocity(dir.multiply(-2.5F).add(new Vector(0,1.5F,0))); // Spieler zum von dem Giant schleudern
+                            player.setVelocity(dir.multiply(-2.5F).add(new Vector(0,1.5F,0)));
                             double health = player.getHealth();
                             player.damage(20+health,giant);
                         }

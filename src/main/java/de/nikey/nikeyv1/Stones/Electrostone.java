@@ -61,35 +61,35 @@ public class Electrostone implements Listener {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(10,lightningStrike);
+                                entity.damage(10,p);
                                 entity.setFireTicks(20*8);
                             }
                         }else {
-                            entity.damage(10,lightningStrike);
+                            entity.damage(10,p);
                             entity.setFireTicks(20*8);
                         }
                     }else if (damageEntityType.equalsIgnoreCase("players")) {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(10,lightningStrike);
+                                entity.damage(10,p);
                                 entity.setFireTicks(20*8);
                             }
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters")) {
                         if (e instanceof Monster) {
-                            entity.damage(10,lightningStrike);
+                            entity.damage(10,p);
                             entity.setFireTicks(20*8);
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(10,lightningStrike);
+                                entity.damage(10,p);
                                 entity.setFireTicks(20*8);
                             }
                         }else if (e instanceof Monster){
-                            entity.damage(10,lightningStrike);
+                            entity.damage(10,p);
                             entity.setFireTicks(20*8);
                         }
                     }
@@ -126,12 +126,12 @@ public class Electrostone implements Listener {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(10,lightningStrike);
+                                entity.damage(10,p);
                                 entity.setFireTicks(20*8);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }else {
-                            entity.damage(10,lightningStrike);
+                            entity.damage(10,p);
                             entity.setFireTicks(20*8);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
@@ -139,14 +139,14 @@ public class Electrostone implements Listener {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(10,lightningStrike);
+                                entity.damage(10,p);
                                 entity.setFireTicks(20*8);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters")) {
                         if (e instanceof Monster) {
-                            entity.damage(10,lightningStrike);
+                            entity.damage(10,p);
                             entity.setFireTicks(20*8);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
@@ -154,12 +154,12 @@ public class Electrostone implements Listener {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(10,lightningStrike);
+                                entity.damage(10,p);
                                 entity.setFireTicks(20*8);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }else if (entity instanceof Monster){
-                            entity.damage(10,lightningStrike);
+                            entity.damage(10,p);
                             entity.setFireTicks(20*8);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
@@ -196,12 +196,12 @@ public class Electrostone implements Listener {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(14,lightningStrike);
+                                entity.damage(14,p);
                                 entity.setFireTicks(20*8);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }else {
-                            entity.damage(14,lightningStrike);
+                            entity.damage(14,p);
                             entity.setFireTicks(20*8);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
@@ -209,14 +209,14 @@ public class Electrostone implements Listener {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(14,lightningStrike);
+                                entity.damage(14,p);
                                 entity.setFireTicks(20*8);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters")) {
                         if (e instanceof Monster) {
-                            entity.damage(14,lightningStrike);
+                            entity.damage(14,p);
                             entity.setFireTicks(20*8);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
@@ -224,12 +224,12 @@ public class Electrostone implements Listener {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(14,lightningStrike);
+                                entity.damage(14,p);
                                 entity.setFireTicks(20*8);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }else if (entity instanceof Monster){
-                            entity.damage(14,lightningStrike);
+                            entity.damage(14,p);
                             entity.setFireTicks(20*8);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
@@ -267,12 +267,12 @@ public class Electrostone implements Listener {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(14,lightningStrike);
+                                entity.damage(14,p);
                                 entity.setFireTicks(20*8);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                             }
                         }else {
-                            entity.damage(14,lightningStrike);
+                            entity.damage(14,p);
                             entity.setFireTicks(20*8);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                         }
@@ -280,14 +280,14 @@ public class Electrostone implements Listener {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(14,lightningStrike);
+                                entity.damage(14,p);
                                 entity.setFireTicks(20*8);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                             }
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters")) {
                         if (e instanceof Monster) {
-                            entity.damage(14,lightningStrike);
+                            entity.damage(14,p);
                             entity.setFireTicks(20*8);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                         }
@@ -295,12 +295,12 @@ public class Electrostone implements Listener {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(14,lightningStrike);
+                                entity.damage(14,p);
                                 entity.setFireTicks(20*8);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                             }
                         }else if (entity instanceof Monster){
-                            entity.damage(14,lightningStrike);
+                            entity.damage(14,p);
                             entity.setFireTicks(20*8);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                         }
