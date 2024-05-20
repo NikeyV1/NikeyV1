@@ -24,8 +24,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -63,7 +61,6 @@ public class Elementalstone implements Listener {
             if (meta != null) {
                 // Getting the lore of the item
                 List<String> lore = meta.getLore();
-                // Checking if lore contains the keyword "Combined"
                 if (lore != null ) {
                     String l = String.valueOf(lore);
                     if (l.equalsIgnoreCase("[§fThe combined power of all §8stones]")) {
