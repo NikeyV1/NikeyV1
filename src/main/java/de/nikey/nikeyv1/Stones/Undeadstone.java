@@ -637,10 +637,10 @@ public class Undeadstone implements Listener {
                                             if (!playersInSameTeam.contains(player)) {
                                                 double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                                 armor = armor*0.15;
-                                                player.damage(armor+1.5F);
+                                                player.damage(armor+1.5F,entity);
                                             }
                                         }else {
-                                            player.damage(2.5F);
+                                            player.damage(2.5F,entity);
                                         }
                                     }else{
                                         if (player instanceof Player) {
@@ -648,10 +648,10 @@ public class Undeadstone implements Listener {
                                             if (!playersInSameTeam.contains(player)) {
                                                 double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                                 armor = armor*0.15;
-                                                player.damage(armor+3.5F);
+                                                player.damage(armor+3.5F,entity);
                                             }
                                         }else {
-                                            player.damage(4.5F);
+                                            player.damage(4.5F,entity);
                                         }
                                     }
                                 }else {
@@ -661,10 +661,10 @@ public class Undeadstone implements Listener {
                                             if (!playersInSameTeam.contains(player)) {
                                                 double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                                 armor = armor*0.2;
-                                                player.damage(armor+2.5F);
+                                                player.damage(armor+2.5F,entity);
                                             }
                                         }else {
-                                            player.damage(3.5F);
+                                            player.damage(3.5F,entity);
                                         }
                                     }else{
                                         if (player instanceof Player) {
@@ -672,10 +672,10 @@ public class Undeadstone implements Listener {
                                             if (!playersInSameTeam.contains(player)) {
                                                 double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                                 armor = armor*0.2;
-                                                player.damage(armor+4.5F);
+                                                player.damage(armor+4.5F,entity);
                                             }
                                         }else {
-                                            player.damage(5.5F);
+                                            player.damage(5.5F,entity);
                                         }
                                     }
                                 }
