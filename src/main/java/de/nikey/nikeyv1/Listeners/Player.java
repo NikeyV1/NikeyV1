@@ -558,6 +558,11 @@ public class Player implements Listener {
                                                         Items.GiveInfernoBlade(p);
                                                         Items.GiveElementalStone(p);
                                                         new ServerScoreboard(p);
+
+                                                        for (org.bukkit.entity.Player players : Bukkit.getOnlinePlayers()) {
+                                                            players.playSound(players.getLocation(),Sound.BLOCK_BEACON_POWER_SELECT,2,2);
+                                                            players.playEffect(EntityEffect.TOTEM_RESURRECT);
+                                                        }
                                                     } else {
                                                         p.sendMessage("§cError: You are already buffed!");
                                                     }
