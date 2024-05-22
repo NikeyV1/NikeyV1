@@ -6,7 +6,6 @@ import de.nikey.nikeyv1.api.EntityTypeDamage;
 import de.slikey.effectlib.effect.CylinderEffect;
 import de.slikey.effectlib.effect.ShieldEffect;
 import de.slikey.effectlib.effect.TornadoEffect;
-import io.papermc.paper.configuration.type.fallback.FallbackValue;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
@@ -587,7 +586,7 @@ public class Electrostone implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         int level = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
@@ -595,11 +594,11 @@ public class Electrostone implements Listener {
         if (stone.equalsIgnoreCase("electric")) {
             if (level >= 7) {
                 if (level == 7) {
-                    player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.075);
+                    player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.1);
                 } else if (level == 8) {
-                    player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.15);
-                }else if (level >= 9) {
                     player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.2);
+                }else if (level >= 9) {
+                    player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.3);
                 }
             }else {
                 player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);

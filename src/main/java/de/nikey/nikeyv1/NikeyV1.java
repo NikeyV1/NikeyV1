@@ -60,8 +60,6 @@ public final class NikeyV1 extends JavaPlugin{
         Items.PowerBeacon();
         Items.UpgradeToken();
         saveDefaultConfig();
-
-        //Code
     }
 
     @Override

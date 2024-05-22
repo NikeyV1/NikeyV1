@@ -57,7 +57,7 @@ public class HelpUtil {
             }
         }
 
-        return null; // Rückgabe von null, wenn keine Entity gefunden wurde
+        return null;
     }
     public static List<Block> getNearbyBlocks(Location location, int radius) {
         List<Block> blocks = new ArrayList<Block>();

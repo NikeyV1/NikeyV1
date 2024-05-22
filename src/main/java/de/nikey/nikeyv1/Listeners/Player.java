@@ -51,12 +51,12 @@ public class Player implements Listener {
             p.setFlySpeed(0.1f);
             if (stone.equalsIgnoreCase("Electric")) {
                 if (level == 3){
-                    p.setWalkSpeed(0.2075F);
+                    p.setWalkSpeed(0.21F);
                 } else if (level == 4) {
-                    p.setWalkSpeed(0.2150F);
+                    p.setWalkSpeed(0.22F);
                 }else if (level == 5) {
-                    p.setWalkSpeed(0.2225F);
-                }else if (level >= 6) p.setWalkSpeed(0.23F);
+                    p.setWalkSpeed(0.23F);
+                }else if (level >= 6) p.setWalkSpeed(0.24F);
             }
             Holystone.hitted.remove(p);
             p.setMaxHealth(20);
