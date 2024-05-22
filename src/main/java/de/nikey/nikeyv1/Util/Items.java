@@ -261,7 +261,11 @@ public class Items {
         itemMeta.setCustomModelData(1);
         sword.setItemMeta(itemMeta);
         sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL,7);
-        player.getInventory().addItem(sword);
+        if (player.getInventory().firstEmpty() != -1) {
+            player.getInventory().addItem(sword);
+        }else {
+            player.getInventory().setItem(9,sword);
+        }
     }
 
     public static void GiveElementalStone(Player player){
@@ -274,7 +278,11 @@ public class Items {
         lore.add("§fThe combined power of all §8stones");
         meta.setLore(lore);
         elementalstone.setItemMeta(meta);
-        player.getInventory().addItem(elementalstone);
+        if (player.getInventory().firstEmpty() != -1) {
+            player.getInventory().addItem(elementalstone);
+        }else {
+            player.getInventory().setItemInOffHand(elementalstone);
+        }
     }
 
     public static void PowerBeacon(){
