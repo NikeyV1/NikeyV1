@@ -270,7 +270,7 @@ public class Holystone implements Listener {
                                         if (!playersInSameTeam.contains(e)) {
                                             Player player =(Player) e;
                                             double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                            armor = armor*1.9;
+                                            armor = armor*1.8;
                                             int players = p.getNearbyEntities(20, 20, 20).size();
                                             if (players == 1){
                                                 p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
@@ -291,7 +291,7 @@ public class Holystone implements Listener {
                                         if (!playersInSameTeam.contains(e)) {
                                             Player player =(Player) e;
                                             double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                            armor = armor*1.9;
+                                            armor = armor*1.8;
                                             int players = p.getNearbyEntities(20, 20, 20).size();
                                             if (players == 1){
                                                 p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
@@ -314,7 +314,7 @@ public class Holystone implements Listener {
                                         if (!playersInSameTeam.contains(e)) {
                                             Player player =(Player) e;
                                             double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                            armor = armor*1.9;
+                                            armor = armor*1.8;
                                             int players = p.getNearbyEntities(20, 20, 20).size();
                                             if (players == 1){
                                                 p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
@@ -356,7 +356,7 @@ public class Holystone implements Listener {
                                         if (!playersInSameTeam.contains(e)) {
                                             Player player =(Player) e;
                                             double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                            armor = armor*1.9;
+                                            armor = armor*1.8;
                                             int players = p.getNearbyEntities(25, 25, 25).size();
                                             if (players == 1){
                                                 p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
@@ -377,7 +377,7 @@ public class Holystone implements Listener {
                                         if (!playersInSameTeam.contains(e)) {
                                             Player player =(Player) e;
                                             double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                            armor = armor*1.9;
+                                            armor = armor*1.8;
                                             int players = p.getNearbyEntities(25, 25, 25).size();
                                             if (players == 1){
                                                 p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
@@ -400,7 +400,7 @@ public class Holystone implements Listener {
                                         if (!playersInSameTeam.contains(e)) {
                                             Player player =(Player) e;
                                             double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                            armor = armor*1.9;
+                                            armor = armor*1.8;
                                             int players = p.getNearbyEntities(25, 25, 25).size();
                                             if (players == 1){
                                                 p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
@@ -442,7 +442,7 @@ public class Holystone implements Listener {
                                         if (!playersInSameTeam.contains(e)) {
                                             Player player =(Player) e;
                                             double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                            armor = armor*1.9;
+                                            armor = armor*1.8;
                                             int players = p.getNearbyEntities(25, 25, 25).size();
                                             if (players == 1){
                                                 p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
@@ -463,7 +463,7 @@ public class Holystone implements Listener {
                                         if (!playersInSameTeam.contains(e)) {
                                             Player player =(Player) e;
                                             double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                            armor = armor*1.9;
+                                            armor = armor*1.8;
                                             int players = p.getNearbyEntities(25, 25, 25).size();
                                             if (players == 1){
                                                 p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
@@ -486,7 +486,7 @@ public class Holystone implements Listener {
                                         if (!playersInSameTeam.contains(e)) {
                                             Player player =(Player) e;
                                             double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                            armor = armor*1.9;
+                                            armor = armor*1.8;
                                             int players = p.getNearbyEntities(25, 25, 25).size();
                                             if (players == 1){
                                                 p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
@@ -528,7 +528,7 @@ public class Holystone implements Listener {
                                         if (!playersInSameTeam.contains(e)) {
                                             Player player =(Player) e;
                                             double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                            armor = armor*2.2;
+                                            armor = armor*2.1;
                                             int players = p.getNearbyEntities(25, 25, 25).size();
                                             if (players == 1){
                                                 p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
@@ -549,7 +549,7 @@ public class Holystone implements Listener {
                                         if (!playersInSameTeam.contains(e)) {
                                             Player player =(Player) e;
                                             double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                            armor = armor*2.2;
+                                            armor = armor*2.1;
                                             int players = p.getNearbyEntities(25, 25, 25).size();
                                             if (players == 1){
                                                 p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
@@ -572,7 +572,7 @@ public class Holystone implements Listener {
                                         if (!playersInSameTeam.contains(e)) {
                                             Player player =(Player) e;
                                             double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                            armor = armor*2.2;
+                                            armor = armor*2.1;
                                             int players = p.getNearbyEntities(25, 25, 25).size();
                                             if (players == 1){
                                                 p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
@@ -614,7 +614,7 @@ public class Holystone implements Listener {
                                         if (!playersInSameTeam.contains(e)) {
                                             Player player =(Player) e;
                                             double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                            armor = armor*2.2;
+                                            armor = armor*2.1;
                                             int players = p.getNearbyEntities(25, 25, 25).size();
                                             if (players == 1){
                                                 p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
@@ -635,7 +635,7 @@ public class Holystone implements Listener {
                                         if (!playersInSameTeam.contains(e)) {
                                             Player player =(Player) e;
                                             double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                            armor = armor*2.2;
+                                            armor = armor*2.1;
                                             int players = p.getNearbyEntities(25, 25, 25).size();
                                             if (players == 1){
                                                 p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
@@ -658,7 +658,7 @@ public class Holystone implements Listener {
                                         if (!playersInSameTeam.contains(e)) {
                                             Player player =(Player) e;
                                             double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                            armor = armor*2.2;
+                                            armor = armor*2.1;
                                             int players = p.getNearbyEntities(25, 25, 25).size();
                                             if (players == 1){
                                                 p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
@@ -681,7 +681,6 @@ public class Holystone implements Listener {
             }
         }
         if (hitted.contains(event.getPlayer())) {
-            // Cancel shield blocking during cooldown
             if (event.getItem() != null && event.getItem().getType() == Material.SHIELD) {
                 event.setCancelled(true);
             }
@@ -690,13 +689,11 @@ public class Holystone implements Listener {
 
     @EventHandler
     public void onEntityResurrect(EntityResurrectEvent event) {
-        // Überprüfen, ob das wiederbelebte Entity ein Spieler ist
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            // Überprüfen, ob der Spieler in der deaktivierten Liste ist
             if (hitted.contains(player)) {
-                // Totem-Auslösen abbrechen
                 event.setCancelled(true);
+                hitted.remove(player);
             }
         }
     }
@@ -767,8 +764,8 @@ public class Holystone implements Listener {
                             }
                         }.runTaskTimer(NikeyV1.getPlugin(),0,3);
                     }
-                    damager.setHealth(damager.getHealth() + event.getFinalDamage()*0.5);
                 }
+                damager.setHealth(damager.getHealth() + event.getFinalDamage()*0.5);
             }
         }
     }
