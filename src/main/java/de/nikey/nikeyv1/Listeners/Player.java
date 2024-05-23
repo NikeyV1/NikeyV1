@@ -26,6 +26,7 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -253,7 +254,7 @@ public class Player implements Listener {
         int i = config.getInt(player.getName() + ".level");
         //Changes to only drop if level is higher than 10
         if (player.getKiller() != null&&player.getKiller() instanceof org.bukkit.entity.Player){
-            if (i > 15) {
+            if (i >= 10) {
                 Items.SoulofStrenght(player.getKiller());
             }
         }

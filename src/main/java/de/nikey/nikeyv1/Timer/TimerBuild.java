@@ -89,8 +89,8 @@ public class TimerBuild  {
                                 cancel();
                             }
                         }else {
-                            System.out.println(player.getName()+" left while upgrading!");
-                            System.out.println("Was eine b*tch");
+                            NikeyV1.getPlugin().getLogger().info(player.getName()+" left while upgrading!");
+                            NikeyV1.getPlugin().getLogger().info("Was eine b*tch");
                             cancel();
                             return;
                         }

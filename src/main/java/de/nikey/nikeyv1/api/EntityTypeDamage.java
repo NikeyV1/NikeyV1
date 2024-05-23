@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 
 public class EntityTypeDamage {
     public static String getDamageEntityType(Player player) {
-
         FileConfiguration config = NikeyV1.getPlugin().getConfig();
         String string = config.getString(player.getName() + ".det");
         if (!string.isEmpty()) {

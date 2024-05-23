@@ -181,17 +181,6 @@ public class Tornado implements Listener {
                 }
             }
 
-            private void cleanStoneItemsAroundPlayer(Entity e) {
-                for (Entity entity1 :e.getNearbyEntities(20,20,20)) {
-                    if (entity1 instanceof Item) {
-                        Item item = (Item) entity1;
-                        if (item.getItemStack().getType() == Material.STONE) {
-                            item.remove();
-                        }
-                    }
-                }
-            }
-
             private float verticalTicker() {
                 if (ticker_vertical < 1.0f) {
                     ticker_vertical += 0.05f;
