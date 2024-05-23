@@ -235,8 +235,6 @@ public class Player implements Listener {
                     Items.Holystone(player,level);
                 }
             }
-
-
             new BukkitRunnable() {
                 @Override
                 public void run() {
