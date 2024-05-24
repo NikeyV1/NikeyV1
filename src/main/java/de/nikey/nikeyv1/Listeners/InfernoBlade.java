@@ -90,16 +90,8 @@ public class InfernoBlade implements Listener {
                                         }.runTaskLater(NikeyV1.getPlugin(),20*45);
                                         red = true;
                                         //Cooldown-Ability
-                                        List<Entity> nearbyEntities = player.getNearbyEntities(20, 15, 20);
-                                        List<LivingEntity> targets = new ArrayList<>();
-                                        for (Entity entity : nearbyEntities) {
-                                            if ((entity instanceof Player || entity instanceof LivingEntity) && !entity.equals(player)) {
-                                                targets.add((LivingEntity) entity);
-                                            }
-                                        }
-                                        if (!targets.isEmpty()) {
-                                            teleportAndRoot(player, targets);
-                                        }
+                                        
+                                        teleportAndRoot(player)
                                     }
                                 }
                             } else if (meta.getDisplayName().equalsIgnoreCase( ChatColor.AQUA + "Inferno Blade")) {
