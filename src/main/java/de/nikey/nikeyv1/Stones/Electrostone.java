@@ -659,35 +659,35 @@ public class Electrostone implements Listener {
                                             if (target instanceof Player){
                                                 List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                 if (!playersInSameTeam.contains(target)) {
-                                                    target.damage(2);
+                                                    target.damage(1);
                                                     target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
                                                 }
                                             }else {
-                                                target.damage(2);
+                                                target.damage(1);
                                                 target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
                                             }
                                         }else if (damageEntityType.equalsIgnoreCase("players")) {
                                             if (target instanceof Player){
                                                 List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                 if (!playersInSameTeam.contains(target)) {
-                                                    target.damage(2);
+                                                    target.damage(1);
                                                     target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
                                                 }
                                             }
                                         }else if (damageEntityType.equalsIgnoreCase("monsters")) {
                                             if (target instanceof Monster) {
-                                                target.damage(2);
+                                                target.damage(1);
                                                 target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
                                             }
                                         }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
                                             if (target instanceof Player){
                                                 List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                 if (!playersInSameTeam.contains(target)) {
-                                                    target.damage(2);
+                                                    target.damage(1);
                                                     target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
                                                 }
                                             }else if (target instanceof Monster){
-                                                target.damage(2);
+                                                target.damage(1);
                                                 target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
                                             }
                                         }
@@ -739,35 +739,35 @@ public class Electrostone implements Listener {
                                             if (target instanceof Player){
                                                 List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                 if (!playersInSameTeam.contains(target)) {
-                                                    target.damage(4);
+                                                    target.damage(2);
                                                     target.setVelocity(target.getLocation().getDirection().multiply(-2));
                                                 }
                                             }else {
-                                                target.damage(4);
+                                                target.damage(2);
                                                 target.setVelocity(target.getLocation().getDirection().multiply(-2));
                                             }
                                         }else if (damageEntityType.equalsIgnoreCase("players")) {
                                             if (target instanceof Player){
                                                 List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                 if (!playersInSameTeam.contains(target)) {
-                                                    target.damage(4);
+                                                    target.damage(2);
                                                     target.setVelocity(target.getLocation().getDirection().multiply(-2));
                                                 }
                                             }
                                         }else if (damageEntityType.equalsIgnoreCase("monsters")) {
                                             if (target instanceof Monster) {
-                                                target.damage(4);
+                                                target.damage(2);
                                                 target.setVelocity(target.getLocation().getDirection().multiply(-2));
                                             }
                                         }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
                                             if (target instanceof Player){
                                                 List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                 if (!playersInSameTeam.contains(target)) {
-                                                    target.damage(4);
+                                                    target.damage(2);
                                                     target.setVelocity(target.getLocation().getDirection().multiply(-2));
                                                 }
                                             }else if (target instanceof Monster){
-                                                target.damage(4);
+                                                target.damage(2);
                                                 target.setVelocity(target.getLocation().getDirection().multiply(-2));
                                             }
                                         }
