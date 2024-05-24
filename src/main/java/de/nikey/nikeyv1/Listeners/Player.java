@@ -7,6 +7,9 @@ import de.nikey.nikeyv1.Stones.Holystone;
 import de.nikey.nikeyv1.Timer.TimerBuild;
 import de.nikey.nikeyv1.Util.Items;
 import io.papermc.paper.event.entity.EntityMoveEvent;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.title.Title;
+import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -561,6 +564,7 @@ public class Player implements Listener {
                                                         for (org.bukkit.entity.Player players : Bukkit.getOnlinePlayers()) {
                                                             players.playSound(players.getLocation(),Sound.BLOCK_BEACON_POWER_SELECT,2,2);
                                                             players.playEffect(EntityEffect.TOTEM_RESURRECT);
+                                                            players.sendTitle("§dInferno Blade has been crafted by" + p.getName(),null);
                                                         }
                                                     } else {
                                                         p.sendMessage("§cError: You are already buffed!");
