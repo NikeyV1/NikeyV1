@@ -534,7 +534,7 @@ public class Elementalstone implements Listener {
         }
     }
 
-    @EventHandle
+    @EventHandler
     public void onEntityMove(EntityMoveEvent event) {
         LivingEntity entity = event.getEntity();
         if (stunned.contains(entity)){

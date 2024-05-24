@@ -1,6 +1,7 @@
 package de.nikey.nikeyv1.Listeners;
 
 import de.nikey.nikeyv1.NikeyV1;
+import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.BleedEffect;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import org.bukkit.*;
@@ -19,6 +20,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 public class InfernoBlade implements Listener {
@@ -32,6 +34,8 @@ public class InfernoBlade implements Listener {
     private HashMap<LivingEntity, Long> frozenPlayers = new HashMap<>();
 
     private final Random random = new Random();
+
+    public static HashMap<String , List<LivingEntity>> targetsmap = new HashMap<>();
 
     @EventHandler
     public void onPlayerItemHeld(PlayerItemHeldEvent event) {
@@ -90,8 +94,7 @@ public class InfernoBlade implements Listener {
                                         }.runTaskLater(NikeyV1.getPlugin(),20*45);
                                         red = true;
                                         //Cooldown-Ability
-                                        
-                                        teleportAndRoot(player)
+                                        teleportAndRoot(player);
                                     }
                                 }
                             } else if (meta.getDisplayName().equalsIgnoreCase( ChatColor.AQUA + "Inferno Blade")) {
@@ -140,68 +143,93 @@ public class InfernoBlade implements Listener {
 
     private void teleportAndRoot(Player player) {
         Location loc = player.getLocation();
-        List<LivingEntity> targets = player.getWorld().getLivingEntities().stream()
-                .filter(entity -> !entity.equals(player) && entity.getLocation().distance(player.getLocation()) <= 20)
-                .sorted(Comparator.comparingDouble(entity -> entity.getLocation().distance(player.getLocation())))
-                .limit(5)
-                .collect(Collectors.toList());
+        String attacking = Stone.getAttacking(player);
+        List<LivingEntity> target;
+        if (attacking.equalsIgnoreCase("all")) {
+            target = player.getWorld().getLivingEntities().stream()
+                    .filter(entity -> !entity.equals(player) && entity.getLocation().distance(player.getLocation()) <= 30)
+                    .sorted(Comparator.comparingDouble(entity -> entity.getLocation().distance(player.getLocation())))
+                    .limit(6)
+                    .collect(Collectors.toList());
+            targetsmap.put(player.getName(),target);
+        }else if (attacking.equalsIgnoreCase("players")) {
+            target = player.getWorld().getLivingEntities().stream()
+                    .filter(entity -> entity instanceof Player && !entity.equals(player) && entity.getLocation().distance(player.getLocation()) <= 30)
+                    .sorted(Comparator.comparingDouble(entity -> entity.getLocation().distance(player.getLocation())))
+                    .limit(6)
+                    .collect(Collectors.toList());
+            targetsmap.put(player.getName(),target);
+        }else if (attacking.equalsIgnoreCase("monsters")) {
+            target = player.getWorld().getLivingEntities().stream()
+                    .filter(entity -> entity instanceof Monster && !entity.equals(player) && entity.getLocation().distance(player.getLocation()) <= 30)
+                    .sorted(Comparator.comparingDouble(entity -> entity.getLocation().distance(player.getLocation())))
+                    .limit(6)
+                    .collect(Collectors.toList());
+            targetsmap.put(player.getName(),target);
+        }else if (attacking.equalsIgnoreCase("monsters-player")) {
+            target = player.getWorld().getLivingEntities().stream()
+                    .filter(entity -> (entity instanceof Monster || entity instanceof Player) &&
+                            !entity.equals(player) && entity.getLocation().distance(player.getLocation()) <= 30)
+                    .sorted(Comparator.comparingDouble(entity -> entity.getLocation().distance(player.getLocation())))
+                    .limit(6)
+                    .collect(Collectors.toList());
+            targetsmap.put(player.getName(),target);
+        }else {
+            player.sendMessage("§cError: Config.Attack wrong input");
+        }
 
         new BukkitRunnable() {
             int teleportCount = 0;
             @Override
             public void run() {
-                teleportCount++;
+                List<LivingEntity> targets = targetsmap.get(player.getName());
+                if (teleportCount < targets.size()) {
+                    LivingEntity targetEntity = targets.get(teleportCount);
+                    targetEntity.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,20*8,0));
+                    Location playerLocation = player.getLocation();
+                    Location nearestPlayerLocation = targetEntity.getLocation();
 
-                if (teleportCount > targets.size()|| targets.isEmpty()) {
-                    player.teleport(loc);
-                    cancel();
-                    return;
-                }
-                if (targets.get(teleportCount) == null) {
-                    loc.getWorld().playEffect(loc,Effect.ENDER_SIGNAL,null);
-                    player.playSound(loc, Sound.ENTITY_PLAYER_TELEPORT, 1.0f, 1.0f);
-                    player.teleport(loc);
-                    cancel();
-                    return;
-                }
+                    double nX;
+                    double nZ;
+                    float nang = nearestPlayerLocation.getYaw() + 90;
+                    if(nang < 0) nang += 360;
+                    nX = Math.cos(Math.toRadians(nang));
+                    nZ = Math.sin(Math.toRadians(nang));
 
-                LivingEntity targetEntity = targets.get(teleportCount);
-                targetEntity.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,20*8,0));
-                Location playerLocation = player.getLocation();
-                Location nearestPlayerLocation = targetEntity.getLocation();
+                    Location teleportLocation = new Location(nearestPlayerLocation.getWorld(), nearestPlayerLocation.getX() - nX,
+                            nearestPlayerLocation.getY(), nearestPlayerLocation.getZ() - nZ, nearestPlayerLocation.getYaw(), nearestPlayerLocation.getPitch());
 
-                double nX;
-                double nZ;
-                float nang = nearestPlayerLocation.getYaw() + 90;
-                if(nang < 0) nang += 360;
-                nX = Math.cos(Math.toRadians(nang));
-                nZ = Math.sin(Math.toRadians(nang));
-      
-                Location teleportLocation = new Location(nearestPlayerLocation.getWorld(), nearestPlayerLocation.getX() - nX,
-                        nearestPlayerLocation.getY(), nearestPlayerLocation.getZ() - nZ, nearestPlayerLocation.getYaw(), nearestPlayerLocation.getPitch());
 
-                  
-                teleportLocation.getWorld().playEffect(teleportLocation,Effect.ENDER_SIGNAL,null);
-                for (Entity entity : teleportLocation.getWorld().getNearbyEntities(teleportLocation, 2, 2, 2)) {
-                    if (entity instanceof LivingEntity) {
-                        LivingEntity livingEntity = (LivingEntity) entity;
-                        player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, teleportLocation, 2);
-                        livingEntity.damage(20,player);
+                    teleportLocation.getWorld().playEffect(teleportLocation,Effect.ENDER_SIGNAL,null);
+                    for (Entity entity : teleportLocation.getWorld().getNearbyEntities(teleportLocation, 2, 2, 2)) {
+                        if (entity instanceof LivingEntity && entity != player) {
+                            LivingEntity livingEntity = (LivingEntity) entity;
+                            player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, teleportLocation, 2);
+                            livingEntity.damage(20,player);
+                            livingEntity.setNoDamageTicks(1);
+                        }
                     }
-                }
-                if (teleportLocation.getBlock().isEmpty()) {
-                    player.teleport(teleportLocation);
-                    player.playSound(teleportLocation, Sound.ENTITY_PLAYER_TELEPORT, 1.0f, 1.0f);
-                }else {
-                    teleportToNearestAirBlock(player,teleportLocation);
-                    player.playSound(teleportLocation, Sound.ENTITY_PLAYER_TELEPORT, 1.0f, 1.0f);
-                }
+                    if (teleportLocation.getBlock().isEmpty()) {
+                        player.teleport(teleportLocation);
+                        player.playSound(teleportLocation, Sound.ENTITY_PLAYER_TELEPORT, 1.0f, 1.0f);
+                    }else {
+                        teleportToNearestAirBlock(player,teleportLocation);
+                        player.playSound(teleportLocation, Sound.ENTITY_PLAYER_TELEPORT, 1.0f, 1.0f);
+                    }
 
-                //Freeze
-                freezePlayer(targetEntity);
-                Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> unfreezePlayer(targetEntity), 50L);
+                    //Freeze
+                    freezePlayer(targetEntity);
+                    Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> unfreezePlayer(targetEntity), 50L);
+
+                    teleportCount++;
+                }else {
+                    loc.getWorld().playEffect(loc,Effect.ENDER_SIGNAL,null);
+                    player.teleport(loc);
+                    cancel();
+                    return;
+                }
             }
-        }.runTaskTimer(NikeyV1.getPlugin(), 20, 20);
+        }.runTaskTimer(NikeyV1.getPlugin(),5, 20);
     }
 
 
