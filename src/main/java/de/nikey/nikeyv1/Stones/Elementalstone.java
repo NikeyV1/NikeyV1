@@ -501,7 +501,7 @@ public class Elementalstone implements Listener {
                         }
                     }
                 pg += 110;
-                radius += 25; // Erhöhe den Radius um 20 Blöcke
+                radius += 25;
                 if (radius >= 100)cancel();
 
             }
@@ -534,7 +534,7 @@ public class Elementalstone implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandle
     public void onEntityMove(EntityMoveEvent event) {
         LivingEntity entity = event.getEntity();
         if (stunned.contains(entity)){
@@ -542,7 +542,7 @@ public class Elementalstone implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player entity = event.getPlayer();
         if (stunned.contains(entity)){
