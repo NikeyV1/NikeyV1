@@ -146,18 +146,21 @@ public class InfernoBlade implements Listener {
         }
     }
 
-    int teleportCount = 0;
-    private void teleportAndRoot(Player player, List<LivingEntity> targets) {
+    private void teleportAndRoot(Player player) {
         Location loc = player.getLocation();
-        Collections.sort(targets, Comparator.comparingDouble(entity -> entity.getLocation().distance(player.getLocation())));
+        List<LivingEntity> targets = player.getWorld().getLivingEntities().stream()
+                .filter(entity -> !entity.equals(player) && entity.getLocation().distance(player.getLocation()) <= 20)
+                .sorted(Comparator.comparingDouble(entity -> entity.getLocation().distance(player.getLocation())))
+                .limit(5)
+                .collect(Collectors.toList());
 
         new BukkitRunnable() {
-
+            int teleportCount = 0;
             @Override
             public void run() {
                 teleportCount++;
 
-                if (teleportCount >= 5 || targets.isEmpty()) {
+                if (teleportCount > targets.size()|| targets.isEmpty()) {
                     player.teleport(loc);
                     cancel();
                     return;
@@ -175,7 +178,17 @@ public class InfernoBlade implements Listener {
                 Location playerLocation = player.getLocation();
                 Location nearestPlayerLocation = targetEntity.getLocation();
 
-                Location teleportLocation = nearestPlayerLocation.clone().subtract(nearestPlayerLocation.getDirection().multiply(2));
+                double nX;
+                double nZ;
+                float nang = nearestPlayerLocation.getYaw() + 90;
+                if(nang < 0) nang += 360;
+                nX = Math.cos(Math.toRadians(nang));
+                nZ = Math.sin(Math.toRadians(nang));
+      
+                Location teleportLocation = new Location(nearestPlayerLocation.getWorld(), nearestPlayerLocation.getX() - nX,
+                        nearestPlayerLocation.getY(), nearestPlayerLocation.getZ() - nZ, nearestPlayerLocation.getYaw(), nearestPlayerLocation.getPitch());
+
+                  
                 teleportLocation.getWorld().playEffect(teleportLocation,Effect.ENDER_SIGNAL,null);
                 for (Entity entity : teleportLocation.getWorld().getNearbyEntities(teleportLocation, 2, 2, 2)) {
                     if (entity instanceof LivingEntity) {
@@ -191,6 +204,8 @@ public class InfernoBlade implements Listener {
                     teleportToNearestAirBlock(player,teleportLocation);
                     player.playSound(teleportLocation, Sound.ENTITY_PLAYER_TELEPORT, 1.0f, 1.0f);
                 }
+
+                //Freeze
                 freezePlayer(targetEntity);
                 Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> unfreezePlayer(targetEntity), 50L);
             }
