@@ -564,7 +564,7 @@ public class Player implements Listener {
                                                         for (org.bukkit.entity.Player players : Bukkit.getOnlinePlayers()) {
                                                             players.playSound(players.getLocation(),Sound.BLOCK_BEACON_POWER_SELECT,2,2);
                                                             players.playEffect(EntityEffect.TOTEM_RESURRECT);
-                                                            players.sendTitle("§dInferno Blade has been crafted by" + p.getName(),null);
+                                                            players.sendTitle("§dDragon egg used!","§dby "+ p.getName());
                                                         }
                                                     } else {
                                                         p.sendMessage("§cError: You are already buffed!");

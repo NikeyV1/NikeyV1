@@ -83,7 +83,7 @@ public class InfernoBlade implements Listener {
                                         player.updateInventory();
                                         remainingTime2 = ability.get(player.getUniqueId()) - System.currentTimeMillis();
                                     }else {
-                                        ability.put(player.getUniqueId(),System.currentTimeMillis() + (80*1000));
+                                        ability.put(player.getUniqueId(),System.currentTimeMillis() + (45*1000));
                                         new BukkitRunnable() {
                                             @Override
                                             public void run() {
