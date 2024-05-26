@@ -258,14 +258,10 @@ public class InfernoBlade implements Listener {
     @EventHandler
     public void onPlayerMove(EntityMoveEvent event) {
         LivingEntity player = event.getEntity();
-        // Überprüfen, ob der Spieler eingefroren ist
         if (frozenPlayers.containsKey(player)) {
-            // Überprüfen, ob die Einfrierzeit abgelaufen ist
             if (System.currentTimeMillis() > frozenPlayers.get(player)) {
-                // Entfrieren des Spielers, wenn die Einfrierzeit abgelaufen ist
                 unfreezePlayer(player);
             } else {
-                // Verhindern, dass sich der Spieler bewegt, während er eingefroren ist
                 event.setCancelled(true);
             }
         }

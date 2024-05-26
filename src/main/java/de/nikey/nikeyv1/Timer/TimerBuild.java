@@ -85,6 +85,8 @@ public class TimerBuild  {
                                     Items.Undeadstone(player,getLevel());
                                 }else if (getStone(player).equalsIgnoreCase("Holy")){
                                     Items.Holystone(player,getLevel());
+                                }else if (getStone(player).equalsIgnoreCase("Ghost")){
+                                    Items.Ghoststone(player,getLevel());
                                 }
                                 cancel();
                             }

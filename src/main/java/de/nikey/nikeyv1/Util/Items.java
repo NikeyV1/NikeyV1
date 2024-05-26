@@ -182,6 +182,27 @@ public class Items {
         }
     }
 
+    public static void Ghoststone(Player player , Integer level){
+        ItemStack ghoststone = new ItemStack(Material.FIREWORK_STAR);
+        ItemMeta meta =  ghoststone.getItemMeta();
+        FireworkEffectMeta metaFw = (FireworkEffectMeta) meta;
+        FireworkEffect aa = FireworkEffect.builder().withColor(Color.fromRGB(14540253)).build();
+        metaFw.setEffect(aa);
+        metaFw.setDisplayName(ChatColor.of("#dddddd")+"Ghost Stone");
+        metaFw.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        ghoststone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add("§fHaunted by ghosts");
+        lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
+        metaFw.setLore(lore);
+        ghoststone.setItemMeta(metaFw);
+        if (player.getInventory().firstEmpty() != -1) {
+            player.getInventory().addItem(ghoststone);
+        }else {
+            player.getInventory().setItemInOffHand(ghoststone);
+        }
+    }
+
     public static void switcher() {
         ItemStack soul = new ItemStack(Material.SOUL_LANTERN);
         ItemMeta smeta = soul.getItemMeta();

@@ -48,6 +48,7 @@ public final class NikeyV1 extends JavaPlugin{
         manager.registerEvents(new UndeadStoneListener(),this);
         manager.registerEvents(new PowerBeacon(),this);
         manager.registerEvents(new ResourcePack(),this);
+        manager.registerEvents(new Ghoststone(),this);
         //Command
         getCommand("stone").setExecutor(new stone());
         getCommand("peffect").setExecutor(new PEffectCMD());

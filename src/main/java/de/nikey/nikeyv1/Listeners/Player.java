@@ -64,6 +64,10 @@ public class Player implements Listener {
             }
             Holystone.hitted.remove(p);
             p.setMaxHealth(20);
+
+            if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) {
+                p.setAllowFlight(false);
+            }
             TimerBuild timerBuild = new TimerBuild();
             if (config.getBoolean(p.getName()+".time")){
                 BukkitRunnable runnable = new BukkitRunnable() {

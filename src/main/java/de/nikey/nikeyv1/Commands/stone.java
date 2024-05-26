@@ -56,6 +56,13 @@ public class stone implements CommandExecutor {
                     }catch (NumberFormatException e){
                         p.sendMessage("§cTake a Number");
                     }
+                }else if (stone.equalsIgnoreCase("Ghost")){
+                    try {
+                        int level = Integer.parseInt(args[1]);
+                        Items.Ghoststone(p,level);
+                    }catch (NumberFormatException e){
+                        p.sendMessage("§cTake a Number");
+                    }
                 }else if (stone.equalsIgnoreCase("Elemental")){
                     Items.GiveElementalStone(p);
                 }
