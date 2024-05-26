@@ -1,23 +1,23 @@
 package de.nikey.nikeyv1.Stones;
 
-import com.destroystokyo.paper.event.player.PlayerConnectionCloseEvent;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
+import de.slikey.effectlib.effect.PlotEffect;
+import de.slikey.effectlib.effect.SphereEffect;
 import org.bukkit.Particle;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftHumanEntity;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
@@ -28,6 +28,9 @@ import java.util.UUID;
 public class Ghoststone implements Listener {
 
     private HashMap<UUID, Integer> playerHitCount = new HashMap<>();
+    public static HashMap<UUID, Long> cooldown = new HashMap<>();
+
+    public static long remainingTime1;
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
@@ -215,5 +218,37 @@ public class Ghoststone implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
+        Player p = event.getPlayer();
+        ItemStack item = event.getItem();
+        if (item == null) return;
+        if (Stone.whatStone(item).equalsIgnoreCase("Ghost")) {
+            int level = Stone.getStoneLevelFromItem(item);
+            FileConfiguration config = NikeyV1.getPlugin().getConfig();
+            config.set(p.getName()+".stone","Ghost");
+            config.set(p.getName()+".level",level);
+            NikeyV1.getPlugin().saveConfig();
+            if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
+                if (level >= 10){
+                    if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
+                        p.updateInventory();
+                        remainingTime1 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
+                    }else {
+                        cooldown.put(p.getUniqueId(),System.currentTimeMillis() + (100*1000));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                cooldown.remove(p.getUniqueId());
+                                cancel();
+                                return;
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(),20*100);
+
+                        if (level == 10) {
+
+                        }
+                    }
+                }
+            }
+        }
     }
 }

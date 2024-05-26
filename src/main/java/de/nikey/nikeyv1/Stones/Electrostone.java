@@ -331,7 +331,6 @@ public class Electrostone implements Listener {
             config.set(p.getName()+".stone","Electric");
             config.set(p.getName()+".level",i);
             NikeyV1.getPlugin().saveConfig();
-            String stone = config.getString(p.getName() + ".stone");
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
                 if (i >= 10){
                     if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
