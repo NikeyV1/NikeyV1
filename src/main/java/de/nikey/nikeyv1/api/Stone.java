@@ -27,4 +27,8 @@ public class Stone {
     public static String getAttacking(Player player) {
         return NikeyV1.getPlugin().getConfig().getString(player.getName() + ".det");
     }
+
+    public static void setStoneLevel(Player player, int level) {
+        NikeyV1.getPlugin().getConfig().set(player.getName() + ".level",level);
+    }
 }
