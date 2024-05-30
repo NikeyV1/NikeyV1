@@ -4,10 +4,7 @@ import com.destroystokyo.paper.event.player.PlayerElytraBoostEvent;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.LineEffect;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EvokerFangs;
@@ -66,6 +63,8 @@ public class GhostStoneDamageAbility implements Listener {
                     }.runTaskLater(NikeyV1.getPlugin(),20*180);
 
                     if (l == 15) {
+                        player.getWorld().spawnParticle(Particle.SCULK_CHARGE, player.getLocation().add(0,2.5F,0), 1, 1);
+
                         setVisibility(victim,player);
                         timer.put(player,100);
                         new BukkitRunnable() {
@@ -138,7 +137,7 @@ public class GhostStoneDamageAbility implements Listener {
         damager.showPlayer(NikeyV1.getPlugin(), victim);
 
         //Effects
-        victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*30,1,true));
+        victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*30,2,true));
         victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*30,1,true));
         victim.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*30,1,true));
         damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*30,2,true));

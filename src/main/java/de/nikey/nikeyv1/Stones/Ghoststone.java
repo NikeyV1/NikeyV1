@@ -243,7 +243,7 @@ public class Ghoststone implements Listener {
                         }.runTaskLater(NikeyV1.getPlugin(),20*100);
 
                         if (level == 10) {
-
+                            //GM
                         }
                     }
                 }
