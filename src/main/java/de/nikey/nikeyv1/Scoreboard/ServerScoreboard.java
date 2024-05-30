@@ -1,5 +1,6 @@
 package de.nikey.nikeyv1.Scoreboard;
 
+import de.nikey.nikeyv1.Listeners.GhostStoneDamageAbility;
 import de.nikey.nikeyv1.Listeners.InfernoBlade;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Stones.*;
@@ -162,6 +163,8 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 return Undeadstone.ability.getOrDefault(player.getUniqueId(), 0L);
             case "holy":
                 return Holystone.ability.getOrDefault(player.getUniqueId(), 0L);
+            case "ghost":
+                return GhostStoneDamageAbility.ability.getOrDefault(player.getUniqueId(), 0L);
             default:
                 return 0L;
         }

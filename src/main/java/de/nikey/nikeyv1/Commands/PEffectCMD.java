@@ -2,6 +2,7 @@ package de.nikey.nikeyv1.Commands;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.slikey.effectlib.effect.*;
+import de.slikey.effectlib.util.DynamicLocation;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -105,11 +106,6 @@ public class PEffectCMD implements CommandExecutor {
                         effect.setLocation(p.getLocation());
                         effect.start();
                         p.sendMessage("Started");
-                    }else if (args[0].equalsIgnoreCase("Jump")){
-                        JumpEffect effect = new JumpEffect(NikeyV1.em);
-                        effect.setLocation(p.getLocation());
-                        effect.start();
-                        p.sendMessage("Started");
                     }else if (args[0].equalsIgnoreCase("Modified")){
                         ModifiedEffect effect = new ModifiedEffect(NikeyV1.em);
                         effect.setLocation(p.getLocation());
@@ -152,6 +148,24 @@ public class PEffectCMD implements CommandExecutor {
                     }else if (args[0].equalsIgnoreCase("Line")) {
                         LineEffect effect = new LineEffect(NikeyV1.em);
                         effect.setLocation(p.getLocation());
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Turn")) {
+                        TurnEffect effect = new TurnEffect(NikeyV1.em);
+                        effect.setEntity(p);
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Wave")) {
+                        WaveEffect effect = new WaveEffect(NikeyV1.em);
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Star")) {
+                        StarEffect effect = new StarEffect(NikeyV1.em);
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("jump")) {
+                        JumpEffect effect = new JumpEffect(NikeyV1.em);
+                        effect.setEntity(p);
                         effect.start();
                         p.sendMessage("Started");
                     }

@@ -54,7 +54,6 @@
                     <minimizeJar>false</minimizeJar>
                     <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
                     <relocations>
-                        <!-- Other relocations can go here, e.g. bstats -->
                         <relocation>
                             <pattern>de.slikey</pattern>
                             <shadedPattern>my.own.plugin.namespace.slikey</shadedPattern>
