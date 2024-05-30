@@ -3,24 +3,17 @@ package de.nikey.nikeyv1.Listeners;
 import com.destroystokyo.paper.event.player.PlayerElytraBoostEvent;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.api.Stone;
-import de.slikey.effectlib.effect.LineEffect;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EvokerFangs;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
-import org.bukkit.event.player.PlayerRiptideEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,6 +27,7 @@ public class GhostStoneDamageAbility implements Listener {
 
     private final Set<Player> blockedPlayers = new HashSet<>();
     public static HashMap<Player, Integer> timer = new HashMap<>();
+    public static HashMap<Player, Integer> stealtimer = new HashMap<>();
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
@@ -63,8 +57,7 @@ public class GhostStoneDamageAbility implements Listener {
                     }.runTaskLater(NikeyV1.getPlugin(),20*180);
 
                     if (l == 15) {
-                        player.getWorld().spawnParticle(Particle.SCULK_CHARGE, player.getLocation().add(0,2.5F,0), 1, 1);
-
+                        startHealthSteal(player,victim);
                         setVisibility(victim,player);
                         timer.put(player,100);
                         new BukkitRunnable() {
@@ -122,6 +115,28 @@ public class GhostStoneDamageAbility implements Listener {
         }
     }
 
+
+    public void startHealthSteal(Player user , Player victim) {
+        stealtimer.put(user,30);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                stealtimer.replace(user,stealtimer.get(user)-1);
+                if (stealtimer.get(user) == 0) cancel();
+
+                if (victim.getHealth()-1 >= 1) {
+                    victim.setHealth(victim.getHealth()-1);
+                    victim.playHurtAnimation(0);
+                }else {
+                    victim.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                }
+                if (user.getHealth() < 20) {
+                    user.setHealth(user.getHealth()+1);
+                }
+            }
+        }.runTaskTimer(NikeyV1.getPlugin(),0,20);
+    }
+
     public void setVisibility(Player victim, Player damager) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player != victim && player != damager) {
@@ -139,7 +154,6 @@ public class GhostStoneDamageAbility implements Listener {
         //Effects
         victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*30,2,true));
         victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*30,1,true));
-        victim.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*30,1,true));
         damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*30,2,true));
         victim.setHealth(20);
 
