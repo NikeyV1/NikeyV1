@@ -520,7 +520,7 @@ public class Waterstone implements Listener {
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 400,0));
-                                    double maxHealth = p.getMaxHealth();
+                                    double maxHealth = entity.getMaxHealth();
                                     double damage = maxHealth * 0.35;
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
@@ -559,7 +559,7 @@ public class Waterstone implements Listener {
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 400,0));
-                                    double maxHealth = p.getMaxHealth();
+                                    double maxHealth = entity.getMaxHealth();
                                     double damage = maxHealth * 0.35;
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
@@ -599,7 +599,7 @@ public class Waterstone implements Listener {
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 400,0));
-                                    double maxHealth = p.getMaxHealth();
+                                    double maxHealth = entity.getMaxHealth();
                                     double damage = maxHealth * 0.45;
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
@@ -638,7 +638,7 @@ public class Waterstone implements Listener {
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 450,0));
-                                    double maxHealth = p.getMaxHealth();
+                                    double maxHealth = entity.getMaxHealth();
                                     double damage = maxHealth * 0.45;
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
@@ -677,7 +677,7 @@ public class Waterstone implements Listener {
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 450,0));
-                                    double maxHealth = p.getMaxHealth();
+                                    double maxHealth = entity.getMaxHealth();
                                     double damage = maxHealth * 0.45;
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
