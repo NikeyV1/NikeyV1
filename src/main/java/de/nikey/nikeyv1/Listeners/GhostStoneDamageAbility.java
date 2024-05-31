@@ -202,14 +202,14 @@ public class GhostStoneDamageAbility implements Listener {
                 stealtimer.replace(user,stealtimer.get(user)-1);
                 if (stealtimer.get(user) == 0) cancel();
 
-                if (victim.getHealth()-1 >= 1) {
-                    victim.setHealth(victim.getHealth()-1);
+                if (victim.getHealth()-0.5F >= 0.5F) {
+                    victim.setHealth(victim.getHealth()-0.5F);
                     victim.playHurtAnimation(0);
                 }else {
                     victim.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
                 }
                 if (user.getHealth() < 20) {
-                    user.setHealth(user.getHealth()+1);
+                    user.setHealth(user.getHealth()+0.5F);
                 }
             }
         }.runTaskTimer(NikeyV1.getPlugin(),0,20);
@@ -234,19 +234,17 @@ public class GhostStoneDamageAbility implements Listener {
         if (level == 15) {
             victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*20,2,true));
             victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*20,1,true));
-            damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*20,1,true));
         }else if (level == 16 ||level == 17) {
             victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*30,2,true));
             victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*30,1,true));
-            damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*30,1,true));
         }else if (level == 18) {
             victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*30,2,true));
             victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*30,1,true));
-            damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*30,2,true));
+            damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*30,1,true));
         }else if (level >= 19) {
             victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*40,2,true));
             victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*40,1,true));
-            damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*40,2,true));
+            damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*40,1,true));
         }
         victim.setHealth(20);
 
