@@ -57,9 +57,82 @@ public class GhostStoneDamageAbility implements Listener {
                     }.runTaskLater(NikeyV1.getPlugin(),20*180);
 
                     if (l == 15) {
+                        setVisibility(victim,player);
+                        timer.put(player,80);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                timer.replace(player,timer.get(player)-1);
+                                if (timer.get(player) == 0){
+                                    cancel();
+                                }
+
+                                Location loc = player.getLocation().add(0, 1, 0);
+                                Location target = victim.getLocation().add(0, 1, 0);
+                                double distance = loc.distance(target);
+                                double step = 0.2;
+                                for (double d = 0; d < distance; d += step) {
+                                    double t = d / distance;
+                                    double x = loc.getX() + (target.getX() - loc.getX()) * t;
+                                    double y = loc.getY() + (target.getY() - loc.getY()) * t;
+                                    double z = loc.getZ() + (target.getZ() - loc.getZ()) * t;
+                                    player.getWorld().spawnParticle(Particle.ASH, new Location(player.getWorld(), x, y, z), 2);
+                                }
+                            }
+                        }.runTaskTimer(NikeyV1.getPlugin(),0,5);
+                    } else if (l == 16 ) {
+                        setVisibility(victim,player);
+                        timer.put(player,120);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                timer.replace(player,timer.get(player)-1);
+                                if (timer.get(player) == 0){
+                                    cancel();
+                                }
+
+                                Location loc = player.getLocation().add(0, 1, 0);
+                                Location target = victim.getLocation().add(0, 1, 0);
+                                double distance = loc.distance(target);
+                                double step = 0.2;
+                                for (double d = 0; d < distance; d += step) {
+                                    double t = d / distance;
+                                    double x = loc.getX() + (target.getX() - loc.getX()) * t;
+                                    double y = loc.getY() + (target.getY() - loc.getY()) * t;
+                                    double z = loc.getZ() + (target.getZ() - loc.getZ()) * t;
+                                    player.getWorld().spawnParticle(Particle.ASH, new Location(player.getWorld(), x, y, z), 2);
+                                }
+                            }
+                        }.runTaskTimer(NikeyV1.getPlugin(),0,5);
+                    }else if (l == 17 || l == 18) {
                         startHealthSteal(player,victim);
                         setVisibility(victim,player);
-                        timer.put(player,100);
+                        timer.put(player,120);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                timer.replace(player,timer.get(player)-1);
+                                if (timer.get(player) == 0){
+                                    cancel();
+                                }
+
+                                Location loc = player.getLocation().add(0, 1, 0);
+                                Location target = victim.getLocation().add(0, 1, 0);
+                                double distance = loc.distance(target);
+                                double step = 0.2;
+                                for (double d = 0; d < distance; d += step) {
+                                    double t = d / distance;
+                                    double x = loc.getX() + (target.getX() - loc.getX()) * t;
+                                    double y = loc.getY() + (target.getY() - loc.getY()) * t;
+                                    double z = loc.getZ() + (target.getZ() - loc.getZ()) * t;
+                                    player.getWorld().spawnParticle(Particle.ASH, new Location(player.getWorld(), x, y, z), 2);
+                                }
+                            }
+                        }.runTaskTimer(NikeyV1.getPlugin(),0,5);
+                    }else if (l >= 19) {
+                        startHealthSteal(player,victim);
+                        setVisibility(victim,player);
+                        timer.put(player,160);
                         new BukkitRunnable() {
                             @Override
                             public void run() {
@@ -117,7 +190,12 @@ public class GhostStoneDamageAbility implements Listener {
 
 
     public void startHealthSteal(Player user , Player victim) {
-        stealtimer.put(user,30);
+        int level = Stone.getStoneLevel(user);
+        if (level == 17 || level == 18) {
+            stealtimer.put(user,30);
+        }else if (level >= 19) {
+            stealtimer.put(user,40);
+        }
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -138,6 +216,7 @@ public class GhostStoneDamageAbility implements Listener {
     }
 
     public void setVisibility(Player victim, Player damager) {
+        int level = Stone.getStoneLevel(damager);
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player != victim && player != damager) {
                 player.hidePlayer(NikeyV1.getPlugin(), victim);
@@ -152,30 +231,80 @@ public class GhostStoneDamageAbility implements Listener {
         damager.showPlayer(NikeyV1.getPlugin(), victim);
 
         //Effects
-        victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*30,2,true));
-        victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*30,1,true));
-        damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*30,2,true));
+        if (level == 15) {
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*20,2,true));
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*20,1,true));
+            damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*20,1,true));
+        }else if (level == 16 ||level == 17) {
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*30,2,true));
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*30,1,true));
+            damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*30,1,true));
+        }else if (level == 18) {
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*30,2,true));
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*30,1,true));
+            damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*30,2,true));
+        }else if (level >= 19) {
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*40,2,true));
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*40,1,true));
+            damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*40,2,true));
+        }
         victim.setHealth(20);
 
         // Add victim and damager to blockedPlayers set to prevent teleportation
         blockedPlayers.add(victim);
         blockedPlayers.add(damager);
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    player.showPlayer(NikeyV1.getPlugin(), victim);
-                    player.showPlayer(NikeyV1.getPlugin(), damager);
-                    // Show all other players to victim and damager
-                    victim.showPlayer(NikeyV1.getPlugin(), player);
-                    damager.showPlayer(NikeyV1.getPlugin(), player);
-                }
+        if (level == 15) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        player.showPlayer(NikeyV1.getPlugin(), victim);
+                        player.showPlayer(NikeyV1.getPlugin(), damager);
+                        // Show all other players to victim and damager
+                        victim.showPlayer(NikeyV1.getPlugin(), player);
+                        damager.showPlayer(NikeyV1.getPlugin(), player);
+                    }
 
-                // Remove victim and damager from blockedPlayers set
-                blockedPlayers.remove(victim);
-                blockedPlayers.remove(damager);
-            }
-        }.runTaskLater(NikeyV1.getPlugin(), 20 * 30);
+                    // Remove victim and damager from blockedPlayers set
+                    blockedPlayers.remove(victim);
+                    blockedPlayers.remove(damager);
+                }
+            }.runTaskLater(NikeyV1.getPlugin(), 20 * 20);
+        }else if (level == 16 || level == 17 || level == 18) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        player.showPlayer(NikeyV1.getPlugin(), victim);
+                        player.showPlayer(NikeyV1.getPlugin(), damager);
+                        // Show all other players to victim and damager
+                        victim.showPlayer(NikeyV1.getPlugin(), player);
+                        damager.showPlayer(NikeyV1.getPlugin(), player);
+                    }
+
+                    // Remove victim and damager from blockedPlayers set
+                    blockedPlayers.remove(victim);
+                    blockedPlayers.remove(damager);
+                }
+            }.runTaskLater(NikeyV1.getPlugin(), 20 * 30);
+        } else if (level >= 19) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        player.showPlayer(NikeyV1.getPlugin(), victim);
+                        player.showPlayer(NikeyV1.getPlugin(), damager);
+                        // Show all other players to victim and damager
+                        victim.showPlayer(NikeyV1.getPlugin(), player);
+                        damager.showPlayer(NikeyV1.getPlugin(), player);
+                    }
+
+                    // Remove victim and damager from blockedPlayers set
+                    blockedPlayers.remove(victim);
+                    blockedPlayers.remove(damager);
+                }
+            }.runTaskLater(NikeyV1.getPlugin(), 20 * 40);
+        }
     }
 }
