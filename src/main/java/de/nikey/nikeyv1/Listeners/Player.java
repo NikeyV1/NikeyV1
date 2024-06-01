@@ -59,12 +59,11 @@ public class Player implements Listener {
             }
             Holystone.hitted.remove(p);
             p.setMaxHealth(20);
-            p.setInvulnerable(false);
-            p.setAllowFlight(false);
-            p.setFlying(false);
 
             if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) {
+                p.setInvulnerable(false);
                 p.setAllowFlight(false);
+                p.setFlying(false);
             }
             TimerBuild timerBuild = new TimerBuild();
             if (config.getBoolean(p.getName()+".time")){

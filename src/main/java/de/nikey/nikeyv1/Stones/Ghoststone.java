@@ -70,6 +70,9 @@ public class Ghoststone implements Listener {
         }
         playerHitCount.put(player.getUniqueId(), hitCount);
     }
+
+
+
     }
 
     @EventHandler
@@ -264,12 +267,14 @@ public class Ghoststone implements Listener {
 
     private void enterGhostmode(Player player) {
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,20*20,0,false,false,false));
+        player.setInvulnerable(true);
         ghost.add(player);
         int level = Stone.getStoneLevel(player);
 
         new BukkitRunnable() {
             @Override
             public void run() {
+                player.setInvulnerable(false);
                 ghost.remove(player);
             }
         }.runTaskLater(NikeyV1.getPlugin(),20*20);
