@@ -3,8 +3,11 @@ package de.nikey.nikeyv1.Stones;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
-import de.slikey.effectlib.effect.LineEffect;
+import de.slikey.effectlib.effect.BigBangEffect;
+import de.slikey.effectlib.effect.SmokeEffect;
+import de.slikey.effectlib.effect.WarpEffect;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
@@ -20,6 +23,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +32,8 @@ import java.util.UUID;
 public class Ghoststone implements Listener {
 
     private HashMap<UUID, Integer> playerHitCount = new HashMap<>();
+    private ArrayList<Entity> ghost = new ArrayList<>();
+
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
 
     public static long remainingTime1;
@@ -78,7 +84,7 @@ public class Ghoststone implements Listener {
             if (entity instanceof Arrow) {
                 Arrow arrow = (Arrow) entity;
                 if (!arrow.isCritical() && arrow.canHitEntity(event.getEntity())) {
-                    shooter.getWorld().spawnParticle(Particle.DUST_PLUME,shooter.getLocation().add(0,1,0),8,0.1,0.1,0.1);
+                    shooter.getWorld().spawnParticle(Particle.DUST_PLUME,shooter.getLocation().add(0,1,0),10,0.1,0.1,0.1);
                     event.setCancelled(true);
                 }
             }
@@ -244,10 +250,28 @@ public class Ghoststone implements Listener {
 
                         if (level == 10) {
                             //GM
+                            WarpEffect effect = new WarpEffect(NikeyV1.em);
+                            effect.setLocation(p.getLocation());
+                            effect.particles = 35;
+                            effect.particle = Particle.CAMPFIRE_COSY_SMOKE;
+                            effect.start();
                         }
                     }
                 }
             }
         }
+    }
+
+    private void enterGhostmode(Player player) {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,20*20,0,false,false,false));
+        ghost.add(player);
+        int level = Stone.getStoneLevel(player);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                ghost.remove(player);
+            }
+        }.runTaskLater(NikeyV1.getPlugin(),20*20);
     }
 }

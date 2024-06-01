@@ -7,9 +7,6 @@ import de.nikey.nikeyv1.Stones.Holystone;
 import de.nikey.nikeyv1.Timer.TimerBuild;
 import de.nikey.nikeyv1.Util.Items;
 import io.papermc.paper.event.entity.EntityMoveEvent;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.title.Title;
-import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -29,9 +26,7 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.time.Instant;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -64,6 +59,9 @@ public class Player implements Listener {
             }
             Holystone.hitted.remove(p);
             p.setMaxHealth(20);
+            p.setInvulnerable(false);
+            p.setAllowFlight(false);
+            p.setFlying(false);
 
             if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) {
                 p.setAllowFlight(false);

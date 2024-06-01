@@ -11,6 +11,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -305,4 +307,6 @@ public class GhostStoneDamageAbility implements Listener {
             }.runTaskLater(NikeyV1.getPlugin(), 20 * 40);
         }
     }
+
+
 }
