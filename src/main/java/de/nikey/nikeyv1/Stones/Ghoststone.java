@@ -3,15 +3,14 @@ package de.nikey.nikeyv1.Stones;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
-import de.slikey.effectlib.effect.BigBangEffect;
-import de.slikey.effectlib.effect.SmokeEffect;
 import de.slikey.effectlib.effect.WarpEffect;
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -23,15 +22,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @SuppressWarnings("ALL")
 public class Ghoststone implements Listener {
 
     private HashMap<UUID, Integer> playerHitCount = new HashMap<>();
+    private HashMap<String, Integer> playerHitted = new HashMap<>();
     private ArrayList<Entity> ghost = new ArrayList<>();
 
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
@@ -251,32 +248,84 @@ public class Ghoststone implements Listener {
                             }
                         }.runTaskLater(NikeyV1.getPlugin(),20*100);
 
-                        if (level == 10) {
-                            //GM
-                            WarpEffect effect = new WarpEffect(NikeyV1.em);
-                            effect.setLocation(p.getLocation());
-                            effect.particles = 35;
-                            effect.particle = Particle.CAMPFIRE_COSY_SMOKE;
-                            effect.start();
+                        WarpEffect effect = new WarpEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
+                        effect.particles = 35;
+                        effect.particle = Particle.CAMPFIRE_COSY_SMOKE;
+                        effect.start();
+                        makePlayerInvisible(p);
+
+                        if (level >= 13) {
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,20*30,1));
+                        }
+
+                        if (level == 10 || level == 11) {
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    makePlayerVisible(p);
+                                    p.sendMessage("§3You are now visible!");
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(),20*20);
+                        }else if (level >= 12) {
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    if (playerHitted.containsKey(p.getName())) {
+                                        makePlayerVisible(p);
+                                        p.sendMessage("§3You are now visible!");
+                                    }
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(),20*30);
                         }
                     }
                 }
             }
         }
     }
-
-    private void enterGhostmode(Player player) {
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,20*20,0,false,false,false));
-        player.setInvulnerable(true);
-        ghost.add(player);
-        int level = Stone.getStoneLevel(player);
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                player.setInvulnerable(false);
-                ghost.remove(player);
+    public void makePlayerInvisible(Player player) {
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            if (!onlinePlayer.equals(player)) {
+                onlinePlayer.hidePlayer(NikeyV1.getPlugin(), player);
             }
-        }.runTaskLater(NikeyV1.getPlugin(),20*20);
+        }
+        playerHitted.put(player.getName(), 0);
+
+    }
+
+    public void makePlayerVisible(Player player) {
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            onlinePlayer.showPlayer(NikeyV1.getPlugin(), player);
+        }
+        playerHitted.remove(player.getName());
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onPlayerHit(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
+            Player damager = (Player) event.getDamager();
+            if (playerHitted.containsKey(damager.getName())) {
+                int hits = playerHitted.get(damager.getName()) + 1;
+                int level = Stone.getStoneLevel(damager);
+                double damageMultiplier = 1;
+                if (level == 10) {
+                    damageMultiplier = 1.0 + (hits * 0.1);
+                }else if (level == 11 || level == 12 || level == 13) {
+                    damageMultiplier = 1.0 + (hits * 0.15);
+                }else if (level >= 14) {
+                    damageMultiplier = 1.0 + (hits * 0.2);
+                }
+                double damage = event.getDamage() * damageMultiplier;
+                event.setDamage(damage);
+                damager.playSound(damager.getLocation(), Sound.ENTITY_PLAYER_BIG_FALL, 1.0F, 1.0F);
+                if (hits >= 5) {
+                    makePlayerVisible(damager);
+                    damager.sendMessage("§3You have hit other players 5 times, you are now visible!");
+                } else {
+                    playerHitted.put(damager.getName(), hits);
+                    damager.sendMessage("§7You hit another player " + hits + " times for " + damage + " hearts of damage");
+                }
+            }
+        }
     }
 }
