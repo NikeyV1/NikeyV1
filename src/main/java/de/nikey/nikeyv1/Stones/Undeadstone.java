@@ -606,8 +606,8 @@ public class Undeadstone implements Listener {
                             player.damage(20+health,giant);
                         }
                         event.setDamage(0);
-                        giant.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,18000,0));
-                        giant.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,18000,0));
+                        giant.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,12000,0));
+                        giant.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,12000,0));
                     }
                 }
             }

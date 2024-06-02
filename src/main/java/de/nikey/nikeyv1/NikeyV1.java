@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Husk;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -75,7 +76,16 @@ public final class NikeyV1 extends JavaPlugin{
         }
         Holystone.auraTasks.clear();
         removeGiants();
-
+        for (World w :Bukkit.getServer().getWorlds()) {
+            for (Entity entitys : w.getEntities()) {
+                if (entitys instanceof Husk) {
+                    Husk husk = (Husk) entitys;
+                    if (husk.isInvulnerable()) {
+                        husk.remove();
+                    }
+                }
+            }
+        }
     }
 
     private void removeGiants() {
