@@ -37,7 +37,6 @@ import java.util.concurrent.ThreadLocalRandom;
 @SuppressWarnings("ALL")
 public class Firestone implements Listener {
     private ArrayList<Entity> entities = new ArrayList<>();
-    private ArrayList<Entity> player = new ArrayList<>();
     private int timer;
     private int time;
     private HashMap<Player , Integer> timecooldown = new HashMap<>();
@@ -937,24 +936,17 @@ public class Firestone implements Listener {
                             int randomZ = ThreadLocalRandom.current().nextInt(z-6, z+6);
                             if (selectedPlayer.getLocation().getZ() > 50) {
                                 Location location = new Location(selectedPlayer.getWorld(),randomX,selectedPlayer.getLocation().getY()+20,randomZ);
-                                Fireball fireball = (Fireball) location.getWorld().spawnEntity(location, EntityType.FIREBALL);
-                                Vector fromLocation = location.toVector();
-                                Vector toLocation = selectedPlayer.getLocation().toVector();
-                                Vector direction = toLocation.clone().subtract(fromLocation).normalize();
-                                double speed = 2.0; // Du kannst diesen Wert anpassen, um die Geschwindigkeit anzupassen
-                                direction.multiply(speed);
+                                Fireball fireball = (Fireball) location.getWorld().spawn(location, Fireball.class, CreatureSpawnEvent.SpawnReason.CUSTOM);
                                 fireball.setShooter(launcherPlayer);
+                                fireball.setVelocity(new Vector(0,-2.5,0));
+                                fireball.setDirection(new Vector(0,-2.5,0));
                                 fireball.setCustomName("airstrike");
                                 fireball.setCustomNameVisible(false);
                             }else {
                                 Location location = new Location(selectedPlayer.getWorld(),randomX,selectedPlayer.getLocation().getY()+40,randomZ);
                                 Fireball fireball = (Fireball) location.getWorld().spawn(location, Fireball.class, CreatureSpawnEvent.SpawnReason.CUSTOM);
-                                Vector fromLocation = location.toVector();
-                                Vector toLocation = selectedPlayer.getLocation().toVector();
-                                Vector direction = toLocation.clone().subtract(fromLocation).normalize();
-                                double speed = 2.0; // Du kannst diesen Wert anpassen, um die Geschwindigkeit anzupassen
-                                direction.multiply(speed);
-                                fireball.setDirection(direction);
+                                fireball.setVelocity(new Vector(0,-2.5,0));
+                                fireball.setDirection(new Vector(0,-2.5,0));
                                 fireball.setShooter(launcherPlayer);
                                 fireball.setCustomName("airstrike");
                                 fireball.setCustomNameVisible(false);
@@ -962,7 +954,7 @@ public class Firestone implements Listener {
 
 
                             if (timecooldown.get(launcherPlayer) == 0) {
-                                timecooldown.remove(player);
+                                timecooldown.remove(launcherPlayer);
                                 cancel();
                                 return;
                             }
@@ -982,33 +974,23 @@ public class Firestone implements Listener {
                             if (selectedPlayer.getLocation().getZ() > 50) {
                                 Location location = new Location(selectedPlayer.getWorld(),randomX,selectedPlayer.getLocation().getY()+20,randomZ);
                                 Fireball fireball = (Fireball) location.getWorld().spawn(location, Fireball.class, CreatureSpawnEvent.SpawnReason.CUSTOM);
-                                fireball.setVelocity(new Vector(0, -1, 0));
                                 fireball.setShooter(launcherPlayer);
-                                Vector fromLocation = location.toVector();
-                                Vector toLocation = selectedPlayer.getLocation().toVector();
-                                Vector direction = toLocation.clone().subtract(fromLocation).normalize();
-                                double speed = 2.0;
-                                direction.multiply(speed);
-                                fireball.setDirection(new Vector(0, -1, 0));
+                                fireball.setVelocity(new Vector(0,-2.5,0));
+                                fireball.setDirection(new Vector(0,-2.5,0));
                                 fireball.setCustomName("strongairstrike");
                                 fireball.setCustomNameVisible(false);
 
                             } else {
                                 Location location = new Location(selectedPlayer.getWorld(),randomX,selectedPlayer.getLocation().getY()+40,randomZ);
                                 Fireball fireball = (Fireball) location.getWorld().spawn(location, Fireball.class, CreatureSpawnEvent.SpawnReason.CUSTOM);
-                                fireball.setVelocity(new Vector(0, 0, 0));
-                                Vector fromLocation = location.toVector();
-                                Vector toLocation = selectedPlayer.getLocation().toVector();
-                                Vector direction = toLocation.clone().subtract(fromLocation).normalize();
-                                double speed = 2.0; // Du kannst diesen Wert anpassen, um die Geschwindigkeit anzupassen
-                                direction.multiply(speed);
-                                fireball.setDirection(direction);
+                                fireball.setVelocity(new Vector(0,-2.5,0));
+                                fireball.setDirection(new Vector(0,-2.5,0));
                                 fireball.setShooter(launcherPlayer);
                                 fireball.setCustomName("strongairstrike");
                                 fireball.setCustomNameVisible(false);
                             }
                             if (timecooldown.get(launcherPlayer) == 0) {
-                                timecooldown.remove(player);
+                                timecooldown.remove(launcherPlayer);
                                 cancel();
                                 return;
                             }
