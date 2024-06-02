@@ -3,6 +3,12 @@ package de.nikey.nikeyv1.Listeners;
 import com.destroystokyo.paper.event.player.PlayerElytraBoostEvent;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.api.Stone;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.title.TitlePart;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -17,6 +23,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -232,6 +239,9 @@ public class GhostStoneDamageAbility implements Listener {
         }
         victim.showPlayer(NikeyV1.getPlugin(), damager);
         damager.showPlayer(NikeyV1.getPlugin(), victim);
+
+        victim.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent("§8§lLocked!"));
+        damager.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent("§8§lLocked!"));
 
         //Effects
         if (level == 15) {
