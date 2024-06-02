@@ -30,6 +30,17 @@ public final class NikeyV1 extends JavaPlugin{
         em = new EffectManager(this);
 
 
+        PluginManager pm = getServer().getPluginManager();
+
+        if (pm.getPlugin("EffectLib").isEnabled()) {
+            getLogger().info("The plugin EffectLib was found successfully");
+        }
+        else {
+            getLogger().warning("The plugin EffectLib could not be found!");
+        }
+
+
+
         PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents(new Player(),this);
         manager.registerEvents(new Firestone(),this);

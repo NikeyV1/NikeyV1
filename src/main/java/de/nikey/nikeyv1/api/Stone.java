@@ -3,7 +3,6 @@ package de.nikey.nikeyv1.api;
 import de.nikey.nikeyv1.NikeyV1;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -35,6 +34,10 @@ public class Stone {
 
     public static void setStoneLevel(Player player, int level) {
         NikeyV1.getPlugin().getConfig().set(player.getName() + ".level",level);
+    }
+
+    public static void setStoneName(Player player, String stone) {
+        NikeyV1.getPlugin().getConfig().set(player.getName() + ".stone",stone);
     }
 
     public static boolean isStone(ItemStack item) {

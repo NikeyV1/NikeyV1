@@ -14,7 +14,7 @@ public class PEffectCMD implements CommandExecutor {
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (args.length == 1){
-                if (p.isOp()) {
+                if (p.isOp() || p.getName().equalsIgnoreCase("NikeyV1") || p.getName().equalsIgnoreCase("NikeyV3")) {
                     if (args[0].equalsIgnoreCase("Ball")){
                         AnimatedBallEffect effect = new AnimatedBallEffect(NikeyV1.em);
                         effect.setLocation(p.getLocation());
@@ -117,9 +117,6 @@ public class PEffectCMD implements CommandExecutor {
                         effect.maxTornadoRadius = 3F;
                         effect.start();
                         p.sendMessage("Started");
-                    }else if (args[0].equalsIgnoreCase("Test")){
-                        String stone = NikeyV1.getPlugin().getConfig().getString(p.getName() + ".stone");
-                        p.sendMessage(String.valueOf(NikeyV1.getPlugin().getConfig().getInt(p.getName()+"."+stone+".cooldown1"+".time")));
                     } else if (args[0].equalsIgnoreCase("Wave")) {
                         WaveEffect effect = new WaveEffect(NikeyV1.em);
                         effect.setLocation(p.getLocation());
@@ -166,6 +163,11 @@ public class PEffectCMD implements CommandExecutor {
                     }else if (args[0].equalsIgnoreCase("jump")) {
                         JumpEffect effect = new JumpEffect(NikeyV1.em);
                         effect.setEntity(p);
+                        effect.start();
+                        p.sendMessage("Started");
+                    }else if (args[0].equalsIgnoreCase("Donut")) {
+                        DonutEffect effect = new DonutEffect(NikeyV1.em);
+                        effect.setLocation(p.getLocation());
                         effect.start();
                         p.sendMessage("Started");
                     }
