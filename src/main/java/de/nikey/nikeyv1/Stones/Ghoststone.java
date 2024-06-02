@@ -263,8 +263,10 @@ public class Ghoststone implements Listener {
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    makePlayerVisible(p);
-                                    p.sendMessage("§3You are now visible!");
+                                    if (playerHitted.containsKey(p.getName())) {
+                                        makePlayerVisible(p);
+                                        p.sendMessage("§3You are now visible!");
+                                    }
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(),20*20);
                         }else if (level >= 12) {
