@@ -930,7 +930,7 @@ public class Firestone implements Listener {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            timecooldown.replace(launcherPlayer,timecooldown.get(player)-1);
+                            timecooldown.replace(launcherPlayer,timecooldown.get(launcherPlayer)-1);
                             int x = (int) (selectedPlayer.getLocation().getX());
                             int z = (int) (selectedPlayer.getLocation().getZ());
                             int randomX = ThreadLocalRandom.current().nextInt(x-6, x+6);
@@ -982,14 +982,14 @@ public class Firestone implements Listener {
                             if (selectedPlayer.getLocation().getZ() > 50) {
                                 Location location = new Location(selectedPlayer.getWorld(),randomX,selectedPlayer.getLocation().getY()+20,randomZ);
                                 Fireball fireball = (Fireball) location.getWorld().spawn(location, Fireball.class, CreatureSpawnEvent.SpawnReason.CUSTOM);
-                                fireball.setVelocity(new Vector(0, 0, 0));
+                                fireball.setVelocity(new Vector(0, -1, 0));
                                 fireball.setShooter(launcherPlayer);
                                 Vector fromLocation = location.toVector();
                                 Vector toLocation = selectedPlayer.getLocation().toVector();
                                 Vector direction = toLocation.clone().subtract(fromLocation).normalize();
                                 double speed = 2.0;
                                 direction.multiply(speed);
-                                fireball.setDirection(direction);
+                                fireball.setDirection(new Vector(0, -1, 0));
                                 fireball.setCustomName("strongairstrike");
                                 fireball.setCustomNameVisible(false);
 
