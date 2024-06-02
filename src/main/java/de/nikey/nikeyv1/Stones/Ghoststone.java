@@ -7,6 +7,7 @@ import de.slikey.effectlib.effect.WarpEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -280,6 +281,8 @@ public class Ghoststone implements Listener {
                         }
                     }
                 }
+            }else if (event.getAction().isLeftClick()) {
+
             }
         }
     }
@@ -290,7 +293,6 @@ public class Ghoststone implements Listener {
             }
         }
         playerHitted.put(player.getName(), 0);
-
     }
 
     public void makePlayerVisible(Player player) {
@@ -317,7 +319,7 @@ public class Ghoststone implements Listener {
                 }
                 double damage = event.getDamage() * damageMultiplier;
                 event.setDamage(damage);
-                damager.playSound(damager.getLocation(), Sound.ENTITY_PLAYER_BIG_FALL, 1.0F, 1.0F);
+                damager.playSound(damager.getLocation(), Sound.ENTITY_PLAYER_BIG_FALL, 1.2F, 1.2F);
                 if (hits >= 5) {
                     makePlayerVisible(damager);
                     damager.sendMessage("§3You have hit other players 5 times, you are now visible!");

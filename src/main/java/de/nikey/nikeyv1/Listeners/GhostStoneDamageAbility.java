@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@SuppressWarnings("ALL")
 public class GhostStoneDamageAbility implements Listener {
     public static HashMap<UUID, Long> ability = new HashMap<>();
 
@@ -248,7 +249,7 @@ public class GhostStoneDamageAbility implements Listener {
             victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*40,1,true));
             damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*40,1,true));
         }
-        victim.setHealth(20);
+        damager.setHealth(damager.getMaxHealth());
 
         // Add victim and damager to blockedPlayers set to prevent teleportation
         blockedPlayers.add(victim);
