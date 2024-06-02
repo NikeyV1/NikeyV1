@@ -237,6 +237,8 @@ public class Player implements Listener {
                     Items.Undeadstone(player,level);
                 }else if (stone.equalsIgnoreCase("Holy")){
                     Items.Holystone(player,level);
+                }else if (stone.equalsIgnoreCase("Ghost")){
+                    Items.Ghoststone(player,level);
                 }
             }
             new BukkitRunnable() {
