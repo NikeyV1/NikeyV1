@@ -19,7 +19,7 @@ public class JoinListener implements Listener {
         FileConfiguration config = NikeyV1.getPlugin().getConfig();
         if (config.getString(p.getName()+".level") == null){
             Random random = new Random();
-            int i = random.nextInt(6);
+            int i = random.nextInt(7);
             if (i == 0){
                 Items.Firestone(p,3);
                 p.sendTitle("§d§kR§r§cFire Stone§r§d§kR","");
@@ -54,6 +54,12 @@ public class JoinListener implements Listener {
                 Items.Holystone(p,3);
                 p.sendTitle("§d§kR§r§aHoly Stone§r§d§kR","");
                 config.set(p.getName()+".stone", "Holy");
+                config.set(p.getName()+".level",3);
+                NikeyV1.getPlugin().saveConfig();
+            }else if (i == 6){
+                Items.Ghoststone(p,3);
+                p.sendTitle("§d§kR§r§fGhost Stone§r§d§kR","");
+                config.set(p.getName()+".stone", "Ghost");
                 config.set(p.getName()+".level",3);
                 NikeyV1.getPlugin().saveConfig();
             }
