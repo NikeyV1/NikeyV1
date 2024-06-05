@@ -6,6 +6,7 @@ import de.nikey.nikeyv1.Stones.Electrostone;
 import de.nikey.nikeyv1.Stones.Holystone;
 import de.nikey.nikeyv1.Timer.TimerBuild;
 import de.nikey.nikeyv1.Util.Items;
+import de.nikey.nikeyv1.api.Stone;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -113,7 +114,7 @@ public class Player implements Listener {
             Item itemDrop = event.getItemDrop();
             org.bukkit.entity.Player player = event.getPlayer();
             PlayerInventory inventory = player.getInventory();
-            if (itemDrop.getItemStack().getType() == Material.FIREWORK_STAR){
+            if (Stone.isStone(itemDrop.getItemStack()) || Stone.isInfernoBlade(itemDrop.getItemStack())){
                 event.setCancelled(true);
                 if (!isInventoryFull(player)) {
                     event.setCancelled(true);
@@ -123,7 +124,7 @@ public class Player implements Listener {
                     event.setCancelled(true);
                 }
             }else {
-                if (itemDrop.getItemStack().getType() == Material.NETHERITE_SWORD && itemDrop.getItemStack().getItemMeta().hasLore()) {
+                if (Stone.isInfernoBlade(itemDrop.getItemStack())) {
                     event.setCancelled(true);
                 }
             }
@@ -178,7 +179,7 @@ public class Player implements Listener {
             for (ItemStack contents : inventory.getContents()){
                 if(contents == null || contents.getType() == Material.AIR || contents.getItemMeta().getDisplayName().equalsIgnoreCase("§dUpgrade") || contents.getType() == Material.PURPLE_STAINED_GLASS_PANE) continue;
                 org.bukkit.entity.Player player = (org.bukkit.entity.Player) event.getPlayer();
-                if (contents.getType() == Material.FIREWORK_STAR && contents.getItemMeta().hasLore()) {
+                if (Stone.isStone(contents) || Stone.isInfernoBlade(contents)) {
                     int i = player.getInventory().firstEmpty();
                     if (i == -1) {
                         player.getInventory().setItemInOffHand(contents);
@@ -266,7 +267,7 @@ public class Player implements Listener {
             config.set(player.getName() +".level",i-1);
             for (ItemStack item : player.getInventory().getContents()) {
                 if (item != null) {
-                    if (item.getType() == Material.FIREWORK_STAR || item.getType() == Material.NETHERITE_SWORD && item.getItemMeta().hasLore()) {
+                    if (Stone.isStone(item)||Stone.isInfernoBlade(item)) {
                         // Stone entfernen
                         event.getDrops().remove(item);
                         boolean buffed = config.getBoolean(player.getName() + ".buffed");
@@ -633,7 +634,7 @@ public class Player implements Listener {
             if (event.getItem().getType() == Material.FIREWORK_STAR) {
                 event.setCancelled(true);
             }
-            if (event.getItem().getType() == Material.FIREWORK_STAR || event.getItem().getType() == Material.NETHERITE_SWORD && event.getItem().getItemMeta().hasLore()){
+            if (Stone.isStone(event.getItem())||Stone.isInfernoBlade(event.getItem())){
                 if (clickedBlock.getType() == Material.DECORATED_POT && event.getItem().getItemMeta().hasLore()) {
                     event.setCancelled(true);
                     event.getPlayer().damage(4);
@@ -666,7 +667,7 @@ public class Player implements Listener {
         if (event.getEntity() instanceof org.bukkit.entity.Player) {
             org.bukkit.entity.Player p = (org.bukkit.entity.Player) event.getEntity();
             Item item = event.getItem();
-            if (item.getItemStack().getType() == Material.FIREWORK_STAR||item.getItemStack().getType() == Material.NETHERITE_SWORD && item.getItemStack().getItemMeta().hasLore()) {
+            if (Stone.isStone(item.getItemStack())||Stone.isInfernoBlade(item.getItemStack())) {
                 event.getEntity().damage(4);
                 event.getEntity().sendMessage("§cYou are not allowed to do that!");
                 Bukkit.broadcastMessage(ChatColor.RED+ event.getEntity().getName() +" triggered Stone-SMP anti Exploit!");
@@ -692,4 +693,5 @@ public class Player implements Listener {
         org.bukkit.entity.Player entity = event.getPlayer();
         if (entity.isInWaterOrRain())entity.setVisualFire(false);
     }
+
 }

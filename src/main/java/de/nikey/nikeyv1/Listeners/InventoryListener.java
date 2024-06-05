@@ -1,5 +1,6 @@
 package de.nikey.nikeyv1.Listeners;
 
+import de.nikey.nikeyv1.api.Stone;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,7 +15,7 @@ public class InventoryListener implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         Inventory top = event.getView().getTopInventory();
         if (event.getCurrentItem() != null) {
-            if (event.getCurrentItem().getType() == Material.FIREWORK_STAR && event.getCurrentItem().getItemMeta().hasLore()) {
+            if (Stone.isStone(event.getCurrentItem()) || Stone.isInfernoBlade(event.getCurrentItem())) {
                 if (!(top.getType() == InventoryType.CRAFTING)){
                     if (!event.getView().getTitle().equalsIgnoreCase("Enchanted Anvil")) {
                         event.setCancelled(true);

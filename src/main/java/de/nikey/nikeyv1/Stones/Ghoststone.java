@@ -19,6 +19,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -350,6 +351,19 @@ public class Ghoststone implements Listener {
         playerHitted.remove(player.getName());
     }
 
+    @EventHandler
+    public void onEntityTarget(EntityTargetEvent event) {
+        Entity entity = event.getEntity();
+        Entity target = event.getTarget();
+        if (!(target instanceof Player)) return;
+
+        Player player = (Player) target;
+
+        if (playerHitted.containsKey(player.getName())) {
+            event.setCancelled(true);
+        }
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerHit(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
@@ -363,7 +377,7 @@ public class Ghoststone implements Listener {
                 }else if (level == 11 || level == 12 || level == 13) {
                     damageMultiplier = 1.0 + (hits * 0.15);
                 }else if (level >= 14) {
-                    damageMultiplier = 1.0 + (hits * 0.2);
+                    damageMultiplier = 1.0 + (hits * 0.2); 
                 }
                 double damage = event.getDamage() * damageMultiplier;
                 event.setDamage(damage);

@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class Stone {
     public static int getStoneLevel(Player player) {
@@ -14,10 +15,6 @@ public class Stone {
 
     public static String getStoneName(Player player) {
         return NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
-    }
-
-    public static boolean isUpgrading(Player player) {
-        return NikeyV1.getPlugin().getConfig().getBoolean(player.getName()+".time");
     }
 
     public static int getUpgradeTime(Player player) {
@@ -32,6 +29,17 @@ public class Stone {
         return NikeyV1.getPlugin().getConfig().getString(player.getName() + ".det");
     }
 
+
+    public static int getStoneLevelFromItem(ItemStack item) {
+        if (isStone(item)) {
+            String[] arr = item.getLore().get(1).split(":");
+            return Integer.parseInt(arr[1]);
+        }else {
+            return 0;
+        }
+    }
+
+
     public static void setStoneLevel(Player player, int level) {
         NikeyV1.getPlugin().getConfig().set(player.getName() + ".level",level);
     }
@@ -40,10 +48,23 @@ public class Stone {
         NikeyV1.getPlugin().getConfig().set(player.getName() + ".stone",stone);
     }
 
+
+    public static boolean isUpgrading(Player player) {
+        return NikeyV1.getPlugin().getConfig().getBoolean(player.getName()+".time");
+    }
+
+
     public static boolean isStone(ItemStack item) {
         if (!item.hasItemMeta()) return false;
 
         return item.getType() == Material.FIREWORK_STAR && item.hasItemFlag(ItemFlag.HIDE_ENCHANTS) && item.getItemMeta().hasLore();
+    }
+
+    public static boolean isInfernoBlade(ItemStack item) {
+        if (!item.hasItemMeta())return false;
+
+        ItemMeta meta = item.getItemMeta();
+        return meta.hasLore() && meta.hasCustomModelData() && meta.isUnbreakable() && meta.getLore().contains("§7What will you do?") && item.getType() == Material.NETHERITE_SWORD;
     }
 
     public static String whatStone(ItemStack item) {
@@ -73,14 +94,5 @@ public class Stone {
 
     public static boolean shouldHaveStone(Player player, ItemStack item) {
         return getStoneName(player).equalsIgnoreCase(whatStone(item));
-    }
-
-    public static int getStoneLevelFromItem(ItemStack item) {
-        if (isStone(item)) {
-            String[] arr = item.getLore().get(1).split(":");
-            return Integer.parseInt(arr[1]);
-        }else {
-            return 0;
-        }
     }
 }
