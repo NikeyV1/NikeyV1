@@ -3,14 +3,13 @@ package de.nikey.nikeyv1.Stones;
 import com.mysql.cj.result.DefaultValueFactory;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
+import de.nikey.nikeyv1.api.EntityTypeDamage;
 import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.TurnEffect;
 import de.slikey.effectlib.effect.WarpEffect;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
@@ -19,6 +18,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -28,9 +28,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.Vector;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("ALL")
 public class Ghoststone implements Listener {
@@ -40,6 +41,9 @@ public class Ghoststone implements Listener {
     private ArrayList<Entity> ghost = new ArrayList<>();
     private HashSet<UUID> ghostPlayers = new HashSet<>();
     private HashMap<UUID, HashSet<Block>> removedBlocks = new HashMap<>();
+    private final Set<UUID> teleportedPlayers = new HashSet<>();
+    private HashMap<String, Integer> particletimes = new HashMap<>();
+    private final Set<UUID> damageReductionPlayers = new HashSet<>();
 
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
@@ -325,7 +329,174 @@ public class Ghoststone implements Listener {
                         }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
                         //Cooldown-Ability
 
+                       Vector up = new Vector(0, 3, 0);
+                        p.setVelocity(up);
+                        teleportedPlayers.add(p.getUniqueId());
+                        damageReductionPlayers.add(p.getUniqueId());
+
+                        Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> teleportedPlayers.remove(p.getUniqueId()), 120L);
+                        Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> damageReductionPlayers.remove(p.getUniqueId()), 300L);
+
+                        Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
+                            Vector down = new Vector(0, -3, 0); // Boost nach unten
+                            p.setVelocity(down);
+                        }, 20L);
                     }
+                }
+            }
+        }
+    }
+
+
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            String attacking = Stone.getAttacking(player);
+            if (event.getCause() == EntityDamageEvent.DamageCause.FALL && teleportedPlayers.contains(player.getUniqueId())) {
+                event.setCancelled(true); // Prevent fall damage for the player
+
+                player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(3);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED ,20*15,4,false,false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING,20*15,3,false,false));
+
+                // Create smoke particles around the player
+                particletimes.put(player.getName(),7);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+
+                        if (particletimes.get(player.getName()) == 0) {
+                            player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(1);
+                            particletimes.remove(player.getName());
+                            cancel();
+                            return;
+                        }
+
+                        for (int i = 0; i < 3000; i++) {
+                            Location smokeLocation = player.getLocation().add((Math.random() - 0.5) * 30, (Math.random() - 0.5) * 10, (Math.random() - 0.5) * 30);
+                            player.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, smokeLocation, 0, 0, 0, 0, 0.1);
+                        }
+
+                        particletimes.replace(player.getName(),particletimes.get(player.getName())-1);
+                    }
+                }.runTaskTimer(NikeyV1.getPlugin(),0,40);
+
+                // Give blindness effect to nearby players
+                for (Entity entity : player.getNearbyEntities(30, 30, 30)) {
+                    if (entity instanceof LivingEntity && entity != player) {
+                        LivingEntity livingEntity = (LivingEntity) entity;
+                        if (attacking.equalsIgnoreCase("all")) {
+                            if (entity instanceof Player) {
+                                List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
+                                if (!playersInSameTeam.contains(entity)) {
+                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*15,3,true));
+                                    double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                                    double damage = maxHealth * 0.3;
+                                    livingEntity.playHurtAnimation(0);
+                                    if (livingEntity.getHealth()-damage >= 1) {
+                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
+                                    }else {
+                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                    }
+                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 300, 1));
+                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
+                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
+                                }
+                            }else {
+                                livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*15,3,true));
+                                double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                                double damage = maxHealth * 0.3;
+                                livingEntity.playHurtAnimation(0);
+                                if (livingEntity.getHealth()-damage >= 1) {
+                                    livingEntity.setHealth(livingEntity.getHealth()-damage);
+                                }else {
+                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                }
+                                livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 300, 1));
+                                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
+                                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
+                            }
+                        }else if (attacking.equalsIgnoreCase("players")) {
+                            if (entity instanceof Player) {
+                                List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
+                                if (!playersInSameTeam.contains(entity)) {
+                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*15,3,true));
+                                    double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                                    double damage = maxHealth * 0.3;
+                                    livingEntity.playHurtAnimation(0);
+                                    if (livingEntity.getHealth()-damage >= 1) {
+                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
+                                    }else {
+                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                    }
+                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 300, 1));
+                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
+                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
+                                }
+                            }
+                        }else if (attacking.equalsIgnoreCase("monsters")) {
+                            if (entity instanceof Monster) {
+                                livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*15,3,true));
+                                double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                                double damage = maxHealth * 0.3;
+                                livingEntity.playHurtAnimation(0);
+                                if (livingEntity.getHealth()-damage >= 1) {
+                                    livingEntity.setHealth(livingEntity.getHealth()-damage);
+                                }else {
+                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                }
+                                livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 300, 1));
+                                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
+                                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
+                            }
+                        }else if (attacking.equalsIgnoreCase("monsters-player")) {
+                            if (entity instanceof Player) {
+                                List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
+                                if (!playersInSameTeam.contains(entity)) {
+                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*15,3,true));
+                                    double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                                    double damage = maxHealth * 0.3;
+                                    livingEntity.playHurtAnimation(0);
+                                    if (livingEntity.getHealth()-damage >= 1) {
+                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
+                                    }else {
+                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                    }
+                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 300, 1));
+                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
+                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
+                                }
+                            }else if (entity instanceof Monster) {
+                                livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*15,3,true));
+                                double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                                double damage = maxHealth * 0.3;
+                                livingEntity.playHurtAnimation(0);
+                                if (livingEntity.getHealth()-damage >= 1) {
+                                    livingEntity.setHealth(livingEntity.getHealth()-damage);
+                                }else {
+                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                }
+                                livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 300, 1));
+                                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
+                                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
+                            }
+                        }
+                    }
+                }
+
+                teleportedPlayers.remove(player.getUniqueId()); // Remove player from the teleported set
+
+                // Schedule task to slow down the server after 2 seconds
+                Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 10"), 40L); // 2 seconds later
+                // Schedule task to reset the tick rate after 10 seconds
+                Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 20"), 300L);
+            }else if (damageReductionPlayers.contains(player.getUniqueId())) {
+                Random r = new Random();
+                int choice = r.nextInt(2);
+                if (choice == 0) {
+                    event.setCancelled(true);
                 }
             }
         }

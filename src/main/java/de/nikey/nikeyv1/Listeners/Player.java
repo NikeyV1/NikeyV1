@@ -9,6 +9,7 @@ import de.nikey.nikeyv1.Util.Items;
 import de.nikey.nikeyv1.api.Stone;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -60,6 +61,8 @@ public class Player implements Listener {
             }
             Holystone.hitted.remove(p);
             p.setMaxHealth(20);
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 20");
+            p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(1);
 
             if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) {
                 p.setInvulnerable(false);
