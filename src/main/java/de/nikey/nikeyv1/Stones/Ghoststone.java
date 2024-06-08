@@ -358,14 +358,13 @@ public class Ghoststone implements Listener {
                 event.setCancelled(true); // Prevent fall damage for the player
 
                 int level = Stone.getStoneLevel(player);
-
                 if (level == 20) {
                     player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(3);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED ,20*15,4,false,false));
                     player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING,20*15,3,false,false));
 
                     // Create smoke particles around the player
-                    particletimes.put(player.getName(),7);
+                    particletimes.put(player.getName(),8);
                     new BukkitRunnable() {
                         @Override
                         public void run() {
