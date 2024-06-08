@@ -492,7 +492,7 @@ public class Ghoststone implements Listener {
                     teleportedPlayers.remove(player.getUniqueId()); // Remove player from the teleported set
 
                     // Schedule task to slow down the server after 2 seconds
-                    Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 10"), 40L); // 2 seconds later
+                    Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 10"), 1L); // 2 seconds later
                     // Schedule task to reset the tick rate after 10 seconds
                     Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 20"), 300L);
                 }else if (level == 21) {
@@ -628,7 +628,7 @@ public class Ghoststone implements Listener {
                     teleportedPlayers.remove(player.getUniqueId()); // Remove player from the teleported set
 
                     // Schedule task to slow down the server after 2 seconds
-                    Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 10"), 40L); // 2 seconds later
+                    Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 10"), 1L); // 2 seconds later
                     // Schedule task to reset the tick rate after 30 seconds
                     Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 20"), 600L);
                 }
