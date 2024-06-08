@@ -10,11 +10,14 @@ import io.papermc.paper.event.entity.EntityMoveEvent;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
@@ -60,36 +63,42 @@ public class Electrostone implements Listener {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(10,p);
                                 entity.setFireTicks(20*8);
+                                DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();
+                                entity.damage(10,source);
                             }
                         }else {
-                            entity.damage(10,p);
                             entity.setFireTicks(20*8);
+                            DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                            entity.damage(10,source);
                         }
                     }else if (damageEntityType.equalsIgnoreCase("players")) {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(10,p);
                                 entity.setFireTicks(20*8);
+                                DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                                entity.damage(10,source);
                             }
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters")) {
                         if (e instanceof Monster) {
-                            entity.damage(10,p);
                             entity.setFireTicks(20*8);
+                            DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                            entity.damage(10,source);
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(10,p);
                                 entity.setFireTicks(20*8);
+                                DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                                entity.damage(10,source);
                             }
                         }else if (e instanceof Monster){
-                            entity.damage(10,p);
                             entity.setFireTicks(20*8);
+                            DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                            entity.damage(10,source);
                         }
                     }
                 }
@@ -125,41 +134,47 @@ public class Electrostone implements Listener {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(10,p);
                                 entity.setFireTicks(20*8);
+                                DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                                entity.damage(10,source);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }else {
-                            entity.damage(10,p);
                             entity.setFireTicks(20*8);
+                            DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                            entity.damage(10,source);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
                     }else if (damageEntityType.equalsIgnoreCase("players")) {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(10,p);
                                 entity.setFireTicks(20*8);
+                                DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                                entity.damage(10,source);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters")) {
                         if (e instanceof Monster) {
-                            entity.damage(10,p);
                             entity.setFireTicks(20*8);
+                            DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                            entity.damage(10,source);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(10,p);
                                 entity.setFireTicks(20*8);
+                                DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                                entity.damage(10,source);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }else if (entity instanceof Monster){
-                            entity.damage(10,p);
                             entity.setFireTicks(20*8);
+                            DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                            entity.damage(10,source);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
                     }
@@ -195,41 +210,47 @@ public class Electrostone implements Listener {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(14,p);
                                 entity.setFireTicks(20*8);
+                                DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                                entity.damage(14,source);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }else {
-                            entity.damage(14,p);
                             entity.setFireTicks(20*8);
+                            DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                            entity.damage(14,source);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
                     }else if (damageEntityType.equalsIgnoreCase("players")) {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(14,p);
                                 entity.setFireTicks(20*8);
+                                DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                                entity.damage(14,source);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters")) {
                         if (e instanceof Monster) {
-                            entity.damage(14,p);
                             entity.setFireTicks(20*8);
+                            DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                            entity.damage(14,source);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(14,p);
                                 entity.setFireTicks(20*8);
+                                DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                                entity.damage(14,source);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }else if (entity instanceof Monster){
-                            entity.damage(14,p);
                             entity.setFireTicks(20*8);
+                            DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                            entity.damage(14,source);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }
                     }
@@ -266,41 +287,47 @@ public class Electrostone implements Listener {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(14,p);
                                 entity.setFireTicks(20*8);
+                                DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                                entity.damage(14,source);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                             }
                         }else {
-                            entity.damage(14,p);
                             entity.setFireTicks(20*8);
+                            DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                            entity.damage(14,source);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                         }
                     }else if (damageEntityType.equalsIgnoreCase("players")) {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(14,p);
                                 entity.setFireTicks(20*8);
+                                DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                                entity.damage(14,source);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                             }
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters")) {
                         if (e instanceof Monster) {
-                            entity.damage(14,p);
                             entity.setFireTicks(20*8);
+                            DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                            entity.damage(14,source);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                         }
                     }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
                         if (entity instanceof Player){
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
-                                entity.damage(14,p);
                                 entity.setFireTicks(20*8);
+                                DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                                entity.damage(14,source);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                             }
                         }else if (entity instanceof Monster){
-                            entity.damage(14,p);
                             entity.setFireTicks(20*8);
+                            DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                            entity.damage(14,source);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*6,2));
                         }
                     }
@@ -453,129 +480,131 @@ public class Electrostone implements Listener {
                     p.updateInventory();
                     remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
                 }else {
-                    if (i == 15||i == 16){
-                        ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                ability.remove(p.getUniqueId());
-                                cancel();
-                                return;
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(),20*180);
+                    if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION ||event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK ||event.getCause() == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK ) {
+                        if (i == 15||i == 16){
+                            ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                    return;
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(),20*180);
 
-                        stunned.add(entity);
-                        CylinderEffect effect = new CylinderEffect(NikeyV1.em);
-                        effect.setEntity(entity);
-                        effect.duration = 5000;
-                        effect.particles = 30;
-                        effect.particle = Particle.ELECTRIC_SPARK;
-                        effect.visibleRange = 100;
-                        effect.start();
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                stunned.clear();
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(),20*5);
-                        for (Entity e : entity.getNearbyEntities(1,1,1)){
-                            if (e != p){
-                                e.getWorld().strikeLightningEffect(e.getLocation());
-                                if (e instanceof Player){
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                    if (!playersInSameTeam.contains(e)) {
-                                        Player player = (Player) e;
-                                        player.damage(8,p);
-                                        stunned.add(player);
+                            stunned.add(entity);
+                            CylinderEffect effect = new CylinderEffect(NikeyV1.em);
+                            effect.setEntity(entity);
+                            effect.duration = 5000;
+                            effect.particles = 30;
+                            effect.particle = Particle.ELECTRIC_SPARK;
+                            effect.visibleRange = 100;
+                            effect.start();
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    stunned.clear();
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(),20*5);
+                            for (Entity e : entity.getNearbyEntities(1,1,1)){
+                                if (e != p){
+                                    e.getWorld().strikeLightningEffect(e.getLocation());
+                                    if (e instanceof Player){
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (!playersInSameTeam.contains(e)) {
+                                            Player player = (Player) e;
+                                            player.damage(8,p);
+                                            stunned.add(player);
+                                        }
+                                    }else if (e instanceof LivingEntity){
+                                        LivingEntity livingEntity = (LivingEntity) e;
+                                        livingEntity.damage(8,p);
+                                        stunned.add(livingEntity);
                                     }
-                                }else if (e instanceof LivingEntity){
-                                    LivingEntity livingEntity = (LivingEntity) e;
-                                    livingEntity.damage(8,p);
-                                    stunned.add(livingEntity);
                                 }
                             }
-                        }
-                    } else if (i == 17 || i == 18) {
-                        ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                ability.remove(p.getUniqueId());
-                                cancel();
-                                return;
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(),20*180);
+                        } else if (i == 17 || i == 18) {
+                            ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                    return;
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(),20*180);
 
-                        stunned.add(entity);
-                        CylinderEffect effect = new CylinderEffect(NikeyV1.em);
-                        effect.setEntity(entity);
-                        effect.duration = 5000;
-                        effect.particles = 30;
-                        effect.particle = Particle.ELECTRIC_SPARK;
-                        effect.visibleRange = 100;
-                        effect.start();
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                stunned.clear();
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(),20*5);
-                        for (Entity e : entity.getNearbyEntities(2,2,2)){
-                            if (e != p){
-                                e.getWorld().strikeLightningEffect(e.getLocation());
-                                if (e instanceof Player){
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                    if (!playersInSameTeam.contains(e)) {
-                                        Player player = (Player) e;
-                                        player.damage(8,p);
-                                        stunned.add(player);
+                            stunned.add(entity);
+                            CylinderEffect effect = new CylinderEffect(NikeyV1.em);
+                            effect.setEntity(entity);
+                            effect.duration = 5000;
+                            effect.particles = 30;
+                            effect.particle = Particle.ELECTRIC_SPARK;
+                            effect.visibleRange = 100;
+                            effect.start();
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    stunned.clear();
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(),20*5);
+                            for (Entity e : entity.getNearbyEntities(2,2,2)){
+                                if (e != p){
+                                    e.getWorld().strikeLightningEffect(e.getLocation());
+                                    if (e instanceof Player){
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (!playersInSameTeam.contains(e)) {
+                                            Player player = (Player) e;
+                                            player.damage(8,p);
+                                            stunned.add(player);
+                                        }
+                                    }else if (e instanceof LivingEntity){
+                                        LivingEntity livingEntity = (LivingEntity) e;
+                                        livingEntity.damage(8,p);
+                                        stunned.add(livingEntity);
                                     }
-                                }else if (e instanceof LivingEntity){
-                                    LivingEntity livingEntity = (LivingEntity) e;
-                                    livingEntity.damage(8,p);
-                                    stunned.add(livingEntity);
                                 }
                             }
-                        }
-                    } else if (i >=19) {
-                        ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                ability.remove(p.getUniqueId());
-                                cancel();
-                                return;
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(),20*180);
+                        } else if (i >=19) {
+                            ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ability.remove(p.getUniqueId());
+                                    cancel();
+                                    return;
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(),20*180);
 
-                        stunned.add(entity);
-                        CylinderEffect effect = new CylinderEffect(NikeyV1.em);
-                        effect.setEntity(entity);
-                        effect.duration = 8000;
-                        effect.particles = 30;
-                        effect.particle = Particle.ELECTRIC_SPARK;
-                        effect.visibleRange = 100;
-                        effect.start();
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                stunned.clear();
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(),20*8);
-                        for (Entity e : entity.getNearbyEntities(2,2,2)){
-                            if (e != p){
-                                e.getWorld().strikeLightningEffect(e.getLocation());
-                                if (e instanceof Player){
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                    if (!playersInSameTeam.contains(e)) {
-                                        Player player = (Player) e;
-                                        player.damage(8,p);
-                                        stunned.add(player);
+                            stunned.add(entity);
+                            CylinderEffect effect = new CylinderEffect(NikeyV1.em);
+                            effect.setEntity(entity);
+                            effect.duration = 8000;
+                            effect.particles = 30;
+                            effect.particle = Particle.ELECTRIC_SPARK;
+                            effect.visibleRange = 100;
+                            effect.start();
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    stunned.clear();
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(),20*8);
+                            for (Entity e : entity.getNearbyEntities(2,2,2)){
+                                if (e != p){
+                                    e.getWorld().strikeLightningEffect(e.getLocation());
+                                    if (e instanceof Player){
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
+                                        if (!playersInSameTeam.contains(e)) {
+                                            Player player = (Player) e;
+                                            player.damage(8,p);
+                                            stunned.add(player);
+                                        }
+                                    }else if (e instanceof LivingEntity){
+                                        LivingEntity livingEntity = (LivingEntity) e;
+                                        livingEntity.damage(8,p);
+                                        stunned.add(livingEntity);
                                     }
-                                }else if (e instanceof LivingEntity){
-                                    LivingEntity livingEntity = (LivingEntity) e;
-                                    livingEntity.damage(8,p);
-                                    stunned.add(livingEntity);
                                 }
                             }
                         }
