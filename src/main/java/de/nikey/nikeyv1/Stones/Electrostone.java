@@ -135,13 +135,13 @@ public class Electrostone implements Listener {
                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                             if (!playersInSameTeam.contains(entity)) {
                                 entity.setFireTicks(20*8);
-                                DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                                DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();
                                 entity.damage(10,source);
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                             }
                         }else {
                             entity.setFireTicks(20*8);
-                            DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();;
+                            DamageSource source = DamageSource.builder(DamageType.LIGHTNING_BOLT).withDirectEntity(p).withCausingEntity(p).build();
                             entity.damage(10,source);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*4,2));
                         }

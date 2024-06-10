@@ -384,8 +384,7 @@ public class Ghoststone implements Listener {
                             particletimes.replace(player.getName(),particletimes.get(player.getName())-1);
                         }
                     }.runTaskTimer(NikeyV1.getPlugin(),0,40);
-
-                    // Give blindness effect to nearby players
+                    
                     for (Entity entity : player.getNearbyEntities(30, 30, 30)) {
                         if (entity instanceof LivingEntity && entity != player) {
                             LivingEntity livingEntity = (LivingEntity) entity;
