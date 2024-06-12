@@ -201,7 +201,7 @@ public class GhostStoneDamageAbility implements Listener {
 
     public void startHealthSteal(Player user , Player victim) {
         int level = Stone.getStoneLevel(user);
-        if (level == 17 || level == 18) {
+        if (level <= 18) {
             stealtimer.put(user,30);
         }else if (level >= 19) {
             stealtimer.put(user,40);
@@ -212,14 +212,26 @@ public class GhostStoneDamageAbility implements Listener {
                 stealtimer.replace(user,stealtimer.get(user)-1);
                 if (stealtimer.get(user) == 0) cancel();
 
-                if (victim.getHealth()-0.5F >= 0.5F) {
-                    victim.setHealth(victim.getHealth()-0.5F);
-                    victim.playHurtAnimation(0);
-                }else {
-                    victim.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
-                }
-                if (user.getHealth() < 20) {
-                    user.setHealth(user.getHealth()+0.5F);
+                if (level == 15 || level == 16) {
+                    if (victim.getHealth()-0.5F >= 0.5F) {
+                        victim.setHealth(victim.getHealth()-0.5F);
+                        victim.playHurtAnimation(0);
+                    }else {
+                        victim.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                    }
+                    if (user.getHealth() < 20) {
+                        user.setHealth(user.getHealth()+0.5F);
+                    }
+                } else if (level >= 17) {
+                    if (victim.getHealth()-1 >= 1) {
+                        victim.setHealth(victim.getHealth()-1);
+                        victim.playHurtAnimation(0);
+                    }else {
+                        victim.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                    }
+                    if (user.getHealth() < 20) {
+                        user.setHealth(user.getHealth()+1);
+                    }
                 }
             }
         }.runTaskTimer(NikeyV1.getPlugin(),0,20);
