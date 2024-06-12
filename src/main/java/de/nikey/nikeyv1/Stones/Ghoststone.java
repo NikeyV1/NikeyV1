@@ -31,7 +31,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("ALL")
 public class Ghoststone implements Listener {
@@ -362,6 +361,7 @@ public class Ghoststone implements Listener {
                     player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(3);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED ,20*15,4,false,false));
                     player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING,20*15,3,false,false));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,20*15,3,false,false));
 
                     // Create smoke particles around the player
                     particletimes.put(player.getName(),8);
@@ -497,6 +497,7 @@ public class Ghoststone implements Listener {
                     player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(5);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED ,20*30,4,false,false));
                     player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING,20*30,3,false,false));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,20*30,3,false,false));
 
                     // Create smoke particles around the player
                     particletimes.put(player.getName(),16);
@@ -639,8 +640,6 @@ public class Ghoststone implements Listener {
             }
         }
     }
-
-
 
 
 
