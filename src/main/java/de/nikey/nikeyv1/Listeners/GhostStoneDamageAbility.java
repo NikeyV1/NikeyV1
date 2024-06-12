@@ -330,6 +330,4 @@ public class GhostStoneDamageAbility implements Listener {
             }.runTaskLater(NikeyV1.getPlugin(), 20 * 40);
         }
     }
-
-
 }
