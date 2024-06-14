@@ -632,53 +632,45 @@ public class Electrostone implements Listener {
                         public void run() {
                             mtimer.replace(p,mtimer.get(p)-1);
                             for (Entity entity : p.getNearbyEntities(5, 5, 5)) {
+                                Location difference = entity.getLocation().subtract(p.getLocation());
+                                Vector normalizedDifference = difference.toVector().normalize();
+                                Vector multiplied = normalizedDifference.multiply(1.5);
+                                entity.setVelocity(multiplied);
                                 if (entity instanceof LivingEntity) {
                                     LivingEntity target = (LivingEntity) entity;
                                     if (target != p) {
-
                                         String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
                                         if (damageEntityType.equalsIgnoreCase("all")) {
                                             if (target instanceof Player){
                                                 List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                 if (!playersInSameTeam.contains(target)) {
                                                     target.damage(1);
-                                                    target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
                                                 }
                                             }else {
                                                 target.damage(1);
-                                                target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
                                             }
                                         }else if (damageEntityType.equalsIgnoreCase("players")) {
                                             if (target instanceof Player){
                                                 List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                 if (!playersInSameTeam.contains(target)) {
                                                     target.damage(1);
-                                                    target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
                                                 }
                                             }
                                         }else if (damageEntityType.equalsIgnoreCase("monsters")) {
                                             if (target instanceof Monster) {
                                                 target.damage(1);
-                                                target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
                                             }
                                         }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
                                             if (target instanceof Player){
                                                 List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                 if (!playersInSameTeam.contains(target)) {
                                                     target.damage(1);
-                                                    target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
                                                 }
                                             }else if (target instanceof Monster){
                                                 target.damage(1);
-                                                target.setVelocity(target.getLocation().getDirection().multiply(-1.5));
                                             }
                                         }
                                     }
-                                }else {
-                                    Location difference = entity.getLocation().subtract(p.getLocation());
-                                    Vector normalizedDifference = difference.toVector().normalize();
-                                    Vector multiplied = normalizedDifference.multiply(1.5);
-                                    entity.setVelocity(multiplied);
                                 }
                             }
 
@@ -707,6 +699,10 @@ public class Electrostone implements Listener {
                         public void run() {
                             mtimer.replace(p,mtimer.get(p)-1);
                             for (Entity entity : p.getNearbyEntities(8, 8, 8)) {
+                                Location difference = entity.getLocation().subtract(p.getLocation());
+                                Vector normalizedDifference = difference.toVector().normalize();
+                                Vector multiplied = normalizedDifference.multiply(2);
+                                entity.setVelocity(multiplied);
                                 if (entity instanceof LivingEntity) {
                                     LivingEntity target = (LivingEntity) entity;
                                     if (target != p) {
@@ -717,43 +713,34 @@ public class Electrostone implements Listener {
                                                 List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                 if (!playersInSameTeam.contains(target)) {
                                                     target.damage(2);
-                                                    target.setVelocity(target.getLocation().getDirection().multiply(-2));
                                                 }
                                             }else {
                                                 target.damage(2);
-                                                target.setVelocity(target.getLocation().getDirection().multiply(-2));
+                                                 
                                             }
                                         }else if (damageEntityType.equalsIgnoreCase("players")) {
                                             if (target instanceof Player){
                                                 List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                 if (!playersInSameTeam.contains(target)) {
                                                     target.damage(2);
-                                                    target.setVelocity(target.getLocation().getDirection().multiply(-2));
                                                 }
                                             }
                                         }else if (damageEntityType.equalsIgnoreCase("monsters")) {
                                             if (target instanceof Monster) {
                                                 target.damage(2);
-                                                target.setVelocity(target.getLocation().getDirection().multiply(-2));
                                             }
                                         }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
                                             if (target instanceof Player){
                                                 List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                 if (!playersInSameTeam.contains(target)) {
                                                     target.damage(2);
-                                                    target.setVelocity(target.getLocation().getDirection().multiply(-2));
                                                 }
                                             }else if (target instanceof Monster){
                                                 target.damage(2);
-                                                target.setVelocity(target.getLocation().getDirection().multiply(-2));
                                             }
                                         }
                                     }
                                 }else {
-                                    Location difference = entity.getLocation().subtract(p.getLocation());
-                                    Vector normalizedDifference = difference.toVector().normalize();
-                                    Vector multiplied = normalizedDifference.multiply(2);
-                                    entity.setVelocity(multiplied);
                                 }
                             }
 

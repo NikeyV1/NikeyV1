@@ -991,9 +991,9 @@ public class Frozenstone implements Listener {
         Location eyeLocation = player.getEyeLocation();
         Location spawnLocation1 = eyeLocation.add(eyeLocation.getDirection().normalize());
         Location spawnLocation2 = spawnLocation1.clone().add(0, -0.8D, 0);
-        Location spawnLocation3 = spawnLocation1.clone().add(1, 0, 0);
+        Location spawnLocation3 = spawnLocation1.clone().add(0.9, 0, 0);
         Location spawnLocation4 = spawnLocation1.clone().add(0, 0.8D, 0);
-        Location spawnLocation5 = spawnLocation1.clone().add(-1, 0, 0);
+        Location spawnLocation5 = spawnLocation1.clone().add(-0.9, 0, 0);
 
         shootArrow(player, spawnLocation2);
         shootArrow(player, spawnLocation3);
@@ -1113,7 +1113,7 @@ public class Frozenstone implements Listener {
                 LivingEntity e = (LivingEntity) hitEntity;
 
                 applyRandomNegativeEffect(i,e);
-                e.setFreezeTicks(20*6);
+                e.setFreezeTicks(20*10);
             }
             entity.remove();
         }
