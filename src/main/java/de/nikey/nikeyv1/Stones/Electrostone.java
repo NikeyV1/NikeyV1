@@ -24,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -673,6 +674,11 @@ public class Electrostone implements Listener {
                                             }
                                         }
                                     }
+                                }else {
+                                    Location difference = entity.getLocation().subtract(p.getLocation());
+                                    Vector normalizedDifference = difference.toVector().normalize();
+                                    Vector multiplied = normalizedDifference.multiply(1.5);
+                                    entity.setVelocity(multiplied);
                                 }
                             }
 
@@ -743,6 +749,11 @@ public class Electrostone implements Listener {
                                             }
                                         }
                                     }
+                                }else {
+                                    Location difference = entity.getLocation().subtract(p.getLocation());
+                                    Vector normalizedDifference = difference.toVector().normalize();
+                                    Vector multiplied = normalizedDifference.multiply(2);
+                                    entity.setVelocity(multiplied);
                                 }
                             }
 

@@ -62,9 +62,10 @@ public class Stone {
 
     public static boolean isInfernoBlade(ItemStack item) {
         if (!item.hasItemMeta())return false;
+        if (!item.getItemMeta().hasLore())return false;
 
         ItemMeta meta = item.getItemMeta();
-        return meta.hasLore() && meta.hasCustomModelData() && meta.isUnbreakable() && meta.getLore().contains("§7What will you do?") && item.getType() == Material.NETHERITE_SWORD;
+        return meta.hasCustomModelData() && meta.isUnbreakable() && meta.getLore().contains("§7What will you do?") && item.getType() == Material.NETHERITE_SWORD;
     }
 
     public static String whatStone(ItemStack item) {
