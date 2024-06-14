@@ -38,6 +38,7 @@ public final class NikeyV1 extends JavaPlugin{
         else {
             getLogger().warning("The plugin EffectLib could not be found!");
         }
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 20");
 
 
 

@@ -360,19 +360,8 @@ public class Electrostone implements Listener {
             NikeyV1.getPlugin().saveConfig();
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
                 if (i >= 10){
-                    if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
-                        p.updateInventory();
-                        remainingTime1 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
-                    }else {
+                    if (!(cooldown.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown.put(p.getUniqueId(),System.currentTimeMillis() + (100*1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                cooldown.remove(p.getUniqueId());
-                                cancel();
-                                return;
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(),20*100);
                         if (i == 10 ){
                             timer = 20;
                             World world = p.getWorld();
@@ -475,22 +464,12 @@ public class Electrostone implements Listener {
                 String[] arr = p.getInventory().getItemInMainHand().getLore().get(1).split(":");
                 int i = Integer.parseInt(arr[1]);
                 FileConfiguration config = NikeyV1.getPlugin().getConfig();
-                if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                    event.setCancelled(true);
-                    p.updateInventory();
-                    remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                }else {
+                if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
+
                     if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION ||event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK ||event.getCause() == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK ) {
                         if (i == 15||i == 16){
                             ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                    return;
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(),20*180);
+                             
 
                             stunned.add(entity);
                             CylinderEffect effect = new CylinderEffect(NikeyV1.em);
@@ -525,14 +504,6 @@ public class Electrostone implements Listener {
                             }
                         } else if (i == 17 || i == 18) {
                             ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                    return;
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(),20*180);
 
                             stunned.add(entity);
                             CylinderEffect effect = new CylinderEffect(NikeyV1.em);
@@ -567,14 +538,6 @@ public class Electrostone implements Listener {
                             }
                         } else if (i >=19) {
                             ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                    return;
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(),20*180);
 
                             stunned.add(entity);
                             CylinderEffect effect = new CylinderEffect(NikeyV1.em);
@@ -651,18 +614,8 @@ public class Electrostone implements Listener {
             String stone = config.getString(p.getName() + ".stone");
             if (i == 20 ){
                 mtimer.put(p,40);
-                if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
-                    p.updateInventory();
-                    remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
-                }else {
+                if (!(cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                     cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            cooldown2.remove(p.getUniqueId());
-                            cancel();
-                        }
-                    }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
                     //Cooldown-Ability
 
                     ShieldEffect effect = new ShieldEffect(NikeyV1.em);
@@ -732,18 +685,8 @@ public class Electrostone implements Listener {
                 }
             } else if (i == 21) {
                 mtimer.put(p,100);
-                if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
-                    p.updateInventory();
-                    remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
-                }else {
+                if (!(cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                     cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            cooldown2.remove(p.getUniqueId());
-                            cancel();
-                        }
-                    }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
                     //Cooldown-Ability
                     ShieldEffect effect = new ShieldEffect(NikeyV1.em);
                     effect.radius = 10;

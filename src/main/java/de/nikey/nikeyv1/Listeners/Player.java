@@ -1,5 +1,6 @@
 package de.nikey.nikeyv1.Listeners;
 
+import de.nikey.nikeyv1.CustomEvents.AbilityCooldownEndEvent;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
 import de.nikey.nikeyv1.Stones.Electrostone;
@@ -61,7 +62,6 @@ public class Player implements Listener {
             }
             Holystone.hitted.remove(p);
             p.setMaxHealth(20);
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 20");
             p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(1);
 
             if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) {
@@ -696,5 +696,4 @@ public class Player implements Listener {
         org.bukkit.entity.Player entity = event.getPlayer();
         if (entity.isInWaterOrRain())entity.setVisualFire(false);
     }
-
 }

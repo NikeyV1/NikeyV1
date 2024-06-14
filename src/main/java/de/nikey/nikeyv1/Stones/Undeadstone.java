@@ -143,20 +143,8 @@ public class Undeadstone implements Listener {
             }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
                 if (p.isSneaking()){
                     if (i == 15){
-                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            event.setCancelled(true);
-                            p.updateInventory();
-                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
+                        if (!(ability.getOrDefault(player.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                    return;
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //cooldown-ability
                             timer.put(p,40);
                             player = p;
@@ -207,20 +195,8 @@ public class Undeadstone implements Listener {
                             }.runTaskTimer(NikeyV1.getPlugin(),10,10);
                         }
                     } else if (i == 16) {
-                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            event.setCancelled(true);
-                            p.updateInventory();
-                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
+                        if (!(ability.getOrDefault(player.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                    return;
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //cooldown-ability
                             timer.put(p,40);
                             player = p;
@@ -277,20 +253,8 @@ public class Undeadstone implements Listener {
                             }.runTaskTimer(NikeyV1.getPlugin(),10,10);
                         }
                     }else if (i == 17) {
-                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            event.setCancelled(true);
-                            p.updateInventory();
-                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
+                        if (!(ability.getOrDefault(player.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                    return;
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //cooldown-ability
                             timer.put(p,40);
                             player = p;
@@ -347,20 +311,8 @@ public class Undeadstone implements Listener {
                             }.runTaskTimer(NikeyV1.getPlugin(),10,10);
                         }
                     }else if (i == 18) {
-                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            event.setCancelled(true);
-                            p.updateInventory();
-                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
+                        if (!(ability.getOrDefault(player.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                    return;
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //cooldown-ability
                             timer.put(p,60);
                             player = p;
@@ -417,20 +369,8 @@ public class Undeadstone implements Listener {
                             }.runTaskTimer(NikeyV1.getPlugin(),10,10);
                         }
                     } else if (i >=19){
-                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            event.setCancelled(true);
-                            p.updateInventory();
-                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
+                        if (!(ability.getOrDefault(player.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                    return;
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //cooldown-ability
                             timer.put(p,60);
                             player = p;
@@ -515,19 +455,9 @@ public class Undeadstone implements Listener {
             String stone = config.getString(p.getName() + ".stone");
             if (i == 20 || i == 21){
                 if (p.isSneaking()) {
-                    if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
-                        p.updateInventory();
-                        remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
-                    }else {
+                    if (!(cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                cooldown2.remove(p.getUniqueId());
-                                cancel();
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
-                        //Cooldown-Ability
+
                         spawnRidingHusk(p);
                     }
                 }
@@ -702,18 +632,8 @@ public class Undeadstone implements Listener {
             if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#100613")+"Undead Stone")){
                 String[] arr = p.getItemInHand().getLore().get(1).split(":");
                 int i = Integer.parseInt(arr[1]);
-                if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
-                    p.updateInventory();
-                    remainingTime1 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
-                }else {
+                if (!(cooldown.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                     cooldown.put(p.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            cooldown.remove(p.getUniqueId());
-                            cancel();
-                        }
-                    }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
                     //cooldown-ability
                     ItemStack hand = p.getInventory().getItemInMainHand();
                     ItemMeta meta = hand.getItemMeta();

@@ -2,12 +2,9 @@ package de.nikey.nikeyv1.Listeners;
 
 import com.destroystokyo.paper.event.player.PlayerElytraBoostEvent;
 import de.nikey.nikeyv1.NikeyV1;
+import de.nikey.nikeyv1.CustomEvents.AbilityCooldownEndEvent;
 import de.nikey.nikeyv1.api.Stone;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.title.TitlePart;
 import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -17,13 +14,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -53,18 +47,8 @@ public class GhostStoneDamageAbility implements Listener {
             config.set(player.getName()+".level",l);
             NikeyV1.getPlugin().saveConfig();
             if (l >= 15) {
-                if (ability.containsKey(player.getUniqueId()) && ability.get(player.getUniqueId()) > System.currentTimeMillis()){
-                    event.setCancelled(true);
-                    remainingTime2 = ability.get(player.getUniqueId()) - System.currentTimeMillis();
-                }else {
+                if (!(ability.getOrDefault(player.getUniqueId(),0L) > System.currentTimeMillis())){
                     ability.put(player.getUniqueId(),System.currentTimeMillis() + (180*1000));
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            ability.remove(player.getUniqueId());
-                            cancel();
-                        }
-                    }.runTaskLater(NikeyV1.getPlugin(),20*180);
 
                     if (l == 15) {
                         setVisibility(victim,player);

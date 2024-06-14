@@ -119,18 +119,8 @@ public class Waterstone implements Listener {
             String stone = config.getString(p.getName() + ".stone");
             if (event.getAction().isRightClick()) {
                 if (i >= 10) {
-                    if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
-                        p.updateInventory();
-                        remainingTime1 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
-                    }else {
+                    if (!(cooldown.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown.put(p.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                cooldown.remove(p.getUniqueId());
-                                cancel();
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
                         //cooldown-ability
                         if (i ==10){
                             timer = 15;
@@ -493,19 +483,8 @@ public class Waterstone implements Listener {
             }else if (event.getAction()==Action.LEFT_CLICK_AIR){
                 if (!p.isSneaking()) {
                     if (i == 15){
-                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            p.updateInventory();
-                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
-
+                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //Cooldown-Ability
                             EquationEffect effect = new EquationEffect(NikeyV1.em);
                             effect.setEntity(p);
@@ -532,19 +511,8 @@ public class Waterstone implements Listener {
                             }
                         }
                     } else if (i == 16) {
-                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            p.updateInventory();
-                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
-
+                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //Cooldown-Ability
                             EquationEffect effect = new EquationEffect(NikeyV1.em);
                             effect.setEntity(p);
@@ -572,19 +540,8 @@ public class Waterstone implements Listener {
                             }
                         }
                     }else if (i == 17) {
-                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            p.updateInventory();
-                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
-
+                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //Cooldown-Ability
                             EquationEffect effect = new EquationEffect(NikeyV1.em);
                             effect.setEntity(p);
@@ -611,19 +568,8 @@ public class Waterstone implements Listener {
                             }
                         }
                     } else if (i == 18){
-                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            p.updateInventory();
-                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
-
+                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //Cooldown-Ability
                             EquationEffect effect = new EquationEffect(NikeyV1.em);
                             effect.setEntity(p);
@@ -650,19 +596,8 @@ public class Waterstone implements Listener {
                             }
                         }
                     }else if (i >=19){
-                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            p.updateInventory();
-                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
-
+                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //Cooldown-Ability
                             EquationEffect effect = new EquationEffect(NikeyV1.em);
                             effect.setEntity(p);
@@ -711,37 +646,17 @@ public class Waterstone implements Listener {
             String stone = config.getString(p.getName() + ".stone");
             if (p.isSneaking()) {
                 if (i== 20){
-                    if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
-                        p.updateInventory();
-                        remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
-                    }else {
+                    if (!(cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                cooldown2.remove(p.getUniqueId());
-                                cancel();
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
-                        //Cooldown-Ability
+
                         p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH, 1.0f, 1.0f);
                         Location BlocksAway = p.getLocation().add(p.getLocation().getDirection().multiply(4));
                         Tornado.spawnTornado(NikeyV1.getPlugin(),BlocksAway,Material.STONE,p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getData(),p.getLocation().getDirection().multiply(4),0.4,275,20*20,false,p,false);
                     }
                 } else if (i == 21) {
-                    if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
-                        p.updateInventory();
-                        remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
-                    }else {
+                    if (!(cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                cooldown2.remove(p.getUniqueId());
-                                cancel();
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
-                        //Cooldown-Ability
+
                         p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH, 1.0f, 1.0f);
                         Location BlocksAway = p.getLocation().add(p.getLocation().getDirection().multiply(4));
                         Tornado.spawnTornado(NikeyV1.getPlugin(),BlocksAway,Material.STONE,p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getData(),p.getLocation().getDirection().multiply(4.5),0.4,300,20*30,false,p,false);

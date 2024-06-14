@@ -64,20 +64,8 @@ public class Firestone implements Listener {
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
                 String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
                 if (i >= 10) {
-                    if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
-                        event.setCancelled(true);
-                        p.updateInventory();
-                        remainingTime1 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
-                    }else {
+                    if (!(cooldown.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown.put(p.getUniqueId(),System.currentTimeMillis() + (100*1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                cooldown.remove(p.getUniqueId());
-                                cancel();
-                                return;
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(),20*100);
                         if (i == 10 ) {
                             timer = 20;
                             SphereEffect effect = new SphereEffect(NikeyV1.em);
@@ -577,20 +565,8 @@ public class Firestone implements Listener {
             }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
                 if (!p.isSneaking()) {
                     if (i == 15||i == 16||i == 17){
-                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            event.setCancelled(true);
-                            p.updateInventory();
-                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
+                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                    return;
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(),20*180);
                             //Cooldown-Ability
                             time = 10;
                             AnimatedBallEffect effect = new AnimatedBallEffect(NikeyV1.em);
@@ -614,21 +590,8 @@ public class Firestone implements Listener {
                             }.runTaskTimer(NikeyV1.getPlugin(),40,40);
                         }
                     }else if (i >=18){
-                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            event.setCancelled(true);
-                            p.updateInventory();
-                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
-
+                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(),System.currentTimeMillis() + (180*1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                    return;
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(),20*180);
                             //Cooldown-Ability
                             time = 10;
                             new BukkitRunnable() {
@@ -837,10 +800,10 @@ public class Firestone implements Listener {
             String stone = config.getString(p.getName() + ".stone");
             if (i == 20 || i == 21){
                 if (p.isSneaking()) {
-                    if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
-                        p.updateInventory();
+                    if (cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis()){
                         remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
                     }else {
+
                         //Cooldown-Ability
                         openPlayerSelectionInventory(p);
                     }
@@ -896,18 +859,9 @@ public class Firestone implements Listener {
                 Player p = (Player) event.getWhoClicked();
 
                 if (selectedPlayer != null) {
-                    if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
-                        p.updateInventory();
-                        remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
-                    }else {
+                    if (!(cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown2.put(event.getWhoClicked().getUniqueId(), System.currentTimeMillis() + (300 * 1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                cooldown2.remove(p.getUniqueId());
-                                cancel();
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
+
                         triggerMegaFireAbility(selectedPlayer, (Player) event.getWhoClicked());
                     }
                 }

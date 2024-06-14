@@ -175,19 +175,8 @@ public class Frozenstone implements Listener {
                     }
                 }else {
                     if (i >= 10) {
-                        if (cooldown.containsKey(p.getUniqueId()) && cooldown.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            event.setCancelled(true);
-                            p.updateInventory();
-                            remainingTime1 = cooldown.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
+                        if (!(cooldown.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                             cooldown.put(p.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    cooldown.remove(p.getUniqueId());
-                                    cancel();
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 100);
                             //cooldown-ability
                             if (i ==10){
                                 timer.put(p,4);
@@ -245,19 +234,8 @@ public class Frozenstone implements Listener {
                 String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
                 if (i == 15){
                     if (!p.isSneaking()) {
-                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            event.setCancelled(true);
-                            p.updateInventory();
-                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
+                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //Cooldown-Ability
                             for (Entity e : p.getNearbyEntities(40,40,40)){
                                 if (e instanceof LivingEntity){
@@ -400,19 +378,8 @@ public class Frozenstone implements Listener {
                     }
                 } else if (i == 16) {
                     if (!p.isSneaking()) {
-                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            event.setCancelled(true);
-                            p.updateInventory();
-                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
+                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //Cooldown-Ability
 
                             for (Entity e : p.getNearbyEntities(50,50,50)){
@@ -555,19 +522,8 @@ public class Frozenstone implements Listener {
                     }
                 }else if (i == 17) {
                     if (!p.isSneaking()) {
-                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            event.setCancelled(true);
-                            p.updateInventory();
-                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
+                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //Cooldown-Ability
 
                             for (Entity e : p.getNearbyEntities(50,50,50)){
@@ -711,19 +667,9 @@ public class Frozenstone implements Listener {
                     }
                 }else if (i == 18) {
                     if (!p.isSneaking()) {
-                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            event.setCancelled(true);
-                            p.updateInventory();
-                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
+                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
+
                             //Cooldown-Ability
 
                             for (Entity e : p.getNearbyEntities(50,50,50)){
@@ -869,21 +815,9 @@ public class Frozenstone implements Listener {
                     }
                 } else if (i >=19){
                     if (!p.isSneaking()) {
-                        if (ability.containsKey(p.getUniqueId()) && ability.get(p.getUniqueId()) > System.currentTimeMillis()){
-                            event.setCancelled(true);
-                            p.updateInventory();
-                            remainingTime2 = ability.get(p.getUniqueId()) - System.currentTimeMillis();
-                        }else {
+                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    ability.remove(p.getUniqueId());
-                                    cancel();
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20 * 180);
                             //Cooldown-Ability
-
                             for (Entity e : p.getNearbyEntities(50,50,50)){
                                 if (e instanceof LivingEntity){
 
@@ -1043,19 +977,9 @@ public class Frozenstone implements Listener {
             String stone = config.getString(p.getName() + ".stone");
             if (p.isSneaking()) {
                 if (i == 20 || i == 21) {
-                    if (cooldown2.containsKey(p.getUniqueId()) && cooldown2.get(p.getUniqueId()) > System.currentTimeMillis()){
-                        p.updateInventory();
-                        remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
-                    }else {
+                    if (!(cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                cooldown2.remove(p.getUniqueId());
-                                cancel();
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(), 20 * 300);
-                        //Cooldown-Ability
+
                         activateAbility(p);
                     }
                 }

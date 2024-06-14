@@ -62,19 +62,8 @@ public class Elementalstone implements Listener {
                     String l = String.valueOf(lore);
                     if (l.equalsIgnoreCase("[§fThe combined power of all §8stones]")) {
                         if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
-                            if (cooldown.containsKey(player.getUniqueId()) && cooldown.get(player.getUniqueId()) > System.currentTimeMillis()){
-                                player.updateInventory();
-                                remainingTime1 = cooldown.get(player.getUniqueId()) - System.currentTimeMillis();
-                            }else {
-                                cooldown.put(player.getUniqueId(), System.currentTimeMillis() + (120 * 1000));
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        cooldown.remove(player.getUniqueId());
-                                        cancel();
-                                        return;
-                                    }
-                                }.runTaskLater(NikeyV1.getPlugin(), 20 * 120);
+                            if (!(cooldown.getOrDefault(player.getUniqueId(),0L) > System.currentTimeMillis())){
+                                cooldown.put(player.getUniqueId(),System.currentTimeMillis() + (120*1000));
                                 //Ability
                                 player.getWorld().setStorm(true);
                                 player.getWorld().setWeatherDuration(20*60);
@@ -82,20 +71,8 @@ public class Elementalstone implements Listener {
                             }
                         }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
                             if (!player.isSneaking()) {
-                                if (cooldown2.containsKey(player.getUniqueId()) && cooldown2.get(player.getUniqueId()) > System.currentTimeMillis()){
-                                    event.setCancelled(true);
-                                    player.updateInventory();
-                                    remainingTime3 = cooldown2.get(player.getUniqueId()) - System.currentTimeMillis();
-                                }else {
+                                if (!(cooldown2.getOrDefault(player.getUniqueId(),0L) > System.currentTimeMillis())){
                                     cooldown2.put(player.getUniqueId(),System.currentTimeMillis() + (150*1000));
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            cooldown2.remove(player.getUniqueId());
-                                            cancel();
-                                            return;
-                                        }
-                                    }.runTaskLater(NikeyV1.getPlugin(),20*150);
 
                                     dmg = 0;
                                     damageCount = 1;

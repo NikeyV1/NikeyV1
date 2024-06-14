@@ -78,11 +78,8 @@ public class InfernoBlade implements Listener {
                                     meta.setDisplayName(ChatColor.AQUA + "Inferno Blade");
                                     event.getItem().setItemMeta(meta);
                                 }else {
-                                    if (ability.containsKey(player.getUniqueId()) && ability.get(player.getUniqueId()) > System.currentTimeMillis()){
-                                        event.setCancelled(true);
-                                        player.updateInventory();
-                                        remainingTime2 = ability.get(player.getUniqueId()) - System.currentTimeMillis();
-                                    }else {
+                                    if (!(ability.getOrDefault(player.getUniqueId(),0L) > System.currentTimeMillis())){
+
                                         ability.put(player.getUniqueId(),System.currentTimeMillis() + (45*1000));
                                         new BukkitRunnable() {
                                             @Override
@@ -102,11 +99,7 @@ public class InfernoBlade implements Listener {
                                     meta.setDisplayName(ChatColor.RED + "Inferno Blade");
                                     event.getItem().setItemMeta(meta);
                                 }else {
-                                    if (ability.containsKey(player.getUniqueId()) && ability.get(player.getUniqueId()) > System.currentTimeMillis()){
-                                        event.setCancelled(true);
-                                        player.updateInventory();
-                                        remainingTime2 = ability.get(player.getUniqueId()) - System.currentTimeMillis();
-                                    }else {
+                                    if (!(ability.getOrDefault(player.getUniqueId(),0L) > System.currentTimeMillis())){
                                         red = false;
                                         ability.put(player.getUniqueId(),System.currentTimeMillis() + (6*1000));
                                         new BukkitRunnable() {
