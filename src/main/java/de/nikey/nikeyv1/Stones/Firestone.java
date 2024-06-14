@@ -68,7 +68,6 @@ public class Firestone implements Listener {
                 if (i >= 10) {
                     if (!(cooldown.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown.put(p.getUniqueId(),System.currentTimeMillis() + (100*1000));
-                        DamageSource source = DamageSource.builder(DamageType.IN_FIRE).withDirectEntity(p).withCausingEntity(p).build();
                         if (i == 10 ) {
                             timer = 20;
                             SphereEffect effect = new SphereEffect(NikeyV1.em);
@@ -91,11 +90,11 @@ public class Firestone implements Listener {
                                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                         if (!playersInSameTeam.contains(e)) {
                                                             e.setVisualFire(true);
-                                                            entity.damage(2,source);
+                                                            entity.damage(2);
                                                         }
                                                     }else {
                                                         entity.setFireTicks(20);
-                                                        entity.damage(2,source);
+                                                        entity.damage(2);
                                                     }
                                                 }
                                                 if (timer == 0){
@@ -113,7 +112,7 @@ public class Firestone implements Listener {
                                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                         if (!playersInSameTeam.contains(e)) {
                                                             e.setVisualFire(true);
-                                                            entity.damage(2,source);
+                                                            entity.damage(2);
                                                         }
                                                     }
                                                     if (timer == 0){
@@ -129,7 +128,7 @@ public class Firestone implements Listener {
                                                     LivingEntity entity = (LivingEntity) e;
                                                     entities.add(entity);
                                                     entity.setFireTicks(20);
-                                                    entity.damage(2,source);
+                                                    entity.damage(2);
                                                     if (timer == 0){
                                                         entity.setVisualFire(false);
                                                         entities.forEach(entity1 -> entity1.setVisualFire(false));
@@ -146,11 +145,11 @@ public class Firestone implements Listener {
                                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                         if (!playersInSameTeam.contains(e)) {
                                                             e.setVisualFire(true);
-                                                            entity.damage(2,source);
+                                                            entity.damage(2);
                                                         }
                                                     }else if (entity instanceof Monster){
                                                         entity.setFireTicks(20);
-                                                        entity.damage(2,source);
+                                                        entity.damage(2);
                                                     }
                                                 }
                                                 if (timer == 0){
@@ -190,11 +189,11 @@ public class Firestone implements Listener {
                                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                         if (!playersInSameTeam.contains(e)) {
                                                             e.setVisualFire(true);
-                                                            entity.damage(2,source);
+                                                            entity.damage(2);
                                                         }
                                                     }else{
                                                         entity.setFireTicks(20);
-                                                        entity.damage(2,source);
+                                                        entity.damage(2);
                                                     }
                                                 }
                                                 if (timer == 0) {
@@ -212,7 +211,7 @@ public class Firestone implements Listener {
                                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                         if (!playersInSameTeam.contains(e)) {
                                                             e.setVisualFire(true);
-                                                            entity.damage(2,source);
+                                                            entity.damage(2);
                                                         }
                                                     }
                                                     if (timer == 0) {
@@ -228,7 +227,7 @@ public class Firestone implements Listener {
                                                     LivingEntity entity = (LivingEntity) e;
                                                     entities.add(entity);
                                                     entity.setFireTicks(20);
-                                                    entity.damage(2,source);
+                                                    entity.damage(2);
                                                     if (timer == 0) {
                                                         entity.setVisualFire(false);
                                                         entities.forEach(entity1 -> entity1.setVisualFire(false));
@@ -245,11 +244,11 @@ public class Firestone implements Listener {
                                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                         if (!playersInSameTeam.contains(e)) {
                                                             e.setVisualFire(true);
-                                                            entity.damage(2,source);
+                                                            entity.damage(2);
                                                         }
                                                     }else if (entity instanceof Monster){
                                                         entity.setFireTicks(20);
-                                                        entity.damage(2,source);
+                                                        entity.damage(2);
                                                     }
                                                 }
                                                 if (timer == 0) {
@@ -289,11 +288,11 @@ public class Firestone implements Listener {
                                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                         if (!playersInSameTeam.contains(e)) {
                                                             e.setVisualFire(true);
-                                                            entity.damage(2.5,source);
+                                                            entity.damage(2.5);
                                                         }
                                                     }else {
                                                         entity.setFireTicks(20);
-                                                        entity.damage(2.5,source);
+                                                        entity.damage(2.5);
                                                     }
                                                 }
                                                 if (timer == 0) {
@@ -311,7 +310,7 @@ public class Firestone implements Listener {
                                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                         if (!playersInSameTeam.contains(e)) {
                                                             e.setVisualFire(true);
-                                                            entity.damage(2.5,source);
+                                                            entity.damage(2.5);
                                                         }
                                                     }
                                                     if (timer == 0) {
@@ -327,7 +326,7 @@ public class Firestone implements Listener {
                                                     LivingEntity entity = (LivingEntity) e;
                                                     entities.add(entity);
                                                     entity.setFireTicks(20);
-                                                    entity.damage(2.5,source);
+                                                    entity.damage(2.5);
                                                     if (timer == 0) {
                                                         entity.setVisualFire(false);
                                                         entities.forEach(entity1 -> entity1.setVisualFire(false));
@@ -344,11 +343,11 @@ public class Firestone implements Listener {
                                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                         if (!playersInSameTeam.contains(e)) {
                                                             e.setVisualFire(true);
-                                                            entity.damage(2.5,source);
+                                                            entity.damage(2.5);
                                                         }
                                                     }else if (entity instanceof Monster){
                                                         entity.setFireTicks(20);
-                                                        entity.damage(2.5,source);
+                                                        entity.damage(2.5);
                                                     }
                                                 }
                                                 if (timer == 0) {
@@ -387,11 +386,11 @@ public class Firestone implements Listener {
                                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                         if (!playersInSameTeam.contains(e)) {
                                                             e.setVisualFire(true);
-                                                            entity.damage(2.5,source);
+                                                            entity.damage(2.5);
                                                         }
                                                     }else {
                                                         entity.setFireTicks(20);
-                                                        entity.damage(2.5,source);
+                                                        entity.damage(2.5);
                                                     }
                                                 }
                                                 if (timer == 0) {
@@ -409,7 +408,7 @@ public class Firestone implements Listener {
                                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                         if (!playersInSameTeam.contains(e)) {
                                                             e.setVisualFire(true);
-                                                            entity.damage(2.5,source);
+                                                            entity.damage(2.5);
                                                         }
                                                     }
                                                     if (timer == 0) {
@@ -425,7 +424,7 @@ public class Firestone implements Listener {
                                                     LivingEntity entity = (LivingEntity) e;
                                                     entities.add(entity);
                                                     entity.setFireTicks(20);
-                                                    entity.damage(2.5,source);
+                                                    entity.damage(2.5);
                                                     if (timer == 0) {
                                                         entity.setVisualFire(false);
                                                         entities.forEach(entity1 -> entity1.setVisualFire(false));
@@ -442,11 +441,11 @@ public class Firestone implements Listener {
                                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                         if (!playersInSameTeam.contains(e)) {
                                                             e.setVisualFire(true);
-                                                            entity.damage(2.5,source);
+                                                            entity.damage(2.5);
                                                         }
                                                     }else if (entity instanceof Monster){
                                                         entity.setFireTicks(20);
-                                                        entity.damage(2.5,source);
+                                                        entity.damage(2.5);
                                                     }
                                                 }
                                                 if (timer == 0) {
@@ -486,11 +485,11 @@ public class Firestone implements Listener {
                                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                         if (!playersInSameTeam.contains(e)) {
                                                             e.setVisualFire(true);
-                                                            entity.damage(3,source);
+                                                            entity.damage(3);
                                                         }
                                                     }else{
                                                         entity.setFireTicks(20);
-                                                        entity.damage(3,source);
+                                                        entity.damage(3);
                                                     }
                                                 }
                                                 if (timer == 0) {
@@ -508,7 +507,7 @@ public class Firestone implements Listener {
                                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                         if (!playersInSameTeam.contains(e)) {
                                                             e.setVisualFire(true);
-                                                            entity.damage(3,source);
+                                                            entity.damage(3);
                                                         }
                                                     }
                                                     if (timer == 0) {
@@ -524,7 +523,7 @@ public class Firestone implements Listener {
                                                     LivingEntity entity = (LivingEntity) e;
                                                     entities.add(entity);
                                                     entity.setFireTicks(20);
-                                                    entity.damage(3,source);
+                                                    entity.damage(3);
                                                     if (timer == 0) {
                                                         entity.setVisualFire(false);
                                                         entities.forEach(entity1 -> entity1.setVisualFire(false));
@@ -541,11 +540,11 @@ public class Firestone implements Listener {
                                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                                         if (!playersInSameTeam.contains(e)) {
                                                             e.setVisualFire(true);
-                                                            entity.damage(3,source);
+                                                            entity.damage(3);
                                                         }
                                                     }else if (entity instanceof Monster){
                                                         entity.setFireTicks(20);
-                                                        entity.damage(3,source);
+                                                        entity.damage(3);
                                                     }
                                                 }
                                                 if (timer == 0) {
