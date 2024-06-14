@@ -8,6 +8,7 @@ import de.nikey.nikeyv1.api.EntityTypeDamage;
 import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.TurnEffect;
 import de.slikey.effectlib.effect.WarpEffect;
+import io.papermc.paper.tag.EntityTags;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
@@ -378,8 +379,10 @@ public class Ghoststone implements Listener {
                                         livingEntity.playHurtAnimation(0);
                                         if (livingEntity.getHealth()-damage >= 1) {
                                             livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                        }else {
+                                        }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
                                             livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                        }else {
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
                                         }
                                           
                                         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
@@ -391,10 +394,12 @@ public class Ghoststone implements Listener {
                                     double damage = maxHealth * 0.3;
                                     livingEntity.playHurtAnimation(0);
                                     if (livingEntity.getHealth()-damage >= 1) {
-                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                    }else {
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
-                                    }
+                                            livingEntity.setHealth(livingEntity.getHealth()-damage);
+                                        }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                        }else {
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
+                                        }
                                       
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
@@ -424,10 +429,12 @@ public class Ghoststone implements Listener {
                                     double damage = maxHealth * 0.3;
                                     livingEntity.playHurtAnimation(0);
                                     if (livingEntity.getHealth()-damage >= 1) {
-                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                    }else {
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
-                                    }
+                                            livingEntity.setHealth(livingEntity.getHealth()-damage);
+                                        }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                        }else {
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
+                                        }
                                       
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
@@ -455,10 +462,12 @@ public class Ghoststone implements Listener {
                                     double damage = maxHealth * 0.3;
                                     livingEntity.playHurtAnimation(0);
                                     if (livingEntity.getHealth()-damage >= 1) {
-                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                    }else {
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
-                                    }
+                                            livingEntity.setHealth(livingEntity.getHealth()-damage);
+                                        }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                        }else {
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
+                                        }
                                       
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
@@ -528,10 +537,12 @@ public class Ghoststone implements Listener {
                                     double damage = maxHealth * 0.4;
                                     livingEntity.playHurtAnimation(0);
                                     if (livingEntity.getHealth()-damage >= 1) {
-                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                    }else {
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
-                                    }
+                                            livingEntity.setHealth(livingEntity.getHealth()-damage);
+                                        }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                        }else {
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
+                                        }
                                      
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*30, 1));
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));
@@ -561,10 +572,12 @@ public class Ghoststone implements Listener {
                                     double damage = maxHealth * 0.4;
                                     livingEntity.playHurtAnimation(0);
                                     if (livingEntity.getHealth()-damage >= 1) {
-                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                    }else {
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
-                                    }
+                                            livingEntity.setHealth(livingEntity.getHealth()-damage);
+                                        }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                        }else {
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
+                                        }
                                      
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*30, 1));
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));
@@ -592,10 +605,12 @@ public class Ghoststone implements Listener {
                                     double damage = maxHealth * 0.4;
                                     livingEntity.playHurtAnimation(0);
                                     if (livingEntity.getHealth()-damage >= 1) {
-                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                    }else {
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
-                                    }
+                                            livingEntity.setHealth(livingEntity.getHealth()-damage);
+                                        }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                        }else {
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
+                                        }
                                      
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*30, 1));
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));

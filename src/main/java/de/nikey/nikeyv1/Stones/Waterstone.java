@@ -6,15 +6,13 @@ import de.nikey.nikeyv1.Util.Tornado;
 import de.nikey.nikeyv1.api.EntityTypeDamage;
 import de.slikey.effectlib.effect.EquationEffect;
 import de.slikey.effectlib.effect.FountainEffect;
+import io.papermc.paper.tag.EntityTags;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -480,7 +478,7 @@ public class Waterstone implements Listener {
                         }
                     }
                 }
-            }else if (event.getAction()==Action.LEFT_CLICK_AIR){
+            }else if (event.getAction() == Action.LEFT_CLICK_AIR){
                 if (!p.isSneaking()) {
                     if (i == 15){
                         if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
@@ -503,8 +501,10 @@ public class Waterstone implements Listener {
                                     double damage = maxHealth * 0.35;
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
+                                    }else if (!EntityTags.UNDEADS.isTagged(entity.getType())){
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
                                     }else {
-                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -531,9 +531,10 @@ public class Waterstone implements Listener {
                                     double damage = maxHealth * 0.35;
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
+                                    }else if (!EntityTags.UNDEADS.isTagged(entity.getType())){
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
                                     }else {
-                                         
-                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -560,8 +561,10 @@ public class Waterstone implements Listener {
                                     double damage = maxHealth * 0.45;
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
+                                    }else if (!EntityTags.UNDEADS.isTagged(entity.getType())){
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
                                     }else {
-                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -588,8 +591,10 @@ public class Waterstone implements Listener {
                                     double damage = maxHealth * 0.45;
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
-                                    }else {
+                                    }else if (!EntityTags.UNDEADS.isTagged(entity.getType())){
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                    }else {
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -616,8 +621,10 @@ public class Waterstone implements Listener {
                                     double damage = maxHealth * 0.45;
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
+                                    }else if (!EntityTags.UNDEADS.isTagged(entity.getType())){
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
                                     }else {
-                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
                                     }
                                     entity.setVisualFire(false);
                                 }
