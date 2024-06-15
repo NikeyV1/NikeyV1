@@ -1,15 +1,10 @@
 package de.nikey.nikeyv1.Stones;
 
-import com.mysql.cj.result.DefaultValueFactory;
-import de.nikey.nikeyv1.CustomEvents.AbilityCooldownEndEvent;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
-import de.nikey.nikeyv1.api.EntityTypeDamage;
 import de.nikey.nikeyv1.api.Stone;
-import de.slikey.effectlib.effect.TurnEffect;
 import de.slikey.effectlib.effect.WarpEffect;
 import io.papermc.paper.tag.EntityTags;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
@@ -127,7 +122,7 @@ public class Ghoststone implements Listener {
                                 List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                 if (!playersInSameTeam.contains(entity)) {
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,1,true,false,false));
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
                                     entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                 }
                             } else if (attacking.equalsIgnoreCase("players")) {
@@ -135,14 +130,14 @@ public class Ghoststone implements Listener {
                                     List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                     if (!playersInSameTeam.contains(entity)) {
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,1,true,false,false));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
                                         entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                     }
                                 }
                             }else if (attacking.equalsIgnoreCase("monsters")) {
                                 if (entity instanceof Monster) {
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,1,true,false,false));
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
                                     entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                 }
                             }else if (attacking.equalsIgnoreCase("monsters-player")) {
@@ -150,7 +145,7 @@ public class Ghoststone implements Listener {
                                     List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                     if (!playersInSameTeam.contains(entity)) {
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,1,true,false,false));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
                                         entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                     }
                                 }
@@ -165,7 +160,7 @@ public class Ghoststone implements Listener {
                                 List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                 if (!playersInSameTeam.contains(entity)) {
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,1,true,false,false));
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
                                     entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                 }
                             } else if (attacking.equalsIgnoreCase("players")) {
@@ -173,14 +168,14 @@ public class Ghoststone implements Listener {
                                     List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                     if (!playersInSameTeam.contains(entity)) {
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,1,true,false,false));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
                                         entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                     }
                                 }
                             }else if (attacking.equalsIgnoreCase("monsters")) {
                                 if (entity instanceof Monster) {
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,1,true,false,false));
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
                                     entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                 }
                             }else if (attacking.equalsIgnoreCase("monsters-player")) {
@@ -188,7 +183,7 @@ public class Ghoststone implements Listener {
                                     List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                     if (!playersInSameTeam.contains(entity)) {
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,1,true,false,false));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
                                         entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                     }
                                 }
@@ -203,7 +198,7 @@ public class Ghoststone implements Listener {
                                 List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                 if (!playersInSameTeam.contains(entity)) {
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,1,true,false,false));
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
                                     entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                 }
                             } else if (attacking.equalsIgnoreCase("players")) {
@@ -211,14 +206,14 @@ public class Ghoststone implements Listener {
                                     List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                     if (!playersInSameTeam.contains(entity)) {
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,1,true,false,false));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
                                         entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                     }
                                 }
                             }else if (attacking.equalsIgnoreCase("monsters")) {
                                 if (entity instanceof Monster) {
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,1,true,false,false));
+                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
                                     entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                 }
                             }else if (attacking.equalsIgnoreCase("monsters-player")) {
@@ -226,7 +221,7 @@ public class Ghoststone implements Listener {
                                     List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                     if (!playersInSameTeam.contains(entity)) {
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,1,true,false,false));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
                                         entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                     }
                                 }
