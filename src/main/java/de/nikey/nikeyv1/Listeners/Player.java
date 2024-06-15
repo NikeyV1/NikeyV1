@@ -272,6 +272,7 @@ public class Player implements Listener {
                 if (item != null) {
                     if (Stone.isStone(item)||Stone.isInfernoBlade(item)) {
                         // Stone entfernen
+                        item.setAmount(0);
                         event.getDrops().remove(item);
                         boolean buffed = config.getBoolean(player.getName() + ".buffed");
                         if (buffed) {

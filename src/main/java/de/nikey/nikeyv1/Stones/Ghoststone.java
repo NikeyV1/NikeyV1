@@ -115,6 +115,7 @@ public class Ghoststone implements Listener {
                     String attacking = Stone.getAttacking(player);
                     if (level == 3) {
                         for (Entity e : player.getNearbyEntities(4,4,4)) {
+                            if (e == player) continue;
                             if (!(e instanceof LivingEntity)) continue;
                             if (e == player) continue;
                             LivingEntity entity = (LivingEntity) e;
@@ -153,6 +154,7 @@ public class Ghoststone implements Listener {
                         }
                     }else if (level == 4) {
                         for (Entity e : player.getNearbyEntities(7,7,7)) {
+                            if (e == player) continue;
                             if (!(e instanceof LivingEntity)) continue;
                             if (e == player) continue;
                             LivingEntity entity = (LivingEntity) e;
@@ -191,6 +193,7 @@ public class Ghoststone implements Listener {
                         }
                     }else if (level >= 5) {
                         for (Entity e : player.getNearbyEntities(10,10,10)) {
+                            if (e == player) continue;
                             if (!(e instanceof LivingEntity)) continue;
                             if (e == player) continue;
                             LivingEntity entity = (LivingEntity) e;
