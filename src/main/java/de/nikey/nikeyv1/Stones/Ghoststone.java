@@ -117,7 +117,6 @@ public class Ghoststone implements Listener {
                         for (Entity e : player.getNearbyEntities(4,4,4)) {
                             if (e == player) continue;
                             if (!(e instanceof LivingEntity)) continue;
-                            if (e == player) continue;
                             LivingEntity entity = (LivingEntity) e;
                             if (attacking.equalsIgnoreCase("all")) {
                                 List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
@@ -156,7 +155,6 @@ public class Ghoststone implements Listener {
                         for (Entity e : player.getNearbyEntities(7,7,7)) {
                             if (e == player) continue;
                             if (!(e instanceof LivingEntity)) continue;
-                            if (e == player) continue;
                             LivingEntity entity = (LivingEntity) e;
                             if (attacking.equalsIgnoreCase("all")) {
                                 List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
@@ -195,7 +193,6 @@ public class Ghoststone implements Listener {
                         for (Entity e : player.getNearbyEntities(10,10,10)) {
                             if (e == player) continue;
                             if (!(e instanceof LivingEntity)) continue;
-                            if (e == player) continue;
                             LivingEntity entity = (LivingEntity) e;
                             if (attacking.equalsIgnoreCase("all")) {
                                 List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
