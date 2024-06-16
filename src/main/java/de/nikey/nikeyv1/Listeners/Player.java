@@ -245,7 +245,7 @@ public class Player implements Listener {
                 public void run() {
                     new ServerScoreboard(player);
                 }
-            }.runTaskLater(NikeyV1.getPlugin(),10);
+            }.runTaskLater(NikeyV1.getPlugin(),15);
         }
     }
 
