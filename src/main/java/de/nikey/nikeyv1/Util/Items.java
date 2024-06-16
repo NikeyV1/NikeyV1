@@ -247,7 +247,7 @@ public class Items {
         ShapedRecipe recipe = new ShapedRecipe(anvil);
         recipe.shape("NWN","ENE","NEN");
         recipe.setIngredient('N',Material.NETHERITE_SCRAP);
-        recipe.setIngredient('W',Material.NETHER_STAR);
+        recipe.setIngredient('W',Material.IRON_BLOCK);
         recipe.setIngredient('E', new RecipeChoice.ExactChoice(essence));
         NikeyV1.getPlugin().getServer().addRecipe(recipe);
     }
