@@ -16,6 +16,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
@@ -111,7 +112,7 @@ public class Player implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         if (event.getItemDrop() != null) {
             Item itemDrop = event.getItemDrop();
@@ -119,15 +120,9 @@ public class Player implements Listener {
             PlayerInventory inventory = player.getInventory();
             if (Stone.isStone(itemDrop.getItemStack()) || Stone.isInfernoBlade(itemDrop.getItemStack())){
                 event.setCancelled(true);
-                if (!isInventoryFull(player)) {
-                    event.setCancelled(true);
-                }else {
+                if (isInventoryFull(player)) {
                     ItemStack droppedItem = event.getItemDrop().getItemStack();
                     player.getInventory().setItemInOffHand(droppedItem);
-                    event.setCancelled(true);
-                }
-            }else {
-                if (Stone.isInfernoBlade(itemDrop.getItemStack())) {
                     event.setCancelled(true);
                 }
             }

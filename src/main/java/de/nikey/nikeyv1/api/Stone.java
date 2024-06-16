@@ -2,6 +2,7 @@ package de.nikey.nikeyv1.api;
 
 import de.nikey.nikeyv1.NikeyV1;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -57,7 +58,7 @@ public class Stone {
     public static boolean isStone(ItemStack item) {
         if (!item.hasItemMeta()) return false;
 
-        return item.getType() == Material.FIREWORK_STAR && item.hasItemFlag(ItemFlag.HIDE_ENCHANTS) && item.getItemMeta().hasLore();
+        return item.getType() == Material.FIREWORK_STAR && item.getItemMeta().hasLore();
     }
 
     public static boolean isInfernoBlade(ItemStack item) {

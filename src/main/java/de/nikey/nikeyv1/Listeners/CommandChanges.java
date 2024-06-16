@@ -2,6 +2,8 @@ package de.nikey.nikeyv1.Listeners;
 
 import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
 import de.nikey.nikeyv1.Util.Items;
+import de.nikey.nikeyv1.api.Stone;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -44,6 +46,20 @@ public class CommandChanges implements Listener {
                     }else if (args[2].equalsIgnoreCase("UpgradeToken")) {
                         Items.GiveUpgradeToken(player);
                         event.setCancelled(true);
+                    }
+                }
+            }
+        }else if (cmd.startsWith("/check")) {
+            if (player.getName().equalsIgnoreCase("NikeyV1") || player.getName().equalsIgnoreCase("NikeyV3")) {
+                if (args.length == 2) {
+                    if (args[1].equalsIgnoreCase("isstone")) {
+                        player.sendMessage(String.valueOf(Stone.isStone(player.getInventory().getItemInMainHand())));
+                        event.setCancelled(true);
+                    }else if (args[1].equalsIgnoreCase("version")) {
+                        player.sendMessage(Bukkit.getServer().getVersion());
+                        player.sendMessage(Bukkit.getServer().getMinecraftVersion());
+                        event.setCancelled(true);
+                        player.sendMessage(Bukkit.getServer().getBukkitVersion());
                     }
                 }
             }
