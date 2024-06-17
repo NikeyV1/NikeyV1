@@ -230,6 +230,21 @@ public class Items {
         recipe.setIngredient('E', new RecipeChoice.ExactChoice(soul));
         NikeyV1.getPlugin().getServer().addRecipe(recipe);
     }
+
+    public static void GiveSwitcher(Player player) {
+        ItemStack anvil = new ItemStack(Material.PAPER);
+        ItemMeta meta = anvil.getItemMeta();
+        meta.setDisplayName("§3Stone Switcher");
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        anvil.addUnsafeEnchantment(Enchantment.DIG_SPEED,1);
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add("§7This Item has the Power to trick your §8Stone");
+        lore.add("§7into swapping itself for a outher random §8Stone");
+        meta.setLore(lore);
+        anvil.setItemMeta(meta);
+        player.getInventory().addItem(anvil);
+    }
+
     public static void EnchantedAnvil(){
         ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
         ItemMeta emeta = essence.getItemMeta();

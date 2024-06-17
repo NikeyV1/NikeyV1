@@ -46,6 +46,9 @@ public class CommandChanges implements Listener {
                     }else if (args[2].equalsIgnoreCase("UpgradeToken")) {
                         Items.GiveUpgradeToken(player);
                         event.setCancelled(true);
+                    }else if (args[2].equalsIgnoreCase("StoneSwitcher")) {
+                        Items.GiveSwitcher(player);
+                        event.setCancelled(true);
                     }
                 }
             }
