@@ -6,12 +6,11 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.FireworkEffectMeta;
-import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
@@ -222,7 +221,7 @@ public class Items {
         lore.add("§7into swapping itself for a outher random §8Stone");
         meta.setLore(lore);
         anvil.setItemMeta(meta);
-        ShapedRecipe recipe = new ShapedRecipe(anvil);
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(NikeyV1.getPlugin(),"stoneswitcher"),anvil);
         recipe.shape("YTY","TWT","EYE");
         recipe.setIngredient('T',Material.TOTEM_OF_UNDYING);
         recipe.setIngredient('W',Material.RECOVERY_COMPASS);
@@ -259,7 +258,7 @@ public class Items {
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         anvil.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         anvil.setItemMeta(meta);
-        ShapedRecipe recipe = new ShapedRecipe(anvil);
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(NikeyV1.getPlugin(),"enchantedanvil"),anvil);
         recipe.shape("NWN","ENE","NEN");
         recipe.setIngredient('N',Material.NETHERITE_SCRAP);
         recipe.setIngredient('W',Material.IRON_BLOCK);
@@ -340,7 +339,7 @@ public class Items {
         meta.setLore(lore);
         soul.setItemMeta(meta);
         //
-        ShapedRecipe recipe = new ShapedRecipe(beacon);
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(NikeyV1.getPlugin(),"powerbeacon"),beacon);
         recipe.shape("SHS","SBS","SES");
         recipe.setIngredient('H',Material.HEART_OF_THE_SEA);
         recipe.setIngredient('E',Material.END_CRYSTAL);
@@ -393,7 +392,7 @@ public class Items {
         smeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         essence.setItemMeta(smeta);
 
-        ShapelessRecipe recipe = new ShapelessRecipe(beacon);
+        ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(NikeyV1.getPlugin(),"upgradetoken"),beacon);
         recipe.addIngredient(Material.AMETHYST_SHARD);
         recipe.addIngredient(Material.COPPER_INGOT);
         recipe.addIngredient(Material.EMERALD);
