@@ -228,6 +228,10 @@ public class Ghoststone implements Listener {
                             }
                         }
                     }
+                    if (player.isOnline()) {
+                        cancel();
+                        return;
+                    }
                 }
             }
         }.runTaskTimer(NikeyV1.getPlugin(),5,2);

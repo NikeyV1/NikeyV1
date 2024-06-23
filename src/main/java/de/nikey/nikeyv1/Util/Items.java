@@ -1,7 +1,6 @@
 package de.nikey.nikeyv1.Util;
 
 import de.nikey.nikeyv1.NikeyV1;
-import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -51,7 +50,7 @@ public class Items {
         essence.setItemMeta(smeta);
         //Recipe
 
-        ShapedRecipe soulrecipe = new ShapedRecipe(soul);
+        ShapedRecipe soulrecipe = new ShapedRecipe(new NamespacedKey(NikeyV1.getPlugin(),"soulofstrenght"),soul);
         soulrecipe.shape("EIE","IWI","EIE");
         soulrecipe.setIngredient('I',Material.DIAMOND_BLOCK);
         soulrecipe.setIngredient('W',Material.BEACON);
@@ -258,7 +257,8 @@ public class Items {
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         anvil.addUnsafeEnchantment(Enchantment.CHANNELING,1);
         anvil.setItemMeta(meta);
-        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(NikeyV1.getPlugin(),"enchantedanvil"),anvil);
+        NamespacedKey key = new NamespacedKey(NikeyV1.getPlugin(),"enchantedanvil");
+        ShapedRecipe recipe = new ShapedRecipe(key,anvil);
         recipe.shape("NWN","ENE","NEN");
         recipe.setIngredient('N',Material.NETHERITE_SCRAP);
         recipe.setIngredient('W',Material.IRON_BLOCK);
@@ -339,7 +339,8 @@ public class Items {
         meta.setLore(lore);
         soul.setItemMeta(meta);
         //
-        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(NikeyV1.getPlugin(),"powerbeacon"),beacon);
+        NamespacedKey key = new NamespacedKey(NikeyV1.getPlugin(),"powerbeacon");
+        ShapedRecipe recipe = new ShapedRecipe(key,beacon);
         recipe.shape("SHS","SBS","SES");
         recipe.setIngredient('H',Material.HEART_OF_THE_SEA);
         recipe.setIngredient('E',Material.END_CRYSTAL);
@@ -392,7 +393,7 @@ public class Items {
         smeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         essence.setItemMeta(smeta);
 
-        ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(NikeyV1.getPlugin(),"upgradetoken"),beacon);
+        ShapelessRecipe recipe = new ShapelessRecipe(beacon);
         recipe.addIngredient(Material.AMETHYST_SHARD);
         recipe.addIngredient(Material.COPPER_INGOT);
         recipe.addIngredient(Material.EMERALD);
@@ -403,5 +404,6 @@ public class Items {
         recipe.addIngredient(Material.REDSTONE);
         recipe.addIngredient(new RecipeChoice.ExactChoice(essence));
         NikeyV1.getPlugin().getServer().addRecipe(recipe);
+        NikeyV1.getPlugin().getLogger().info("Recipe active");
     }
 }
