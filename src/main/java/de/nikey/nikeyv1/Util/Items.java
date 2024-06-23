@@ -2,10 +2,7 @@ package de.nikey.nikeyv1.Util;
 
 import de.nikey.nikeyv1.NikeyV1;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
@@ -45,8 +42,6 @@ public class Items {
         ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
         ItemMeta smeta = essence.getItemMeta();
         smeta.setDisplayName("§dEnchanted Essence");
-        essence.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        smeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         essence.setItemMeta(smeta);
         //Recipe
 
@@ -226,7 +221,7 @@ public class Items {
         recipe.setIngredient('W',Material.RECOVERY_COMPASS);
         recipe.setIngredient('Y',Material.NETHERITE_INGOT);
         recipe.setIngredient('E', new RecipeChoice.ExactChoice(soul));
-        NikeyV1.getPlugin().getServer().addRecipe(recipe);
+        NikeyV1.getPlugin().getServer().addRecipe((Recipe) recipe);
     }
 
     public static void GiveSwitcher(Player player) {
@@ -247,8 +242,6 @@ public class Items {
         ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
         ItemMeta emeta = essence.getItemMeta();
         emeta.setDisplayName("§dEnchanted Essence");
-        essence.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        emeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         essence.setItemMeta(emeta);
         //
         ItemStack anvil = new ItemStack(Material.ANVIL);
@@ -269,8 +262,6 @@ public class Items {
         ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
         ItemMeta emeta = essence.getItemMeta();
         emeta.setDisplayName("§dEnchanted Essence");
-        essence.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        emeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         essence.setItemMeta(emeta);
         //
         ItemStack anvil = new ItemStack(Material.ANVIL);
@@ -389,8 +380,6 @@ public class Items {
         ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
         ItemMeta smeta = essence.getItemMeta();
         smeta.setDisplayName("§dEnchanted Essence");
-        essence.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        smeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         essence.setItemMeta(smeta);
 
         ShapelessRecipe recipe = new ShapelessRecipe(beacon);
@@ -403,7 +392,6 @@ public class Items {
         recipe.addIngredient(Material.QUARTZ);
         recipe.addIngredient(Material.REDSTONE);
         recipe.addIngredient(new RecipeChoice.ExactChoice(essence));
-        NikeyV1.getPlugin().getServer().addRecipe(recipe);
-        NikeyV1.getPlugin().getLogger().info("Recipe active");
+        NikeyV1.getPlugin().getServer().addRecipe((Recipe)recipe);
     }
 }

@@ -202,8 +202,6 @@ public class Player implements Listener {
             ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
             ItemMeta meta = essence.getItemMeta();
             meta.setDisplayName("§dEnchanted Essence");
-            essence.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             essence.setItemMeta(meta);
             if (p.getInventory().firstEmpty() != -1){
                 p.getInventory().addItem(essence);
