@@ -75,6 +75,8 @@ public final class NikeyV1 extends JavaPlugin{
         Items.switcher();
         Items.PowerBeacon();
         Items.UpgradeToken();
+        Items.Soulrecepie2();
+        Items.Soulrecepie3();
         saveDefaultConfig();
     }
 

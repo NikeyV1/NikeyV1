@@ -372,6 +372,26 @@ public class Player implements Listener {
                                     if (num == 1 || num == 2) {
                                         TimerBuild timerBuild = new TimerBuild();
                                         if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
+                                            if (p.getLevel() >= 5 || p.getGameMode() == GameMode.CREATIVE) {
+                                                inventory.setItem(13, null);
+                                                p.closeInventory();
+                                                timerBuild.setLevel(num + 1);
+                                                timerBuild.setStopTime(60 * 5);
+                                                timerBuild.setTime(1);
+                                                timerBuild.start(p);
+                                                p.sendMessage("§aUpgrading!");
+                                                config.set(p.getName() + ".level", num + 1);
+                                                NikeyV1.getPlugin().saveConfig();
+                                                if (p.getGameMode() != GameMode.CREATIVE) {
+                                                    p.setLevel(p.getLevel() - 5);
+                                                }
+                                            } else {
+                                                p.sendMessage("You dont have 5 levels!");
+                                            }
+                                        }
+                                    } else if (num == 3 || num == 4 || num == 5) {
+                                        TimerBuild timerBuild = new TimerBuild();
+                                        if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
                                             if (p.getLevel() >= 10 || p.getGameMode() == GameMode.CREATIVE) {
                                                 inventory.setItem(13, null);
                                                 p.closeInventory();
@@ -379,17 +399,17 @@ public class Player implements Listener {
                                                 timerBuild.setStopTime(60 * 10);
                                                 timerBuild.setTime(1);
                                                 timerBuild.start(p);
-                                                p.sendMessage("§aUpgrading!");
                                                 config.set(p.getName() + ".level", num + 1);
                                                 NikeyV1.getPlugin().saveConfig();
                                                 if (p.getGameMode() != GameMode.CREATIVE) {
                                                     p.setLevel(p.getLevel() - 10);
                                                 }
+                                                p.sendMessage("§aUpgrading!");
                                             } else {
                                                 p.sendMessage("You dont have 10 levels!");
                                             }
                                         }
-                                    } else if (num == 3 || num == 4 || num == 5) {
+                                    } else if (num == 6 || num == 7 || num == 8 || num == 9) {
                                         TimerBuild timerBuild = new TimerBuild();
                                         if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
                                             for (ItemStack soul : p.getInventory().getContents()) {
@@ -403,9 +423,8 @@ public class Player implements Listener {
                                                         timerBuild.start(p);
                                                         config.set(p.getName() + ".level", num + 1);
                                                         NikeyV1.getPlugin().saveConfig();
-                                                        if (p.getGameMode() != GameMode.CREATIVE) {
+                                                        if (p.getGameMode() != GameMode.CREATIVE)
                                                             p.setLevel(p.getLevel() - 20);
-                                                        }
                                                         p.sendMessage("§aUpgrading!");
                                                         if (soul.getAmount() >= amountToTax) {
                                                             soul.setAmount(soul.getAmount() - 1);
@@ -420,7 +439,7 @@ public class Player implements Listener {
                                                 }
                                             }
                                         }
-                                    } else if (num == 6 || num == 7 || num == 8 || num == 9) {
+                                    } else if (num == 10 ||num == 11 || num == 12 || num == 13 || num == 14) {
                                         TimerBuild timerBuild = new TimerBuild();
                                         if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
                                             for (ItemStack soul : p.getInventory().getContents()) {
@@ -434,8 +453,9 @@ public class Player implements Listener {
                                                         timerBuild.start(p);
                                                         config.set(p.getName() + ".level", num + 1);
                                                         NikeyV1.getPlugin().saveConfig();
-                                                        if (p.getGameMode() != GameMode.CREATIVE)
+                                                        if (p.getGameMode() != GameMode.CREATIVE) {
                                                             p.setLevel(p.getLevel() - 30);
+                                                        }
                                                         p.sendMessage("§aUpgrading!");
                                                         if (soul.getAmount() >= amountToTax) {
                                                             soul.setAmount(soul.getAmount() - 1);
@@ -450,11 +470,11 @@ public class Player implements Listener {
                                                 }
                                             }
                                         }
-                                    } else if (num == 10 ||num == 11 || num == 12 || num == 13 || num == 14) {
+                                    } else if (num == 15 ||  num == 16 || num == 17 || num == 18 || num == 19) {
                                         TimerBuild timerBuild = new TimerBuild();
                                         if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
                                             for (ItemStack soul : p.getInventory().getContents()) {
-                                                if (soul != null && soul.getType() == Material.PRISMARINE_SHARD && soul.getItemMeta().hasLore()) {
+                                                if (soul != null && soul.getType() == Material.SOUL_LANTERN && soul.getItemMeta().hasLore()) {
                                                     if (p.getLevel() >= 40 || p.getGameMode() == GameMode.CREATIVE) {
                                                         inventory.setItem(13, null);
                                                         p.closeInventory();
@@ -468,6 +488,7 @@ public class Player implements Listener {
                                                             p.setLevel(p.getLevel() - 40);
                                                         }
                                                         p.sendMessage("§aUpgrading!");
+                                                        new ServerScoreboard(p);
                                                         if (soul.getAmount() >= amountToTax) {
                                                             soul.setAmount(soul.getAmount() - 1);
                                                             break;
@@ -481,45 +502,13 @@ public class Player implements Listener {
                                                 }
                                             }
                                         }
-                                    } else if (num == 15 ||  num == 16 || num == 17 || num == 18 || num == 19) {
-                                        TimerBuild timerBuild = new TimerBuild();
-                                        if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
-                                            for (ItemStack soul : p.getInventory().getContents()) {
-                                                if (soul != null && soul.getType() == Material.SOUL_LANTERN && soul.getItemMeta().hasLore()) {
-                                                    if (p.getLevel() >= 50 || p.getGameMode() == GameMode.CREATIVE) {
-                                                        inventory.setItem(13, null);
-                                                        p.closeInventory();
-                                                        timerBuild.setLevel(num + 1);
-                                                        timerBuild.setStopTime(60 * 50);
-                                                        timerBuild.setTime(1);
-                                                        timerBuild.start(p);
-                                                        config.set(p.getName() + ".level", num + 1);
-                                                        NikeyV1.getPlugin().saveConfig();
-                                                        if (p.getGameMode() != GameMode.CREATIVE) {
-                                                            p.setLevel(p.getLevel() - 50);
-                                                        }
-                                                        p.sendMessage("§aUpgrading!");
-                                                        new ServerScoreboard(p);
-                                                        if (soul.getAmount() >= amountToTax) {
-                                                            soul.setAmount(soul.getAmount() - 1);
-                                                            break;
-                                                        } else {
-                                                            p.getInventory().remove(soul);
-                                                            break;
-                                                        }
-                                                    } else {
-                                                        p.sendMessage("You dont have 50 levels!");
-                                                    }
-                                                }
-                                            }
-                                        }
                                     } else if (num == 20) {
                                         TimerBuild timerBuild = new TimerBuild();
                                         if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
                                             // Durchlaufe das Inventar des Spielers und entferne die Soul of Strenght
                                             for (ItemStack soul : p.getInventory().getContents()) {
                                                 if (soul != null && soul.getType() == Material.SOUL_LANTERN && soul.getItemMeta().hasLore()) {
-                                                    if (p.getLevel() >= 100 || p.getGameMode() == GameMode.CREATIVE) {
+                                                    if (p.getLevel() >= 75 || p.getGameMode() == GameMode.CREATIVE) {
                                                         inventory.setItem(13, null);
                                                         p.closeInventory();
                                                         timerBuild.setLevel(num + 1);
@@ -529,7 +518,7 @@ public class Player implements Listener {
                                                         config.set(p.getName() + ".level", num + 1);
                                                         NikeyV1.getPlugin().saveConfig();
                                                         if (p.getGameMode() != GameMode.CREATIVE) {
-                                                            p.setLevel(p.getLevel() - 100);
+                                                            p.setLevel(p.getLevel() - 75);
                                                         }
                                                         p.sendMessage("§aUpgrading!");
                                                         if (soul.getAmount() >= amountToTax) {
@@ -540,7 +529,7 @@ public class Player implements Listener {
                                                             break;
                                                         }
                                                     } else {
-                                                        p.sendMessage("You dont have 100 levels!");
+                                                        p.sendMessage("You dont have 75 levels!");
                                                     }
                                                 }
                                             }
@@ -548,7 +537,6 @@ public class Player implements Listener {
                                     } else if (num == 21) {
                                         TimerBuild timerBuild = new TimerBuild();
                                         if (!timerBuild.isRunning() || !config.getBoolean(p.getName() + ".time")) {
-                                            // Durchlaufe das Inventar des Spielers und entferne die Soul of Strenght
                                             for (ItemStack soul : p.getInventory().getContents()) {
                                                 if (soul != null && soul.getType() == Material.DRAGON_EGG) {
                                                     boolean buffed = config.getBoolean(p.getName() + ".buffed");

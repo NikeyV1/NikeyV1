@@ -115,114 +115,150 @@ public class Ghoststone implements Listener {
                     String attacking = Stone.getAttacking(player);
                     if (level == 3) {
                         for (Entity e : player.getNearbyEntities(4,4,4)) {
-                            if (e == player) continue;
-                            if (!(e instanceof LivingEntity)) continue;
-                            LivingEntity entity = (LivingEntity) e;
-                            if (attacking.equalsIgnoreCase("all")) {
-                                List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                if (!playersInSameTeam.contains(entity)) {
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
-                                    entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                }
-                            } else if (attacking.equalsIgnoreCase("players")) {
-                                if (entity instanceof Player) {
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                    if (!playersInSameTeam.contains(entity)) {
+                            if (e instanceof LivingEntity && e != player) {
+                                LivingEntity entity = (LivingEntity) e;
+                                if (attacking.equalsIgnoreCase("all")) {
+                                    if (entity instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
+                                        if (!playersInSameTeam.contains(entity)) {
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                            entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
+                                        }
+                                    }else {
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
                                         entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                     }
-                                }
-                            }else if (attacking.equalsIgnoreCase("monsters")) {
-                                if (entity instanceof Monster) {
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
-                                    entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                }
-                            }else if (attacking.equalsIgnoreCase("monsters-player")) {
-                                if (entity instanceof Player || entity instanceof Monster) {
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                    if (!playersInSameTeam.contains(entity)) {
+                                } else if (attacking.equalsIgnoreCase("players")) {
+                                    if (entity instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
+                                        if (!playersInSameTeam.contains(entity)) {
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                            entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
+                                        }
+                                    }
+                                }else if (attacking.equalsIgnoreCase("monsters")) {
+                                    if (entity instanceof Monster) {
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
                                         entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
+                                    }
+                                }else if (attacking.equalsIgnoreCase("monsters-player")) {
+                                    if (entity instanceof Player || entity instanceof Monster) {
+                                        if (entity instanceof Player) {
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
+                                            if (!playersInSameTeam.contains(entity)) {
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                                entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
+                                            }
+                                        }else {
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                            entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
+                                        }
                                     }
                                 }
                             }
                         }
                     }else if (level == 4) {
                         for (Entity e : player.getNearbyEntities(7,7,7)) {
-                            if (e == player) continue;
-                            if (!(e instanceof LivingEntity)) continue;
-                            LivingEntity entity = (LivingEntity) e;
-                            if (attacking.equalsIgnoreCase("all")) {
-                                List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                if (!playersInSameTeam.contains(entity)) {
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
-                                    entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                }
-                            } else if (attacking.equalsIgnoreCase("players")) {
-                                if (entity instanceof Player) {
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                    if (!playersInSameTeam.contains(entity)) {
+                            if (e instanceof LivingEntity && e != player) {
+                                LivingEntity entity = (LivingEntity) e;
+                                if (attacking.equalsIgnoreCase("all")) {
+                                    if (entity instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
+                                        if (!playersInSameTeam.contains(entity)) {
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                            entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
+                                        }
+                                    }else {
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
                                         entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                     }
-                                }
-                            }else if (attacking.equalsIgnoreCase("monsters")) {
-                                if (entity instanceof Monster) {
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
-                                    entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                }
-                            }else if (attacking.equalsIgnoreCase("monsters-player")) {
-                                if (entity instanceof Player || entity instanceof Monster) {
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                    if (!playersInSameTeam.contains(entity)) {
+                                } else if (attacking.equalsIgnoreCase("players")) {
+                                    if (entity instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
+                                        if (!playersInSameTeam.contains(entity)) {
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                            entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
+                                        }
+                                    }
+                                }else if (attacking.equalsIgnoreCase("monsters")) {
+                                    if (entity instanceof Monster) {
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
                                         entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
+                                    }
+                                }else if (attacking.equalsIgnoreCase("monsters-player")) {
+                                    if (entity instanceof Player || entity instanceof Monster) {
+                                        if (entity instanceof Player) {
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
+                                            if (!playersInSameTeam.contains(entity)) {
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                                entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
+                                            }
+                                        }else {
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                            entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
+                                        }
                                     }
                                 }
                             }
                         }
                     }else if (level >= 5) {
                         for (Entity e : player.getNearbyEntities(10,10,10)) {
-                            if (e == player) continue;
-                            if (!(e instanceof LivingEntity)) continue;
-                            LivingEntity entity = (LivingEntity) e;
-                            if (attacking.equalsIgnoreCase("all")) {
-                                List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                if (!playersInSameTeam.contains(entity)) {
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
-                                    entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                }
-                            } else if (attacking.equalsIgnoreCase("players")) {
-                                if (entity instanceof Player) {
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                    if (!playersInSameTeam.contains(entity)) {
+                            if (e instanceof LivingEntity && e != player) {
+                                LivingEntity entity = (LivingEntity) e;
+                                if (attacking.equalsIgnoreCase("all")) {
+                                    if (entity instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
+                                        if (!playersInSameTeam.contains(entity)) {
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                            entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
+                                        }
+                                    }else {
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
                                         entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                     }
-                                }
-                            }else if (attacking.equalsIgnoreCase("monsters")) {
-                                if (entity instanceof Monster) {
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
-                                    entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                }
-                            }else if (attacking.equalsIgnoreCase("monsters-player")) {
-                                if (entity instanceof Player || entity instanceof Monster) {
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                    if (!playersInSameTeam.contains(entity)) {
+                                } else if (attacking.equalsIgnoreCase("players")) {
+                                    if (entity instanceof Player) {
+                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
+                                        if (!playersInSameTeam.contains(entity)) {
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                            entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
+                                        }
+                                    }
+                                }else if (attacking.equalsIgnoreCase("monsters")) {
+                                    if (entity instanceof Monster) {
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
                                         entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
+                                    }
+                                }else if (attacking.equalsIgnoreCase("monsters-player")) {
+                                    if (entity instanceof Player || entity instanceof Monster) {
+                                        if (entity instanceof Player) {
+                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
+                                            if (!playersInSameTeam.contains(entity)) {
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                                entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
+                                            }
+                                        }else {
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                            entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
+                                        }
                                     }
                                 }
                             }

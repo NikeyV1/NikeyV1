@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 @SuppressWarnings("ALL")
 public class Items {
-
     public static void SoulofStrenght(Player player) {
         ItemStack soul = new ItemStack(Material.SOUL_LANTERN);
         ItemMeta meta = soul.getItemMeta();
@@ -29,6 +28,7 @@ public class Items {
         }
         
     }
+
     public static void Soulrecepie(){
         ItemStack soul = new ItemStack(Material.SOUL_LANTERN);
         ItemMeta meta = soul.getItemMeta();
@@ -50,6 +50,59 @@ public class Items {
         soulrecipe.setIngredient('I',Material.DIAMOND_BLOCK);
         soulrecipe.setIngredient('W',Material.BEACON);
         soulrecipe.setIngredient('E', new RecipeChoice.ExactChoice(essence));
+        NikeyV1.getPlugin().getServer().addRecipe(soulrecipe);
+    }
+
+    public static void Soulrecepie2(){
+        ItemStack soul = new ItemStack(Material.SOUL_LANTERN);
+        ItemMeta meta = soul.getItemMeta();
+        meta.setDisplayName("§3Soul of Strenght");
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add("§7A §3Soul §7that contains the §cStrenght §7of 1000 Players");
+        meta.setLore(lore);
+        soul.setItemMeta(meta);
+
+        //Needed
+        ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
+        ItemMeta smeta = essence.getItemMeta();
+        smeta.setDisplayName("§dEnchanted Essence");
+        essence.setItemMeta(smeta);
+        //Recipe
+
+        ShapedRecipe soulrecipe = new ShapedRecipe(new NamespacedKey(NikeyV1.getPlugin(),"soulofstrenght2"),soul);
+        soulrecipe.shape("EIE","IWI","EIE");
+        soulrecipe.setIngredient('I',Material.DIAMOND_BLOCK);
+        soulrecipe.setIngredient('W',Material.CONDUIT);
+        soulrecipe.setIngredient('E', new RecipeChoice.ExactChoice(essence));
+        NikeyV1.getPlugin().getServer().addRecipe(soulrecipe);
+    }
+
+    public static void Soulrecepie3(){
+        ItemStack soul = new ItemStack(Material.SOUL_LANTERN);
+        ItemMeta meta = soul.getItemMeta();
+        meta.setDisplayName("§3Soul of Strenght");
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add("§7A §3Soul §7that contains the §cStrenght §7of 1000 Players");
+        meta.setLore(lore);
+        soul.setItemMeta(meta);
+
+        //Needed
+        ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
+        ItemMeta smeta = essence.getItemMeta();
+        smeta.setDisplayName("§dEnchanted Essence");
+        essence.setItemMeta(smeta);
+        //Recipe
+
+        ShapedRecipe soulrecipe = new ShapedRecipe(new NamespacedKey(NikeyV1.getPlugin(),"soulofstrenght3"),soul);
+        soulrecipe.shape("EIE","IWI","EIE");
+        soulrecipe.setIngredient('I',Material.DIAMOND_BLOCK);
+        soulrecipe.setIngredient('E', new RecipeChoice.ExactChoice(essence));
+
+        ItemStack enchantedGoldenApple1 = new ItemStack(Material.ENCHANTED_GOLDEN_APPLE);
+        ItemStack enchantedGoldenApple2 = new ItemStack(Material.ENCHANTED_GOLDEN_APPLE);
+        RecipeChoice.ExactChoice enchantedGoldenApples = new RecipeChoice.ExactChoice(enchantedGoldenApple1, enchantedGoldenApple2);
+
+        soulrecipe.setIngredient('W', enchantedGoldenApples);
         NikeyV1.getPlugin().getServer().addRecipe(soulrecipe);
     }
     
@@ -332,11 +385,10 @@ public class Items {
         //
         NamespacedKey key = new NamespacedKey(NikeyV1.getPlugin(),"powerbeacon");
         ShapedRecipe recipe = new ShapedRecipe(key,beacon);
-        recipe.shape("SHS","SBS","SES");
-        recipe.setIngredient('H',Material.HEART_OF_THE_SEA);
-        recipe.setIngredient('E',Material.END_CRYSTAL);
-        recipe.setIngredient('B',Material.BEACON);
-        recipe.setIngredient('S', new RecipeChoice.ExactChoice(soul));
+        recipe.shape("SHS","SBS","SHS");
+        recipe.setIngredient('H',new RecipeChoice.ExactChoice(soul));
+        recipe.setIngredient('B',Material.NETHER_STAR);
+        recipe.setIngredient('S',Material.TOTEM_OF_UNDYING);
         NikeyV1.getPlugin().getServer().addRecipe(recipe);
     }
 
@@ -382,7 +434,8 @@ public class Items {
         smeta.setDisplayName("§dEnchanted Essence");
         essence.setItemMeta(smeta);
 
-        ShapelessRecipe recipe = new ShapelessRecipe(beacon);
+        NamespacedKey key = new NamespacedKey(NikeyV1.getPlugin(),"upgradetoken");
+        ShapelessRecipe recipe = new ShapelessRecipe(key,beacon);
         recipe.addIngredient(Material.AMETHYST_SHARD);
         recipe.addIngredient(Material.COPPER_INGOT);
         recipe.addIngredient(Material.EMERALD);
