@@ -27,15 +27,16 @@ public class Stone_Swap implements Listener {
                 } else {
                     player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
                 }
-
-                player.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
-
-                FileConfiguration config = NikeyV1.getPlugin().getConfig();
-                String stone = config.getString(player.getName() + ".stone");
-                Integer level = config.getInt(player.getName() + ".level");
-                player.getActivePotionEffects().clear();
-                swap(player,level, stone);
-                player.getWorld().playSound(player.getLocation(),Sound.BLOCK_BEACON_POWER_SELECT,1,1);
+                boolean buffed = config.getBoolean(p.getName() + ".buffed");
+                if (!buffed) {
+                    player.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
+                    FileConfiguration config = NikeyV1.getPlugin().getConfig();
+                    String stone = config.getString(player.getName() + ".stone");
+                    Integer level = config.getInt(player.getName() + ".level");
+                    player.getActivePotionEffects().clear();
+                    swap(player,level, stone);
+                    player.getWorld().playSound(player.getLocation(),Sound.BLOCK_BEACON_POWER_SELECT,1,1);
+                }
             }
         }
     }
