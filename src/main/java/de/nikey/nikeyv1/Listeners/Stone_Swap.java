@@ -27,7 +27,7 @@ public class Stone_Swap implements Listener {
                 } else {
                     player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
                 }
-                boolean buffed = config.getBoolean(p.getName() + ".buffed");
+                boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
                 if (!buffed) {
                     player.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
                     FileConfiguration config = NikeyV1.getPlugin().getConfig();
@@ -36,6 +36,8 @@ public class Stone_Swap implements Listener {
                     player.getActivePotionEffects().clear();
                     swap(player,level, stone);
                     player.getWorld().playSound(player.getLocation(),Sound.BLOCK_BEACON_POWER_SELECT,1,1);
+                }else {
+                    player.sendMessage("§cDon't even try!");
                 }
             }
         }
