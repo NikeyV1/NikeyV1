@@ -95,7 +95,7 @@ public class Ghoststone implements Listener {
         if (stoneName.equalsIgnoreCase("Ghost") && stoneLevel >= 6) {
             if (entity instanceof Arrow) {
                 Arrow arrow = (Arrow) entity;
-                if (!arrow.isCritical() && arrow.canHitEntity(event.getEntity())) {
+                if (!arrow.isCritical()) {
                     shooter.getWorld().spawnParticle(Particle.DUST_PLUME,shooter.getLocation().add(0,1,0),10,0.1,0.1,0.1);
                     event.setCancelled(true);
                 }
