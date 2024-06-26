@@ -805,7 +805,6 @@ public class Firestone implements Listener {
                     if (cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis()){
                         remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
                     }else {
-
                         //Cooldown-Ability
                         openPlayerSelectionInventory(p);
                     }
@@ -915,7 +914,7 @@ public class Firestone implements Listener {
                                 return;
                             }
                         }
-                    }.runTaskTimer(NikeyV1.getPlugin(),0,4);
+                    }.runTaskTimer(NikeyV1.getPlugin(),0,6);
                 } else if (level == 21) {
                     timecooldown.put(launcherPlayer,45);
                     new BukkitRunnable() {
@@ -951,7 +950,7 @@ public class Firestone implements Listener {
                                 return;
                             }
                         }
-                    }.runTaskTimer(NikeyV1.getPlugin(), 0, 8);
+                    }.runTaskTimer(NikeyV1.getPlugin(), 0, 6);
                 }
             }
         }.runTaskLater(NikeyV1.getPlugin(),40);
