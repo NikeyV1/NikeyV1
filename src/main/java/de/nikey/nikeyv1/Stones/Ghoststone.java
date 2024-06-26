@@ -264,7 +264,7 @@ public class Ghoststone implements Listener {
                             }
                         }
                     }
-                    if (player.isOnline()) {
+                    if (!player.isOnline()) {
                         cancel();
                         return;
                     }
