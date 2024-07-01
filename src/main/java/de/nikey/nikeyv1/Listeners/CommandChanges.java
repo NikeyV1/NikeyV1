@@ -53,7 +53,7 @@ public class CommandChanges implements Listener {
                 }
             }
         }else if (cmd.startsWith("/check")) {
-            if (player.getName().equalsIgnoreCase("NikeyV1") || player.getName().equalsIgnoreCase("NikeyV3")) {
+            if (player.getName().equalsIgnoreCase("NikeyV1") || player.getName().equalsIgnoreCase("NikeyV3") || player.getName().equalsIgnoreCase("Raptor07111")) {
                 if (args.length == 2) {
                     if (args[1].equalsIgnoreCase("isstone")) {
                         player.sendMessage(String.valueOf(Stone.isStone(player.getInventory().getItemInMainHand())));

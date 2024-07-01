@@ -663,7 +663,6 @@ public class Undeadstone implements Listener {
     }
 
     private boolean isUndead(LivingEntity entity) {
-        // Check if the entity is undead (zombie, skeleton, etc.)
         EntityType type = entity.getType();
         return type == EntityType.ZOMBIE || type == EntityType.SKELETON || type == EntityType.ZOGLIN|| type == EntityType.ZOMBIFIED_PIGLIN|| type == EntityType.ZOMBIE_VILLAGER|| type == EntityType.PHANTOM || type == EntityType.DROWNED  || type == EntityType.WITHER_SKELETON || type == EntityType.STRAY || type == EntityType.HUSK;
     }
@@ -685,7 +684,7 @@ public class Undeadstone implements Listener {
             if (stone.equalsIgnoreCase("Undead") && level >= 6) {
                 if (event.getDamager() instanceof LivingEntity) {
                     if (isUndead((LivingEntity) event.getDamager())) {
-                        double damageReductionPercentage = 15; // 7.5% damage reduction
+                        double damageReductionPercentage = 15;
                         double damage = event.getDamage();
                         double reducedDamage = damage - (damage * (damageReductionPercentage / 100));
                         event.setDamage(reducedDamage);
