@@ -81,6 +81,22 @@ public class HelpUtil {
         return blocks;
     }
 
+
+public static boolean shouldDamageEntity(LivingEntity entity) {
+        switch (damageEntityType.toLowerCase()) {
+            case "all":
+                return true;
+            case "players":
+                return entity instanceof Player && !HelpUtil.getPlayersInSameTeam(p).contains(entity);
+            case "monsters":
+                return entity instanceof Monster;
+            case "monsters-player":
+                return (entity instanceof Player && !HelpUtil.getPlayersInSameTeam(p).contains(entity)) || entity instanceof Monster;
+            default:
+                return false;
+        }
+    }
+
     public static void triggerEntityAggro(LivingEntity damagedEntity, Player p) {
         // Iteriere durch alle nahegelegenen Entitäten
         for (Entity nearbySummoned : damagedEntity.getWorld().getNearbyEntities(damagedEntity.getLocation(),200,200,200)) {
