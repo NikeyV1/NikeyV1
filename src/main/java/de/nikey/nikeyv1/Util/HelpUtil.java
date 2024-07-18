@@ -82,7 +82,8 @@ public class HelpUtil {
     }
 
 
-public static boolean shouldDamageEntity(LivingEntity entity) {
+public static boolean shouldDamageEntity(LivingEntity entity, Player p) {
+        String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
         switch (damageEntityType.toLowerCase()) {
             case "all":
                 return true;
