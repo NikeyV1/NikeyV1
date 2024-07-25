@@ -4,7 +4,7 @@ author: Nikey
 website: https://github.com/NikeyV1
 main: de.nikey.nikeyv1.NikeyV1
 api-version: 1.20
-description: A stone plugin with ability's (This plugin needs "effect lib" to work url= https://dev.bukkit.org/projects/effectlib).
+description: Special thanks to Raptor07111 for testing and to Timletsplay for disigning!
 depend:
   - EffectLib
 commands:
