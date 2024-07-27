@@ -5,6 +5,7 @@ import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.WarpEffect;
 import io.papermc.paper.tag.EntityTags;
+import io.papermc.paper.util.Tick;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
@@ -420,7 +421,7 @@ public class Ghoststone implements Listener {
                                             livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                         }
                                           
-                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
+                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*15, 1));
                                         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
                                     }
                                 }else {
@@ -436,7 +437,7 @@ public class Ghoststone implements Listener {
                                             livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                         }
                                       
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
+                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*15, 1));
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
                                 }
                             }else if (attacking.equalsIgnoreCase("players")) {
@@ -453,7 +454,7 @@ public class Ghoststone implements Listener {
                                             livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                         }
                                           
-                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
+                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*15, 1));
                                         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
                                     }
                                 }
@@ -471,7 +472,7 @@ public class Ghoststone implements Listener {
                                             livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                         }
                                       
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
+                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*15, 1));
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
                                 }
                             }else if (attacking.equalsIgnoreCase("monsters-player")) {
@@ -488,7 +489,7 @@ public class Ghoststone implements Listener {
                                             livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                         }
                                           
-                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
+                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*15, 1));
                                         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
                                     }
                                 }else if (entity instanceof Monster) {
@@ -504,7 +505,7 @@ public class Ghoststone implements Listener {
                                             livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                         }
                                       
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
+                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*15, 1));
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
                                 }
                             }
@@ -563,7 +564,7 @@ public class Ghoststone implements Listener {
                                             livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                         }
                                          
-                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*30, 1));
+                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*30, 1));
                                         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));
                                     }
                                 }else {
@@ -579,7 +580,7 @@ public class Ghoststone implements Listener {
                                             livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                         }
                                      
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*30, 1));
+                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*30, 1));
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));
                                 }
                             }else if (attacking.equalsIgnoreCase("players")) {
@@ -596,7 +597,7 @@ public class Ghoststone implements Listener {
                                             livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                         }
                                          
-                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*30, 1));
+                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*30, 1));
                                         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));
                                     }
                                 }
@@ -614,7 +615,7 @@ public class Ghoststone implements Listener {
                                             livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                         }
                                      
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*30, 1));
+                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*30, 1));
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));
                                 }
                             }else if (attacking.equalsIgnoreCase("monsters-player")) {
@@ -631,7 +632,7 @@ public class Ghoststone implements Listener {
                                             livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                         }
                                          
-                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*30, 1));
+                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*30, 1));
                                         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));
                                     }
                                 }else if (entity instanceof Monster) {
@@ -647,7 +648,7 @@ public class Ghoststone implements Listener {
                                             livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                         }
                                      
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*30, 1));
+                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*30, 1));
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));
                                 }
                             }
@@ -657,9 +658,10 @@ public class Ghoststone implements Listener {
                     teleportedPlayers.remove(player.getUniqueId());
 
                     // Schedule task to slow down the server after 2 seconds
-                    Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 10"), 1L);
+                    Bukkit.getServerTickManager().setTickRate(10);
+                    Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> Bukkit.getServerTickManager().setTickRate(10), 1L);
                     // Schedule task to reset the tick rate after 30 seconds
-                    Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 20"), 600L);
+                    Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> Bukkit.getServerTickManager().setTickRate(20), 600L);
                 }
             }else if (damageReductionPlayers.contains(player.getUniqueId())) {
                 Random r = new Random();

@@ -1008,7 +1008,7 @@ public class Frozenstone implements Listener {
             arrow.setVelocity(player.getEyeLocation().getDirection().multiply(2.4));
             arrow.setCustomName(ChatColor.DARK_AQUA + "FD");
             arrow.setCustomNameVisible(false);
-            arrow.setDamage(8);
+            arrow.setDamage(5);
             arrow.setCritical(true);
             arrow.setGravity(false); // Disable arrow gravity
             arrow.setMetadata(ICE_ARROW_METADATA, new FixedMetadataValue(NikeyV1.getPlugin(), true)); // Set metadata to mark arrow as ice arrow for no reason
@@ -1030,7 +1030,7 @@ public class Frozenstone implements Listener {
             arrow.setVelocity(player.getEyeLocation().getDirection().multiply(2.6));
             arrow.setCustomName(ChatColor.DARK_AQUA + "FD");
             arrow.setCustomNameVisible(false);
-            arrow.setDamage(13);
+            arrow.setDamage(10);
             arrow.setCritical(true);
             arrow.setPierceLevel(2);
             arrow.setGravity(false); // Disable arrow gravity

@@ -212,7 +212,7 @@ public class InfernoBlade implements Listener {
 
                     //Freeze
                     freezePlayer(targetEntity);
-                    Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> unfreezePlayer(targetEntity), 50L);
+                    Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> unfreezePlayer(targetEntity), 100L);
 
                     teleportCount++;
                 }else {

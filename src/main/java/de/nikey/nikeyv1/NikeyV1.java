@@ -37,7 +37,9 @@ public final class NikeyV1 extends JavaPlugin{
         }else {
             getLogger().warning("The plugin EffectLib could not be found!");
         }
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 20");
+        if (Bukkit.getServerTickManager().getTickRate() == 10) {
+            Bukkit.getServerTickManager().setTickRate(20);
+        }
 
 
 
@@ -109,6 +111,10 @@ public final class NikeyV1 extends JavaPlugin{
                         entity.getPassenger().remove();
                     }
                     entity.remove();
+                } else if (entity.getType() == EntityType.HUSK) {
+                    if (entity.isInvulnerable() && entity.isInvisible()) {
+                        entity.remove();
+                    }
                 }
             }
         }

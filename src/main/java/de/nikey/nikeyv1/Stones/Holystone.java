@@ -125,111 +125,41 @@ public class Holystone implements Listener {
                     if (!(cooldown.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown.put(p.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
                         //Ability
-                        if (i ==10 ){
-                            World world = p.getWorld();
-                            int players = p.getNearbyEntities(20, 20, 20).size();
-                            if (players >8){
-                                players = 8;
-                            }
-                            p.setMaxHealth(22+players);
-                            p.setHealth(20);
-                            Location location = p.getLocation().add(0,1,0);
-                            p.spawnParticle(Particle.HEART,location,3);
-                            CircleEffect effect = new CircleEffect(NikeyV1.em);
-                            effect.setEntity(p);
-                            effect.start();
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    p.setMaxHealth(20);
+
+                        switch (i) {
+                            case 10:
+                                applyEffect(p, 20, 8, 1, 30 * 30);
+                                break;
+                            case 11:
+                                applyEffect(p, 20, 18, 1, 30 * 30);
+                                break;
+                            case 12:
+                                applyEffect(p, 25, 18, 2, 30 * 30);
+                                break;
+                            case 13:
+                                applyEffect(p, 25, 18, 2, 20 * 30);
+                                p.removePotionEffect(PotionEffectType.WEAKNESS);
+                                p.removePotionEffect(PotionEffectType.POISON);
+                                p.removePotionEffect(PotionEffectType.DARKNESS);
+                                p.removePotionEffect(PotionEffectType.LEVITATION);
+                                p.removePotionEffect(PotionEffectType.BLINDNESS);
+                                p.removePotionEffect(PotionEffectType.SLOWNESS);
+                                p.removePotionEffect(PotionEffectType.NAUSEA);
+                                p.removePotionEffect(PotionEffectType.WITHER);
+                                break;
+                            default:
+                                if (i >= 14) {
+                                    applyEffect(p, 25, 18, 2, 20 * 40);
+                                    p.removePotionEffect(PotionEffectType.WEAKNESS);
+                                    p.removePotionEffect(PotionEffectType.POISON);
+                                    p.removePotionEffect(PotionEffectType.DARKNESS);
+                                    p.removePotionEffect(PotionEffectType.LEVITATION);
+                                    p.removePotionEffect(PotionEffectType.BLINDNESS);
+                                    p.removePotionEffect(PotionEffectType.SLOWNESS);
+                                    p.removePotionEffect(PotionEffectType.NAUSEA);
+                                    p.removePotionEffect(PotionEffectType.WITHER);
                                 }
-                            }.runTaskLater(NikeyV1.getPlugin(),30*30);
-                        } else if (i == 11) {
-                            World world = p.getWorld();
-                            int players = p.getNearbyEntities(20, 20, 20).size();
-                            if (players >18){
-                                players = 18;
-                            }
-                            p.setMaxHealth(22+players);
-                            p.setHealth(20);
-                            Location location = p.getLocation().add(0,1,0);
-                            p.spawnParticle(Particle.HEART,location,3);
-                            CircleEffect effect = new CircleEffect(NikeyV1.em);
-                            effect.setEntity(p);
-                            effect.start();
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    p.setMaxHealth(20);
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(),30*30);
-                        } else if (i == 12) {
-                            World world = p.getWorld();
-                            int players = p.getNearbyEntities(25, 25, 25).size();
-                            if (players >18)players = 18;
-                            p.setMaxHealth(22+players);
-                            p.setHealth(20);
-                            Location location = p.getLocation().add(0,2,0);
-                            CircleEffect effect = new CircleEffect(NikeyV1.em);
-                            effect.setEntity(p);
-                            effect.start();
-                            p.spawnParticle(Particle.HEART,location,3);
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    p.setMaxHealth(20);
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(),30*30);
-                        }else if (i == 13) {
-                            World world = p.getWorld();
-                            int players = p.getNearbyEntities(25, 25, 25).size();
-                            if (players >18)players = 18;
-                            p.removePotionEffect(PotionEffectType.WEAKNESS);
-                            p.removePotionEffect(PotionEffectType.POISON);
-                            p.removePotionEffect(PotionEffectType.DARKNESS);
-                            p.removePotionEffect(PotionEffectType.LEVITATION);
-                            p.removePotionEffect(PotionEffectType.BLINDNESS);
-                            p.removePotionEffect(PotionEffectType.SLOWNESS);
-                            p.removePotionEffect(PotionEffectType.NAUSEA);
-                            p.removePotionEffect(PotionEffectType.WITHER);
-                            p.setMaxHealth(22+players);
-                            p.setHealth(20);
-                            Location location = p.getLocation().add(0,2,0);
-                            CircleEffect effect = new CircleEffect(NikeyV1.em);
-                            effect.setEntity(p);
-                            effect.start();
-                            p.spawnParticle(Particle.HEART,location,3);
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    p.setMaxHealth(20);
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(),20*30);
-                        }else if (i >= 14) {
-                            World world = p.getWorld();
-                            int players = p.getNearbyEntities(25, 25, 25).size();
-                            if (players >18)players = 18;
-                            p.removePotionEffect(PotionEffectType.WEAKNESS);
-                            p.removePotionEffect(PotionEffectType.POISON);
-                            p.removePotionEffect(PotionEffectType.DARKNESS);
-                            p.removePotionEffect(PotionEffectType.LEVITATION);
-                            p.removePotionEffect(PotionEffectType.BLINDNESS);
-                            p.removePotionEffect(PotionEffectType.SLOWNESS);
-                            p.removePotionEffect(PotionEffectType.NAUSEA);
-                            p.removePotionEffect(PotionEffectType.WITHER);
-                            p.setMaxHealth(22+players);
-                            p.setHealth(20);
-                            Location location = p.getLocation().add(0,2,0);
-                            CircleEffect effect = new CircleEffect(NikeyV1.em);
-                            effect.setEntity(p);
-                            effect.start();
-                            p.spawnParticle(Particle.HEART,location,3);
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    p.setMaxHealth(20);
-                                }
-                            }.runTaskLater(NikeyV1.getPlugin(),20*40);
+                                break;
                         }
                     }            
                 }
@@ -244,7 +174,7 @@ public class Holystone implements Listener {
                             for (Entity e : p.getNearbyEntities(10,10,10)){
                                 if (e instanceof LivingEntity) {
                                     if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
-                                        Player player =(Player) e;
+                                        LivingEntity player =(LivingEntity) e;
                                         double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                         armor = armor*2.1;
                                         int players = p.getNearbyEntities(10, 10, 10).size();
@@ -273,7 +203,7 @@ public class Holystone implements Listener {
                             for (Entity e : p.getNearbyEntities(15,15,15)){
                                 if (e instanceof LivingEntity) {
                                     if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
-                                        Player player =(Player) e;
+                                        LivingEntity player =(LivingEntity) e;
                                         double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                         armor = armor*2.1;
                                         int players = p.getNearbyEntities(15, 15, 15).size();
@@ -302,7 +232,7 @@ public class Holystone implements Listener {
                             for (Entity e : p.getNearbyEntities(15,15,15)){
                                 if (e instanceof LivingEntity) {
                                     if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
-                                        Player player =(Player) e;
+                                        LivingEntity player =(LivingEntity) e;
                                         double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                         armor = armor*2.1;
                                         int players = p.getNearbyEntities(15, 15, 15).size();
@@ -331,7 +261,7 @@ public class Holystone implements Listener {
                             for (Entity e : p.getNearbyEntities(15,15,15)){
                                 if (e instanceof LivingEntity) {
                                     if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
-                                        Player player =(Player) e;
+                                        LivingEntity player =(LivingEntity) e;
                                         double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                         armor = armor*2.6;
                                         int players = p.getNearbyEntities(15, 15, 15).size();
@@ -360,7 +290,7 @@ public class Holystone implements Listener {
                             for (Entity e : p.getNearbyEntities(15,15,15)){
                                 if (e instanceof LivingEntity) {
                                     if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
-                                        Player player =(Player) e;
+                                        LivingEntity player =(LivingEntity) e;
                                         double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
                                         armor = armor*2.6;
                                         int players = p.getNearbyEntities(15, 15, 15).size();
@@ -391,6 +321,29 @@ public class Holystone implements Listener {
             }
         }
     }
+
+
+    public void applyEffect(Player p, int radius, int maxPlayers, int yOffset, int taskDelay) {
+        World world = p.getWorld();
+        int players = Math.min(p.getNearbyEntities(radius, radius, radius).size(), maxPlayers);
+        p.setMaxHealth(22 + players);
+        p.setHealth(22 + players);
+
+        Location location = p.getLocation().add(0, yOffset, 0);
+        p.spawnParticle(Particle.HEART, location, 3);
+
+        CircleEffect effect = new CircleEffect(NikeyV1.em);
+        effect.setEntity(p);
+        effect.start();
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                p.setMaxHealth(20);
+            }
+        }.runTaskLater(NikeyV1.getPlugin(), taskDelay);
+    }
+
 
     @EventHandler
     public void onEntityResurrect(EntityResurrectEvent event) {
@@ -541,10 +494,10 @@ public class Holystone implements Listener {
             for (UUID selectedPlayerUUID : selectedPlayers) {
                 Player selectedPlayer = Bukkit.getPlayer(selectedPlayerUUID);
                 if (selectedPlayer != null) {
-                    selectedPlayer.getWorld().playSound(selectedPlayer.getLocation(),Sound.BLOCK_AMETHYST_BLOCK_BREAK,1,1);
+                    selectedPlayer.getWorld().playSound(selectedPlayer.getLocation(),Sound.BLOCK_AMETHYST_BLOCK_BREAK,1.2F,1);
                     if (level == 20) {
                         selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 20*30, 0)); // Strength effect
-                        selectedPlayer.setHealth(20);
+                        selectedPlayer.setHealth(selectedPlayer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
                         selectedPlayer.setFoodLevel(20);
                         selectedPlayer.setSaturation(20);
                         selectedPlayer.setFireTicks(0);
@@ -565,7 +518,7 @@ public class Holystone implements Listener {
                     } else if (level == 21) {
                         selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 20*45, 0)); // Strength effect
                         selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*45, 1));
-                        selectedPlayer.setHealth(20);
+                        selectedPlayer.setHealth(selectedPlayer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
                         selectedPlayer.setFoodLevel(20);
                         selectedPlayer.setSaturation(20);
                         selectedPlayer.setFireTicks(0);
