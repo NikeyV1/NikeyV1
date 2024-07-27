@@ -1,6 +1,7 @@
 package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
+import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.EntityTypeDamage;
 import de.slikey.effectlib.effect.FlameEffect;
 import io.papermc.paper.event.entity.EntityMoveEvent;
@@ -44,7 +45,6 @@ public class Elementalstone implements Listener {
 
     Map<Entity, Integer> executionCountMap = new HashMap<>();
 
-    private double damageCount;
 
     public static ArrayList<Entity> stunned = new ArrayList<>();
 
@@ -75,7 +75,6 @@ public class Elementalstone implements Listener {
                                     cooldown2.put(player.getUniqueId(),System.currentTimeMillis() + (150*1000));
 
                                     dmg = 0;
-                                    damageCount = 1;
                                     new BukkitRunnable(){
                                         String damageEntityType = EntityTypeDamage.getDamageEntityType(player);
                                         double t = PI/4;
@@ -91,10 +90,10 @@ public class Elementalstone implements Listener {
                                                 player.spawnParticle(Particle.DUST, loc, 0, 0, 0, 0,dust);
                                                 for (Entity e : loc.getNearbyEntities(2,2,2)) {
                                                     if (e instanceof LivingEntity && e != player) {
-                                                        if (damageEntityType.equalsIgnoreCase("all")) {
+                                                        if (HelpUtil.shouldDamageEntity((LivingEntity) e,player)) {
                                                             LivingEntity living = (LivingEntity) e;
                                                             int executionCount = executionCountMap.getOrDefault(living, 0);
-                                                            if (executionCount < 5) {
+                                                            if (executionCount <= 5) {
 
                                                                 if (!stunned.contains(living)) {
                                                                     stunned.add(living);
@@ -125,112 +124,6 @@ public class Elementalstone implements Listener {
                                                                     dmg += health*0.5;
                                                                 }
                                                                 executionCountMap.put(living, executionCount + 1);
-                                                                damageCount++;
-                                                            }
-                                                        } else if (damageEntityType.equalsIgnoreCase("players")) {
-                                                            if (e instanceof Player) {
-                                                                Player living = (Player) e;
-                                                                int executionCount = executionCountMap.getOrDefault(living, 0);
-                                                                if (executionCount < 5) {
-
-                                                                    if (!stunned.contains(living)) {
-                                                                        stunned.add(living);
-                                                                    }
-
-
-                                                                    if (executionCount == 0) {
-                                                                        damageArmor(living);
-                                                                        FlameEffect effect = new FlameEffect(NikeyV1.em);
-                                                                        effect.duration = 4500;
-                                                                        effect.particle = Particle.WAX_ON;
-                                                                        effect.visibleRange = 60;
-                                                                        effect.setLocation(living.getLocation());
-                                                                        effect.start();
-                                                                    }
-
-                                                                    transferPositiveEffects(living,player);
-
-
-                                                                    if (living instanceof Player){
-                                                                        double damage = getArmorStrengthMultiplier(living);
-                                                                        living.damage(damage*1.5,player);
-                                                                        dmg += damage*0.5;
-                                                                    }
-                                                                    executionCountMap.put(living, executionCount + 1);
-                                                                    damageCount++;
-                                                                }
-                                                            }
-                                                        }else if (damageEntityType.equalsIgnoreCase("monsters")) {
-                                                            if (e instanceof Monster) {
-                                                                Monster living = (Monster) e;
-                                                                int executionCount = executionCountMap.getOrDefault(living, 0);
-                                                                if (executionCount < 5) {
-
-                                                                    if (!stunned.contains(living)) {
-                                                                        stunned.add(living);
-                                                                    }
-
-
-                                                                    if (executionCount == 0) {
-                                                                        damageArmor(living);
-                                                                        FlameEffect effect = new FlameEffect(NikeyV1.em);
-                                                                        effect.duration = 4500;
-                                                                        effect.particle = Particle.WAX_ON;
-                                                                        effect.visibleRange = 60;
-                                                                        effect.setLocation(living.getLocation());
-                                                                        effect.start();
-                                                                    }
-
-                                                                    transferPositiveEffects(living,player);
-
-
-                                                                    if (executionCount == 0){
-                                                                        double health = living.getHealth();
-                                                                        health = health * 0.65;
-                                                                        living.setHealth(living.getHealth() * 0.65);
-                                                                        dmg += health*0.5;
-                                                                    }
-                                                                    executionCountMap.put(living, executionCount + 1);
-                                                                    damageCount++;
-                                                                }
-                                                            }
-                                                        }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
-                                                            if (e instanceof Monster || e instanceof Player) {
-                                                                LivingEntity living = (LivingEntity) e;
-                                                                int executionCount = executionCountMap.getOrDefault(living, 0);
-                                                                if (executionCount < 5) {
-
-                                                                    if (!stunned.contains(living)) {
-                                                                        stunned.add(living);
-                                                                    }
-
-
-                                                                    if (executionCount == 0) {
-                                                                        damageArmor(living);
-                                                                        FlameEffect effect = new FlameEffect(NikeyV1.em);
-                                                                        effect.duration = 4500;
-                                                                        effect.particle = Particle.WAX_ON;
-                                                                        effect.visibleRange = 60;
-                                                                        effect.setLocation(living.getLocation());
-                                                                        effect.start();
-                                                                    }
-
-                                                                    transferPositiveEffects(living,player);
-
-
-                                                                    if (living instanceof Player){
-                                                                        double damage = getArmorStrengthMultiplier(living);
-                                                                        living.damage(damage*1.5,player);
-                                                                        dmg += damage*0.5;
-                                                                    }else if (executionCount == 0){
-                                                                        double health = living.getHealth();
-                                                                        health = health * 0.65;
-                                                                        living.setHealth(living.getHealth() * 0.65);
-                                                                        dmg += health*0.5;
-                                                                    }
-                                                                    executionCountMap.put(living, executionCount + 1);
-                                                                    damageCount++;
-                                                                }
                                                             }
                                                         }
                                                     }
@@ -249,32 +142,11 @@ public class Elementalstone implements Listener {
 
                                                 for (Entity e : loc.getNearbyEntities(2,2,2)) {
                                                     if (e instanceof LivingEntity && e != player) {
-                                                        if (damageEntityType.equalsIgnoreCase("all")) {
+                                                        if (HelpUtil.shouldDamageEntity((LivingEntity) e,player)) {
                                                             LivingEntity living = (LivingEntity) e;
-                                                            living.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,20*20,1));
+                                                            living.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,20*20,1));
                                                             living.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*20,4));
                                                             living.playSound(Sound.sound(Key.key("block.beacon.deactivate"), Sound.Source.BLOCK,1,1));
-                                                        }else if (damageEntityType.equalsIgnoreCase("players")) {
-                                                            if (e instanceof Player) {
-                                                                Player living = (Player) e;
-                                                                living.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,20*20,1));
-                                                                living.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*20,4));
-                                                                living.playSound(Sound.sound(Key.key("block.beacon.deactivate"), Sound.Source.BLOCK,1,1));
-                                                            }
-                                                        }else if (damageEntityType.equalsIgnoreCase("monster")) {
-                                                            if (e instanceof Monster) {
-                                                                Monster living = (Monster) e;
-                                                                living.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,20*20,1));
-                                                                living.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*20,4));
-                                                                living.playSound(Sound.sound(Key.key("block.beacon.deactivate"), Sound.Source.BLOCK,1,1));
-                                                            }
-                                                        }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
-                                                            if (e instanceof Monster || e instanceof Player) {
-                                                                LivingEntity living = (LivingEntity) e;
-                                                                living.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,20*20,1));
-                                                                living.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*20,4));
-                                                                living.playSound(Sound.sound(Key.key("block.beacon.deactivate"), Sound.Source.BLOCK,1,1));
-                                                            }
                                                         }
                                                     }
                                                     break;
@@ -307,7 +179,6 @@ public class Elementalstone implements Listener {
                                             if (dmg > missinghealth) {
                                                 dmg -= missinghealth;
                                                 player.setHealth(player.getMaxHealth());
-                                                dmg = dmg *0.5;
                                                 if (!(player.getAbsorptionAmount() > dmg)) {
                                                     double baseValue = player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).getBaseValue();
                                                     player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).setBaseValue(dmg);
@@ -323,14 +194,14 @@ public class Elementalstone implements Listener {
                                                 player.setHealth(health + dmg);
                                             }
                                         }
-                                    }.runTaskLater(NikeyV1.getPlugin(),20*4);
+                                    }.runTaskLater(NikeyV1.getPlugin(),20*5);
                                     executionCountMap.clear();
                                     new BukkitRunnable() {
                                         @Override
                                         public void run() {
                                             stunned.clear();
                                         }
-                                    }.runTaskLater(NikeyV1.getPlugin(),20*5);
+                                    }.runTaskLater(NikeyV1.getPlugin(),20*8);
                                 }
                             }
                         }
@@ -388,19 +259,19 @@ public class Elementalstone implements Listener {
             case NETHERITE_CHESTPLATE:
             case NETHERITE_LEGGINGS:
             case NETHERITE_BOOTS: {
-                return 7.0;
+                return 8.0;
             }
             case DIAMOND_HELMET:
             case DIAMOND_CHESTPLATE:
             case DIAMOND_LEGGINGS:
             case DIAMOND_BOOTS: {
-                return 6.0;
+                return 7.0;
             }
             case IRON_HELMET:
             case IRON_CHESTPLATE:
             case IRON_LEGGINGS:
             case IRON_BOOTS: {
-                return 5.0;
+                return 6.0;
             }
             case GOLDEN_HELMET:
             case GOLDEN_CHESTPLATE:
@@ -421,7 +292,7 @@ public class Elementalstone implements Listener {
                 return 3.5;
             }
             default: {
-                return 0.0;
+                return 1.0;
             }
         }
     }
@@ -471,13 +342,14 @@ public class Elementalstone implements Listener {
                                 LivingEntity entity = (LivingEntity) e;
                                 if (entity != p){
                                     applyRandomNegativeEffect(entity);
-                                    entity.damage(45,p);
+                                    entity.damage(50,p);
                                     entity.setFreezeTicks(200);
+                                    entity.setNoDamageTicks(5);
                                 }
                             }
                         }
                     }
-                pg += 110;
+                pg += 120;
                 radius += 25;
                 if (radius >= 100)cancel();
 
@@ -500,7 +372,7 @@ public class Elementalstone implements Listener {
         Random random = new Random();
         PotionEffectType effectType = negativeEffects[random.nextInt(negativeEffects.length)];
         // Apply the effect to the player
-        entity.addPotionEffect(new PotionEffect(effectType, 260, 3));
+        entity.addPotionEffect(new PotionEffect(effectType, 300, 3));
     }
 
     @EventHandler

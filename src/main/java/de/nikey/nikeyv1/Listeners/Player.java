@@ -64,6 +64,7 @@ public class Player implements Listener {
             Holystone.hitted.remove(p);
             p.setMaxHealth(20);
             p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(1);
+            p.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).setBaseValue(0);
 
             if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) {
                 p.setInvulnerable(false);

@@ -114,157 +114,28 @@ public class Ghoststone implements Listener {
                     Player player = event.getPlayer();
                     int level = Stone.getStoneLevel(player);
                     String attacking = Stone.getAttacking(player);
+                    int range;
                     if (level == 3) {
-                        for (Entity e : player.getNearbyEntities(4,4,4)) {
-                            if (e instanceof LivingEntity && e != player) {
-                                LivingEntity entity = (LivingEntity) e;
-                                if (attacking.equalsIgnoreCase("all")) {
-                                    if (entity instanceof Player) {
-                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                        if (!playersInSameTeam.contains(entity)) {
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
-                                            entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                        }
-                                    }else {
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
-                                        entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                    }
-                                } else if (attacking.equalsIgnoreCase("players")) {
-                                    if (entity instanceof Player) {
-                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                        if (!playersInSameTeam.contains(entity)) {
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
-                                            entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                        }
-                                    }
-                                }else if (attacking.equalsIgnoreCase("monsters")) {
-                                    if (entity instanceof Monster) {
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
-                                        entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                    }
-                                }else if (attacking.equalsIgnoreCase("monsters-player")) {
-                                    if (entity instanceof Player || entity instanceof Monster) {
-                                        if (entity instanceof Player) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                            if (!playersInSameTeam.contains(entity)) {
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
-                                                entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                            }
-                                        }else {
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
-                                            entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }else if (level == 4) {
-                        for (Entity e : player.getNearbyEntities(7,7,7)) {
-                            if (e instanceof LivingEntity && e != player) {
-                                LivingEntity entity = (LivingEntity) e;
-                                if (attacking.equalsIgnoreCase("all")) {
-                                    if (entity instanceof Player) {
-                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                        if (!playersInSameTeam.contains(entity)) {
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
-                                            entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                        }
-                                    }else {
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
-                                        entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                    }
-                                } else if (attacking.equalsIgnoreCase("players")) {
-                                    if (entity instanceof Player) {
-                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                        if (!playersInSameTeam.contains(entity)) {
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
-                                            entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                        }
-                                    }
-                                }else if (attacking.equalsIgnoreCase("monsters")) {
-                                    if (entity instanceof Monster) {
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
-                                        entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                    }
-                                }else if (attacking.equalsIgnoreCase("monsters-player")) {
-                                    if (entity instanceof Player || entity instanceof Monster) {
-                                        if (entity instanceof Player) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                            if (!playersInSameTeam.contains(entity)) {
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
-                                                entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                            }
-                                        }else {
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
-                                            entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }else if (level >= 5) {
-                        for (Entity e : player.getNearbyEntities(10,10,10)) {
-                            if (e instanceof LivingEntity && e != player) {
-                                LivingEntity entity = (LivingEntity) e;
-                                if (attacking.equalsIgnoreCase("all")) {
-                                    if (entity instanceof Player) {
-                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                        if (!playersInSameTeam.contains(entity)) {
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
-                                            entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                        }
-                                    }else {
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
-                                        entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                    }
-                                } else if (attacking.equalsIgnoreCase("players")) {
-                                    if (entity instanceof Player) {
-                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                        if (!playersInSameTeam.contains(entity)) {
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
-                                            entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                        }
-                                    }
-                                }else if (attacking.equalsIgnoreCase("monsters")) {
-                                    if (entity instanceof Monster) {
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
-                                        entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                    }
-                                }else if (attacking.equalsIgnoreCase("monsters-player")) {
-                                    if (entity instanceof Player || entity instanceof Monster) {
-                                        if (entity instanceof Player) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                            if (!playersInSameTeam.contains(entity)) {
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
-                                                entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                            }
-                                        }else {
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
-                                            entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
-                                        }
-                                    }
-                                }
+                        range = 4;
+                    } else if (level == 4) {
+                        range = 7;
+                    } else if (level >= 5) {
+                        range = 10;
+                    } else {
+                        return;
+                    }
+
+                    for (Entity e : player.getNearbyEntities(range, range, range)) {
+                        if (e instanceof LivingEntity && e != player) {
+                            LivingEntity entity = (LivingEntity) e;
+                            if (HelpUtil.shouldDamageEntity(entity, player)) {
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 20 * 3, 1, true, false, false));
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, 20 * 3, 0, true, false, false));
+                                entity.getWorld().spawnParticle(Particle.SNOWFLAKE, entity.getLocation().add(0, 0.5F, 0), 0, 0, 0, 0);
                             }
                         }
                     }
+
                     if (!player.isOnline()) {
                         cancel();
                         return;
@@ -405,7 +276,7 @@ public class Ghoststone implements Listener {
                     for (Entity entity : player.getNearbyEntities(30, 30, 30)) {
                         if (entity instanceof LivingEntity && entity != player) {
                             LivingEntity livingEntity = (LivingEntity) entity;
-                            if (attacking.equalsIgnoreCase("all")) {
+                            if (HelpUtil.shouldDamageEntity(livingEntity,player)) {
                                 if (entity instanceof Player) {
                                     List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                     if (!playersInSameTeam.contains(entity)) {
@@ -420,7 +291,7 @@ public class Ghoststone implements Listener {
                                         }else {
                                             livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                         }
-                                          
+
                                         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*15, 1));
                                         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
                                     }
@@ -430,81 +301,13 @@ public class Ghoststone implements Listener {
                                     double damage = maxHealth * 0.3;
                                     livingEntity.playHurtAnimation(0);
                                     if (livingEntity.getHealth()-damage >= 1) {
-                                            livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                        }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
-                                        }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
-                                        }
-                                      
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*15, 1));
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
-                                }
-                            }else if (attacking.equalsIgnoreCase("players")) {
-                                if (entity instanceof Player) {
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                    if (!playersInSameTeam.contains(entity)) {
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*15,3,true));
-                                        double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                                        double damage = maxHealth * 0.3;
-                                        livingEntity.playHurtAnimation(0);
-                                        if (livingEntity.getHealth()-damage >= 1) {
-                                            livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                        }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
-                                        }
-                                          
-                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*15, 1));
-                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
+                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
+                                    }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
+                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
+                                    }else {
+                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                     }
-                                }
-                            }else if (attacking.equalsIgnoreCase("monsters")) {
-                                if (entity instanceof Monster) {
-                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*15,3,true));
-                                    double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                                    double damage = maxHealth * 0.3;
-                                    livingEntity.playHurtAnimation(0);
-                                    if (livingEntity.getHealth()-damage >= 1) {
-                                            livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                        }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
-                                        }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
-                                        }
-                                      
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*15, 1));
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
-                                }
-                            }else if (attacking.equalsIgnoreCase("monsters-player")) {
-                                if (entity instanceof Player) {
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                    if (!playersInSameTeam.contains(entity)) {
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*15,3,true));
-                                        double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                                        double damage = maxHealth * 0.3;
-                                        livingEntity.playHurtAnimation(0);
-                                        if (livingEntity.getHealth()-damage >= 1) {
-                                            livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                        }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
-                                        }
-                                          
-                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*15, 1));
-                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
-                                    }
-                                }else if (entity instanceof Monster) {
-                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*15,3,true));
-                                    double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                                    double damage = maxHealth * 0.3;
-                                    livingEntity.playHurtAnimation(0);
-                                    if (livingEntity.getHealth()-damage >= 1) {
-                                            livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                        }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
-                                        }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
-                                        }
-                                      
+
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*15, 1));
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
                                 }
@@ -550,7 +353,7 @@ public class Ghoststone implements Listener {
                     for (Entity entity : player.getNearbyEntities(30, 30, 30)) {
                         if (entity instanceof LivingEntity && entity != player) {
                             LivingEntity livingEntity = (LivingEntity) entity;
-                            if (attacking.equalsIgnoreCase("all")) {
+                            if (HelpUtil.shouldDamageEntity(livingEntity,player)) {
                                 if (entity instanceof Player) {
                                     List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                     if (!playersInSameTeam.contains(entity)) {
@@ -563,7 +366,7 @@ public class Ghoststone implements Listener {
                                         }else {
                                             livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                         }
-                                         
+
                                         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*30, 1));
                                         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));
                                     }
@@ -573,81 +376,13 @@ public class Ghoststone implements Listener {
                                     double damage = maxHealth * 0.4;
                                     livingEntity.playHurtAnimation(0);
                                     if (livingEntity.getHealth()-damage >= 1) {
-                                            livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                        }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
-                                        }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
-                                        }
-                                     
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*30, 1));
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));
-                                }
-                            }else if (attacking.equalsIgnoreCase("players")) {
-                                if (entity instanceof Player) {
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                    if (!playersInSameTeam.contains(entity)) {
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*30,3,true));
-                                        double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                                        double damage = maxHealth * 0.4;
-                                        livingEntity.playHurtAnimation(0);
-                                        if (livingEntity.getHealth()-damage >= 1) {
-                                            livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                        }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
-                                        }
-                                         
-                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*30, 1));
-                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));
+                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
+                                    }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
+                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
+                                    }else {
+                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                     }
-                                }
-                            }else if (attacking.equalsIgnoreCase("monsters")) {
-                                if (entity instanceof Monster) {
-                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*30,3,true));
-                                    double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                                    double damage = maxHealth * 0.4;
-                                    livingEntity.playHurtAnimation(0);
-                                    if (livingEntity.getHealth()-damage >= 1) {
-                                            livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                        }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
-                                        }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
-                                        }
-                                     
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*30, 1));
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));
-                                }
-                            }else if (attacking.equalsIgnoreCase("monsters-player")) {
-                                if (entity instanceof Player) {
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                    if (!playersInSameTeam.contains(entity)) {
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*30,3,true));
-                                        double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                                        double damage = maxHealth * 0.4;
-                                        livingEntity.playHurtAnimation(0);
-                                        if (livingEntity.getHealth()-damage >= 1) {
-                                            livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                        }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
-                                        }
-                                         
-                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*30, 1));
-                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));
-                                    }
-                                }else if (entity instanceof Monster) {
-                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*600,3,true));
-                                    double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                                    double damage = maxHealth * 0.4;
-                                    livingEntity.playHurtAnimation(0);
-                                    if (livingEntity.getHealth()-damage >= 1) {
-                                            livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                        }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
-                                        }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
-                                        }
-                                     
+
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*30, 1));
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));
                                 }
