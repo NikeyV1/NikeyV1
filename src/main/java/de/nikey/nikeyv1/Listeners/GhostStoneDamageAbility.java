@@ -2,7 +2,6 @@ package de.nikey.nikeyv1.Listeners;
 
 import com.destroystokyo.paper.event.player.PlayerElytraBoostEvent;
 import de.nikey.nikeyv1.NikeyV1;
-import de.nikey.nikeyv1.CustomEvents.AbilityCooldownEndEvent;
 import de.nikey.nikeyv1.api.Stone;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
