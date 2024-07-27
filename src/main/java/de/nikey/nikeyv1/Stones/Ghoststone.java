@@ -121,28 +121,28 @@ public class Ghoststone implements Listener {
                                     if (entity instanceof Player) {
                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                         if (!playersInSameTeam.contains(entity)) {
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
                                             entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                         }
                                     }else {
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
                                         entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                     }
                                 } else if (attacking.equalsIgnoreCase("players")) {
                                     if (entity instanceof Player) {
                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                         if (!playersInSameTeam.contains(entity)) {
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
                                             entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                         }
                                     }
                                 }else if (attacking.equalsIgnoreCase("monsters")) {
                                     if (entity instanceof Monster) {
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
                                         entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                     }
                                 }else if (attacking.equalsIgnoreCase("monsters-player")) {
@@ -150,13 +150,13 @@ public class Ghoststone implements Listener {
                                         if (entity instanceof Player) {
                                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                             if (!playersInSameTeam.contains(entity)) {
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
                                                 entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                             }
                                         }else {
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
                                             entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                         }
                                     }
@@ -171,28 +171,28 @@ public class Ghoststone implements Listener {
                                     if (entity instanceof Player) {
                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                         if (!playersInSameTeam.contains(entity)) {
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
                                             entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                         }
                                     }else {
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
                                         entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                     }
                                 } else if (attacking.equalsIgnoreCase("players")) {
                                     if (entity instanceof Player) {
                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                         if (!playersInSameTeam.contains(entity)) {
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
                                             entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                         }
                                     }
                                 }else if (attacking.equalsIgnoreCase("monsters")) {
                                     if (entity instanceof Monster) {
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
                                         entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                     }
                                 }else if (attacking.equalsIgnoreCase("monsters-player")) {
@@ -200,13 +200,13 @@ public class Ghoststone implements Listener {
                                         if (entity instanceof Player) {
                                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                             if (!playersInSameTeam.contains(entity)) {
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
                                                 entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                             }
                                         }else {
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
                                             entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                         }
                                     }
@@ -221,28 +221,28 @@ public class Ghoststone implements Listener {
                                     if (entity instanceof Player) {
                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                         if (!playersInSameTeam.contains(entity)) {
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
                                             entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                         }
                                     }else {
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
                                         entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                     }
                                 } else if (attacking.equalsIgnoreCase("players")) {
                                     if (entity instanceof Player) {
                                         List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                         if (!playersInSameTeam.contains(entity)) {
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
                                             entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                         }
                                     }
                                 }else if (attacking.equalsIgnoreCase("monsters")) {
                                     if (entity instanceof Monster) {
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
                                         entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                     }
                                 }else if (attacking.equalsIgnoreCase("monsters-player")) {
@@ -250,13 +250,13 @@ public class Ghoststone implements Listener {
                                         if (entity instanceof Player) {
                                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
                                             if (!playersInSameTeam.contains(entity)) {
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
                                                 entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                             }
                                         }else {
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*3,1,true,false,false));
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*3,0,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*3,1,true,false,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*3,0,true,false,false));
                                             entity.getWorld().spawnParticle(Particle.SNOWFLAKE,entity.getLocation().add(0,0.5F,0),0,0,0,0);
                                         }
                                     }
@@ -376,7 +376,7 @@ public class Ghoststone implements Listener {
                 if (level == 20) {
                     player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(3);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED ,20*15,4,false,false));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING,20*15,3,false,false));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE,20*15,3,false,false));
                     player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,20*15,3,false,false));
 
                     // Create smoke particles around the player
@@ -415,9 +415,9 @@ public class Ghoststone implements Listener {
                                         if (livingEntity.getHealth()-damage >= 1) {
                                             livingEntity.setHealth(livingEntity.getHealth()-damage);
                                         }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                         }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                         }
                                           
                                         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
@@ -431,9 +431,9 @@ public class Ghoststone implements Listener {
                                     if (livingEntity.getHealth()-damage >= 1) {
                                             livingEntity.setHealth(livingEntity.getHealth()-damage);
                                         }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                         }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                         }
                                       
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
@@ -450,7 +450,7 @@ public class Ghoststone implements Listener {
                                         if (livingEntity.getHealth()-damage >= 1) {
                                             livingEntity.setHealth(livingEntity.getHealth()-damage);
                                         }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                         }
                                           
                                         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
@@ -466,9 +466,9 @@ public class Ghoststone implements Listener {
                                     if (livingEntity.getHealth()-damage >= 1) {
                                             livingEntity.setHealth(livingEntity.getHealth()-damage);
                                         }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                         }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                         }
                                       
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
@@ -485,7 +485,7 @@ public class Ghoststone implements Listener {
                                         if (livingEntity.getHealth()-damage >= 1) {
                                             livingEntity.setHealth(livingEntity.getHealth()-damage);
                                         }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                         }
                                           
                                         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
@@ -499,9 +499,9 @@ public class Ghoststone implements Listener {
                                     if (livingEntity.getHealth()-damage >= 1) {
                                             livingEntity.setHealth(livingEntity.getHealth()-damage);
                                         }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                         }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                         }
                                       
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*15, 1));
@@ -520,7 +520,7 @@ public class Ghoststone implements Listener {
                 }else if (level == 21) {
                     player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(5);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED ,20*30,4,false,false));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING,20*30,3,false,false));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE,20*30,3,false,false));
                     player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,20*30,3,false,false));
 
                     // Create smoke particles around the player
@@ -560,7 +560,7 @@ public class Ghoststone implements Listener {
                                         if (livingEntity.getHealth()-damage >= 1) {
                                             livingEntity.setHealth(livingEntity.getHealth()-damage);
                                         }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                         }
                                          
                                         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*30, 1));
@@ -574,9 +574,9 @@ public class Ghoststone implements Listener {
                                     if (livingEntity.getHealth()-damage >= 1) {
                                             livingEntity.setHealth(livingEntity.getHealth()-damage);
                                         }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                         }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                         }
                                      
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*30, 1));
@@ -593,7 +593,7 @@ public class Ghoststone implements Listener {
                                         if (livingEntity.getHealth()-damage >= 1) {
                                             livingEntity.setHealth(livingEntity.getHealth()-damage);
                                         }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                         }
                                          
                                         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*30, 1));
@@ -609,9 +609,9 @@ public class Ghoststone implements Listener {
                                     if (livingEntity.getHealth()-damage >= 1) {
                                             livingEntity.setHealth(livingEntity.getHealth()-damage);
                                         }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                         }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                         }
                                      
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*30, 1));
@@ -628,7 +628,7 @@ public class Ghoststone implements Listener {
                                         if (livingEntity.getHealth()-damage >= 1) {
                                             livingEntity.setHealth(livingEntity.getHealth()-damage);
                                         }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                         }
                                          
                                         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*30, 1));
@@ -642,9 +642,9 @@ public class Ghoststone implements Listener {
                                     if (livingEntity.getHealth()-damage >= 1) {
                                             livingEntity.setHealth(livingEntity.getHealth()-damage);
                                         }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                         }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
+                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                         }
                                      
                                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*30, 1));

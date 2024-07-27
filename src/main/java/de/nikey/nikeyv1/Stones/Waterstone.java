@@ -502,9 +502,9 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else if (!EntityTags.UNDEADS.isTagged(entity.getType())){
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                     }else {
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -532,9 +532,9 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else if (!EntityTags.UNDEADS.isTagged(entity.getType())){
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                     }else {
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -562,9 +562,9 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else if (!EntityTags.UNDEADS.isTagged(entity.getType())){
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                     }else {
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -592,9 +592,9 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else if (!EntityTags.UNDEADS.isTagged(entity.getType())){
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                     }else {
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                     }
                                     entity.setVisualFire(false);
                                 }
@@ -622,9 +622,9 @@ public class Waterstone implements Listener {
                                     if (entity.getHealth()-damage >= 1) {
                                         entity.setHealth(entity.getHealth()-damage);
                                     }else if (!EntityTags.UNDEADS.isTagged(entity.getType())){
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                     }else {
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,1,240));
+                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                     }
                                     entity.setVisualFire(false);
                                 }

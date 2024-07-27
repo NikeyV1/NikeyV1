@@ -88,7 +88,7 @@ public class Elementalstone implements Listener {
                                                 double z = t*sin(theta);
                                                 loc.add(x,y,z);
                                                 Particle.DustOptions dust = new Particle.DustOptions(Color.BLACK, 1);
-                                                player.spawnParticle(Particle.REDSTONE, loc, 0, 0, 0, 0,dust);
+                                                player.spawnParticle(Particle.DUST, loc, 0, 0, 0, 0,dust);
                                                 for (Entity e : loc.getNearbyEntities(2,2,2)) {
                                                     if (e instanceof LivingEntity && e != player) {
                                                         if (damageEntityType.equalsIgnoreCase("all")) {
@@ -245,7 +245,7 @@ public class Elementalstone implements Listener {
                                                 z = t*sin(theta);
                                                 loc.add(x,y,z);
                                                 Particle.DustTransition transition= new Particle.DustTransition(Color.AQUA, Color.BLACK,1);
-                                                loc.getWorld().spawnParticle(Particle.REDSTONE,loc,0,0,0,0,transition);
+                                                loc.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION,loc,0,0,0,0,transition);
 
                                                 for (Entity e : loc.getNearbyEntities(2,2,2)) {
                                                     if (e instanceof LivingEntity && e != player) {
@@ -288,7 +288,7 @@ public class Elementalstone implements Listener {
                                                 z = t*sin(theta);
                                                 loc.add(x,y,z);
                                                 Particle.DustOptions orp= new Particle.DustOptions(Color.BLACK,1);
-                                                loc.getWorld().spawnParticle(Particle.REDSTONE,loc,0,0,0,0,orp);
+                                                loc.getWorld().spawnParticle(Particle.DUST,loc,0,0,0,0,orp);
                                                 loc.subtract(x,y,z);
                                             }
                                             if (t > 20){
@@ -362,7 +362,7 @@ public class Elementalstone implements Listener {
     private boolean isGoodEffect(PotionEffect effect) {
         PotionEffectType type = effect.getType();
         // Hier können Sie die Potion-Effekte definieren, die als "gut" betrachtet werden sollen
-        return type.equals(PotionEffectType.INCREASE_DAMAGE) || type.equals(PotionEffectType.HEAL) || type.equals(PotionEffectType.REGENERATION)|| type.equals(PotionEffectType.INVISIBILITY) || type.equals(PotionEffectType.WATER_BREATHING) || type.equals(PotionEffectType.DAMAGE_RESISTANCE) || type.equals(PotionEffectType.SPEED)|| type.equals(PotionEffectType.HEALTH_BOOST);
+        return type.equals(PotionEffectType.STRENGTH) || type.equals(PotionEffectType.INSTANT_HEALTH) || type.equals(PotionEffectType.REGENERATION)|| type.equals(PotionEffectType.INVISIBILITY) || type.equals(PotionEffectType.WATER_BREATHING) || type.equals(PotionEffectType.RESISTANCE) || type.equals(PotionEffectType.SPEED)|| type.equals(PotionEffectType.HEALTH_BOOST);
     }
 
     private boolean isEffectStronger(PotionEffect effect, Player player) {
@@ -489,11 +489,11 @@ public class Elementalstone implements Listener {
         // List of negative potion effects
         PotionEffectType[] negativeEffects = {
                 PotionEffectType.BLINDNESS,
-                PotionEffectType.CONFUSION,
+                PotionEffectType.NAUSEA,
                 PotionEffectType.HUNGER,
                 PotionEffectType.WITHER,
                 PotionEffectType.POISON,
-                PotionEffectType.SLOW,
+                PotionEffectType.SLOWNESS,
                 PotionEffectType.WEAKNESS
         };
 

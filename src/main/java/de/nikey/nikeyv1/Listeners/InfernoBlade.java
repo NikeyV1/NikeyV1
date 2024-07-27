@@ -197,7 +197,7 @@ public class InfernoBlade implements Listener {
                     for (Entity entity : teleportLocation.getWorld().getNearbyEntities(teleportLocation, 2, 2, 2)) {
                         if (entity instanceof LivingEntity && entity != player) {
                             LivingEntity livingEntity = (LivingEntity) entity;
-                            player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, teleportLocation, 2);
+                            player.getWorld().spawnParticle(Particle.EXPLOSION, teleportLocation, 2);
                             livingEntity.damage(20,player);
                             livingEntity.setNoDamageTicks(1);
                         }

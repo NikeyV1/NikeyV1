@@ -245,7 +245,7 @@ public class Frozenstone implements Listener {
                                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                             if (!playersInSameTeam.contains(e)) {
                                                 LivingEntity entity = (LivingEntity) e;
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                                 notp.add(entity);
                                                 entity.damage(18,p);
@@ -265,7 +265,7 @@ public class Frozenstone implements Listener {
                                             }
                                         }else{
                                             LivingEntity entity = (LivingEntity) e;
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                             entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                             notp.add(entity);
                                             entity.damage(18,p);
@@ -288,7 +288,7 @@ public class Frozenstone implements Listener {
                                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                             if (!playersInSameTeam.contains(e)) {
                                                 LivingEntity entity = (LivingEntity) e;
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                                 notp.add(entity);
                                                 entity.damage(18,p);
@@ -310,7 +310,7 @@ public class Frozenstone implements Listener {
                                     } else if (damageEntityType.equalsIgnoreCase("monsters")) {
                                         if (e instanceof Monster) {
                                             Monster entity = (Monster) e;
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                             entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                             notp.add(entity);
                                             entity.damage(18,p);
@@ -333,7 +333,7 @@ public class Frozenstone implements Listener {
                                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                             if (!playersInSameTeam.contains(e)) {
                                                 LivingEntity entity = (LivingEntity) e;
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                                 notp.add(entity);
                                                 entity.damage(18,p);
@@ -353,7 +353,7 @@ public class Frozenstone implements Listener {
                                             }
                                         }else if (e instanceof Monster){
                                             Monster entity = (Monster) e;
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                             entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                             notp.add(entity);
                                             entity.damage(18,p);
@@ -389,7 +389,7 @@ public class Frozenstone implements Listener {
                                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                             if (!playersInSameTeam.contains(e)) {
                                                 LivingEntity entity = (LivingEntity) e;
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                                 notp.add(entity);
                                                 entity.damage(18,p);
@@ -409,7 +409,7 @@ public class Frozenstone implements Listener {
                                             }
                                         }else {
                                             LivingEntity entity = (LivingEntity) e;
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                             entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                             notp.add(entity);
                                             entity.damage(18,p);
@@ -432,7 +432,7 @@ public class Frozenstone implements Listener {
                                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                             if (!playersInSameTeam.contains(e)) {
                                                 LivingEntity entity = (LivingEntity) e;
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                                 notp.add(entity);
                                                 entity.damage(18,p);
@@ -454,7 +454,7 @@ public class Frozenstone implements Listener {
                                     } else if (damageEntityType.equalsIgnoreCase("monsters")) {
                                         if (e instanceof Monster) {
                                             Monster entity = (Monster) e;
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                             entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                             notp.add(entity);
                                             entity.damage(18,p);
@@ -477,7 +477,7 @@ public class Frozenstone implements Listener {
                                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                             if (!playersInSameTeam.contains(e)) {
                                                 LivingEntity entity = (LivingEntity) e;
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                                 notp.add(entity);
                                                 entity.damage(18,p);
@@ -497,7 +497,7 @@ public class Frozenstone implements Listener {
                                             }
                                         }else if (e instanceof Monster){
                                             Monster entity = (Monster) e;
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                             entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                             notp.add(entity);
                                             entity.damage(18,p);
@@ -534,7 +534,7 @@ public class Frozenstone implements Listener {
                                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                             if (!playersInSameTeam.contains(e)) {
                                                 LivingEntity entity = (LivingEntity) e;
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                                 notp.add(entity);
                                                 entity.damage(24,p);
@@ -554,7 +554,7 @@ public class Frozenstone implements Listener {
                                             }
                                         }else {
                                             LivingEntity entity = (LivingEntity) e;
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                             entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                             notp.add(entity);
                                             entity.damage(24,p);
@@ -577,7 +577,7 @@ public class Frozenstone implements Listener {
                                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                             if (!playersInSameTeam.contains(e)) {
                                                 LivingEntity entity = (LivingEntity) e;
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                                 notp.add(entity);
                                                 entity.damage(24,p);
@@ -599,7 +599,7 @@ public class Frozenstone implements Listener {
                                     } else if (damageEntityType.equalsIgnoreCase("monsters")) {
                                         if (e instanceof Monster) {
                                             LivingEntity entity = (LivingEntity) e;
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                             entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                             notp.add(entity);
                                             entity.damage(24,p);
@@ -622,7 +622,7 @@ public class Frozenstone implements Listener {
                                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                             if (!playersInSameTeam.contains(e)) {
                                                 LivingEntity entity = (LivingEntity) e;
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                                 notp.add(entity);
                                                 entity.damage(24,p);
@@ -642,7 +642,7 @@ public class Frozenstone implements Listener {
                                             }
                                         }else if (e instanceof Monster){
                                             LivingEntity entity = (LivingEntity) e;
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                             entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                             notp.add(entity);
                                             entity.damage(24,p);
@@ -680,7 +680,7 @@ public class Frozenstone implements Listener {
                                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                             if (!playersInSameTeam.contains(e)) {
                                                 LivingEntity entity = (LivingEntity) e;
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                                 notp.add(entity);
                                                 entity.damage(24,p);
@@ -700,7 +700,7 @@ public class Frozenstone implements Listener {
                                             }
                                         }else {
                                             LivingEntity entity = (LivingEntity) e;
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                             entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                             notp.add(entity);
                                             entity.damage(24,p);
@@ -723,7 +723,7 @@ public class Frozenstone implements Listener {
                                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                             if (!playersInSameTeam.contains(e)) {
                                                 LivingEntity entity = (LivingEntity) e;
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                                 notp.add(entity);
                                                 entity.damage(24,p);
@@ -745,7 +745,7 @@ public class Frozenstone implements Listener {
                                     } else if (damageEntityType.equalsIgnoreCase("monsters")) {
                                         if (e instanceof Monster) {
                                             LivingEntity entity = (LivingEntity) e;
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                             entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                             notp.add(entity);
                                             entity.damage(24,p);
@@ -768,7 +768,7 @@ public class Frozenstone implements Listener {
                                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                             if (!playersInSameTeam.contains(e)) {
                                                 LivingEntity entity = (LivingEntity) e;
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                                 notp.add(entity);
                                                 entity.damage(24,p);
@@ -788,7 +788,7 @@ public class Frozenstone implements Listener {
                                             }
                                         }else if (e instanceof Monster){
                                             LivingEntity entity = (LivingEntity) e;
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,2,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
                                             entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                             notp.add(entity);
                                             entity.damage(24,p);
@@ -826,7 +826,7 @@ public class Frozenstone implements Listener {
                                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                             if (!playersInSameTeam.contains(e)) {
                                                 LivingEntity entity = (LivingEntity) e;
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,3,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,3,false));
                                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                                 notp.add(entity);
                                                 entity.damage(24,p);
@@ -846,7 +846,7 @@ public class Frozenstone implements Listener {
                                             }
                                         }else {
                                             LivingEntity entity = (LivingEntity) e;
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,3,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,3,false));
                                             entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                             notp.add(entity);
                                             entity.damage(24,p);
@@ -869,7 +869,7 @@ public class Frozenstone implements Listener {
                                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                             if (!playersInSameTeam.contains(e)) {
                                                 LivingEntity entity = (LivingEntity) e;
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,3,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,3,false));
                                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                                 notp.add(entity);
                                                 entity.damage(24,p);
@@ -891,7 +891,7 @@ public class Frozenstone implements Listener {
                                     } else if (damageEntityType.equalsIgnoreCase("monsters")) {
                                         if (e instanceof Monster) {
                                             LivingEntity entity = (LivingEntity) e;
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,3,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,3,false));
                                             entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                             notp.add(entity);
                                             entity.damage(24,p);
@@ -914,7 +914,7 @@ public class Frozenstone implements Listener {
                                             List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
                                             if (!playersInSameTeam.contains(e)) {
                                                 LivingEntity entity = (LivingEntity) e;
-                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,3,false));
+                                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,3,false));
                                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                                 notp.add(entity);
                                                 entity.damage(24,p);
@@ -934,7 +934,7 @@ public class Frozenstone implements Listener {
                                             }
                                         }else if (e instanceof Monster){
                                             LivingEntity entity = (LivingEntity) e;
-                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,400,3,false));
+                                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,3,false));
                                             entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
                                             notp.add(entity);
                                             entity.damage(24,p);
@@ -1091,9 +1091,9 @@ public class Frozenstone implements Listener {
             }
             e.setFreezeTicks(800);
             if (i == 10 || i == 11 || i == 12) {
-                e.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*20,1,false));
+                e.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*20,1,false));
             }else if (i >= 13) {
-                e.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*20,3,false));
+                e.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*20,3,false));
             }
             e.setVisualFire(false);
             if (i >= 11) {
@@ -1135,10 +1135,10 @@ public class Frozenstone implements Listener {
         // List of negative potion effects
         PotionEffectType[] negativeEffects = {
                 PotionEffectType.BLINDNESS,
-                PotionEffectType.CONFUSION,
+                PotionEffectType.NAUSEA,
                 PotionEffectType.HUNGER,
                 PotionEffectType.POISON,
-                PotionEffectType.SLOW,
+                PotionEffectType.SLOWNESS,
                 PotionEffectType.WEAKNESS
         };
 

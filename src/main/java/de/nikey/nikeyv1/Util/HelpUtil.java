@@ -1,5 +1,6 @@
 package de.nikey.nikeyv1.Util;
 
+import de.nikey.nikeyv1.api.Stone;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -83,7 +84,7 @@ public class HelpUtil {
 
 
 public static boolean shouldDamageEntity(LivingEntity entity, Player p) {
-        String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
+        String damageEntityType = Stone.getAttacking(p);
         switch (damageEntityType.toLowerCase()) {
             case "all":
                 return true;

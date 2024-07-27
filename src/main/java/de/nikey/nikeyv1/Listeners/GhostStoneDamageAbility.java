@@ -201,7 +201,7 @@ public class GhostStoneDamageAbility implements Listener {
                         victim.setHealth(victim.getHealth()-0.5F);
                         victim.playHurtAnimation(0);
                     }else {
-                        victim.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                        victim.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                     }
                     if (user.getHealth() < 20) {
                         user.setHealth(user.getHealth()+0.5F);
@@ -211,7 +211,7 @@ public class GhostStoneDamageAbility implements Listener {
                         victim.setHealth(victim.getHealth()-1);
                         victim.playHurtAnimation(0);
                     }else {
-                        victim.addPotionEffect(new PotionEffect(PotionEffectType.HARM,1,240));
+                        victim.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                     }
                     if (user.getHealth() < 20) {
                         user.setHealth(user.getHealth()+1);
@@ -241,19 +241,19 @@ public class GhostStoneDamageAbility implements Listener {
 
         //Effects
         if (level == 15) {
-            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*20,2,true));
-            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*20,1,true));
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*20,2,true));
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*20,1,true));
         }else if (level == 16 ||level == 17) {
-            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*30,2,true));
-            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*30,1,true));
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*30,2,true));
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*30,1,true));
         }else if (level == 18) {
-            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*30,2,true));
-            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*30,1,true));
-            damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*30,1,true));
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*30,2,true));
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*30,1,true));
+            damager.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,20*30,1,true));
         }else if (level >= 19) {
-            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,20*40,2,true));
-            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,20*40,1,true));
-            damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,20*40,1,true));
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*40,2,true));
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*40,1,true));
+            damager.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,20*40,1,true));
         }
         damager.setHealth(damager.getMaxHealth());
 

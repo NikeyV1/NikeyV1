@@ -82,7 +82,7 @@ public class Tornado implements Listener {
                     FallingBlock entity1 = l.getWorld().spawnFallingBlock(l, Material.STONE, b.getData());
                     entity = entity1;
                     entity1.setDropItem(false);
-                    entity.getWorld().spawnParticle(Particle.DRIP_WATER,entity.getLocation(),10);
+                    entity.getWorld().spawnParticle(Particle.DRIPPING_WATER,entity.getLocation(),10);
                     new BukkitRunnable() {
                         @Override
                         public void run() {
@@ -104,7 +104,7 @@ public class Tornado implements Listener {
                             entity.remove();
                         }
                     }.runTaskLater(NikeyV1.getPlugin(),20*3);
-                    entity.getWorld().spawnParticle(Particle.DRIP_WATER,entity.getLocation(),10);
+                    entity.getWorld().spawnParticle(Particle.DRIPPING_WATER,entity.getLocation(),10);
                     removable = !explode;
                 }
 

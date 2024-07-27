@@ -262,7 +262,7 @@ public class Items {
         ItemMeta meta = anvil.getItemMeta();
         meta.setDisplayName("§3Stone Switcher");
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        anvil.addUnsafeEnchantment(Enchantment.DIG_SPEED,1);
+        anvil.addUnsafeEnchantment(Enchantment.EFFICIENCY,1);
         ArrayList<String> lore = new ArrayList<>();
         lore.add("§7This Item has the Power to trick your §8Stone");
         lore.add("§7into swapping itself for a outher random §8Stone");
@@ -282,7 +282,7 @@ public class Items {
         ItemMeta meta = anvil.getItemMeta();
         meta.setDisplayName("§3Stone Switcher");
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        anvil.addUnsafeEnchantment(Enchantment.DIG_SPEED,1);
+        anvil.addUnsafeEnchantment(Enchantment.EFFICIENCY,1);
         ArrayList<String> lore = new ArrayList<>();
         lore.add("§7This Item has the Power to trick your §8Stone");
         lore.add("§7into swapping itself for a outher random §8Stone");
@@ -339,7 +339,7 @@ public class Items {
         itemMeta.setUnbreakable(true);
         itemMeta.setCustomModelData(1);
         sword.setItemMeta(itemMeta);
-        sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL,7);
+        sword.addUnsafeEnchantment(Enchantment.SHARPNESS,7);
         if (player.getInventory().firstEmpty() != -1) {
             player.getInventory().addItem(sword);
         }else {

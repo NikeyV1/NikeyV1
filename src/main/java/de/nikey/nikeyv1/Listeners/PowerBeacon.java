@@ -3,7 +3,6 @@ package de.nikey.nikeyv1.Listeners;
 import io.papermc.paper.ban.BanListType;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.data.loot.packs.UpdateOneTwentyOneLootTableProvider;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

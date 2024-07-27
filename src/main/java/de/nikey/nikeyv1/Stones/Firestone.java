@@ -68,500 +68,53 @@ public class Firestone implements Listener {
                 if (i >= 10) {
                     if (!(cooldown.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown.put(p.getUniqueId(),System.currentTimeMillis() + (100*1000));
-                        if (i == 10 ) {
-                            timer = 20;
-                            SphereEffect effect = new SphereEffect(NikeyV1.em);
-                            effect.setEntity(p);
-                            effect.duration = 20000;
-                            effect.particles = 100;
-                            effect.particle = Particle.FLAME;
-                            effect.radius = 20.0;
-                            effect.start();
-                            BukkitRunnable runnable = new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(),20,20,20)){
-                                        if (e instanceof LivingEntity){
-                                            if (damageEntityType.equalsIgnoreCase("all")) {
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entities.add(entity);
-                                                if (entity != p) {
-                                                    if (entity instanceof Player) {
-                                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                                        if (!playersInSameTeam.contains(e)) {
-                                                            e.setVisualFire(true);
-                                                            entity.damage(2);
-                                                        }
-                                                    }else {
-                                                        entity.setFireTicks(20);
-                                                        entity.damage(2);
-                                                    }
-                                                }
-                                                if (timer == 0){
-                                                    entity.setVisualFire(false);
-                                                    entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                    entities.clear();
-                                                    cancel();
-                                                    return;
-                                                }
-                                            }else if (damageEntityType.equalsIgnoreCase("players")) {
-                                                if (e instanceof Player) {
-                                                    LivingEntity entity = (LivingEntity) e;
-                                                    entities.add(entity);
-                                                    if (entity != p) {
-                                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                                        if (!playersInSameTeam.contains(e)) {
-                                                            e.setVisualFire(true);
-                                                            entity.damage(2);
-                                                        }
-                                                    }
-                                                    if (timer == 0){
-                                                        entity.setVisualFire(false);
-                                                        entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                        entities.clear();
-                                                        cancel();
-                                                        return;
-                                                    }
-                                                }
-                                            }else if (damageEntityType.equalsIgnoreCase("monsters")) {
-                                                if (e instanceof Monster) {
-                                                    LivingEntity entity = (LivingEntity) e;
-                                                    entities.add(entity);
-                                                    entity.setFireTicks(20);
-                                                    entity.damage(2);
-                                                    if (timer == 0){
-                                                        entity.setVisualFire(false);
-                                                        entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                        entities.clear();
-                                                        cancel();
-                                                        return;
-                                                    }
-                                                }
-                                            }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entities.add(entity);
-                                                if (entity != p) {
-                                                    if (entity instanceof Player) {
-                                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                                        if (!playersInSameTeam.contains(e)) {
-                                                            e.setVisualFire(true);
-                                                            entity.damage(2);
-                                                        }
-                                                    }else if (entity instanceof Monster){
-                                                        entity.setFireTicks(20);
-                                                        entity.damage(2);
-                                                    }
-                                                }
-                                                if (timer == 0){
-                                                    entity.setVisualFire(false);
-                                                    entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                    entities.clear();
-                                                    cancel();
-                                                    return;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    timer--;
-                                }
-                            };
-                            runnable.runTaskTimer(NikeyV1.getPlugin(),0,20);
-                        } else if (i == 11) {
-                            timer = 20;
-                            SphereEffect effect = new SphereEffect(NikeyV1.em);
-                            effect.setEntity(p);
-                            effect.duration = 20000;
-                            effect.particles = 200;
-                            effect.particle = Particle.FLAME;
-                            effect.radius = 25.0;
-                            effect.start();
-                            BukkitRunnable runnable = new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(), 25, 25, 25)) {
-                                        if (e instanceof LivingEntity) {
+                        int radius = 20;
+                        int particles = 100;
+                        double damage = 2.0;
 
-                                            if (damageEntityType.equalsIgnoreCase("all")) {
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entities.add(entity);
-                                                if (entity != p) {
-                                                    if (entity instanceof Player) {
-                                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                                        if (!playersInSameTeam.contains(e)) {
-                                                            e.setVisualFire(true);
-                                                            entity.damage(2);
-                                                        }
-                                                    }else{
-                                                        entity.setFireTicks(20);
-                                                        entity.damage(2);
-                                                    }
-                                                }
-                                                if (timer == 0) {
-                                                    entity.setVisualFire(false);
-                                                    entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                    entities.clear();
-                                                    cancel();
-                                                    return;
-                                                }
-                                            }else if (damageEntityType.equalsIgnoreCase("players")) {
-                                                if (e instanceof Player) {
-                                                    Player entity = (Player) e;
-                                                    entities.add(entity);
-                                                    if (entity != p) {
-                                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                                        if (!playersInSameTeam.contains(e)) {
-                                                            e.setVisualFire(true);
-                                                            entity.damage(2);
-                                                        }
-                                                    }
-                                                    if (timer == 0) {
-                                                        entity.setVisualFire(false);
-                                                        entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                        entities.clear();
-                                                        cancel();
-                                                        return;
-                                                    }
-                                                }
-                                            }else if (damageEntityType.equalsIgnoreCase("monsters")) {
-                                                if (e instanceof Monster) {
-                                                    LivingEntity entity = (LivingEntity) e;
-                                                    entities.add(entity);
-                                                    entity.setFireTicks(20);
-                                                    entity.damage(2);
-                                                    if (timer == 0) {
-                                                        entity.setVisualFire(false);
-                                                        entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                        entities.clear();
-                                                        cancel();
-                                                        return;
-                                                    }
-                                                }
-                                            }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entities.add(entity);
-                                                if (entity != p) {
-                                                    if (entity instanceof Player) {
-                                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                                        if (!playersInSameTeam.contains(e)) {
-                                                            e.setVisualFire(true);
-                                                            entity.damage(2);
-                                                        }
-                                                    }else if (entity instanceof Monster){
-                                                        entity.setFireTicks(20);
-                                                        entity.damage(2);
-                                                    }
-                                                }
-                                                if (timer == 0) {
-                                                    entity.setVisualFire(false);
-                                                    entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                    entities.clear();
-                                                    cancel();
-                                                    return;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    timer--;
-                                }
-                            };
-                            runnable.runTaskTimer(NikeyV1.getPlugin(), 0, 20);
-                        }else if (i == 12) {
-                            timer = 20;
-                            SphereEffect effect = new SphereEffect(NikeyV1.em);
-                            effect.setEntity(p);
-                            effect.duration = 20000;
-                            effect.particles = 200;
-                            effect.particle = Particle.FLAME;
-                            effect.radius = 25.0;
-                            effect.start();
-                            BukkitRunnable runnable = new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(), 25, 25, 25)) {
-                                        if (e instanceof LivingEntity) {
-
-                                            if (damageEntityType.equalsIgnoreCase("all")) {
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entities.add(entity);
-                                                if (entity != p) {
-                                                    if (entity instanceof Player) {
-                                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                                        if (!playersInSameTeam.contains(e)) {
-                                                            e.setVisualFire(true);
-                                                            entity.damage(2.5);
-                                                        }
-                                                    }else {
-                                                        entity.setFireTicks(20);
-                                                        entity.damage(2.5);
-                                                    }
-                                                }
-                                                if (timer == 0) {
-                                                    entity.setVisualFire(false);
-                                                    entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                    entities.clear();
-                                                    cancel();
-                                                    return;
-                                                }
-                                            }else if (damageEntityType.equalsIgnoreCase("players")) {
-                                                if (e instanceof Player) {
-                                                    Player entity = (Player) e;
-                                                    entities.add(entity);
-                                                    if (entity != p) {
-                                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                                        if (!playersInSameTeam.contains(e)) {
-                                                            e.setVisualFire(true);
-                                                            entity.damage(2.5);
-                                                        }
-                                                    }
-                                                    if (timer == 0) {
-                                                        entity.setVisualFire(false);
-                                                        entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                        entities.clear();
-                                                        cancel();
-                                                        return;
-                                                    }
-                                                }
-                                            }else if (damageEntityType.equalsIgnoreCase("monsters")) {
-                                                if (e instanceof Monster) {
-                                                    LivingEntity entity = (LivingEntity) e;
-                                                    entities.add(entity);
-                                                    entity.setFireTicks(20);
-                                                    entity.damage(2.5);
-                                                    if (timer == 0) {
-                                                        entity.setVisualFire(false);
-                                                        entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                        entities.clear();
-                                                        cancel();
-                                                        return;
-                                                    }
-                                                }
-                                            }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entities.add(entity);
-                                                if (entity != p) {
-                                                    if (entity instanceof Player) {
-                                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                                        if (!playersInSameTeam.contains(e)) {
-                                                            e.setVisualFire(true);
-                                                            entity.damage(2.5);
-                                                        }
-                                                    }else if (entity instanceof Monster){
-                                                        entity.setFireTicks(20);
-                                                        entity.damage(2.5);
-                                                    }
-                                                }
-                                                if (timer == 0) {
-                                                    entity.setVisualFire(false);
-                                                    entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                    entities.clear();
-                                                    cancel();
-                                                    return;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    timer--;
-                                }
-                            };
-                            runnable.runTaskTimer(NikeyV1.getPlugin(), 0, 20);
-                        }else if (i == 13) {
-                            timer = 20;
-                            SphereEffect effect = new SphereEffect(NikeyV1.em);
-                            effect.setEntity(p);
-                            effect.duration = 20000;
-                            effect.particles = 200;
-                            effect.particle = Particle.FLAME;
-                            effect.radius = 30.0;
-                            effect.start();
-                            BukkitRunnable runnable = new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(), 30, 30, 30)) {
-                                        if (e instanceof LivingEntity) {
-                                            if (damageEntityType.equalsIgnoreCase("all")) {
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entities.add(entity);
-                                                if (entity != p) {
-                                                    if (entity instanceof Player) {
-                                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                                        if (!playersInSameTeam.contains(e)) {
-                                                            e.setVisualFire(true);
-                                                            entity.damage(2.5);
-                                                        }
-                                                    }else {
-                                                        entity.setFireTicks(20);
-                                                        entity.damage(2.5);
-                                                    }
-                                                }
-                                                if (timer == 0) {
-                                                    entity.setVisualFire(false);
-                                                    entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                    entities.clear();
-                                                    cancel();
-                                                    return;
-                                                }
-                                            }else if (damageEntityType.equalsIgnoreCase("players")) {
-                                                if (e instanceof Player) {
-                                                    Player entity = (Player) e;
-                                                    entities.add(entity);
-                                                    if (entity != p) {
-                                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                                        if (!playersInSameTeam.contains(e)) {
-                                                            e.setVisualFire(true);
-                                                            entity.damage(2.5);
-                                                        }
-                                                    }
-                                                    if (timer == 0) {
-                                                        entity.setVisualFire(false);
-                                                        entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                        entities.clear();
-                                                        cancel();
-                                                        return;
-                                                    }
-                                                }
-                                            }else if (damageEntityType.equalsIgnoreCase("monsters")) {
-                                                if (e instanceof Monster) {
-                                                    LivingEntity entity = (LivingEntity) e;
-                                                    entities.add(entity);
-                                                    entity.setFireTicks(20);
-                                                    entity.damage(2.5);
-                                                    if (timer == 0) {
-                                                        entity.setVisualFire(false);
-                                                        entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                        entities.clear();
-                                                        cancel();
-                                                        return;
-                                                    }
-                                                }
-                                            }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entities.add(entity);
-                                                if (entity != p) {
-                                                    if (entity instanceof Player) {
-                                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                                        if (!playersInSameTeam.contains(e)) {
-                                                            e.setVisualFire(true);
-                                                            entity.damage(2.5);
-                                                        }
-                                                    }else if (entity instanceof Monster){
-                                                        entity.setFireTicks(20);
-                                                        entity.damage(2.5);
-                                                    }
-                                                }
-                                                if (timer == 0) {
-                                                    entity.setVisualFire(false);
-                                                    entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                    entities.clear();
-                                                    cancel();
-                                                    return;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    timer--;
-                                }
-                            };
-                            runnable.runTaskTimer(NikeyV1.getPlugin(), 0, 20);
-                        }else if (i >= 14) {
-                            timer = 20;
-                            SphereEffect effect = new SphereEffect(NikeyV1.em);
-                            effect.setEntity(p);
-                            effect.duration = 20000;
-                            effect.particles = 200;
-                            effect.particle = Particle.FLAME;
-                            effect.radius = 30.0;
-                            effect.start();
-                            BukkitRunnable runnable = new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(), 30, 30, 30)) {
-                                        if (e instanceof LivingEntity) {
-
-                                            if (damageEntityType.equalsIgnoreCase("all")) {
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entities.add(entity);
-                                                if (entity != p) {
-                                                    if (entity instanceof Player) {
-                                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                                        if (!playersInSameTeam.contains(e)) {
-                                                            e.setVisualFire(true);
-                                                            entity.damage(3);
-                                                        }
-                                                    }else{
-                                                        entity.setFireTicks(20);
-                                                        entity.damage(3);
-                                                    }
-                                                }
-                                                if (timer == 0) {
-                                                    entity.setVisualFire(false);
-                                                    entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                    entities.clear();
-                                                    cancel();
-                                                    return;
-                                                }
-                                            }else if (damageEntityType.equalsIgnoreCase("players")) {
-                                                if (e instanceof Player) {
-                                                    Player entity = (Player) e;
-                                                    entities.add(entity);
-                                                    if (entity != p) {
-                                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                                        if (!playersInSameTeam.contains(e)) {
-                                                            e.setVisualFire(true);
-                                                            entity.damage(3);
-                                                        }
-                                                    }
-                                                    if (timer == 0) {
-                                                        entity.setVisualFire(false);
-                                                        entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                        entities.clear();
-                                                        cancel();
-                                                        return;
-                                                    }
-                                                }
-                                            }else if (damageEntityType.equalsIgnoreCase("monsters")) {
-                                                if (e instanceof Monster) {
-                                                    LivingEntity entity = (LivingEntity) e;
-                                                    entities.add(entity);
-                                                    entity.setFireTicks(20);
-                                                    entity.damage(3);
-                                                    if (timer == 0) {
-                                                        entity.setVisualFire(false);
-                                                        entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                        entities.clear();
-                                                        cancel();
-                                                        return;
-                                                    }
-                                                }
-                                            }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entities.add(entity);
-                                                if (entity != p) {
-                                                    if (entity instanceof Player) {
-                                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                                        if (!playersInSameTeam.contains(e)) {
-                                                            e.setVisualFire(true);
-                                                            entity.damage(3);
-                                                        }
-                                                    }else if (entity instanceof Monster){
-                                                        entity.setFireTicks(20);
-                                                        entity.damage(3);
-                                                    }
-                                                }
-                                                if (timer == 0) {
-                                                    entity.setVisualFire(false);
-                                                    entities.forEach(entity1 -> entity1.setVisualFire(false));
-                                                    entities.clear();
-                                                    cancel();
-                                                    return;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    timer--;
-                                }
-                            };
-                            runnable.runTaskTimer(NikeyV1.getPlugin(), 0, 20);
+                        if (i == 11 || i == 12) {
+                            radius = 25;
+                            particles = 200;
+                        } else if (i == 13 || i >= 14) {
+                            radius = 30;
+                            particles = 200;
+                            damage = (i >= 14) ? 3.0 : 2.5;
                         }
+                        if (i == 12 || i == 13) {
+                            damage = 2.5;
+                        }
+
+                        timer = 20;
+                        SphereEffect effect = new SphereEffect(NikeyV1.em);
+                        effect.setEntity(p);
+                        effect.duration = 20000;
+                        effect.particles = particles;
+                        effect.particle = Particle.FLAME;
+                        effect.radius = radius;
+                        effect.start();
+
+                        int finalRadius = radius;
+                        double finalDamage = damage;
+                        BukkitRunnable runnable = new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(), finalRadius, finalRadius, finalRadius)) {
+                                    if (e instanceof LivingEntity) {
+                                        if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
+                                            setEntityOnFire((LivingEntity) e, finalDamage);
+                                        }
+                                    }
+                                }
+                                if (timer == 0) {
+                                    entities.forEach(entity1 -> entity1.setVisualFire(false));
+                                    entities.clear();
+                                    cancel();
+                                    return;
+                                }
+                                timer--;
+                            }
+                        };
+                        runnable.runTaskTimer(NikeyV1.getPlugin(), 0, 20);
                     }
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
@@ -620,6 +173,12 @@ public class Firestone implements Listener {
                 }
             }
         }
+    }
+
+    private void setEntityOnFire(LivingEntity entity, double damage) {
+        entity.setVisualFire(true);
+        entity.setFireTicks(20);
+        entity.damage(damage);
     }
 
     @EventHandler
@@ -880,77 +439,9 @@ public class Firestone implements Listener {
             @Override
             public void run() {
                 if (level == 20) {
-                    timecooldown.put(launcherPlayer,38);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            timecooldown.replace(launcherPlayer,timecooldown.get(launcherPlayer)-1);
-                            int x = (int) (selectedPlayer.getLocation().getX());
-                            int z = (int) (selectedPlayer.getLocation().getZ());
-                            int randomX = ThreadLocalRandom.current().nextInt(x-6, x+6);
-                            int randomZ = ThreadLocalRandom.current().nextInt(z-6, z+6);
-                            if (selectedPlayer.getLocation().getZ() > 50) {
-                                Location location = new Location(selectedPlayer.getWorld(),randomX,selectedPlayer.getLocation().getY()+20,randomZ);
-                                Fireball fireball = (Fireball) location.getWorld().spawn(location, Fireball.class, CreatureSpawnEvent.SpawnReason.CUSTOM);
-                                fireball.setShooter(launcherPlayer);
-                                fireball.setVelocity(new Vector(0,-2.5,0));
-                                fireball.setDirection(new Vector(0,-2.5,0));
-                                fireball.setCustomName("airstrike");
-                                fireball.setCustomNameVisible(false);
-                            }else {
-                                Location location = new Location(selectedPlayer.getWorld(),randomX,selectedPlayer.getLocation().getY()+40,randomZ);
-                                Fireball fireball = (Fireball) location.getWorld().spawn(location, Fireball.class, CreatureSpawnEvent.SpawnReason.CUSTOM);
-                                fireball.setVelocity(new Vector(0,-2.5,0));
-                                fireball.setDirection(new Vector(0,-2.5,0));
-                                fireball.setShooter(launcherPlayer);
-                                fireball.setCustomName("airstrike");
-                                fireball.setCustomNameVisible(false);
-                            }
-
-
-                            if (timecooldown.get(launcherPlayer) == 0) {
-                                timecooldown.remove(launcherPlayer);
-                                cancel();
-                                return;
-                            }
-                        }
-                    }.runTaskTimer(NikeyV1.getPlugin(),0,6);
+                    handleAirstrike(launcherPlayer, selectedPlayer, level, 38);
                 } else if (level == 21) {
-                    timecooldown.put(launcherPlayer,45);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            timecooldown.replace(launcherPlayer,timecooldown.get(launcherPlayer)-1);
-                            int x = (int) (selectedPlayer.getLocation().getX());
-                            int z = (int) (selectedPlayer.getLocation().getZ());
-                            int randomX = ThreadLocalRandom.current().nextInt(x - 6, x + 6);
-                            int randomZ = ThreadLocalRandom.current().nextInt(z - 6, z + 6);
-                            int randomY = selectedPlayer.getWorld().getHighestBlockYAt(randomX, randomZ);
-                            if (selectedPlayer.getLocation().getZ() > 50) {
-                                Location location = new Location(selectedPlayer.getWorld(),randomX,selectedPlayer.getLocation().getY()+20,randomZ);
-                                Fireball fireball = (Fireball) location.getWorld().spawn(location, Fireball.class, CreatureSpawnEvent.SpawnReason.CUSTOM);
-                                fireball.setShooter(launcherPlayer);
-                                fireball.setVelocity(new Vector(0,-2.5,0));
-                                fireball.setDirection(new Vector(0,-2.5,0));
-                                fireball.setCustomName("strongairstrike");
-                                fireball.setCustomNameVisible(false);
-
-                            } else {
-                                Location location = new Location(selectedPlayer.getWorld(),randomX,selectedPlayer.getLocation().getY()+40,randomZ);
-                                Fireball fireball = (Fireball) location.getWorld().spawn(location, Fireball.class, CreatureSpawnEvent.SpawnReason.CUSTOM);
-                                fireball.setVelocity(new Vector(0,-2.5,0));
-                                fireball.setDirection(new Vector(0,-2.5,0));
-                                fireball.setShooter(launcherPlayer);
-                                fireball.setCustomName("strongairstrike");
-                                fireball.setCustomNameVisible(false);
-                            }
-                            if (timecooldown.get(launcherPlayer) == 0) {
-                                timecooldown.remove(launcherPlayer);
-                                cancel();
-                                return;
-                            }
-                        }
-                    }.runTaskTimer(NikeyV1.getPlugin(), 0, 6);
+                    handleAirstrike(launcherPlayer, selectedPlayer, level, 45);
                 }
             }
         }.runTaskLater(NikeyV1.getPlugin(),40);
@@ -1002,6 +493,37 @@ public class Firestone implements Listener {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void handleAirstrike(final Player launcherPlayer, final Player selectedPlayer, final int level, final int cooldown) {
+        timecooldown.put(launcherPlayer, cooldown);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                timecooldown.replace(launcherPlayer, timecooldown.get(launcherPlayer) - 1);
+
+                int x = (int) selectedPlayer.getLocation().getX();
+                int z = (int) selectedPlayer.getLocation().getZ();
+                int randomX = ThreadLocalRandom.current().nextInt(x - 6, x + 6);
+                int randomZ = ThreadLocalRandom.current().nextInt(z - 6, z + 6);
+                int yOffset = selectedPlayer.getLocation().getZ() > 50 ? 20 : 40;
+                String customName = level == 20 ? "airstrike" : "strongairstrike";
+
+                Location location = new Location(selectedPlayer.getWorld(), randomX, selectedPlayer.getLocation().getY() + yOffset, randomZ);
+                Fireball fireball = (Fireball) location.getWorld().spawn(location, Fireball.class, CreatureSpawnEvent.SpawnReason.CUSTOM);
+                fireball.setShooter(launcherPlayer);
+                fireball.setVelocity(new Vector(0, -2.5, 0));
+                fireball.setDirection(new Vector(0, -2.5, 0));
+                fireball.setCustomName(customName);
+                fireball.setCustomNameVisible(false);
+
+                if (timecooldown.get(launcherPlayer) == 0) {
+                    timecooldown.remove(launcherPlayer);
+                    cancel();
+                }
+            }
+        }.runTaskTimer(NikeyV1.getPlugin(), 0, 6);
     }
 
     @EventHandler
