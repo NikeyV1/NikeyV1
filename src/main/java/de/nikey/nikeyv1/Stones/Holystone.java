@@ -4,7 +4,13 @@ import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.EntityTypeDamage;
 import de.slikey.effectlib.effect.CircleEffect;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -37,6 +43,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
+import static net.kyori.adventure.text.format.TextColor.color;
 import static org.bukkit.Bukkit.getServer;
 
 @SuppressWarnings("ALL")
@@ -412,7 +421,9 @@ public class Holystone implements Listener {
                         }.runTaskTimer(NikeyV1.getPlugin(),0,3);
                     }
                 }
-                damager.setHealth(damager.getHealth() + event.getFinalDamage()*0.5);
+                if (damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() >= damager.getHealth() + event.getFinalDamage()*0.5) {
+                    damager.setHealth(damager.getHealth() + event.getFinalDamage()*0.5);
+                }
             }
         }
     }
@@ -508,6 +519,7 @@ public class Holystone implements Listener {
                         effect.enableRotation=false;
                         effect.particle=Particle.INSTANT_EFFECT;
                         effect.start();
+                        selectedPlayer.sendMessage(ChatColor.BLUE+player.getName()+ChatColor.GREEN+" buffed you");
                         //Remove Buff
                         new BukkitRunnable() {
                             @Override
@@ -529,6 +541,7 @@ public class Holystone implements Listener {
                         effect.enableRotation=false;
                         effect.particle=Particle.INSTANT_EFFECT;
                         effect.start();
+                        selectedPlayer.sendMessage(ChatColor.BLUE+player.getName()+ChatColor.GREEN+" buffed you");
                         //Remove Buff
                         new BukkitRunnable() {
                             @Override
@@ -549,22 +562,24 @@ public class Holystone implements Listener {
                         Player selectedPlayer = Bukkit.getPlayer(selectedPlayerUUID);
                         if (selectedPlayer != null) {
                             onlinePlayer.hidePlayer(NikeyV1.getPlugin(), selectedPlayer);
-                            selectedPlayer.sendMessage(ChatColor.BLUE+player.getName()+ChatColor.GREEN+" buffed you");
+
+                            int delayTicks;
                             if (level == 20) {
-                                Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
-                                    for (Player p : getServer().getOnlinePlayers()) {
-                                        onlinePlayer.showPlayer(NikeyV1.getPlugin(), selectedPlayer  );
-                                    }
-                                    vanishedPlayers.remove(player);
-                                }, 20*20); // 20 seconds (20 ticks per second)
+                                delayTicks = 20 * 20; // 20 seconds
                             } else if (level == 21) {
-                                Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
-                                    for (Player p : getServer().getOnlinePlayers()) {
-                                        onlinePlayer.showPlayer(NikeyV1.getPlugin(), selectedPlayer  );
-                                    }
-                                    vanishedPlayers.remove(player);
-                                }, 20*30); // 30 seconds (20 ticks per second)
+                                delayTicks = 20 * 30; // 30 seconds
+                            } else {
+                                continue;
                             }
+
+                            Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
+                                for (Player p : Bukkit.getOnlinePlayers()) {
+                                    onlinePlayer.showPlayer(NikeyV1.getPlugin(), selectedPlayer);
+                                }
+                                vanishedPlayers.remove(player);
+                                selectedPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, new net.md_5.bungee.api.chat.TextComponent(org.bukkit.ChatColor.AQUA + "You are now visible!"));
+                            }, delayTicks);
+
                             vanishedPlayers.add(player);
                         }
                     }

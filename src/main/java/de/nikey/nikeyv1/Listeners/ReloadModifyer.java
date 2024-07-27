@@ -18,8 +18,8 @@ public class ReloadModifyer implements Listener {
                 event.setCancelled(true);
                 for (Player players : Bukkit.getOnlinePlayers()){
                     players.kickPlayer("§cServer reload");
+                    p.getServer().reload();
                 }
-                p.getServer().reload();
             }
         }
     }
