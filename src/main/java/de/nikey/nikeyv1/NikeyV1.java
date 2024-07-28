@@ -8,12 +8,14 @@ import de.nikey.nikeyv1.Listeners.*;
 import de.nikey.nikeyv1.Stones.*;
 import de.nikey.nikeyv1.Util.Items;
 import de.nikey.nikeyv1.Util.Tornado;
+import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Husk;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -91,28 +93,13 @@ public final class NikeyV1 extends JavaPlugin{
         }
         Holystone.auraTasks.clear();
         removeGiants();
-        for (World w :Bukkit.getServer().getWorlds()) {
-            for (Entity entitys : w.getEntities()) {
-                if (entitys instanceof Husk) {
-                    Husk husk = (Husk) entitys;
-                    if (husk.isInvulnerable()) {
-                        husk.remove();
-                    }
-                }
-            }
-        }
     }
 
     private void removeGiants() {
         for (World world : Bukkit.getWorlds()) {
             for (Entity entity : world.getEntities()) {
-                if (entity.getType() == EntityType.GIANT) {
-                    if (!entity.getPassengers().isEmpty()) {
-                        entity.getPassenger().remove();
-                    }
-                    entity.remove();
-                } else if (entity.getType() == EntityType.HUSK) {
-                    if (entity.isInvulnerable() && entity.isInvisible()) {
+                if (entity instanceof LivingEntity) {
+                    if (Stone.isUndeadMaster((LivingEntity) entity)) {
                         entity.remove();
                     }
                 }
