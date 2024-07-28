@@ -3,9 +3,14 @@ package de.nikey.nikeyv1.api;
 import de.nikey.nikeyv1.NikeyV1;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.Objects;
 
 public class Stone {
     public static int getStoneLevel(Player player) {
@@ -94,5 +99,24 @@ public class Stone {
 
     public static boolean shouldHaveStone(Player player, ItemStack item) {
         return getStoneName(player).equalsIgnoreCase(whatStone(item));
+    }
+
+
+    public static boolean isUndeadMaster(LivingEntity entity) {
+
+        if (!(entity instanceof Zombie)) return false;
+        if (Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_SCALE)).getValue() == 3.5F) {
+            if (Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue() == 500) {
+                return entity.hasMetadata("master");
+            }
+        }
+
+        return false;
+    }
+
+
+    public static boolean isSummoned(Player summoner, LivingEntity entity) {
+        if (entity.getCustomName() == null) return false;
+        return entity.getCustomName().startsWith(summoner.getName() + "'s " + entity.getType().getName());
     }
 }

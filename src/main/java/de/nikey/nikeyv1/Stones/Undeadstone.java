@@ -2,16 +2,21 @@ package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
+import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.SmokeEffect;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import io.papermc.paper.event.entity.WardenAngerChangeEvent;
 import io.papermc.paper.tag.EntityTags;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,8 +24,10 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -144,7 +151,6 @@ public class Undeadstone implements Listener {
                     if (i == 15){
                         if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            //cooldown-ability
                             timer.put(p,40);
                             new BukkitRunnable() {
                                 @Override
@@ -448,12 +454,10 @@ public class Undeadstone implements Listener {
             NikeyV1.getPlugin().saveConfig();
             String stone = config.getString(p.getName() + ".stone");
             if (i == 20 || i == 21){
-                if (p.isSneaking()) {
-                    if (!(cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
-                        cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
+                if (!(cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
+                    cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
 
-                        spawnRidingHusk(p);
-                    }
+                    spawnRidingHusk(p);
                 }
             }
         }
@@ -461,77 +465,60 @@ public class Undeadstone implements Listener {
 
 
     private void spawnRidingHusk(Player player) {
-            Location added = player.getLocation().getWorld().getHighestBlockAt(player.getLocation()).getLocation();
-            Location l = added.clone().add(0,1,0);
-            Giant giant = (Giant) player.getLocation().getWorld().spawnEntity(l, EntityType.GIANT);
-            giant.setMaxHealth(500);
-            giant.setHealth(500);
-            int i = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
-            if (i == 20) {
-                giant.setCustomName(player.getName()+"'s "+giant.getType().getName());
-            } else if (i == 21) {
-                giant.setCustomName(player.getName()+"'s "+giant.getType().getName()+" strong");
-            }
-            giant.setCustomNameVisible(true);
-            giant.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,12000,1,false,false));
-            giant.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST,12000,4,false,false));
-            AttributeInstance attribute = giant.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
-            if (attribute != null) {
-                attribute.setBaseValue(1);
-            }
-            if (i == 21) {
-                giant.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,12000,1));
-            }
-            Husk husk = (Husk) player.getLocation().getWorld().spawnEntity(player.getLocation(), EntityType.HUSK);
-            husk.getEquipment().clear();
-            husk.setInvisible(true);
-            husk.setMaxHealth(500);
-            husk.setHealth(500);
-            husk.setInvulnerable(true);
-            husk.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(100);
-            husk.setCustomName(player.getName()+"'s");
-            husk.setCustomNameVisible(false);
-            giant.addPassenger(husk);
-
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    giant.setJumping(true);
-                }
-            }.runTaskTimer(NikeyV1.getPlugin(),0,100);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    husk.remove();
-                    giant.remove();
-                }
-            }.runTaskLater(NikeyV1.getPlugin(),20*60*10);
+        Location added = player.getLocation().getWorld().getHighestBlockAt(player.getLocation()).getLocation();
+        Location l = added.clone().add(0,1,0);
+        Zombie zombie = (Zombie) player.getLocation().getWorld().spawnEntity(l, EntityType.ZOMBIE);
+        zombie.setMaxHealth(500);
+        zombie.setHealth(500);
+        zombie.setShouldBurnInDay(false);
+        zombie.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(3.5F);
+        zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(8);
+        zombie.getAttribute(Attribute.GENERIC_STEP_HEIGHT).setBaseValue(6);
+        zombie.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE).setBaseValue(7);
+        zombie.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(20);
+        zombie.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(10);
+        zombie.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(10);
+        zombie.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(100);
+        zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.5F);
+        zombie.setMetadata("master", new FixedMetadataValue(NikeyV1.getPlugin(), true));
+        zombie.setCanBreakDoors(true);
+        zombie.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,PotionEffect.INFINITE_DURATION,1,false,false,false));
+        zombie.getEquipment().setItem(EquipmentSlot.HAND,new ItemStack(Material.DIAMOND_SWORD));
+        int level = Stone.getStoneLevel(player);
+        if (level == 20) {
+            zombie.setCustomName(player.getName()+"'s "+zombie.getType().getName());
+            zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.35F);
+        } else if (level == 21) {
+            zombie.setCustomName(player.getName()+"'s "+zombie.getType().getName()+" strong");
+            zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.5F);
+        }
+        zombie.setCustomNameVisible(false);
     }
 
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
-        if (entity.getType() == EntityType.GIANT) {
-            Giant giant = (Giant) entity;
+        if (!(entity instanceof LivingEntity)) return;
+        if (Stone.isUndeadMaster((LivingEntity) entity)) {
+            Zombie zombie = (Zombie) entity;
             if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-                if (event.getFinalDamage() > 12) {
-                    event.setDamage(12);
+                if (event.getFinalDamage() > 10) {
+                    event.setDamage(10);
                 }
-            } else if (event.getCause() == EntityDamageEvent.DamageCause.FALL && giant.getCustomName().contains("low")) {
-                for (Entity nearbyEntity : giant.getNearbyEntities(30, 50, 30)) {
+            } else if (event.getCause() == EntityDamageEvent.DamageCause.FALL && zombie.getCustomName().contains("low")) {
+                for (Entity nearbyEntity : zombie.getNearbyEntities(30, 50, 30)) {
                     if (nearbyEntity instanceof LivingEntity) {
-                        giant.getWorld().playSound(giant,Sound.ENTITY_WITHER_BREAK_BLOCK,1,1);
+                        zombie.getWorld().playSound(zombie,Sound.ENTITY_WITHER_BREAK_BLOCK,1,1);
                         LivingEntity player = (LivingEntity) nearbyEntity;
-                        if (!giant.getName().contains(player.getName()+"'s")) {
-                            Vector dir = player.getLocation().toVector().subtract(giant.getLocation().toVector()).normalize();
+                        if (!zombie.getName().contains(player.getName()+"'s")) {
+                            Vector dir = player.getLocation().toVector().subtract(zombie.getLocation().toVector()).normalize();
                             player.setVelocity(dir.multiply(-2.5F).add(new Vector(0,1.5F,0)));
-                            double health = player.getHealth();
-                            player.damage(20+health,giant);
+                            player.damage(20+player.getHealth(),zombie);
                         }
                         event.setDamage(0);
-                        giant.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,12000,0));
-                        giant.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,12000,0));
+                        zombie.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,12000,0));
+                        zombie.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,12000,0));
                     }
                 }
             }
@@ -541,67 +528,52 @@ public class Undeadstone implements Listener {
     @EventHandler
     public void onEntityMove(EntityMoveEvent event) {
         Entity entity = event.getEntity();
-        if (entity.getType() == EntityType.GIANT) {
-            Entity passenger = entity.getPassenger();
-            if (passenger instanceof Husk) {
-                Husk husk = (Husk) passenger;
-                for (Entity nearbyEntity : entity.getNearbyEntities(4, 13, 4)) {
-                    if (nearbyEntity instanceof LivingEntity) {
-                        LivingEntity player = (LivingEntity) nearbyEntity;
-                        double distance = husk.getLocation().distance(player.getLocation());
-                        if (distance <= 13 && player.getLocation().add(0,-1,0).getBlock().getType() != Material.AIR) {
-                            String[] arr = entity.getCustomName().split("'");
-                            if (!entity.getName().contains(player.getName()+"'s")) {
-                                Player p = Bukkit.getPlayer(arr[0]);
-                                int level = NikeyV1.getPlugin().getConfig().getInt(arr[0] + ".level");
-                                if (!entity.getCustomName().contains("low")) {
-                                    if (!entity.getCustomName().contains("strong")) {
-                                        if (player instanceof Player) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (!playersInSameTeam.contains(player)) {
-                                                double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                                armor = armor*0.15;
-                                                player.damage(armor+1.5F,entity);
-                                            }
-                                        }else {
-                                            player.damage(2.5F,entity);
-                                        }
-                                    }else{
-                                        if (player instanceof Player) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (!playersInSameTeam.contains(player)) {
-                                                double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                                armor = armor*0.15;
-                                                player.damage(armor+3.5F,entity);
-                                            }
-                                        }else {
-                                            player.damage(4.5F,entity);
-                                        }
-                                    }
+        if (!(entity instanceof LivingEntity))return;
+        if (Stone.isUndeadMaster((LivingEntity) entity)) {
+            double eyeLocation = ((LivingEntity) entity).getEyeLocation().getY() -5;
+            Location loc = new Location(entity.getWorld(),entity.getX(),eyeLocation,entity.getZ());
+            for (Entity entitys : loc.getNearbyEntities(3,2,3)) {
+                if (!(entitys instanceof LivingEntity)) return;
+                LivingEntity living = (LivingEntity) entitys;
+                String[] arr = entity.getCustomName().split("'");
+                Player p = Bukkit.getPlayer(arr[0]);
+                if (Stone.isSummoned(p,event.getEntity()) && HelpUtil.shouldDamageEntity(living,p) ) {
+                    if (living != event.getEntity() && !HelpUtil.getPlayersInSameTeam(p).contains(living) && living != p && !Stone.isSummoned(p,living)) {
+                        HelpUtil.spawnParticles(loc,3,0,-2,0,Particle.LARGE_SMOKE);
+                        if (!entity.getCustomName().contains("low")) {
+                            if (!entity.getCustomName().contains("strong")) {
+                                if (living instanceof Player) {
+                                    double armor = living.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                    armor = armor*0.10;
+                                    living.damage(armor+1.5F,entity);
                                 }else {
-                                    if (!entity.getCustomName().contains("strong")) {
-                                        if (player instanceof Player) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (!playersInSameTeam.contains(player)) {
-                                                double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                                armor = armor*0.2;
-                                                player.damage(armor+2.5F,entity);
-                                            }
-                                        }else {
-                                            player.damage(3.5F,entity);
-                                        }
-                                    }else{
-                                        if (player instanceof Player) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (!playersInSameTeam.contains(player)) {
-                                                double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                                armor = armor*0.2;
-                                                player.damage(armor+4.5F,entity);
-                                            }
-                                        }else {
-                                            player.damage(5.5F,entity);
-                                        }
-                                    }
+                                    living.damage(2.5F,entity);
+                                }
+                            }else{
+                                if (living instanceof Player) {
+                                    double armor = living.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                    armor = armor*0.15;
+                                    living.damage(armor+3.5F,entity);
+                                }else {
+                                    living.damage(4.5F,entity);
+                                }
+                            }
+                        }else {
+                            if (!entity.getCustomName().contains("strong")) {
+                                if (living instanceof Player) {
+                                    double armor = living.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                    armor = armor*0.1;
+                                    living.damage(armor+2.5F,entity);
+                                }else {
+                                    living.damage(3.5F,entity);
+                                }
+                            }else{
+                                if (living instanceof Player) {
+                                    double armor = living.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                    armor = armor*0.15;
+                                    living.damage(armor+4.5F,entity);
+                                }else {
+                                    living.damage(5.5F,entity);
                                 }
                             }
                         }
@@ -614,9 +586,38 @@ public class Undeadstone implements Listener {
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
         LivingEntity entity = event.getEntity();
-        if (event.getEntityType() == EntityType.GIANT) {
-            entity.getPassenger().remove();
+
+        if (event.getEntity().getKiller() != null) {
+            Player player = event.getEntity().getKiller();
+            int level = Stone.getStoneLevel(player);
+            if (Stone.getStoneName(player).equalsIgnoreCase("undead")) {
+                if (player.getGameMode() == GameMode.SURVIVAL && level >= 3) {
+                    player.getWorld().spawnParticle(Particle.RAID_OMEN, player.getLocation(), 30, 0.5, 0.5, 0.5, 0.1);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 20*8, 1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*8, 1));
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new net.md_5.bungee.api.chat.TextComponent(org.bukkit.ChatColor.DARK_RED + "You are in a rush!"));
+
+                    if (level >= 4) {
+                        player.setInvulnerable(true);
+
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                player.setInvulnerable(false);
+                                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new net.md_5.bungee.api.chat.TextComponent(org.bukkit.ChatColor.DARK_RED + "Your rush has worm off!"));
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(), 20*8);
+                    }
+
+                    if (level >= 5) {
+                        player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                        player.setFoodLevel(20);
+                        player.setSaturation(20);
+                    }
+                }
+            }
         }
+
         if (entity.getCustomName() != null && entity.getCustomName().contains("'s")) {
             event.getDrops().clear();
         }
@@ -650,7 +651,7 @@ public class Undeadstone implements Listener {
     public void onProjectileHit(ProjectileHitEvent event) {
         if (event.getHitEntity() != null) {
             Entity hitEntity = event.getHitEntity();
-            if (hitEntity.getType() == EntityType.GIANT && hitEntity.getCustomName().contains("low") && event.getEntity().getCustomName() == null) {
+            if (Stone.isUndeadMaster((LivingEntity) hitEntity) && hitEntity.getCustomName().contains("low") ) {
                 event.setCancelled(true);
             }
         }
@@ -686,32 +687,15 @@ public class Undeadstone implements Listener {
                 }
             }
         }
-        if (event.getDamager() instanceof Player) {
-            int level = NikeyV1.getPlugin().getConfig().getInt(event.getDamager().getName() + ".level");
-            HelpUtil.triggerEntityAggro((LivingEntity) event.getEntity(), (Player) event.getDamager());
-            String stone = config.getString(event.getDamager().getName() + ".stone");
-            if (stone.equalsIgnoreCase("Undead")) {
-                if (EntityTags.UNDEADS.isTagged(event.getEntityType())) {
-                    if (level == 3) {
-                        event.setDamage(event.getDamage()+0.5F);
-                    } else if (level == 4) {
-                        event.setDamage(event.getDamage()+1);
-                    }else if (level >= 5) {
-                        event.setDamage(event.getDamage()+1.5F);
-                    }
-                }
-            }
-        }
-        if (event.getEntity().getType() == EntityType.GIANT) {
-            Giant giant = (Giant) event.getEntity();
+        if (Stone.isUndeadMaster((LivingEntity) event.getEntity())) {
+            Zombie giant = (Zombie) event.getEntity();
             double health = giant.getHealth();
             if (event.getFinalDamage() >12) {
                 event.setDamage(12);
             }
-            if (health < 100) {
-                if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+            if (health <= 100) {
+                if (!(event.getCause() == EntityDamageEvent.DamageCause.FALL)) {
 
-                }else {
                     if (!giant.getCustomName().contains("low") && giant.getHealth() <100) {
                         Block h = giant.getWorld().getHighestBlockAt(giant.getLocation());
                         Location loc = h.getLocation().add(0, 50, 0);
@@ -725,9 +709,9 @@ public class Undeadstone implements Listener {
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                giant.setVelocity(new Vector(0, -1, 0)); // Den Giant wieder nach unten fallen lassen
+                                giant.setVelocity(new Vector(0, -1, 0));
                             }
-                        }.runTaskLater(NikeyV1.getPlugin(), 20L); // 40 Tick (2 Sekunden) später
+                        }.runTaskLater(NikeyV1.getPlugin(), 20L);  //40 Tick (2 Sekunden) später
                     }
                 }
             }
@@ -771,12 +755,11 @@ public class Undeadstone implements Listener {
 
     @EventHandler
     public void onEntityTarget(EntityTargetEvent event){
-        if (event.getTarget() instanceof Player && event.getEntity() instanceof Husk) {
-            Husk husk = (Husk) event.getEntity();
+        if (event.getTarget() instanceof Player && event.getEntity() instanceof Zombie) {
+            Zombie zombie = (Zombie) event.getEntity();
             Player player = (Player) event.getTarget();
-            if (husk.getVehicle() != null && husk.getVehicle().getType() == EntityType.GIANT) {
-                Entity vehicle = husk.getVehicle();
-                String[] arr = vehicle.getCustomName().split("'");
+            if (Stone.isUndeadMaster(zombie)) {
+                String[] arr = zombie.getCustomName().split("'");
                 if (player.getName().equalsIgnoreCase(arr[0])) {
                     event.setCancelled(true);
                 }

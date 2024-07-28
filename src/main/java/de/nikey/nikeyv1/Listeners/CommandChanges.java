@@ -58,11 +58,6 @@ public class CommandChanges implements Listener {
                     if (args[1].equalsIgnoreCase("isstone")) {
                         player.sendMessage(String.valueOf(Stone.isStone(player.getInventory().getItemInMainHand())));
                         event.setCancelled(true);
-                    }else if (args[1].equalsIgnoreCase("version")) {
-                        player.sendMessage(Bukkit.getServer().getVersion());
-                        player.sendMessage(Bukkit.getServer().getMinecraftVersion());
-                        event.setCancelled(true);
-                        player.sendMessage(Bukkit.getServer().getBukkitVersion());
                     }
                 }
             }

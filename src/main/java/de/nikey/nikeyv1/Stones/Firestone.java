@@ -101,7 +101,9 @@ public class Firestone implements Listener {
                                 for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(), finalRadius, finalRadius, finalRadius)) {
                                     if (e instanceof LivingEntity) {
                                         if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
-                                            setEntityOnFire((LivingEntity) e, finalDamage);
+                                            if (e != p) {
+                                                setEntityOnFire((LivingEntity) e, finalDamage);
+                                            }
                                         }
                                     }
                                 }

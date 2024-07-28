@@ -162,6 +162,23 @@ public static boolean shouldDamageEntity(LivingEntity entity, Player p) {
 
         return playersInSameTeam;
     }
+
+
+    public static void spawnParticles(Location center, int radius, int offsetX, int offsetY, int offsetZ, Particle particle) {
+        World world = center.getWorld();
+
+        for (int x = -radius; x <= radius; x++) {
+            for (int y = -radius; y <= radius; y++) {
+                for (int z = -radius; z <= radius; z++) {
+                    Location loc = center.clone().add(x + offsetX, y + offsetY, z + offsetZ);
+                    if (center.distance(loc) <= radius) {
+                        world.spawnParticle(particle, loc, 0 ,0,0,0);
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 
