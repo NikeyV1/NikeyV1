@@ -489,6 +489,26 @@ public class Undeadstone implements Listener {
             zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.5F);
         }
         zombie.setCustomNameVisible(false);
+
+        // Remove zombie after 10 min
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (zombie.isValid()) {
+                    zombie.remove();
+                }
+            }
+        }.runTaskLater(NikeyV1.getPlugin(), 10 * 60 * 20);
+    }
+
+    @EventHandler
+    public void onEntityTransform(EntityTransformEvent event) {
+        if (!(event.getEntity() instanceof Zombie)) return;
+        if (event.getTransformReason() == EntityTransformEvent.TransformReason.DROWNED && Stone.isUndeadMaster((LivingEntity) event.getEntity())) {
+            Zombie living = (Zombie) event.getEntity();
+            event.setCancelled(true);
+            living.setConversionTime(2400);
+        }
     }
 
 
@@ -505,18 +525,16 @@ public class Undeadstone implements Listener {
             } else if (event.getCause() == EntityDamageEvent.DamageCause.FALL && zombie.getCustomName().contains("low")) {
                 for (Entity nearbyEntity : zombie.getNearbyEntities(30, 50, 30)) {
                     if (nearbyEntity instanceof LivingEntity) {
-                        zombie.getWorld().playSound(zombie,Sound.ENTITY_WITHER_BREAK_BLOCK,1,1);
                         LivingEntity player = (LivingEntity) nearbyEntity;
-                        if (!zombie.getName().contains(player.getName()+"'s")) {
-                            Vector dir = player.getLocation().toVector().subtract(zombie.getLocation().toVector()).normalize();
-                            player.setVelocity(dir.multiply(-2.5F).add(new Vector(0,1.5F,0)));
-                            player.damage(20+player.getHealth(),zombie);
-                        }
-                        event.setDamage(0);
-                        zombie.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,12000,0));
-                        zombie.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,12000,0));
+                        Vector dir = player.getLocation().toVector().subtract(zombie.getLocation().toVector()).normalize();
+                        player.setVelocity(dir.multiply(-2.5F).add(new Vector(0,1.5F,0)));
+                        player.damage(20+player.getHealth(),zombie);
                     }
                 }
+                zombie.getWorld().playSound(zombie,Sound.ENTITY_WITHER_BREAK_BLOCK,1,1);
+                event.setDamage(0);
+                zombie.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,12000,0));
+                zombie.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,12000,0));
             }
         }
     }
