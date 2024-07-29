@@ -228,7 +228,7 @@ public class Firestone implements Listener {
                     int a = (int) (remain/1000);
                     if (a >160){
                         double damage = event.getDamage();
-                        event.setDamage(damage*0.75);
+                        event.setDamage(damage*0.7);
                         damager.damage(damage*0.2,entity);
                     }
                 }else if (i == 17){
@@ -236,7 +236,7 @@ public class Firestone implements Listener {
                     int a = (int) (remain/1000);
                     if (a >160){
                         double damage = event.getDamage();
-                        event.setDamage(damage*0.75);
+                        event.setDamage(damage*0.7);
                         damager.damage(damage*0.3,entity);
                     }
                 }else if (i == 18){
@@ -244,23 +244,23 @@ public class Firestone implements Listener {
                     int a = (int) (remain/1000);
                     if (a >160){
                         double damage = event.getDamage();
-                        event.setDamage(damage*0.75);
-                        damager.damage(damage*0.3,entity);
+                        event.setDamage(damage*0.6);
+                        damager.damage(damage*0.4,entity);
                     }
                 }else if (i >= 19){
                     long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
                     int a = (int) (remain/1000);
                     if (a >160){
                         double damage = event.getDamage();
-                        event.setDamage(damage*0.70);
-                        damager.damage(damage*0.4,entity);
+                        event.setDamage(damage*0.5);
+                        damager.damage(damage*0.5,entity);
                     }
                 }
             }
         }
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
         if (entity instanceof Player) {
@@ -301,7 +301,7 @@ public class Firestone implements Listener {
                     if (a >160){
                         if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
                             double damage = event.getDamage();
-                            event.setDamage(damage*0.7);
+                            event.setDamage(damage*0.65);
                         }else if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK && event.getCause() != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK){
                             double damage = event.getDamage();
                             event.setDamage(damage*0.7);
@@ -313,7 +313,7 @@ public class Firestone implements Listener {
                     if (a >160){
                         if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
                             double damage = event.getDamage();
-                            event.setDamage(damage*0.65);
+                            event.setDamage(damage*0.55);
                         }else if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK && event.getCause() != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK){
                             double damage = event.getDamage();
                             event.setDamage(damage*0.6);
@@ -325,10 +325,10 @@ public class Firestone implements Listener {
                     if (a >160){
                         if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
                             double damage = event.getDamage();
-                            event.setDamage(damage*0.6);
+                            event.setDamage(damage*0.45);
                         }else if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK && event.getCause() != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK){
                             double damage = event.getDamage();
-                            event.setDamage(damage*0.5);
+                            event.setDamage(damage*0.6);
                         }
                     }
                 }else if (i >= 19){
@@ -337,7 +337,7 @@ public class Firestone implements Listener {
                     if (a >160){
                         if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
                             double damage = event.getDamage();
-                            event.setDamage(damage*0.6);
+                            event.setDamage(damage*0.45);
                         }else if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK && event.getCause() != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK){
                             double damage = event.getDamage();
                             event.setDamage(damage*0.5);

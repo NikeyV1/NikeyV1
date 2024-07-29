@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Objects;
 
+@SuppressWarnings("ALL")
 public class Stone {
     public static int getStoneLevel(Player player) {
         return NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
@@ -103,7 +104,6 @@ public class Stone {
 
 
     public static boolean isUndeadMaster(LivingEntity entity) {
-
         if (!(entity instanceof Zombie)) return false;
         if (Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_SCALE)).getValue() == 3.5F) {
             if (Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue() == 500) {
@@ -117,6 +117,7 @@ public class Stone {
 
     public static boolean isSummoned(Player summoner, LivingEntity entity) {
         if (entity.getCustomName() == null) return false;
+        if (summoner.getName().isEmpty()) return false;
         return entity.getCustomName().startsWith(summoner.getName() + "'s " + entity.getType().getName());
     }
 }

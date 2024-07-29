@@ -6,17 +6,13 @@ import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.SmokeEffect;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import io.papermc.paper.event.entity.WardenAngerChangeEvent;
-import io.papermc.paper.tag.EntityTags;
-import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -36,7 +32,6 @@ import org.bukkit.util.Vector;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static org.bukkit.Bukkit.getLogger;
 import static org.bukkit.Bukkit.getServer;
 
 @SuppressWarnings("ALL")
@@ -47,6 +42,7 @@ public class Undeadstone implements Listener {
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
 
     private HashMap<Player, Integer> timer = new HashMap<>();
+    private final Map<UUID, BukkitRunnable> invulnerableTasks = new HashMap<>();
     public static long remainingTime1;
     public static long remainingTime2;
     public static long remainingTime3;
@@ -600,13 +596,22 @@ public class Undeadstone implements Listener {
                     if (level >= 4) {
                         player.setInvulnerable(true);
 
-                        new BukkitRunnable() {
+                        // Cancel the previous task if it exists
+                        if (invulnerableTasks.containsKey(player.getUniqueId())) {
+                            invulnerableTasks.get(player.getUniqueId()).cancel();
+                        }
+
+                        // Create a new task
+                        BukkitRunnable task = new BukkitRunnable() {
                             @Override
                             public void run() {
                                 player.setInvulnerable(false);
-                                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new net.md_5.bungee.api.chat.TextComponent(org.bukkit.ChatColor.DARK_RED + "Your rush has worm off!"));
+                                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(org.bukkit.ChatColor.DARK_RED + "Your rush has worn off!"));
+                                invulnerableTasks.remove(player.getUniqueId());
                             }
-                        }.runTaskLater(NikeyV1.getPlugin(), 20*8);
+                        };
+                        task.runTaskLater(NikeyV1.getPlugin(), 20*8);
+                        invulnerableTasks.put(player.getUniqueId(), task);
                     }
 
                     if (level >= 5) {
@@ -687,31 +692,34 @@ public class Undeadstone implements Listener {
                 }
             }
         }
-        if (Stone.isUndeadMaster((LivingEntity) event.getEntity())) {
-            Zombie giant = (Zombie) event.getEntity();
-            double health = giant.getHealth();
-            if (event.getFinalDamage() >12) {
-                event.setDamage(12);
-            }
-            if (health <= 100) {
-                if (!(event.getCause() == EntityDamageEvent.DamageCause.FALL)) {
 
-                    if (!giant.getCustomName().contains("low") && giant.getHealth() <100) {
-                        Block h = giant.getWorld().getHighestBlockAt(giant.getLocation());
-                        Location loc = h.getLocation().add(0, 50, 0);
-                        int y = (int) giant.getLocation().getY();
-                        y += 50;
-                        int x = (int) giant.getLocation().getX();
-                        int z = (int) giant.getLocation().getZ();
-                        getServer().dispatchCommand(Bukkit.getConsoleSender(),"tp "+giant.getUniqueId()+" "+x+" " +y+" "+z);
-                        giant.setCustomName(giant.getCustomName() +" low");
-                        giant.setHealth(200);
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                giant.setVelocity(new Vector(0, -1, 0));
-                            }
-                        }.runTaskLater(NikeyV1.getPlugin(), 20L);  //40 Tick (2 Sekunden) später
+        if (event.getEntity() instanceof LivingEntity) {
+            if (Stone.isUndeadMaster((LivingEntity) event.getEntity())) {
+                Zombie giant = (Zombie) event.getEntity();
+                double health = giant.getHealth();
+                if (event.getFinalDamage() >12) {
+                    event.setDamage(12);
+                }
+                if (health <= 100) {
+                    if (!(event.getCause() == EntityDamageEvent.DamageCause.FALL)) {
+
+                        if (!giant.getCustomName().contains("low") && giant.getHealth() <100) {
+                            Block h = giant.getWorld().getHighestBlockAt(giant.getLocation());
+                            Location loc = h.getLocation().add(0, 50, 0);
+                            int y = (int) giant.getLocation().getY();
+                            y += 50;
+                            int x = (int) giant.getLocation().getX();
+                            int z = (int) giant.getLocation().getZ();
+                            getServer().dispatchCommand(Bukkit.getConsoleSender(),"tp "+giant.getUniqueId()+" "+x+" " +y+" "+z);
+                            giant.setCustomName(giant.getCustomName() +" low");
+                            giant.setHealth(200);
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    giant.setVelocity(new Vector(0, -1, 0));
+                                }
+                            }.runTaskLater(NikeyV1.getPlugin(), 20L);  //40 Tick (2 Sekunden) später
+                        }
                     }
                 }
             }
