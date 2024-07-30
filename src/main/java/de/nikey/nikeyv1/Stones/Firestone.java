@@ -91,6 +91,7 @@ public class Firestone implements Listener {
                         effect.particles = particles;
                         effect.particle = Particle.FLAME;
                         effect.radius = radius;
+                        effect.visibleRange = 100;
                         effect.start();
 
                         int finalRadius = radius;
@@ -378,7 +379,7 @@ public class Firestone implements Listener {
     private void openPlayerSelectionInventory(Player player) {
         Inventory playerSelectionInventory = Bukkit.createInventory(null, 27, "§cSelect Player");
 
-        List<Player> nearbyPlayers = getPlayersInRadius(player.getLocation(), 100);
+        List<Player> nearbyPlayers = getPlayersInRadius(player.getLocation(), 250);
 
         for (Player nearbyPlayer : nearbyPlayers) {
             ItemStack playerHead = getPlayerHeadItem(nearbyPlayer);

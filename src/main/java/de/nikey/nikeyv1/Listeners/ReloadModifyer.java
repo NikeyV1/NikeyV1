@@ -16,9 +16,9 @@ public class ReloadModifyer implements Listener {
         if (cmd.startsWith("/rl") ||cmd.startsWith("/reload")||cmd.startsWith("rl")){
             if (args.length == 1 && p.isOp()){
                 event.setCancelled(true);
+                p.getServer().reload();
                 for (Player players : Bukkit.getOnlinePlayers()){
                     players.kickPlayer("§cServer reload");
-                    p.getServer().reload();
                 }
             }
         }
