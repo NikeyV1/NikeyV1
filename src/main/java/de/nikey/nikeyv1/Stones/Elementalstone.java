@@ -105,7 +105,7 @@ public class Elementalstone implements Listener {
                                                                     FlameEffect effect = new FlameEffect(NikeyV1.em);
                                                                     effect.duration = 4500;
                                                                     effect.particle = Particle.WAX_ON;
-                                                                    effect.visibleRange = 60;
+                                                                    effect.visibleRange = 100;
                                                                     effect.setLocation(living.getLocation());
                                                                     effect.start();
                                                                 }

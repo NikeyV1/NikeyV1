@@ -111,7 +111,7 @@ public class Player implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         if (event.getItemDrop() != null) {
             Item itemDrop = event.getItemDrop();

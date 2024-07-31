@@ -75,7 +75,7 @@ public class Electrostone implements Listener {
         TornadoEffect effect = new TornadoEffect(NikeyV1.em);
         effect.setLocation(location);
         effect.maxTornadoRadius = 3F;
-        effect.visibleRange = 70;
+        effect.visibleRange = 100;
         effect.circleParticles = 32;
         effect.cloudParticles = 20;
         effect.tornadoParticle = Particle.ELECTRIC_SPARK;
@@ -288,6 +288,7 @@ public class Electrostone implements Listener {
             effect.duration = duration;
             effect.particle = Particle.SCRAPE;
             effect.particles = particleAmount;
+            effect.visibleRange = 100;
             effect.start();
 
             // Start the BukkitRunnable task

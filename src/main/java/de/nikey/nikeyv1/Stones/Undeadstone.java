@@ -26,6 +26,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -471,14 +472,13 @@ public class Undeadstone implements Listener {
         zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(8);
         zombie.getAttribute(Attribute.GENERIC_STEP_HEIGHT).setBaseValue(6);
         zombie.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE).setBaseValue(7);
-        zombie.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(20);
+        zombie.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(18);
         zombie.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(10);
         zombie.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(10);
         zombie.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(100);
         zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.5F);
         zombie.setMetadata("master", new FixedMetadataValue(NikeyV1.getPlugin(), true));
         zombie.setCanBreakDoors(true);
-        zombie.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,PotionEffect.INFINITE_DURATION,1,false,false,false));
         zombie.getEquipment().setItem(EquipmentSlot.HAND,new ItemStack(Material.DIAMOND_SWORD));
         int level = Stone.getStoneLevel(player);
         if (level == 20) {
@@ -498,7 +498,7 @@ public class Undeadstone implements Listener {
                     zombie.remove();
                 }
             }
-        }.runTaskLater(NikeyV1.getPlugin(), 10 * 60 * 20);
+        }.runTaskLater(NikeyV1.getPlugin(), 5 * 60 * 20);
     }
 
     @EventHandler
@@ -518,11 +518,10 @@ public class Undeadstone implements Listener {
         if (!(entity instanceof LivingEntity)) return;
         if (Stone.isUndeadMaster((LivingEntity) entity)) {
             Zombie zombie = (Zombie) entity;
-            if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-                if (event.getFinalDamage() > 10) {
-                    event.setDamage(10);
-                }
-            } else if (event.getCause() == EntityDamageEvent.DamageCause.FALL && zombie.getCustomName().contains("low")) {
+            if (event.getFinalDamage() > 10) {
+                event.setDamage(10);
+            }
+            if (event.getCause() == EntityDamageEvent.DamageCause.FALL && zombie.getCustomName().contains("low")) {
                 for (Entity nearbyEntity : zombie.getNearbyEntities(30, 50, 30)) {
                     if (nearbyEntity instanceof LivingEntity) {
                         LivingEntity player = (LivingEntity) nearbyEntity;
@@ -690,10 +689,16 @@ public class Undeadstone implements Listener {
         FileConfiguration config = NikeyV1.getPlugin().getConfig();
         if (event.getEntity() instanceof Player) {
             Player p = (Player) event.getEntity();
-            String stone = config.getString(p.getName() + ".stone");
-            if (stone.equalsIgnoreCase("Undead") && event.getDamager() instanceof Monster) {
-                Monster damager = (Monster) event.getDamager();
-                if (damager != null) {
+            String stone = Stone.getStoneName(p);
+            if (stone.equalsIgnoreCase("Undead") ) {
+                if (event.getDamager() instanceof Projectile) {
+                    Projectile projectile = (Projectile) event.getDamager();
+                    ProjectileSource shooter = projectile.getShooter();
+                    if (shooter instanceof LivingEntity) {
+                        HelpUtil.triggerEntityAggro((LivingEntity) shooter,p);
+                    }
+                }else {
+                    LivingEntity damager = (LivingEntity) event.getDamager();
                     HelpUtil.triggerEntityAggro(damager,p);
                 }
             }
@@ -715,9 +720,6 @@ public class Undeadstone implements Listener {
             if (Stone.isUndeadMaster((LivingEntity) event.getEntity())) {
                 Zombie giant = (Zombie) event.getEntity();
                 double health = giant.getHealth();
-                if (event.getFinalDamage() >12) {
-                    event.setDamage(12);
-                }
                 if (health <= 100) {
                     if (!(event.getCause() == EntityDamageEvent.DamageCause.FALL)) {
 

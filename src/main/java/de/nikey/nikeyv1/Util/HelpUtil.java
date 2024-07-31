@@ -87,7 +87,11 @@ public static boolean shouldDamageEntity(LivingEntity entity, Player p) {
         String damageEntityType = Stone.getAttacking(p);
         switch (damageEntityType.toLowerCase()) {
             case "all":
-                return true;
+                if (entity instanceof Player && !HelpUtil.getPlayersInSameTeam(p).contains(entity)) {
+                    return true;
+                }else if (!(entity instanceof Player)){
+                    return true;
+                }
             case "players":
                 return entity instanceof Player && !HelpUtil.getPlayersInSameTeam(p).contains(entity);
             case "monsters":
@@ -102,7 +106,7 @@ public static boolean shouldDamageEntity(LivingEntity entity, Player p) {
     public static void triggerEntityAggro(LivingEntity damagedEntity, Player p) {
         // Iteriere durch alle nahegelegenen Entitäten
         for (Entity nearbySummoned : damagedEntity.getWorld().getNearbyEntities(damagedEntity.getLocation(),200,200,200)) {
-            if (nearbySummoned instanceof Monster || nearbySummoned instanceof Giant || nearbySummoned instanceof Husk ) {
+            if (nearbySummoned instanceof Monster ) {
                 Monster monster = (Monster) nearbySummoned;
                 if (monster.getName().contains(p.getName()+"'s")) {
                     monster.setTarget(damagedEntity);
@@ -110,9 +114,9 @@ public static boolean shouldDamageEntity(LivingEntity entity, Player p) {
             }else if (nearbySummoned instanceof Warden) {
                 Warden entity = (Warden) nearbySummoned;
                 if (entity.getName().contains(p.getName()+"'s")) {
-                    entity.clearAnger(damagedEntity);
-                    entity.setAnger(damagedEntity,150);
                     entity.setTarget(damagedEntity);
+                    entity.clearAnger(damagedEntity);
+                    entity.setAnger(damagedEntity,80);
                 }
             }else if (nearbySummoned instanceof IronGolem) {
                 IronGolem entity = (IronGolem) nearbySummoned;

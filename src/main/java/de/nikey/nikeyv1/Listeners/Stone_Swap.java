@@ -82,7 +82,7 @@ public class Stone_Swap implements Listener {
             }else {
                 swap(p, level, stone);
             }
-        }else if (i == 6){
+        }else {
             if (!stone.equalsIgnoreCase("ghost")) {
                 ghostStone(p, level);
             }else {

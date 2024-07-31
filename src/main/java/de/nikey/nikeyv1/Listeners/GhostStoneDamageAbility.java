@@ -196,21 +196,39 @@ public class GhostStoneDamageAbility implements Listener {
                 if (stealtimer.get(user) == 0) cancel();
 
                 if (level == 15 || level == 16) {
-                    if (victim.getHealth()-0.5F >= 0.5F) {
-                        victim.setHealth(victim.getHealth()-0.5F);
-                        victim.playHurtAnimation(0);
+                    if (victim.getAbsorptionAmount() == 0) {
+                        if (victim.getHealth()-0.5F >= 0.5F) {
+                            victim.setHealth(victim.getHealth()-0.5F);
+                            victim.playHurtAnimation(0);
+                        }else {
+                            victim.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
+                        }
                     }else {
-                        victim.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
+                        if (victim.getAbsorptionAmount()-0.5F >= 0.5F) {
+                            victim.setAbsorptionAmount(victim.getAbsorptionAmount()-0.5F);
+                            victim.playHurtAnimation(0);
+                        }else {
+                            victim.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
+                        }
                     }
                     if (user.getHealth() < 20) {
                         user.setHealth(user.getHealth()+0.5F);
                     }
                 } else if (level >= 17) {
-                    if (victim.getHealth()-1 >= 1) {
-                        victim.setHealth(victim.getHealth()-1);
-                        victim.playHurtAnimation(0);
+                    if (victim.getAbsorptionAmount() == 0) {
+                        if (victim.getHealth()-1 >= 1) {
+                            victim.setHealth(victim.getHealth()-1);
+                            victim.playHurtAnimation(0);
+                        }else {
+                            victim.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
+                        }
                     }else {
-                        victim.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
+                        if (victim.getAbsorptionAmount()-1 >= 1) {
+                            victim.setAbsorptionAmount(victim.getAbsorptionAmount()-1);
+                            victim.playHurtAnimation(0);
+                        }else {
+                            victim.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
+                        }
                     }
                     if (user.getHealth() < 20) {
                         user.setHealth(user.getHealth()+1);
