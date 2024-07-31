@@ -443,26 +443,28 @@ public class Ghoststone implements Listener {
     public void onPlayerHit(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
             Player damager = (Player) event.getDamager();
-            if (playerHitted.containsKey(damager.getName())) {
-                int hits = playerHitted.get(damager.getName()) + 1;
-                int level = Stone.getStoneLevel(damager);
-                double damageMultiplier = 1;
-                if (level == 10) {
-                    damageMultiplier = 1.0 + (hits * 0.1);
-                }else if (level == 11 || level == 12 || level == 13) {
-                    damageMultiplier = 1.0 + (hits * 0.15);
-                }else if (level >= 14) {
-                    damageMultiplier = 1.0 + (hits * 0.2); 
-                }
-                double damage = event.getDamage() * damageMultiplier;
-                event.setDamage(damage);
-                damager.playSound(damager.getLocation(), Sound.ENTITY_PLAYER_BIG_FALL, 1.2F, 1.2F);
-                if (hits >= 5) {
-                    makePlayerVisible(damager);
-                    damager.sendMessage("§3You have hit other players 5 times, you are now visible!");
-                } else {
-                    playerHitted.put(damager.getName(), hits);
-                    damager.sendMessage("§7You hit another player " + hits + " times for " + damage + " hearts of damage");
+            if (Stone.getStoneName(damager).equalsIgnoreCase("ghost")) {
+                if (playerHitted.containsKey(damager.getName())) {
+                    int hits = playerHitted.get(damager.getName()) + 1;
+                    int level = Stone.getStoneLevel(damager);
+                    double damageMultiplier = 1;
+                    if (level == 10) {
+                        damageMultiplier = 1.0 + (hits * 0.1);
+                    }else if (level == 11 || level == 12 || level == 13) {
+                        damageMultiplier = 1.0 + (hits * 0.15);
+                    }else if (level >= 14) {
+                        damageMultiplier = 1.0 + (hits * 0.2);
+                    }
+                    double damage = event.getDamage() * damageMultiplier;
+                    event.setDamage(damage);
+                    damager.playSound(damager.getLocation(), Sound.ENTITY_PLAYER_BIG_FALL, 1.2F, 1.2F);
+                    if (hits >= 5) {
+                        makePlayerVisible(damager);
+                        damager.sendMessage("§3You have hit other players 5 times, you are now visible!");
+                    } else {
+                        playerHitted.put(damager.getName(), hits);
+                        damager.sendMessage("§7You hit another player " + hits + " times for " + damage + " hearts of damage");
+                    }
                 }
             }
         }

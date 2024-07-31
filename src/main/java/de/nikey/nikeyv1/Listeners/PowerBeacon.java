@@ -59,7 +59,7 @@ public class PowerBeacon implements Listener {
                             player.playEffect(EntityEffect.TOTEM_RESURRECT);
                             event.setCancelled(true);
                         } else {
-                            player.sendMessage("Der Spieler " + targetPlayer.getName() + " ist nicht gebannt.");
+                            player.sendMessage("The player " + targetPlayer.getName() + " isn't banned.");
                             event.setCancelled(true);
                         }
 

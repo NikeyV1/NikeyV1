@@ -479,6 +479,7 @@ public class Undeadstone implements Listener {
         zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.5F);
         zombie.setMetadata("master", new FixedMetadataValue(NikeyV1.getPlugin(), true));
         zombie.setCanBreakDoors(true);
+        zombie.setAdult();
         zombie.getEquipment().setItem(EquipmentSlot.HAND,new ItemStack(Material.DIAMOND_SWORD));
         int level = Stone.getStoneLevel(player);
         if (level == 20) {
@@ -519,7 +520,7 @@ public class Undeadstone implements Listener {
         if (Stone.isUndeadMaster((LivingEntity) entity)) {
             Zombie zombie = (Zombie) entity;
             if (event.getFinalDamage() > 10) {
-                event.setDamage(10);
+                //event.setDamage(10);
             }
             if (event.getCause() == EntityDamageEvent.DamageCause.FALL && zombie.getCustomName().contains("low")) {
                 for (Entity nearbyEntity : zombie.getNearbyEntities(30, 50, 30)) {
@@ -606,8 +607,8 @@ public class Undeadstone implements Listener {
             if (Stone.getStoneName(player).equalsIgnoreCase("undead")) {
                 if (player.getGameMode() == GameMode.SURVIVAL && level >= 3) {
                     player.getWorld().spawnParticle(Particle.RAID_OMEN, player.getLocation(), 30, 0.5, 0.5, 0.5, 0.1);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 20*8, 1));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*8, 1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 20*6, 1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*6, 1));
                     player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new net.md_5.bungee.api.chat.TextComponent(org.bukkit.ChatColor.DARK_RED + "You are in a rush!"));
 
                     if (level >= 4) {
@@ -627,7 +628,7 @@ public class Undeadstone implements Listener {
                                 invulnerableTasks.remove(player.getUniqueId());
                             }
                         };
-                        task.runTaskLater(NikeyV1.getPlugin(), 20*8);
+                        task.runTaskLater(NikeyV1.getPlugin(), 20*6);
                         invulnerableTasks.put(player.getUniqueId(), task);
                     }
 

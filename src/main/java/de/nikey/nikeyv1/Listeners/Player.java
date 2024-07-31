@@ -297,6 +297,7 @@ public class Player implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
+
         if (event.getCause() == EntityDamageEvent.DamageCause.FREEZE){
             event.setDamage(event.getDamage()+1.5);
         }
