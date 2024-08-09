@@ -91,10 +91,10 @@ public class Stone {
             }else if (displayName.equalsIgnoreCase(ChatColor.of("#e66b63")+"Fire Stone")) {
                 return "Fire";
             }else {
-                return "Error: No Stone";
+                return "";
             }
         }else {
-            return "Error: No Stone";
+            return "";
         }
     }
 
