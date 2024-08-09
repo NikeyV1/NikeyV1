@@ -2,6 +2,7 @@ package de.nikey.nikeyv1.api;
 
 import de.nikey.nikeyv1.NikeyV1;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
@@ -119,5 +120,16 @@ public class Stone {
         if (entity.getCustomName() == null) return false;
         if (summoner.getName().isEmpty()) return false;
         return entity.getCustomName().startsWith(summoner.getName() + "'s " + entity.getType().getName());
+    }
+
+    public static boolean isSummoned(LivingEntity entity) {
+        if (entity.getCustomName() == null) return false;
+        return entity.getCustomName().contains("'s "+ entity.getType().name());
+    }
+
+    public static Player getSummoner(LivingEntity entity) {
+        String[] arr = entity.getCustomName().split("'");
+        Player p = Bukkit.getPlayer(arr[0]);
+        return p;
     }
 }

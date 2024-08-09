@@ -519,11 +519,11 @@ public class Undeadstone implements Listener {
         if (!(entity instanceof LivingEntity)) return;
         if (Stone.isUndeadMaster((LivingEntity) entity)) {
             Zombie zombie = (Zombie) entity;
-            if (event.getFinalDamage() > 10) {
-                //event.setDamage(10);
+            if (event.getFinalDamage() > 12) {
+                event.setDamage(12);
             }
             if (event.getCause() == EntityDamageEvent.DamageCause.FALL && zombie.getCustomName().contains("low")) {
-                for (Entity nearbyEntity : zombie.getNearbyEntities(30, 50, 30)) {
+                for (Entity nearbyEntity : zombie.getNearbyEntities(30, 30, 30)) {
                     if (nearbyEntity instanceof LivingEntity) {
                         LivingEntity player = (LivingEntity) nearbyEntity;
                         Vector dir = player.getLocation().toVector().subtract(zombie.getLocation().toVector()).normalize();
@@ -532,9 +532,9 @@ public class Undeadstone implements Listener {
                     }
                 }
                 zombie.getWorld().playSound(zombie,Sound.ENTITY_WITHER_BREAK_BLOCK,1,1);
-                event.setDamage(0);
-                zombie.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,12000,0));
-                zombie.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,12000,0));
+                event.setCancelled(true);
+                zombie.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,6000,0));
+                zombie.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,6000,0));
             }
         }
     }
@@ -551,44 +551,29 @@ public class Undeadstone implements Listener {
                 LivingEntity living = (LivingEntity) entitys;
                 String[] arr = entity.getCustomName().split("'");
                 Player p = Bukkit.getPlayer(arr[0]);
+                if (p == null) return;
                 if (Stone.isSummoned(p,event.getEntity()) && HelpUtil.shouldDamageEntity(living,p) ) {
                     if (living != event.getEntity() && !HelpUtil.getPlayersInSameTeam(p).contains(living) && living != p && !Stone.isSummoned(p,living)) {
                         HelpUtil.spawnParticles(loc,3,0,-2,0,Particle.LARGE_SMOKE);
                         if (!entity.getCustomName().contains("low")) {
                             if (!entity.getCustomName().contains("strong")) {
-                                if (living instanceof Player) {
-                                    double armor = living.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                    armor = armor*0.10;
-                                    living.damage(armor+1.5F,entity);
-                                }else {
-                                    living.damage(2.5F,entity);
-                                }
+                                double armor = living.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                armor = armor*0.10;
+                                living.damage(armor+1.5F,entity);
                             }else{
-                                if (living instanceof Player) {
-                                    double armor = living.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                    armor = armor*0.15;
-                                    living.damage(armor+3.5F,entity);
-                                }else {
-                                    living.damage(4.5F,entity);
-                                }
+                                double armor = living.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                armor = armor*0.15;
+                                living.damage(armor+3.5F,entity);
                             }
                         }else {
                             if (!entity.getCustomName().contains("strong")) {
-                                if (living instanceof Player) {
-                                    double armor = living.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                    armor = armor*0.1;
-                                    living.damage(armor+2.5F,entity);
-                                }else {
-                                    living.damage(3.5F,entity);
-                                }
+                                double armor = living.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                armor = armor*0.1;
+                                living.damage(armor+2.5F,entity);
                             }else{
-                                if (living instanceof Player) {
-                                    double armor = living.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                    armor = armor*0.15;
-                                    living.damage(armor+4.5F,entity);
-                                }else {
-                                    living.damage(5.5F,entity);
-                                }
+                                double armor = living.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                armor = armor*0.15;
+                                living.damage(armor+4.5F,entity);
                             }
                         }
                     }

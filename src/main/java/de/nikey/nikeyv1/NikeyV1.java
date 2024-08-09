@@ -41,8 +41,7 @@ public final class NikeyV1 extends JavaPlugin{
             Bukkit.getServerTickManager().setTickRate(20);
         }
 
-
-
+        
         PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents(new Player(),this);
         manager.registerEvents(new Firestone(),this);
@@ -108,5 +107,4 @@ public final class NikeyV1 extends JavaPlugin{
     public static NikeyV1 getPlugin() {
         return plugin;
     }
-
 }

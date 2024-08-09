@@ -5,7 +5,6 @@ import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.WarpEffect;
 import io.papermc.paper.tag.EntityTags;
-import io.papermc.paper.util.Tick;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
@@ -96,7 +95,7 @@ public class Ghoststone implements Listener {
         if (stoneName.equalsIgnoreCase("Ghost") && stoneLevel >= 6) {
             if (entity instanceof Arrow) {
                 Arrow arrow = (Arrow) entity;
-                if (!arrow.isCritical()) {
+                if (!arrow.isCritical() && arrow.canHitEntity(shooter)) {
                     shooter.getWorld().spawnParticle(Particle.DUST_PLUME,shooter.getLocation().add(0,1,0),10,0.1,0.1,0.1);
                     event.setCancelled(true);
                 }
