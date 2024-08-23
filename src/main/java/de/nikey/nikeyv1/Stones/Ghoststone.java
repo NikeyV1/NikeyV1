@@ -211,7 +211,7 @@ public class Ghoststone implements Listener {
             config.set(p.getName()+".level",level);
             NikeyV1.getPlugin().saveConfig();
             if (level == 20 || level == 21){
-                if (p.isSneaking()) {
+                if (p.isSneaking() && Bukkit.getServer().getServerTickManager().isRunningNormally()) {
                     if (!(cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
 
@@ -221,7 +221,11 @@ public class Ghoststone implements Listener {
                         damageReductionPlayers.add(p.getUniqueId());
 
                         Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> teleportedPlayers.remove(p.getUniqueId()), 120L);
-                        Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> damageReductionPlayers.remove(p.getUniqueId()), 300L);
+                        if (level == 20) {
+                            Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> damageReductionPlayers.remove(p.getUniqueId()), 300L);
+                        }else {
+                            Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> damageReductionPlayers.remove(p.getUniqueId()), 600L);
+                        }
 
                         Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
                             Vector down = new Vector(0, -3, 0); // Boost nach unten

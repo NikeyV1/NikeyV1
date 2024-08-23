@@ -3,7 +3,7 @@ package de.nikey.nikeyv1;
 import de.nikey.nikeyv1.Anti_Exploits.Stone_Swapping;
 import de.nikey.nikeyv1.Commands.DamageEntityType;
 import de.nikey.nikeyv1.Commands.PEffectCMD;
-import de.nikey.nikeyv1.Commands.stone;
+import de.nikey.nikeyv1.Commands.GiveStone;
 import de.nikey.nikeyv1.Listeners.*;
 import de.nikey.nikeyv1.Stones.*;
 import de.nikey.nikeyv1.Util.Items;
@@ -65,7 +65,7 @@ public final class NikeyV1 extends JavaPlugin{
         manager.registerEvents(new Ghoststone(),this);
         manager.registerEvents(new GhostStoneDamageAbility(),this);
         //Command
-        getCommand("stone").setExecutor(new stone());
+        getCommand("stone").setExecutor(new GiveStone());
         getCommand("peffect").setExecutor(new PEffectCMD());
         getCommand("attack").setExecutor(new DamageEntityType());
         getCommand("attack").setTabCompleter(new DamageEntityType());

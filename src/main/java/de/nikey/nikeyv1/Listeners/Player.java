@@ -169,7 +169,7 @@ public class Player implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClose(InventoryCloseEvent event) {
         if (event.getInventory() == inv){
             Inventory inventory = event.getInventory();
