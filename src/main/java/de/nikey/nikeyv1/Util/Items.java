@@ -249,6 +249,28 @@ public class Items {
         }
     }
 
+    public static void Airstone(Player player , Integer level){
+        ItemStack airstone = new ItemStack(Material.FIREWORK_STAR);
+        ItemMeta meta =  airstone.getItemMeta();
+        FireworkEffectMeta metaFw = (FireworkEffectMeta) meta;
+        FireworkEffect aa = FireworkEffect.builder().withColor(Color.fromRGB(180, 212, 206)).build();
+        metaFw.setEffect(aa);
+        metaFw.setDisplayName(ChatColor.of("#b4d4ce")+"Air Stone");
+        metaFw.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        metaFw.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        airstone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add("§fStrong winds storm in this stone");
+        lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
+        metaFw.setLore(lore);
+        airstone.setItemMeta(metaFw);
+        if (player.getInventory().firstEmpty() != -1) {
+            player.getInventory().addItem(airstone);
+        }else {
+            player.getInventory().setItemInOffHand(airstone);
+        }
+    }
+
     public static void switcher() {
         ItemStack soul = new ItemStack(Material.SOUL_LANTERN);
         ItemMeta smeta = soul.getItemMeta();

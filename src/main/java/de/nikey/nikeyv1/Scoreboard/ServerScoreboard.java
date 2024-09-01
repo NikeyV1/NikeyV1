@@ -66,7 +66,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
                 long remainingTime3 = 0;
-                if (Arrays.asList("Electric", "Fire", "Water", "Frozen", "Undead", "Holy", "Ghost").contains(stone)) {
+                if (Arrays.asList("Electric", "Fire", "Water", "Frozen", "Undead", "Holy", "Ghost", "Air").contains(stone)) {
                     boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
                     if (!buffed) {
                         remainingTime3 = getMasterCooldown(player,stone);
@@ -87,7 +87,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
             @Override
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
-                if (Arrays.asList("Electric", "Fire", "Water", "Frozen", "Undead", "Holy", "Ghost").contains(stone)) {
+                if (Arrays.asList("Electric", "Fire", "Water", "Frozen", "Undead", "Holy", "Ghost", "Air").contains(stone)) {
                     boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
                     if (!buffed) {
                         long remainingTime2 = getAbilityCooldown(player, stone);
@@ -123,7 +123,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
             @Override
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
-                if (Arrays.asList("Electric", "Fire", "Water", "Frozen", "Undead", "Holy", "Ghost").contains(stone)) {
+                if (Arrays.asList("Electric", "Fire", "Water", "Frozen", "Undead", "Holy", "Ghost", "Air").contains(stone)) {
                     boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
                     if (!buffed) {
                         long remainingTime = getCooldown(player, stone);
@@ -165,6 +165,8 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 return Holystone.ability.getOrDefault(player.getUniqueId(), 0L);
             case "ghost":
                 return GhostStoneDamageAbility.ability.getOrDefault(player.getUniqueId(), 0L);
+            case "air":
+                return Airstone.ability.getOrDefault(player.getUniqueId(), 0L);
             default:
                 return 0L;
         }
@@ -186,6 +188,8 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 return Holystone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
             case "ghost":
                 return Ghoststone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
+            case "air":
+                return Airstone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
             default:
                 return 0L;
         }
@@ -234,6 +238,8 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 return Holystone.cooldown.getOrDefault(player.getUniqueId(), 0L);
             case "ghost":
                 return Ghoststone.cooldown.getOrDefault(player.getUniqueId(), 0L);
+            case "air":
+                return Airstone.cooldown.getOrDefault(player.getUniqueId(), 0L);
             default:
                 return 0L;
         }
@@ -271,6 +277,8 @@ public class ServerScoreboard extends ScoreboardBuilder {
                             break;
                         case "ghost":
                             color = net.md_5.bungee.api.ChatColor.of("#dddddd");
+                        case "air":
+                            color = net.md_5.bungee.api.ChatColor.valueOf(net.md_5.bungee.api.ChatColor.of("#b4d4ce")+"Air Stone");
                         default:
                             color = ChatColor.WHITE.asBungee();
                             break;
@@ -285,16 +293,5 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 }
             }
         }.runTaskTimer(NikeyV1.getPlugin(),0,120);
-    }
-
-    private ChatColor getRandomColor(ChatColor currentColor) {
-        ChatColor[] colors = {ChatColor.RED, ChatColor.GREEN, ChatColor.BLUE, ChatColor.YELLOW, ChatColor.AQUA, ChatColor.LIGHT_PURPLE};
-        Random random = new Random();
-        ChatColor newColor = colors[random.nextInt(colors.length)];
-        // Ensure the new color is different from the current color
-        while (newColor == currentColor) {
-            newColor = colors[random.nextInt(colors.length)];
-        }
-        return newColor;
     }
 }

@@ -63,6 +63,13 @@ public class GiveStone implements CommandExecutor {
                     }catch (NumberFormatException e){
                         p.sendMessage("§cTake a Number");
                     }
+                }else if (stone.equalsIgnoreCase("Air")){
+                    try {
+                        int level = Integer.parseInt(args[1]);
+                        Items.Airstone(p,level);
+                    }catch (NumberFormatException e){
+                        p.sendMessage("§cTake a Number");
+                    }
                 }else if (stone.equalsIgnoreCase("Elemental")){
                     Items.GiveElementalStone(p);
                 }

@@ -2,6 +2,7 @@ package de.nikey.nikeyv1.Listeners;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.Items;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -45,7 +46,7 @@ public class Stone_Swap implements Listener {
 
     public static void swap(Player p,Integer level,String stone) {
         Random random = new Random();
-        int i = random.nextInt(7);
+        int i = random.nextInt(8);
         if (i == 0 ){
             if (!stone.equalsIgnoreCase("fire")) {
                 fireStone(p, level);
@@ -82,9 +83,15 @@ public class Stone_Swap implements Listener {
             }else {
                 swap(p, level, stone);
             }
-        }else {
+        }else if (i == 6){
             if (!stone.equalsIgnoreCase("ghost")) {
                 ghostStone(p, level);
+            }else {
+                swap(p, level, stone);
+            }
+        }else {
+            if (!stone.equalsIgnoreCase("air")) {
+                airStone(p, level);
             }else {
                 swap(p, level, stone);
             }
@@ -132,6 +139,13 @@ public class Stone_Swap implements Listener {
         Items.Ghoststone(p,level);
         p.sendTitle("§d§kR§r§fGhost Stone§r§d§kR","");
         NikeyV1.getPlugin().getConfig().set(p.getName()+".stone", "Ghost");
+        NikeyV1.getPlugin().saveConfig();
+    }
+
+    private static void airStone(Player p, Integer level) {
+        Items.Airstone(p,level);
+        p.sendTitle("§d§kR§r"+ Color.fromRGB(180, 212, 206) +"Air Stone§r§d§kR","");
+        NikeyV1.getPlugin().getConfig().set(p.getName()+".stone", "Air");
         NikeyV1.getPlugin().saveConfig();
     }
 }

@@ -87,6 +87,8 @@ public class TimerBuild  {
                                     Items.Holystone(player,getLevel());
                                 }else if (getStone(player).equalsIgnoreCase("Ghost")){
                                     Items.Ghoststone(player,getLevel());
+                                }else if (getStone(player).equalsIgnoreCase("Air")){
+                                    Items.Airstone(player,getLevel());
                                 }
                                 cancel();
                             }
