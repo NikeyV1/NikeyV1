@@ -3,6 +3,7 @@ package de.nikey.nikeyv1.Stones;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -15,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
@@ -25,6 +27,8 @@ public class Airstone implements Listener {
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> ability = new HashMap<>();
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
+
+    public static HashMap<Player, Integer> timer = new HashMap<>();
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -39,7 +43,33 @@ public class Airstone implements Listener {
             NikeyV1.getPlugin().saveConfig();
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
                 if (level >= 10){
-                    castKillerWail(player);
+
+                }
+            }else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
+                if (!player.isSneaking() && level >= 15) {
+                    if (!(ability.getOrDefault(player.getUniqueId(),0L) > System.currentTimeMillis())){
+                        ability.put(player.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+
+                        if (level == 15) {
+                            timer.put(player,6);
+                        }else if (level == 16 || level == 17 || level == 18) {
+                            timer.put(player,8);
+                        }else {
+                            timer.put(player,10);
+                        }
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                if (timer.get(player) == 0 || !player.isValid()) {
+                                    cancel();
+                                    return;
+                                }
+
+                                castKillerWail(player);
+                                timer.replace(player,timer.get(player)-1);
+                            }
+                        }.runTaskTimer(NikeyV1.getPlugin(),0,8);
+                    }
                 }
             }
         }
@@ -50,10 +80,20 @@ public class Airstone implements Listener {
         Vector direction = player.getEyeLocation().getDirection().normalize();
         Location startLocation = player.getEyeLocation().clone().add(direction.multiply(1.5)); // Offset to avoid starting inside the player
 
-        int beamLength = 20;
+        int beamLength;
+        if (Stone.getStoneLevel(player) >= 18) {
+            beamLength = 30;
+        }else {
+            beamLength = 20;
+        }
         double beamRadius = 1.5;
         double pullStrength = 2.5;
-        double damage = 1.5;
+        double damage;
+        if (Stone.getStoneLevel(player) >= 17) {
+            damage = 2.5;
+        }else {
+            damage = 1.5;
+        }
         int particlesPerCircle = 20;
         double beamAttackRange = 3.5;
 

@@ -278,7 +278,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
                         case "ghost":
                             color = net.md_5.bungee.api.ChatColor.of("#dddddd");
                         case "air":
-                            color = net.md_5.bungee.api.ChatColor.valueOf(net.md_5.bungee.api.ChatColor.of("#b4d4ce")+"Air Stone");
+                            color = net.md_5.bungee.api.ChatColor.of("#b4d4ce");
                         default:
                             color = ChatColor.WHITE.asBungee();
                             break;

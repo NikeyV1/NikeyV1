@@ -227,11 +227,9 @@ public class GhostStoneDamageAbility implements Listener {
                         if (victim.getAbsorptionAmount()-1 >= 1) {
                             victim.setAbsorptionAmount(victim.getAbsorptionAmount()-1);
                             victim.playHurtAnimation(0);
-                        }else {
-                            victim.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                         }
                     }
-                    if (user.getHealth() < 20) {
+                    if (user.getHealth() <= 19) {
                         user.setHealth(user.getHealth()+1);
                     }
                 }
