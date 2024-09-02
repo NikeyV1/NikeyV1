@@ -95,9 +95,9 @@ public static boolean shouldDamageEntity(LivingEntity entity, Player p) {
             case "players":
                 return entity instanceof Player && !HelpUtil.getPlayersInSameTeam(p).contains(entity) && p.canSee(entity);
             case "monsters":
-                return entity instanceof Monster;
+                return entity instanceof Monster && p.canSee(entity);
             case "monsters-player":
-                return (entity instanceof Player && !HelpUtil.getPlayersInSameTeam(p).contains(entity)) || entity instanceof Monster;
+                return (entity instanceof Player && !HelpUtil.getPlayersInSameTeam(p).contains(entity)) || entity instanceof Monster && p.canSee(entity);
             default:
                 return false;
         }
