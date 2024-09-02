@@ -19,7 +19,7 @@ public class HelpUtil {
         // Hinzufügen aller Materialien, durch die ein Spieler durchlaufen kann
         durchlauffaehigeMaterialien.add(Material.AIR);
         durchlauffaehigeMaterialien.add(Material.WATER);
-        durchlauffaehigeMaterialien.add(Material.WATER);
+        durchlauffaehigeMaterialien.add(Material.LAVA);
         durchlauffaehigeMaterialien.add(Material.TALL_GRASS);
         durchlauffaehigeMaterialien.add(Material.SHORT_GRASS);
         durchlauffaehigeMaterialien.add(Material.DANDELION);
