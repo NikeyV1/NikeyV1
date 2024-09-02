@@ -262,7 +262,7 @@ public class InfernoBlade implements Listener {
 
     // Spieler einfrieren
     private void freezePlayer(LivingEntity entity) {
-        frozenPlayers.put(entity, System.currentTimeMillis() + 2500);
+        frozenPlayers.put(entity, System.currentTimeMillis() + 5000);
     }
 
     // Spieler entfrieren
