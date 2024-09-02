@@ -3,18 +3,23 @@ package de.nikey.nikeyv1.Stones;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import de.slikey.effectlib.effect.DonutEffect;
+import de.slikey.effectlib.effect.SmokeEffect;
+import org.bukkit.*;
+import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -29,6 +34,7 @@ public class Airstone implements Listener {
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
 
     public static HashMap<Player, Integer> timer = new HashMap<>();
+    public static HashMap<Player, Integer> flyingtimer = new HashMap<>();
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -43,7 +49,57 @@ public class Airstone implements Listener {
             NikeyV1.getPlugin().saveConfig();
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
                 if (level >= 10){
+                    if (!(cooldown.getOrDefault(player.getUniqueId(),0L) > System.currentTimeMillis())){
+                        cooldown.put(player.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
 
+                        DonutEffect effect = new DonutEffect(NikeyV1.em);
+                        effect.setEntity(player);
+                        effect.particle = Particle.SWEEP_ATTACK;
+                        effect.duration = 200;
+                        effect.start();
+
+                        if (level == 10){
+                            Vector direction = player.getLocation().getDirection();
+
+                            direction.multiply(2);
+                            direction.setY(direction.getY() + 1);
+
+                            player.setGliding(true);
+                            player.setVelocity(direction);
+
+                            int maxsec;
+                            maxsec = 15;
+
+                            // Aktualisiere den Timer jede Sekunde
+                            flyingtimer.put(player, 15);
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    if (flyingtimer.containsKey(player)) {
+                                        int timeLeft = flyingtimer.get(player);
+
+                                        if (timeLeft > 0) {
+                                            // Zeige die verbleibende Zeit über der Hotbar an
+                                            player.sendActionBar(ChatColor.YELLOW +""+ flyingtimer.get(player) +"/"+maxsec);
+
+                                            flyingtimer.put(player, timeLeft - 1);
+                                        } else {
+                                            player.setGliding(false);
+                                            player.setVelocity(new Vector(0, -1, 0));
+
+                                            triggerLanding(player,0);
+
+                                            flyingtimer.remove(player);
+
+                                            cancel();
+                                        }
+                                    } else {
+                                        cancel();
+                                    }
+                                }
+                            }.runTaskTimer(NikeyV1.getPlugin(), 0L, 20L);
+                        }
+                    }
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
                 if (!player.isSneaking() && level >= 15) {
@@ -74,6 +130,70 @@ public class Airstone implements Listener {
             }
         }
     }
+    @EventHandler
+    public void onEntityToggleGlide(EntityToggleGlideEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+
+            // Überprüfen, ob der Spieler versucht, das Gleiten zu deaktivieren, während der Timer läuft
+            if (flyingtimer.containsKey(player) && !event.isGliding()) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    private void triggerLanding(Player player, double dmg) {
+        // Erzeuge eine Explosion ohne Schaden am Spieler, aber mit Partikeln und Schaden an anderen Entitäten
+        Location location = player.getLocation();
+
+        // Erzeuge Partikel für die Explosion
+        player.getWorld().spawnParticle(Particle.EXPLOSION, location, 1);
+        player.getWorld().playSound(player.getLocation(),Sound.ENTITY_GENERIC_EXPLODE,1,1);
+
+
+        double radius = 5.0;
+        for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
+            if (entity instanceof LivingEntity) {
+                if (entity instanceof Player && entity.equals(player)) {
+                    continue;
+                }else if (!HelpUtil.shouldDamageEntity((LivingEntity) entity,player)) {
+                    continue;
+                }
+
+                ((LivingEntity)entity).damage(10+dmg, player);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerLand(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+
+        // Überprüfen, ob der Spieler mit der Fähigkeit geglitten ist und nun den Boden berührt
+        if (flyingtimer.containsKey(player) && !player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().isAir() && flyingtimer.get(player) < 14) {
+            Bukkit.broadcastMessage(event.getEventName()+ " triggered");
+            triggerLanding(player,0);
+            Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
+                flyingtimer.remove(player);
+            }, 10);
+        }
+    }
+
+
+    @EventHandler
+    public void onPlayerDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+
+            // Verhindere Fallschaden, wenn der Spieler mit der Fähigkeit gelandet ist
+            if ((event.getCause() == EntityDamageEvent.DamageCause.FALL ||event.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL) && flyingtimer.containsKey(player)) {
+                event.setCancelled(true);
+                triggerLanding((Player) event.getEntity(),event.getDamage());
+                flyingtimer.remove(player);
+            }
+        }
+    }
+
 
     private void castKillerWail(Player player) {
         // Get the direction the player is looking at
@@ -128,6 +248,7 @@ public class Airstone implements Listener {
                         // Apply damage and pull effect
                         ((LivingEntity) entity).damage(damage,player);
                         ((LivingEntity) entity).setNoDamageTicks(10);
+                        Bukkit.broadcastMessage(entity.getName());
 
                         Vector pullDirection = player.getLocation().toVector().subtract(entity.getLocation().toVector()).normalize();
                         entity.setVelocity(pullDirection.multiply(pullStrength));
