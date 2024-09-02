@@ -193,6 +193,7 @@ public class Electrostone implements Listener {
                                 @Override
                                 public void run() {
                                     stunned.clear();
+                                    ((Player)entity).setAllowFlight(false);
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(), 20 * (duration / 1000));
 
@@ -330,6 +331,7 @@ public class Electrostone implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         Player entity = event.getPlayer();
         if (stunned.contains(entity)){
+            entity.setAllowFlight(true);
             event.setCancelled(true);
         }
     }
