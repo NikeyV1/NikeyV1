@@ -87,13 +87,13 @@ public static boolean shouldDamageEntity(LivingEntity entity, Player p) {
         String damageEntityType = Stone.getAttacking(p);
         switch (damageEntityType.toLowerCase()) {
             case "all":
-                if (entity instanceof Player && !HelpUtil.getPlayersInSameTeam(p).contains(entity)) {
+                if (entity instanceof Player && !HelpUtil.getPlayersInSameTeam(p).contains(entity) && p.canSee(entity)) {
                     return true;
                 }else if (!(entity instanceof Player)){
                     return true;
                 }
             case "players":
-                return entity instanceof Player && !HelpUtil.getPlayersInSameTeam(p).contains(entity);
+                return entity instanceof Player && !HelpUtil.getPlayersInSameTeam(p).contains(entity) && p.canSee(entity);
             case "monsters":
                 return entity instanceof Monster;
             case "monsters-player":
