@@ -4,6 +4,7 @@ import de.nikey.nikeyv1.api.Stone;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
@@ -171,7 +172,6 @@ public static boolean shouldDamageEntity(LivingEntity entity, Player p) {
         return playersInSameTeam;
     }
 
-
     public static void spawnParticles(Location center, int radius, int offsetX, int offsetY, int offsetZ, Particle particle) {
         World world = center.getWorld();
 
@@ -186,7 +186,4 @@ public static boolean shouldDamageEntity(LivingEntity entity, Player p) {
             }
         }
     }
-
 }
-
-

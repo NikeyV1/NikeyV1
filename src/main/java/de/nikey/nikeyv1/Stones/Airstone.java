@@ -202,9 +202,9 @@ public class Airstone implements Listener {
                 event.setCancelled(true);
                 int stoneLevel = Stone.getStoneLevel(player);
                 if (stoneLevel >= 14) {
-                    triggerLanding((Player) event.getEntity(),event.getDamage()*0.4);
+                    triggerLanding((Player) event.getEntity(),event.getDamage()*0.5);
                 }else {
-                    triggerLanding((Player) event.getEntity(),event.getDamage()*0.3);
+                    triggerLanding((Player) event.getEntity(),event.getDamage()*0.4);
                 }
                 flyingtimer.remove(player);
             }
@@ -227,9 +227,9 @@ public class Airstone implements Listener {
         double pullStrength = 2.5;
         double damage;
         if (Stone.getStoneLevel(player) >= 17) {
-            damage = 4;
+            damage = 5;
         }else {
-            damage = 2.5;
+            damage = 3.5;
         }
         int particlesPerCircle = 20;
         double beamAttackRange = 3.5;

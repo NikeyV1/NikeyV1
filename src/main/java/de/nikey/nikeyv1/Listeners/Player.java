@@ -89,6 +89,10 @@ public class Player implements Listener {
                 };
                 runnable.runTaskLater(NikeyV1.getPlugin(),20);
             }
+
+            for (org.bukkit.entity.Player player : Bukkit.getOnlinePlayers()) {
+                player.showPlayer(NikeyV1.getPlugin(),p);
+            }
         }
     }
 
