@@ -58,47 +58,50 @@ public class Airstone implements Listener {
                         effect.duration = 200;
                         effect.start();
 
-                        if (level == 10){
-                            Vector direction = player.getLocation().getDirection();
+                        Vector direction = player.getLocation().getDirection();
 
-                            direction.multiply(2);
-                            direction.setY(direction.getY() + 1);
+                        direction.multiply(2);
+                        direction.setY(direction.getY() + 1);
 
-                            player.setGliding(true);
-                            player.setVelocity(direction);
+                        player.setGliding(true);
+                        player.setVelocity(direction);
 
-                            int maxsec;
+                        int maxsec;
+                        int stoneLevel = Stone.getStoneLevel(player);
+                        if (stoneLevel >= 13) {
+                            maxsec = 20;
+
+                            flyingtimer.put(player, 20);
+                        }else {
                             maxsec = 15;
 
-                            // Aktualisiere den Timer jede Sekunde
                             flyingtimer.put(player, 15);
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    if (flyingtimer.containsKey(player)) {
-                                        int timeLeft = flyingtimer.get(player);
+                        }
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                if (flyingtimer.containsKey(player)) {
+                                    int timeLeft = flyingtimer.get(player);
 
-                                        if (timeLeft > 0) {
-                                            // Zeige die verbleibende Zeit über der Hotbar an
-                                            player.sendActionBar(ChatColor.YELLOW +""+ flyingtimer.get(player) +"/"+maxsec);
+                                    if (timeLeft > 0) {
+                                        // Zeige die verbleibende Zeit über der Hotbar an
+                                        player.sendActionBar(ChatColor.YELLOW +""+ flyingtimer.get(player) +"/"+maxsec);
 
-                                            flyingtimer.put(player, timeLeft - 1);
-                                        } else {
-                                            player.setGliding(false);
-                                            player.setVelocity(new Vector(0, -1, 0));
-
-                                            triggerLanding(player,0);
-
-                                            flyingtimer.remove(player);
-
-                                            cancel();
-                                        }
+                                        flyingtimer.put(player, timeLeft - 1);
                                     } else {
+                                        player.setGliding(false);
+
+                                        triggerLanding(player,0);
+
+                                        flyingtimer.remove(player);
+
                                         cancel();
                                     }
+                                } else {
+                                    cancel();
                                 }
-                            }.runTaskTimer(NikeyV1.getPlugin(), 0L, 20L);
-                        }
+                            }
+                        }.runTaskTimer(NikeyV1.getPlugin(), 0L, 20L);
                     }
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
@@ -107,11 +110,11 @@ public class Airstone implements Listener {
                         ability.put(player.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
 
                         if (level == 15) {
-                            timer.put(player,6);
-                        }else if (level == 16 || level == 17 || level == 18) {
                             timer.put(player,8);
-                        }else {
+                        }else if (level == 16 || level == 17 || level == 18) {
                             timer.put(player,10);
+                        }else {
+                            timer.put(player,12);
                         }
                         new BukkitRunnable() {
                             @Override
@@ -151,7 +154,11 @@ public class Airstone implements Listener {
         player.getWorld().playSound(player.getLocation(),Sound.ENTITY_GENERIC_EXPLODE,1,1);
 
 
-        double radius = 5.0;
+        double radius = 3.0;
+        int stoneLevel = Stone.getStoneLevel(player);
+        if (stoneLevel >= 11) {
+            radius = 4.0;
+        }
         for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
             if (entity instanceof LivingEntity) {
                 if (entity instanceof Player && entity.equals(player)) {
@@ -160,9 +167,15 @@ public class Airstone implements Listener {
                     continue;
                 }
 
-                ((LivingEntity)entity).damage(10+dmg, player);
+                if (stoneLevel >= 12) {
+                    ((LivingEntity)entity).damage(10+dmg, player);
+                }else {
+                    ((LivingEntity)entity).damage(5+dmg, player);
+                }
             }
         }
+
+        HelpUtil.spawnParticles(player.getLocation(), (int) radius,0,0,0,Particle.TRIAL_SPAWNER_DETECTION);
     }
 
     @EventHandler
@@ -171,7 +184,6 @@ public class Airstone implements Listener {
 
         // Überprüfen, ob der Spieler mit der Fähigkeit geglitten ist und nun den Boden berührt
         if (flyingtimer.containsKey(player) && !player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().isAir() && flyingtimer.get(player) < 14) {
-            Bukkit.broadcastMessage(event.getEventName()+ " triggered");
             triggerLanding(player,0);
             Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
                 flyingtimer.remove(player);
@@ -188,7 +200,12 @@ public class Airstone implements Listener {
             // Verhindere Fallschaden, wenn der Spieler mit der Fähigkeit gelandet ist
             if ((event.getCause() == EntityDamageEvent.DamageCause.FALL ||event.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL) && flyingtimer.containsKey(player)) {
                 event.setCancelled(true);
-                triggerLanding((Player) event.getEntity(),event.getDamage());
+                int stoneLevel = Stone.getStoneLevel(player);
+                if (stoneLevel >= 14) {
+                    triggerLanding((Player) event.getEntity(),event.getDamage()*0.4);
+                }else {
+                    triggerLanding((Player) event.getEntity(),event.getDamage()*0.3);
+                }
                 flyingtimer.remove(player);
             }
         }
@@ -210,9 +227,9 @@ public class Airstone implements Listener {
         double pullStrength = 2.5;
         double damage;
         if (Stone.getStoneLevel(player) >= 17) {
-            damage = 2.5;
+            damage = 4;
         }else {
-            damage = 1.5;
+            damage = 2.5;
         }
         int particlesPerCircle = 20;
         double beamAttackRange = 3.5;
@@ -246,9 +263,9 @@ public class Airstone implements Listener {
                 if (entity instanceof LivingEntity) {
                     if (entity.getLocation().distance(beamLocation) <= beamAttackRange && entity != player && HelpUtil.shouldDamageEntity((LivingEntity) entity,player)) {
                         // Apply damage and pull effect
-                        ((LivingEntity) entity).damage(damage,player);
-                        ((LivingEntity) entity).setNoDamageTicks(10);
-                        Bukkit.broadcastMessage(entity.getName());
+                        LivingEntity living = (LivingEntity) entity;
+                        living.damage(damage,player);
+                        living.setNoDamageTicks(0);
 
                         Vector pullDirection = player.getLocation().toVector().subtract(entity.getLocation().toVector()).normalize();
                         entity.setVelocity(pullDirection.multiply(pullStrength));

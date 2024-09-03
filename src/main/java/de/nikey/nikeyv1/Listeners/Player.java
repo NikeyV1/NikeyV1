@@ -24,6 +24,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
+import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -680,4 +681,16 @@ public class Player implements Listener {
         org.bukkit.entity.Player entity = event.getPlayer();
         if (entity.isInWaterOrRain())entity.setVisualFire(false);
     }
+
+    @EventHandler
+    public void onPluginEnable(PluginEnableEvent event) {
+        if (event.getPlugin() == NikeyV1.getPlugin()) {
+            for (org.bukkit.entity.Player player : Bukkit.getOnlinePlayers()) {
+                if (player != null) {
+                    new ServerScoreboard(player);
+                }
+            }
+        }
+    }
+
 }
