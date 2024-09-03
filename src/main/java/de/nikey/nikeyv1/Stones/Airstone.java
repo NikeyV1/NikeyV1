@@ -124,7 +124,7 @@ public class Airstone implements Listener {
                                 castKillerWail(player);
                                 timer.replace(player,timer.get(player)-1);
                             }
-                        }.runTaskTimer(NikeyV1.getPlugin(),0,8);
+                        }.runTaskTimer(NikeyV1.getPlugin(),0,5);
                     }
                 }
             }
