@@ -186,4 +186,23 @@ public static boolean shouldDamageEntity(LivingEntity entity, Player p) {
             }
         }
     }
+
+    /**
+     * Überprüft, ob ein Spieler nach unten schaut.
+     *
+     * @param player Der Spieler, dessen Blickrichtung überprüft wird
+     * @return true, wenn der Spieler nach unten schaut, false sonst
+     */
+    public static boolean isLookingDown(Player player) {
+        float pitch = player.getLocation().getPitch();
+
+        return pitch >= 60.0f;
+    }
+
+    public static Location getLocationInFrontOfPlayer(Player player, int blocksAhead) {
+        Location playerLocation = player.getLocation();
+        Vector direction = playerLocation.getDirection().normalize(); // Blickrichtung normalisieren
+        Location locationInFront = playerLocation.add(direction.multiply(blocksAhead));
+        return locationInFront;
+    }
 }

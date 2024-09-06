@@ -23,11 +23,13 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class Airstone implements Listener {
@@ -37,6 +39,8 @@ public class Airstone implements Listener {
 
     public static HashMap<Player, Integer> timer = new HashMap<>();
     public static HashMap<Player, Integer> flyingtimer = new HashMap<>();
+    public static HashMap<Player, Integer> used = new HashMap<>();
+    public static HashMap<Player, Boolean> playerBoostCooldown = new HashMap<>();
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -73,43 +77,53 @@ public class Airstone implements Listener {
 
             int level = Stone.getStoneLevel(player);
             if (Stone.getStoneName(player).equalsIgnoreCase("air") && level >= 7) {
-                if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
-                    double originalDamage = event.getDamage();
+                if (event.getCause() == EntityDamageEvent.DamageCause.FALL && !flyingtimer.containsKey(player)) {
+                    if (!player.isGliding() ) {
+                        if (player.getInventory().getChestplate() == null) {
+                            event.setCancelled(true);
 
-                    // Reduce fall damage by 50%
-                    double reducedDamage = originalDamage * 0.5;
-                    event.setDamage(reducedDamage);
+                            double shockwaveDamage = 0.3;
+                            if (level == 8) {
+                                shockwaveDamage = 0.4;
+                            }else if (level >= 9) {
+                                shockwaveDamage = 0.5;
+                            }
 
-                    // Calculate shockwave damage (30% of the reduced fall damage)
-                    double shockwaveDamage = 0.1;
-                    if (level == 8) {
-                        shockwaveDamage = originalDamage * 0.2;
-                    }else if (level >= 9) {
-                        shockwaveDamage = originalDamage * 0.3;
+                            performMeteorStrike(player, player.getFallDistance(),shockwaveDamage);
+                        }else if (!player.getInventory().getChestplate().getType().equals(Material.ELYTRA)){
+                            event.setCancelled(true);
+
+                            double shockwaveDamage = 0.3;
+                            if (level == 8) {
+                                shockwaveDamage = 0.4;
+                            }else if (level >= 9) {
+                                shockwaveDamage = 0.5;
+                            }
+
+                            performMeteorStrike(player, player.getFallDistance(),shockwaveDamage);
+                        }
                     }
-
-                    createShockwave(player.getLocation(), shockwaveDamage, player);
                 }
             }
         }
     }
 
-    private void createShockwave(Location location, double damage, Player player) {
-        World world = location.getWorld();
+    private void performMeteorStrike(Player player, double fallHeight, double dmgmultiplier) {
+        double radius =fallHeight * 0.1;
+        double damage = fallHeight * dmgmultiplier;
 
-        // Create a visual effect for the shockwave
-        if (world != null) {
-            world.spawnParticle(Particle.EXPLOSION_EMITTER, location, 1);
-            world.playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f);
+        player.getWorld().playSound(player.getLocation(), Sound.ITEM_MACE_SMASH_AIR, 0.3f, 1.0f);
+        player.getWorld().spawnParticle(Particle.GUST_EMITTER_SMALL, player.getLocation(), 4);
 
-            // Damage nearby entities (excluding the player)
-            double radius = 3.0; // Shockwave radius
-            for (Entity entity : world.getNearbyEntities(location, radius, radius, radius)) {
-                if (entity instanceof LivingEntity) {
-                    if (entity != player && HelpUtil.shouldDamageEntity((LivingEntity) entity,player)) {
-                        ((LivingEntity) entity).damage(damage);
-                    }
-                }
+        for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
+            if (entity instanceof LivingEntity) {
+                LivingEntity target = (LivingEntity) entity;
+
+                target.damage(damage, player);
+
+                Vector knockback = target.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().multiply(1.5);
+                knockback.setY(0.5);
+                target.setVelocity(knockback);
             }
         }
     }
@@ -168,7 +182,10 @@ public class Airstone implements Listener {
 
                                         flyingtimer.put(player, timeLeft - 1);
                                     } else {
-                                        player.setGliding(false);
+                                        PlayerInventory inventory = player.getInventory();
+                                        if (inventory.getChestplate() == null && !(inventory.getChestplate().getType() == Material.ELYTRA)) {
+                                            player.setGliding(false);
+                                        }
 
                                         triggerLanding(player,0);
 
@@ -183,10 +200,46 @@ public class Airstone implements Listener {
                         }.runTaskTimer(NikeyV1.getPlugin(), 0L, 20L);
                     }
                 }
+                
             }else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
                 if (!player.isSneaking() && level >= 15) {
                     if (!(ability.getOrDefault(player.getUniqueId(),0L) > System.currentTimeMillis())){
+
+                        if (HelpUtil.isLookingDown(player) && level >= 17 && event.getAction() == Action.LEFT_CLICK_BLOCK) {
+                            int max;
+                            if (level >= 19) {
+                                max = 7;
+                            }else {
+                                max = 5;
+                            }
+                            if (!playerBoostCooldown.containsKey(player)) {
+                                if (used.get(player) == null) {
+                                    used.put(player,1);
+                                    Location clickedBlockLocation = event.getClickedBlock().getLocation();
+                                    triggerBoostWithDelay(player,clickedBlockLocation);
+
+                                }else if (used.get(player) < max){
+                                    used.put(player,used.get(player)+1);
+                                    Location clickedBlockLocation = event.getClickedBlock().getLocation();
+                                    triggerBoostWithDelay(player,clickedBlockLocation);
+                                }else {
+                                    used.remove(player);
+                                    Location clickedBlockLocation = event.getClickedBlock().getLocation();
+                                    triggerBoostWithDelay(player,clickedBlockLocation);
+
+                                    ability.put(player.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                                }
+                                if (used.get(player) == null) {
+                                    return;
+                                }
+                                player.sendActionBar(ChatColor.YELLOW +""+ used.get(player)+"/"+max);
+                            }
+                            return;
+                        }
+
+
                         ability.put(player.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                        used.remove(player);
 
                         if (level == 15) {
                             timer.put(player,8);
@@ -212,6 +265,24 @@ public class Airstone implements Listener {
             }
         }
     }
+
+    private void triggerBoostWithDelay(Player player, Location location) {
+        playerBoostCooldown.put(player, true);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Vector normalize = player.getLocation().toVector().subtract(location.toVector()).normalize();
+                Vector multiplied = normalize.multiply(1.3);
+
+                player.getWorld().spawnParticle(Particle.GUST, player.getLocation(), 0);
+                player.playSound(location,Sound.ENTITY_WIND_CHARGE_WIND_BURST,1,1);
+                player.setVelocity(multiplied);
+                playerBoostCooldown.remove(player);
+            }
+        }.runTaskLater(NikeyV1.getPlugin(), 5);
+    }
+
+
     @EventHandler
     public void onEntityToggleGlide(EntityToggleGlideEvent event) {
         if (event.getEntity() instanceof Player) {
