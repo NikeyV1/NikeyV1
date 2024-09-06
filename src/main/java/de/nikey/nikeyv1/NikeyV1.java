@@ -1,6 +1,6 @@
 package de.nikey.nikeyv1;
 
-import de.nikey.nikeyv1.Anti_Exploits.Stone_Swapping;
+import de.nikey.nikeyv1.Anti_Exploits.StoneSwapping;
 import de.nikey.nikeyv1.Commands.DamageEntityType;
 import de.nikey.nikeyv1.Commands.PEffectCMD;
 import de.nikey.nikeyv1.Commands.GiveStone;
@@ -54,7 +54,7 @@ public final class NikeyV1 extends JavaPlugin{
         manager.registerEvents(new ReloadModifyer(),this);
         manager.registerEvents(new JoinListener(),this);
         manager.registerEvents(new InventoryListener(),this);
-        manager.registerEvents(new Stone_Swapping(),this);
+        manager.registerEvents(new StoneSwapping(),this);
         manager.registerEvents(new Stone_Swap(),this);
         manager.registerEvents(new Tornado(),this);
         manager.registerEvents(new InfernoBlade(),this);

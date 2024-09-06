@@ -146,7 +146,7 @@ public class Electrostone implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player){
             Player p = (Player) event.getDamager();

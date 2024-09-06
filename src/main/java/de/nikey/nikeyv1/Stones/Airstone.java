@@ -6,6 +6,7 @@ import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.DonutEffect;
 import de.slikey.effectlib.effect.SmokeEffect;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
@@ -18,6 +19,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -35,6 +37,83 @@ public class Airstone implements Listener {
 
     public static HashMap<Player, Integer> timer = new HashMap<>();
     public static HashMap<Player, Integer> flyingtimer = new HashMap<>();
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        int level = Stone.getStoneLevel(player);
+        String stone = Stone.getStoneName(player);
+        if (stone.equalsIgnoreCase("air")) {
+            if (level >= 3) {
+                if (level == 3) {
+                    player.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE).setBaseValue(4);
+                } else if (level == 4) {
+                    player.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE).setBaseValue(5);
+                }else {
+                    player.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE).setBaseValue(6);
+                }
+            }else {
+                player.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE).setBaseValue(3);
+            }
+        }else {
+            player.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE).setBaseValue(3);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            if (Stone.getStoneName(player).equalsIgnoreCase("air") && Stone.getStoneLevel(player) >= 6) {
+                if (event.getDamage() > 55) {
+                    event.setDamage(55);
+                    player.playEffect(player.getLocation(),Effect.SPONGE_DRY,0);
+                }
+            }
+
+            int level = Stone.getStoneLevel(player);
+            if (Stone.getStoneName(player).equalsIgnoreCase("air") && level >= 7) {
+                if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                    double originalDamage = event.getDamage();
+
+                    // Reduce fall damage by 50%
+                    double reducedDamage = originalDamage * 0.5;
+                    event.setDamage(reducedDamage);
+
+                    // Calculate shockwave damage (30% of the reduced fall damage)
+                    double shockwaveDamage = 0.1;
+                    if (level == 8) {
+                        shockwaveDamage = originalDamage * 0.2;
+                    }else if (level >= 9) {
+                        shockwaveDamage = originalDamage * 0.3;
+                    }
+
+                    createShockwave(player.getLocation(), shockwaveDamage, player);
+                }
+            }
+        }
+    }
+
+    private void createShockwave(Location location, double damage, Player player) {
+        World world = location.getWorld();
+
+        // Create a visual effect for the shockwave
+        if (world != null) {
+            world.spawnParticle(Particle.EXPLOSION_EMITTER, location, 1);
+            world.playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f);
+
+            // Damage nearby entities (excluding the player)
+            double radius = 3.0; // Shockwave radius
+            for (Entity entity : world.getNearbyEntities(location, radius, radius, radius)) {
+                if (entity instanceof LivingEntity) {
+                    if (entity != player && HelpUtil.shouldDamageEntity((LivingEntity) entity,player)) {
+                        ((LivingEntity) entity).damage(damage);
+                    }
+                }
+            }
+        }
+    }
+
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
