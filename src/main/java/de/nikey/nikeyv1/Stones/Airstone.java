@@ -4,13 +4,11 @@ import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.DonutEffect;
-import de.slikey.effectlib.effect.SmokeEffect;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,7 +19,6 @@ import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -38,8 +35,8 @@ public class Airstone implements Listener {
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
 
     public static HashMap<Player, Integer> timer = new HashMap<>();
-    public static HashMap<Player, Integer> flyingtimer = new HashMap<>();
-    public static HashMap<Player, Integer> used = new HashMap<>();
+    public static HashMap<String , Integer> flyingtimer = new HashMap<>();
+    public static HashMap<String , Integer> used = new HashMap<>();
     public static HashMap<Player, Boolean> playerBoostCooldown = new HashMap<>();
 
     @EventHandler
@@ -77,7 +74,7 @@ public class Airstone implements Listener {
 
             int level = Stone.getStoneLevel(player);
             if (Stone.getStoneName(player).equalsIgnoreCase("air") && level >= 7) {
-                if (event.getCause() == EntityDamageEvent.DamageCause.FALL && !flyingtimer.containsKey(player)) {
+                if (event.getCause() == EntityDamageEvent.DamageCause.FALL && !flyingtimer.containsKey(player.getName())) {
                     if (!player.isGliding() ) {
                         if (player.getInventory().getChestplate() == null) {
                             event.setCancelled(true);
@@ -89,7 +86,7 @@ public class Airstone implements Listener {
                                 shockwaveDamage = 0.5;
                             }
 
-                            performMeteorStrike(player, player.getFallDistance(),shockwaveDamage);
+                            performShockwave(player, player.getFallDistance(),shockwaveDamage);
                         }else if (!player.getInventory().getChestplate().getType().equals(Material.ELYTRA)){
                             event.setCancelled(true);
 
@@ -100,7 +97,7 @@ public class Airstone implements Listener {
                                 shockwaveDamage = 0.5;
                             }
 
-                            performMeteorStrike(player, player.getFallDistance(),shockwaveDamage);
+                            performShockwave(player, player.getFallDistance(),shockwaveDamage);
                         }
                     }
                 }
@@ -108,7 +105,7 @@ public class Airstone implements Listener {
         }
     }
 
-    private void performMeteorStrike(Player player, double fallHeight, double dmgmultiplier) {
+    private void performShockwave(Player player, double fallHeight, double dmgmultiplier) {
         double radius =fallHeight * 0.1;
         double damage = fallHeight * dmgmultiplier;
 
@@ -164,23 +161,22 @@ public class Airstone implements Listener {
                         if (stoneLevel >= 13) {
                             maxsec = 20;
 
-                            flyingtimer.put(player, 20);
+                            flyingtimer.put(player.getName(), 20);
                         }else {
                             maxsec = 15;
 
-                            flyingtimer.put(player, 15);
+                            flyingtimer.put(player.getName(), 15);
                         }
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                if (flyingtimer.containsKey(player)) {
-                                    int timeLeft = flyingtimer.get(player);
+                                if (flyingtimer.containsKey(player.getName())) {
+                                    int timeLeft = flyingtimer.get(player.getName());
 
                                     if (timeLeft > 0) {
-                                        // Zeige die verbleibende Zeit über der Hotbar an
-                                        player.sendActionBar(ChatColor.YELLOW +""+ flyingtimer.get(player) +"/"+maxsec);
+                                        player.sendActionBar(ChatColor.YELLOW +""+ flyingtimer.get(player.getName()) +"/"+maxsec);
 
-                                        flyingtimer.put(player, timeLeft - 1);
+                                        flyingtimer.put(player.getName(), timeLeft - 1);
                                     } else {
                                         PlayerInventory inventory = player.getInventory();
                                         if (inventory.getChestplate() == null && !(inventory.getChestplate().getType() == Material.ELYTRA)) {
@@ -189,7 +185,7 @@ public class Airstone implements Listener {
 
                                         triggerLanding(player,0);
 
-                                        flyingtimer.remove(player);
+                                        flyingtimer.remove(player.getName());
 
                                         cancel();
                                     }
@@ -213,33 +209,33 @@ public class Airstone implements Listener {
                                 max = 5;
                             }
                             if (!playerBoostCooldown.containsKey(player)) {
-                                if (used.get(player) == null) {
-                                    used.put(player,1);
+                                if (used.get(player.getName()) == null) {
+                                    used.put(player.getName(),1);
                                     Location clickedBlockLocation = event.getClickedBlock().getLocation();
                                     triggerBoostWithDelay(player,clickedBlockLocation);
 
-                                }else if (used.get(player) < max){
-                                    used.put(player,used.get(player)+1);
+                                }else if (used.get(player.getName()) < max){
+                                    used.put(player.getName(),used.get(player.getName())+1);
                                     Location clickedBlockLocation = event.getClickedBlock().getLocation();
                                     triggerBoostWithDelay(player,clickedBlockLocation);
                                 }else {
-                                    used.remove(player);
+                                    used.remove(player.getName());
                                     Location clickedBlockLocation = event.getClickedBlock().getLocation();
                                     triggerBoostWithDelay(player,clickedBlockLocation);
 
                                     ability.put(player.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
                                 }
-                                if (used.get(player) == null) {
+                                if (used.get(player.getName()) == null) {
                                     return;
                                 }
-                                player.sendActionBar(ChatColor.YELLOW +""+ used.get(player)+"/"+max);
+                                player.sendActionBar(ChatColor.YELLOW +""+ used.get(player.getName())+"/"+max);
                             }
                             return;
                         }
 
 
                         ability.put(player.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                        used.remove(player);
+                        used.remove(player.getName());
 
                         if (level == 15) {
                             timer.put(player,8);
@@ -289,7 +285,7 @@ public class Airstone implements Listener {
             Player player = (Player) event.getEntity();
 
             // Überprüfen, ob der Spieler versucht, das Gleiten zu deaktivieren, während der Timer läuft
-            if (flyingtimer.containsKey(player) && !event.isGliding()) {
+            if (flyingtimer.containsKey(player.getName()) && !event.isGliding()) {
                 event.setCancelled(true);
             }
         }
@@ -333,10 +329,10 @@ public class Airstone implements Listener {
         Player player = event.getPlayer();
 
         // Überprüfen, ob der Spieler mit der Fähigkeit geglitten ist und nun den Boden berührt
-        if (flyingtimer.containsKey(player) && !player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().isAir() && flyingtimer.get(player) < 14) {
+        if (flyingtimer.containsKey(player.getName()) && !player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().isAir() && flyingtimer.get(player.getName()) < 14) {
             triggerLanding(player,0);
             Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
-                flyingtimer.remove(player);
+                flyingtimer.remove(player.getName());
             }, 10);
         }
     }
@@ -348,7 +344,7 @@ public class Airstone implements Listener {
             Player player = (Player) event.getEntity();
 
             // Verhindere Fallschaden, wenn der Spieler mit der Fähigkeit gelandet ist
-            if ((event.getCause() == EntityDamageEvent.DamageCause.FALL ||event.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL) && flyingtimer.containsKey(player)) {
+            if ((event.getCause() == EntityDamageEvent.DamageCause.FALL ||event.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL) && flyingtimer.containsKey(player.getName())) {
                 event.setCancelled(true);
                 int stoneLevel = Stone.getStoneLevel(player);
                 if (stoneLevel >= 14) {
@@ -356,7 +352,7 @@ public class Airstone implements Listener {
                 }else {
                     triggerLanding((Player) event.getEntity(),event.getDamage()*0.4);
                 }
-                flyingtimer.remove(player);
+                flyingtimer.remove(player.getName());
             }
         }
     }
