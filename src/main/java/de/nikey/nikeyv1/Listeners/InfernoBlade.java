@@ -38,30 +38,6 @@ public class InfernoBlade implements Listener {
     public static HashMap<String , List<LivingEntity>> targetsmap = new HashMap<>();
 
     @EventHandler
-    public void onPlayerItemHeld(PlayerItemHeldEvent event) {
-        Player player = event.getPlayer();
-        ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
-
-        if (item.getType() == Material.FIREWORK_STAR && item.getItemMeta().hasLore()) {
-            ItemMeta meta = item.getItemMeta();
-            if (meta != null) {
-                // Getting the lore of the item
-                List<String> lore = meta.getLore();
-                // Checking if lore contains the keyword "Combined"
-                if (lore != null ) {
-                    String l = String.valueOf(lore);
-                    if (l.equalsIgnoreCase("[§fThe combined power of all §8stones]")) {
-                        ChatColor currentColor = ChatColor.getByChar(meta.getDisplayName().charAt(1));
-                        ChatColor newColor = getRandomColor(currentColor);
-                        meta.setDisplayName(newColor + "Elemental Stone");
-                        item.setItemMeta(meta);
-                    }
-                }
-            }
-        }
-    }
-
-    @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
@@ -212,7 +188,7 @@ public class InfernoBlade implements Listener {
 
                     //Freeze
                     freezePlayer(targetEntity);
-                    Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> unfreezePlayer(targetEntity), 100L);
+                    Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> unfreezePlayer(targetEntity), 20*8);
 
                     teleportCount++;
                 }else {
@@ -249,7 +225,7 @@ public class InfernoBlade implements Listener {
     }
 
     @EventHandler
-    public void onPlayerMove(EntityMoveEvent event) {
+    public void onEntityMove(EntityMoveEvent event) {
         LivingEntity player = event.getEntity();
         if (frozenPlayers.containsKey(player)) {
             if (System.currentTimeMillis() > frozenPlayers.get(player)) {
@@ -260,42 +236,38 @@ public class InfernoBlade implements Listener {
         }
     }
 
-    // Spieler einfrieren
-    private void freezePlayer(LivingEntity entity) {
-        frozenPlayers.put(entity, System.currentTimeMillis() + 5000);
-    }
-
-    // Spieler entfrieren
-    private void unfreezePlayer(LivingEntity entity) {
-        frozenPlayers.remove(entity);
-    }
-
-
-
     @EventHandler
-    public void onPlayerTeleport(PlayerTeleportEvent event) {
-        Player player = event.getPlayer();
-        boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
-        if (buffed) {
-            ItemStack itemInHand = player.getItemInHand();
-            if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.AQUA + "Inferno Blade") && event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN) {
-                if (!red) {
-                    Location eventTo = event.getTo();
-                    eventTo.getWorld().createExplosion(eventTo.add(0,0.3F,0),1.7F,false,false);
-                }
+    public void onPlayerMove(PlayerMoveEvent event) {
+        LivingEntity player = event.getPlayer();
+        if (frozenPlayers.containsKey(player)) {
+            if (System.currentTimeMillis() > frozenPlayers.get(player)) {
+                unfreezePlayer(player);
+            } else {
+                event.setCancelled(true);
             }
         }
     }
 
-    private ChatColor getRandomColor(ChatColor currentColor) {
-        ChatColor[] colors = {ChatColor.RED, ChatColor.GREEN, ChatColor.BLUE, ChatColor.YELLOW, ChatColor.AQUA, ChatColor.LIGHT_PURPLE};
-        Random random = new Random();
-        ChatColor newColor = colors[random.nextInt(colors.length)];
-        // Ensure the new color is different from the current color
-        while (newColor == currentColor) {
-            newColor = colors[random.nextInt(colors.length)];
+    private void freezePlayer(LivingEntity entity) {
+        frozenPlayers.put(entity, System.currentTimeMillis() + 8000);
+    }
+
+    private void unfreezePlayer(LivingEntity entity) {
+        frozenPlayers.remove(entity);
+    }
+
+    @EventHandler
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        Player player = event.getPlayer();
+        if (Stone.isBuffed(player)) {
+            ItemStack itemInHand = player.getItemInHand();
+            if (Stone.isInfernoBlade(itemInHand) && event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN) {
+                if (!red) {
+                    Location eventTo = event.getTo();
+                    eventTo.getWorld().createExplosion(eventTo.add(0,0.3F,0),1.8F,false,false);
+                }
+            }
         }
-        return newColor;
     }
 
     @EventHandler
@@ -306,11 +278,12 @@ public class InfernoBlade implements Listener {
             if (killer.getInventory().getItemInMainHand().getType() == Material.NETHERITE_SWORD && killer.getInventory().getItemInMainHand().getItemMeta().hasLore()) {
                 BleedEffect effect = new BleedEffect(NikeyV1.em);
                 effect.setLocation(player.getLocation());
-                effect.iterations =0;
+                effect.iterations = 0;
                 effect.start();
                 player.getInventory().clear();
-                player.kickPlayer("§cYour are banned by "+killer.getName()+" using the Inferno Blade");
-                Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), "§cYour stone is out of strength!",null,"Game");
+                player.ban("§cYour are banned by "+ killer.getName()+ " using the Inferno Blade!", (Date) null,"Inferno Blade",true);
+                //player.kickPlayer("§cYour are banned by "+killer.getName()+" using the Inferno Blade");
+                //                Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), "§cYour stone is out of strength!",null,"Game");
             }
         }
     }

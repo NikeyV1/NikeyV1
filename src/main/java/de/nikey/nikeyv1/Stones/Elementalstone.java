@@ -3,6 +3,7 @@ package de.nikey.nikeyv1.Stones;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.EntityTypeDamage;
+import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.FlameEffect;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import net.kyori.adventure.key.Key;
@@ -15,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
@@ -44,9 +46,30 @@ public class Elementalstone implements Listener {
     double dmg = 0;
 
     Map<Entity, Integer> executionCountMap = new HashMap<>();
-
-
     public static ArrayList<Entity> stunned = new ArrayList<>();
+
+
+    @EventHandler
+    public void onPlayerItemHeld(PlayerItemHeldEvent event) {
+        Player player = event.getPlayer();
+        ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
+
+        if (item.getType() == Material.FIREWORK_STAR && item.getItemMeta().hasLore()) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                List<String> lore = meta.getLore();
+                if (lore != null ) {
+                    String l = String.valueOf(lore);
+                    if (l.equalsIgnoreCase("[§fThe combined power of all §8stones]")) {
+                        ChatColor currentColor = ChatColor.getByChar(meta.getDisplayName().charAt(1));
+                        ChatColor newColor = getRandomColor(currentColor);
+                        meta.setDisplayName(newColor + "Elemental Stone");
+                        item.setItemMeta(meta);
+                    }
+                }
+            }
+        }
+    }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -76,7 +99,6 @@ public class Elementalstone implements Listener {
 
                                     dmg = 0;
                                     new BukkitRunnable(){
-                                        String damageEntityType = EntityTypeDamage.getDamageEntityType(player);
                                         double t = PI/4;
                                         final Location loc = player.getLocation();
                                         public void run(){
@@ -399,4 +421,14 @@ public class Elementalstone implements Listener {
         }
     }
 
+    private ChatColor getRandomColor(ChatColor currentColor) {
+        ChatColor[] colors = {ChatColor.RED, ChatColor.GREEN, ChatColor.BLUE, ChatColor.YELLOW, ChatColor.AQUA, ChatColor.LIGHT_PURPLE};
+        Random random = new Random();
+        ChatColor newColor = colors[random.nextInt(colors.length)];
+        // Ensure the new color is different from the current color
+        while (newColor == currentColor) {
+            newColor = colors[random.nextInt(colors.length)];
+        }
+        return newColor;
+    }
 }

@@ -3,7 +3,7 @@ version: 1.0
 author: Nikey
 website: https://github.com/NikeyV1
 main: de.nikey.nikeyv1.NikeyV1
-api-version: 1.20
+api-version: 1.21
 description: Special thanks to Raptor07111 for testing and to Timletsplay for designing!
 depend:
   - EffectLib
@@ -15,5 +15,5 @@ commands:
     description: Plays a particle effect
     usage: </peffect [effect name]>
   attack:
-    description: Allows you to set what entity-types are damaged with ability's
+    description: Allows you to set what entity-types are damaged with stone ability's
     usage: </attack [Players,Monsters,Monsters-Players,All]>

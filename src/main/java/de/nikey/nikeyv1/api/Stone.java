@@ -134,4 +134,8 @@ public class Stone {
         Player p = Bukkit.getPlayer(arr[0]);
         return p;
     }
+
+    public static boolean isBuffed(Player player) {
+        return NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
+    }
 }
