@@ -55,6 +55,8 @@ public class Holystone implements Listener {
     private final List<UUID> selectedPlayers = new ArrayList<>();
     private final Set<Player> vanishedPlayers = new HashSet<>();
     public static final Map<Player, BukkitRunnable> auraTasks = new HashMap<>();
+    public static HashMap<Player, Boolean> repairing = new HashMap<>();
+    
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> ability = new HashMap<>();
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
@@ -85,35 +87,67 @@ public class Holystone implements Listener {
         }
     }
 
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-            Player p =  event.getPlayer();
-            String stone = NikeyV1.getPlugin().getConfig().getString(p.getName() + ".stone");
-            int level = NikeyV1.getPlugin().getConfig().getInt(p.getName() + ".level");
-            if (stone.equalsIgnoreCase("Holy")){
+    public static void repairfunc(Player player) {
+        int level = Stone.getStoneLevel(player);
+        String stone = Stone.getStoneName(player);
+
+        if (stone.equalsIgnoreCase("Holy") && !repairing.containsKey(player)){
                 if (level == 7){
+                    repairing.put(player,true);
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            repairRandomArmorPiece(p);
+                            if(stone.equalsIgnoreCase("Holy") && level == 7){
+                                repairRandomArmorPiece(p);
+                            }else{
+                                repairfunc(player);
+                                repairing.remove(player);
+                                cancel();
+                            }
                         }
-                    }.runTaskTimer(NikeyV1.getPlugin(),0,160);
+                    }.runTaskTimer(NikeyV1.getPlugin(),0,40);
                 }else if (level == 8){
+                    repairing.put(player,true);
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            repairRandomArmorPiece(p);
+                            if(stone.equalsIgnoreCase("Holy") && level == 8){
+                                repairRandomArmorPiece(p);
+                            }else{
+                                repairfunc(player);
+                                repairing.remove(player);
+                                cancel();
+                            }
                         }
-                    }.runTaskTimer(NikeyV1.getPlugin(),0,100);
+                    }.runTaskTimer(NikeyV1.getPlugin(),0,20);
                 }else if (level >= 9){
+                    repairing.put(player,true);
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            repairRandomArmorPiece(p);
+                            if(stone.equalsIgnoreCase("Holy") && level >= 9){
+                                repairRandomArmorPiece(p);
+                            }else{
+                                repairfunc(player);
+                                repairing.remove(player);
+                                cancel();
+                            }
                         }
-                    }.runTaskTimer(NikeyV1.getPlugin(),0,60);
+                    }.runTaskTimer(NikeyV1.getPlugin(),0,10);
                 }
             }
+    }
+
+    @EventHandler
+    public void onToggleSprint(PlayerToggleSprintEvent event) {
+        Player p =  event.getPlayer();
+        repairfunc(p);
+    }
+    
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player p =  event.getPlayer();
+        repairfunc(p);
     }
 
     @EventHandler
@@ -617,6 +651,8 @@ public class Holystone implements Listener {
         short maxDurability = armorToRepair.getType().getMaxDurability();
         if (currentDurability < maxDurability) {
             armorToRepair.setDurability((short) (currentDurability - 1));
+        }else {
+            repairRandomArmorPiece(player);
         }
     }
 
