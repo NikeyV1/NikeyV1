@@ -53,7 +53,7 @@ public class HelpUtil {
                 double zDiff = Math.abs(entity.getLocation().getZ() - location.getZ());
 
                 // Überprüfe die Nähe unter Berücksichtigung von Wasser
-                if (xDiff < 1.5 && yDiff < 1.7 && zDiff < 1.5) {
+                if (xDiff < 1.8 && yDiff < 2 && zDiff < 1.8) {
                     return entity;
                 }
             }
