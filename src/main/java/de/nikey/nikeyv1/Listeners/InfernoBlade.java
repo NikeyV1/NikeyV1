@@ -282,8 +282,6 @@ public class InfernoBlade implements Listener {
                 effect.start();
                 player.getInventory().clear();
                 player.ban("§cYour are banned by "+ killer.getName()+ " using the Inferno Blade!", (Date) null,"Inferno Blade",true);
-                //player.kickPlayer("§cYour are banned by "+killer.getName()+" using the Inferno Blade");
-                //                Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), "§cYour stone is out of strength!",null,"Game");
             }
         }
     }

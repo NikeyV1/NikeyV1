@@ -3,12 +3,8 @@ package de.nikey.nikeyv1.Stones;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.EntityTypeDamage;
+import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.CircleEffect;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.*;
@@ -18,7 +14,6 @@ import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,14 +23,10 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityResurrectEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -43,9 +34,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
-import static net.kyori.adventure.text.format.TextColor.color;
 import static org.bukkit.Bukkit.getServer;
 
 @SuppressWarnings("ALL")
@@ -97,8 +85,8 @@ public class Holystone implements Listener {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            if(stone.equalsIgnoreCase("Holy") && level == 7){
-                                repairRandomArmorPiece(p);
+                            if(stone.equalsIgnoreCase("Holy") && level == 7 && player.isValid()){
+                                repairRandomArmorPiece(player);
                             }else{
                                 repairfunc(player);
                                 repairing.remove(player);
@@ -111,8 +99,8 @@ public class Holystone implements Listener {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            if(stone.equalsIgnoreCase("Holy") && level == 8){
-                                repairRandomArmorPiece(p);
+                            if(stone.equalsIgnoreCase("Holy") && level == 8 && player.isValid()){
+                                repairRandomArmorPiece(player);
                             }else{
                                 repairfunc(player);
                                 repairing.remove(player);
@@ -125,8 +113,8 @@ public class Holystone implements Listener {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            if(stone.equalsIgnoreCase("Holy") && level >= 9){
-                                repairRandomArmorPiece(p);
+                            if(stone.equalsIgnoreCase("Holy") && level >= 9 && player.isValid()){
+                                repairRandomArmorPiece(player);
                             }else{
                                 repairfunc(player);
                                 repairing.remove(player);
@@ -138,12 +126,12 @@ public class Holystone implements Listener {
             }
     }
 
-    @EventHandler
-    public void onToggleSprint(PlayerToggleSprintEvent event) {
-        Player p =  event.getPlayer();
-        repairfunc(p);
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerToggleSprint(PlayerToggleSprintEvent event) {
+        repairfunc(event.getPlayer());
     }
-    
+
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player p =  event.getPlayer();
@@ -633,9 +621,8 @@ public class Holystone implements Listener {
         }
     }
 
-    private void repairRandomArmorPiece(Player player) {
-        ItemStack[] armorContents = player.getInventory().getArmorContents();
-        ItemStack[] nonRepairedArmorPieces = getNonRepairedArmorPieces(armorContents);
+    private static void repairRandomArmorPiece(Player player) {
+        ItemStack[] nonRepairedArmorPieces = getNonRepairedArmorPieces(player.getInventory().getArmorContents());
 
         if (nonRepairedArmorPieces.length == 0) {
             // Alle Rüstungsteile sind bereits vollständig repariert
@@ -657,7 +644,7 @@ public class Holystone implements Listener {
     }
 
     // Methode zum Abrufen der nicht reparierten Rüstungsteile eines Spielers
-    private ItemStack[] getNonRepairedArmorPieces(ItemStack[] armorContents) {
+    private static ItemStack[] getNonRepairedArmorPieces(ItemStack[] armorContents) {
         List<ItemStack> nonRepairedPieces = new ArrayList<>();
         for (ItemStack armorPiece : armorContents) {
             if (armorPiece != null && armorPiece.getDurability() < armorPiece.getType().getMaxDurability()) {

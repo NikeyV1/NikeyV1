@@ -7,6 +7,9 @@ import de.slikey.effectlib.effect.DonutEffect;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -16,9 +19,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.*;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -37,6 +39,10 @@ public class Airstone implements Listener {
     public static HashMap<String , Integer> flyingtimer = new HashMap<>();
     public static HashMap<String , Integer> used = new HashMap<>();
     public static HashMap<Player, Boolean> playerBoostCooldown = new HashMap<>();
+    private final HashMap<Player, Long> chargeStartTime = new HashMap<>();
+    private final HashMap<Player, BossBar> bossBars = new HashMap<>();
+    private final HashMap<Player, Boolean> isCharging = new HashMap<>();
+    private final long MAX_CHARGE_TIME = 60 * 1000;
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -260,6 +266,197 @@ public class Airstone implements Listener {
             }
         }
     }
+
+
+    @EventHandler
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        Player p = event.getPlayer();
+        ItemStack item = event.getItemDrop().getItemStack();
+        if (Stone.whatStone(item).equalsIgnoreCase("Air")){
+            int level = Stone.getStoneLevelFromItem(item);
+            FileConfiguration config = NikeyV1.getPlugin().getConfig();
+            config.set(p.getName()+".stone","Air");
+            config.set(p.getName()+".level",level);
+            NikeyV1.getPlugin().saveConfig();
+            if (level == 20 || level == 21){
+                if (p.isSneaking() && Bukkit.getServer().getServerTickManager().isRunningNormally()) {
+                    if (!(cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
+                        cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
+
+                        if (!isCharging.getOrDefault(p, false)) {
+                            startCharging(p);
+                        }
+                    }else if (isCharging.getOrDefault(p, false)) {
+                        releaseAirSwipe(p);
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPluginEnable(PluginDisableEvent event) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            BossBar bossBar = bossBars.remove(player);
+            if (bossBar != null) {
+                bossBar.removeAll();
+            }
+            chargeStartTime.remove(player);
+            isCharging.remove(player);
+        }
+
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        BossBar bossBar = bossBars.remove(player);
+        if (bossBar != null) {
+            bossBar.removeAll();
+        }
+        chargeStartTime.remove(player);
+        isCharging.remove(player);
+    }
+
+    private void startCharging(Player player) {
+        isCharging.put(player, true);
+        chargeStartTime.put(player, System.currentTimeMillis());
+
+        BossBar bossBar = Bukkit.createBossBar(ChatColor.AQUA + "Charging Air Swipe...", BarColor.BLUE, BarStyle.SOLID);
+        bossBar.addPlayer(player);
+        bossBars.put(player, bossBar);
+
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!isCharging.getOrDefault(player, false)) {
+                    cancel();
+                    return;
+                }
+
+                long elapsedTime = System.currentTimeMillis() - chargeStartTime.get(player);
+                if (elapsedTime >= MAX_CHARGE_TIME) {
+                    elapsedTime = MAX_CHARGE_TIME;
+                }
+
+                double chargePercentage = (double) elapsedTime / MAX_CHARGE_TIME;
+
+                bossBar.setProgress(chargePercentage);
+                bossBar.setTitle(ChatColor.AQUA + "Charging Air Swipe... " + (int) (chargePercentage * 100) + "%");
+
+                player.getWorld().spawnParticle(Particle.CRIT, player.getLocation().add(0, 1.5, 0), 5);
+            }
+        }.runTaskTimer(NikeyV1.getPlugin(), 0, 10);
+    }
+
+    private void releaseAirSwipe(Player player) {
+        int level = Stone.getStoneLevel(player);
+        isCharging.put(player, false);
+        BossBar bossBar = bossBars.remove(player);
+        if (bossBar != null) {
+            bossBar.removeAll();
+        }
+        long elapsedTime = System.currentTimeMillis() - chargeStartTime.get(player);
+        if (elapsedTime >= MAX_CHARGE_TIME) {
+            elapsedTime = MAX_CHARGE_TIME;
+        }
+
+        double chargePercentage = (double) elapsedTime / MAX_CHARGE_TIME;
+        double maxDamage;
+        double initialRadius = 2.0;
+        double maxRadius;
+        double sweepAngle = 180.0;
+        if (level == 21) {
+            maxDamage = 35.0;
+            maxRadius = 18.0;
+        }else {
+            maxDamage = 30.0;
+            maxRadius = 15;
+        }
+        double damage = 5.0 + chargePercentage * maxDamage;
+
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.0f, 1.0f);
+        Location playerLocation = player.getEyeLocation();
+        Vector direction = playerLocation.getDirection().normalize();
+
+        int numberOfSwipes;
+        if (level == 21) {
+            numberOfSwipes = 5;
+        }else {
+            numberOfSwipes = 3;
+        }
+        int swipeInterval = 5;  // Ticks between each swipe
+
+        new BukkitRunnable() {
+            int swipeCount = 0;
+
+            @Override
+            public void run() {
+                if (swipeCount >= numberOfSwipes) {
+                    cancel();
+                    return;
+                }
+
+                new BukkitRunnable() {
+                    double currentRadius = initialRadius;
+                    final double speedMultiplier = 1.5;
+
+                    @Override
+                    public void run() {
+                        if (currentRadius > maxRadius) {
+                            cancel();
+                            return;
+                        }
+
+                        // Define the number of particles based on the radius (increase with distance)
+                        int particlesPerStep = (int) (currentRadius * 10);
+
+                        // Generate particles along a half-circle in front of the player
+                        for (int i = 0; i <= particlesPerStep; i++) {
+                            double angle = -sweepAngle / 2 + (sweepAngle / particlesPerStep) * i;
+
+                            Vector particleDirection = rotateAroundAxisY(direction.clone(), Math.toRadians(angle));
+
+                            // Calculate the location of the particle based on the player's position and the radius
+                            Location particleLocation = playerLocation.clone().add(particleDirection.multiply(currentRadius));
+
+                            player.getWorld().spawnParticle(Particle.SWEEP_ATTACK, particleLocation, 0, 0.1, 0.1, 0.1, 0.05);
+
+                            // Damage entities within the swipe area
+                            for (Entity entity : player.getWorld().getNearbyEntities(particleLocation, 1.0, 1.0, 1.0)) {
+                                if (entity instanceof LivingEntity && entity != player) {
+                                    LivingEntity target = (LivingEntity) entity;
+                                    if (swipeCount == numberOfSwipes) {
+                                        Vector knockback = particleDirection.clone().normalize().multiply(1.0).setY(0.5);
+                                        target.setVelocity(knockback);
+                                    }
+                                    target.damage(damage, player);
+                                    target.setNoDamageTicks(15);
+                                    target.getWorld().playSound(target.getLocation(), Sound.ENTITY_PLAYER_HURT, 1.0f, 0.8f);
+                                }
+                            }
+                        }
+
+                        // Increase the radius of the swipe for the next iteration, faster than before
+                        currentRadius += speedMultiplier;  // Increase the speed of the swipe
+                    }
+                }.runTaskTimer(NikeyV1.getPlugin(), 0, 1);  // Run each swipe every tick
+
+                swipeCount++;
+            }
+        }.runTaskTimer(NikeyV1.getPlugin(), 0, swipeInterval);  // Run the next swipe after swipeInterval ticks
+    }
+
+    // Helper method to rotate a vector around the Y-axis (used to create the half-circle arc)
+    private Vector rotateAroundAxisY(Vector vector, double angle) {
+        double cos = Math.cos(angle);
+        double sin = Math.sin(angle);
+        double x = vector.getX() * cos - vector.getZ() * sin;
+        double z = vector.getX() * sin + vector.getZ() * cos;
+        return new Vector(x, vector.getY(), z);
+    }
+
 
     private void triggerBoostWithDelay(Player player, Location location) {
         playerBoostCooldown.put(player, true);

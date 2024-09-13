@@ -4,7 +4,6 @@ import de.nikey.nikeyv1.api.Stone;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
@@ -37,6 +36,7 @@ public class HelpUtil {
         durchlauffaehigeMaterialien.add(Material.LILAC);
         durchlauffaehigeMaterialien.add(Material.ROSE_BUSH);
         durchlauffaehigeMaterialien.add(Material.PEONY);
+        durchlauffaehigeMaterialien.add(Material.LIGHT);
 
         ArrayList<Entity> entities = new ArrayList<>(player.getNearbyEntities(range, range, range));
         ArrayList<Block> sightBlock = new ArrayList<>(player.getLineOfSight(durchlauffaehigeMaterialien, range));
