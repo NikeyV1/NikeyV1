@@ -23,6 +23,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -422,11 +423,17 @@ public class Frozenstone implements Listener {
 
     private void shootFrozenDagger(Player player) {
         Location eyeLocation = player.getEyeLocation();
-        Location spawnLocation1 = eyeLocation.add(eyeLocation.getDirection().normalize());
-        Location spawnLocation2 = spawnLocation1.clone().add(0, -0.8D, 0);
-        Location spawnLocation3 = spawnLocation1.clone().add(0.9, 0, 0);
-        Location spawnLocation4 = spawnLocation1.clone().add(0, 0.8D, 0);
-        Location spawnLocation5 = spawnLocation1.clone().add(-0.9, 0, 0);
+        org.bukkit.util.Vector direction = eyeLocation.getDirection().normalize();
+
+        org.bukkit.util.Vector right = direction.clone().crossProduct(new Vector(0, 1, 0)).normalize();
+        org.bukkit.util.Vector up = new Vector(0, 1, 0);
+        org.bukkit.util.Vector down = up.clone().multiply(-1);
+
+        Location spawnLocation1 = eyeLocation.clone().add(direction);
+        Location spawnLocation2 = spawnLocation1.clone().add(down.multiply(0.8));
+        Location spawnLocation3 = spawnLocation1.clone().add(right.multiply(0.9));
+        Location spawnLocation4 = spawnLocation1.clone().add(up.multiply(0.8));
+        Location spawnLocation5 = spawnLocation1.clone().add(right.multiply(-0.9));
 
         shootArrow(player, spawnLocation2);
         shootArrow(player, spawnLocation3);
@@ -441,7 +448,7 @@ public class Frozenstone implements Listener {
             arrow.setVelocity(player.getEyeLocation().getDirection().multiply(2.4));
             arrow.setCustomName(ChatColor.DARK_AQUA + "FD");
             arrow.setCustomNameVisible(false);
-            arrow.setDamage(5);
+            arrow.setDamage(6);
             arrow.setCritical(true);
             arrow.setGravity(false); // Disable arrow gravity
             arrow.setMetadata(ICE_ARROW_METADATA, new FixedMetadataValue(NikeyV1.getPlugin(), true)); // Set metadata to mark arrow as ice arrow for no reason
@@ -463,7 +470,7 @@ public class Frozenstone implements Listener {
             arrow.setVelocity(player.getEyeLocation().getDirection().multiply(2.6));
             arrow.setCustomName(ChatColor.DARK_AQUA + "FD");
             arrow.setCustomNameVisible(false);
-            arrow.setDamage(10);
+            arrow.setDamage(12);
             arrow.setCritical(true);
             arrow.setPierceLevel(2);
             arrow.setGravity(false); // Disable arrow gravity

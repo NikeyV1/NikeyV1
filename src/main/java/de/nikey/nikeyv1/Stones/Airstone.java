@@ -26,6 +26,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -279,15 +280,15 @@ public class Airstone implements Listener {
             config.set(p.getName()+".level",level);
             NikeyV1.getPlugin().saveConfig();
             if (level == 20 || level == 21){
-                if (p.isSneaking() && Bukkit.getServer().getServerTickManager().isRunningNormally()) {
+                if (p.isSneaking()) {
+                    if (isCharging.getOrDefault(p,false)) {
+                        releaseAirSwipe(p);
+                        return;
+                    }
                     if (!(cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
 
-                        if (!isCharging.getOrDefault(p, false)) {
-                            startCharging(p);
-                        }
-                    }else if (isCharging.getOrDefault(p, false)) {
-                        releaseAirSwipe(p);
+                        startCharging(p);
                     }
                 }
             }
@@ -345,7 +346,11 @@ public class Airstone implements Listener {
                 bossBar.setProgress(chargePercentage);
                 bossBar.setTitle(ChatColor.AQUA + "Charging Air Swipe... " + (int) (chargePercentage * 100) + "%");
 
-                player.getWorld().spawnParticle(Particle.CRIT, player.getLocation().add(0, 1.5, 0), 5);
+                if (chargePercentage == 1) {
+                    player.getWorld().spawnParticle(Particle.CRIT, player.getLocation().add(0, 1.5, 0), 7);
+                }else {
+                    player.getWorld().spawnParticle(Particle.ENCHANTED_HIT, player.getLocation().add(0, 1.5, 0), 5);
+                }
             }
         }.runTaskTimer(NikeyV1.getPlugin(), 0, 10);
     }
@@ -368,10 +373,10 @@ public class Airstone implements Listener {
         double maxRadius;
         double sweepAngle = 180.0;
         if (level == 21) {
-            maxDamage = 35.0;
+            maxDamage = 27.5;
             maxRadius = 18.0;
         }else {
-            maxDamage = 30.0;
+            maxDamage = 32.5;
             maxRadius = 15;
         }
         double damage = 5.0 + chargePercentage * maxDamage;
@@ -386,7 +391,7 @@ public class Airstone implements Listener {
         }else {
             numberOfSwipes = 3;
         }
-        int swipeInterval = 5;  // Ticks between each swipe
+        int swipeInterval = 8;
 
         new BukkitRunnable() {
             int swipeCount = 0;
@@ -425,21 +430,24 @@ public class Airstone implements Listener {
 
                             // Damage entities within the swipe area
                             for (Entity entity : player.getWorld().getNearbyEntities(particleLocation, 1.0, 1.0, 1.0)) {
-                                if (entity instanceof LivingEntity && entity != player) {
-                                    LivingEntity target = (LivingEntity) entity;
-                                    if (swipeCount == numberOfSwipes) {
-                                        Vector knockback = particleDirection.clone().normalize().multiply(1.0).setY(0.5);
-                                        target.setVelocity(knockback);
+                                if (entity instanceof LivingEntity) {
+                                    if (HelpUtil.shouldDamageEntity((LivingEntity) entity,player)) {
+                                        LivingEntity target = (LivingEntity) entity;
+                                        if (swipeCount == numberOfSwipes) {
+                                            Vector knockback = particleDirection.clone().normalize().multiply(1.0).setY(0.5);
+                                            target.setVelocity(knockback);
+                                        }
+                                        target.damage(damage, player);
+                                        if (target instanceof Player) {
+                                            target.setNoDamageTicks(7);
+                                        }
+                                        target.getWorld().playSound(target.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.0f, 0.8f);
                                     }
-                                    target.damage(damage, player);
-                                    target.setNoDamageTicks(15);
-                                    target.getWorld().playSound(target.getLocation(), Sound.ENTITY_PLAYER_HURT, 1.0f, 0.8f);
                                 }
                             }
                         }
 
-                        // Increase the radius of the swipe for the next iteration, faster than before
-                        currentRadius += speedMultiplier;  // Increase the speed of the swipe
+                        currentRadius += speedMultiplier;
                     }
                 }.runTaskTimer(NikeyV1.getPlugin(), 0, 1);  // Run each swipe every tick
 
@@ -544,9 +552,9 @@ public class Airstone implements Listener {
                 event.setCancelled(true);
                 int stoneLevel = Stone.getStoneLevel(player);
                 if (stoneLevel >= 14) {
-                    triggerLanding((Player) event.getEntity(),event.getDamage()*0.5);
+                    triggerLanding((Player) event.getEntity(),event.getDamage()*0.6);
                 }else {
-                    triggerLanding((Player) event.getEntity(),event.getDamage()*0.4);
+                    triggerLanding((Player) event.getEntity(),event.getDamage()*0.5);
                 }
                 flyingtimer.remove(player.getName());
             }
@@ -557,7 +565,7 @@ public class Airstone implements Listener {
     private void castKillerWail(Player player) {
         // Get the direction the player is looking at
         Vector direction = player.getEyeLocation().getDirection().normalize();
-        Location startLocation = player.getEyeLocation().clone().add(direction.multiply(1.5)); // Offset to avoid starting inside the player
+        Location startLocation = player.getEyeLocation().clone().add(direction.multiply(1.5));
 
         int beamLength;
         if (Stone.getStoneLevel(player) >= 18) {

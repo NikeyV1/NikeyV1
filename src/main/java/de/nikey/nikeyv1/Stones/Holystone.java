@@ -41,7 +41,7 @@ public class Holystone implements Listener {
     public static ArrayList<Entity> stunned = new ArrayList<>();
     public static ArrayList<Player> hitted = new ArrayList<>();
     private final List<UUID> selectedPlayers = new ArrayList<>();
-    private final Set<Player> vanishedPlayers = new HashSet<>();
+    public static final Set<Player> vanishedPlayers = new HashSet<>();
     public static final Map<Player, BukkitRunnable> auraTasks = new HashMap<>();
     public static HashMap<Player, Boolean> repairing = new HashMap<>();
     
@@ -370,7 +370,7 @@ public class Holystone implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                p.setMaxHealth(20);
+                if (p.isOnline()) p.setMaxHealth(20);
             }
         }.runTaskLater(NikeyV1.getPlugin(), taskDelay);
     }

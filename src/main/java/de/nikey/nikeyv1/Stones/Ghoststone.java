@@ -135,7 +135,7 @@ public class Ghoststone implements Listener {
                         }
                     }
 
-                    if (!player.isOnline()) {
+                    if (!player.isValid()) {
                         cancel();
                         return;
                     }
@@ -437,7 +437,7 @@ public class Ghoststone implements Listener {
 
         Player player = (Player) target;
 
-        if (playerHitted.containsKey(player.getName())) {
+        if (playerHitted.containsKey(player.getName()) || Holystone.vanishedPlayers.contains(player.getName())) {
             event.setCancelled(true);
         }
     }
