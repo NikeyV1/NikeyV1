@@ -96,7 +96,7 @@ public class Waterstone implements Listener {
             Player player = (Player) event.getEntity();
             int level = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
             String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
-            if (stone.equalsIgnoreCase("water")&&level >= 3&&event.getCause() == EntityDamageEvent.DamageCause.DROWNING) {
+            if (stone.equalsIgnoreCase("water") && level >= 3 && event.getCause() == EntityDamageEvent.DamageCause.DROWNING) {
                 event.setDamage(event.getDamage() * 0.5);
             }
         }
@@ -138,7 +138,7 @@ public class Waterstone implements Listener {
                                         cancel();
                                         return;
                                     }
-                                    for (Entity e : location.getNearbyEntities(8,8,8)){
+                                    for (Entity e : location.getNearbyEntities(7,7,7)){
 
                                         String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
                                         if (damageEntityType.equalsIgnoreCase("all")) {
