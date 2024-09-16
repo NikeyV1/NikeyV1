@@ -53,17 +53,17 @@ public class Airstone implements Listener {
         if (stone.equalsIgnoreCase("air")) {
             if (level >= 3) {
                 if (level == 3) {
-                    player.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE).setBaseValue(4);
+                    player.getAttribute(Attribute.GENERIC_MOVEMENT_EFFICIENCY).setBaseValue(0.3);
                 } else if (level == 4) {
-                    player.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE).setBaseValue(5);
+                    player.getAttribute(Attribute.GENERIC_MOVEMENT_EFFICIENCY).setBaseValue(0.6);
                 }else {
-                    player.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE).setBaseValue(6);
+                    player.getAttribute(Attribute.GENERIC_MOVEMENT_EFFICIENCY).setBaseValue(1);
                 }
             }else {
-                player.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE).setBaseValue(3);
+                player.getAttribute(Attribute.GENERIC_MOVEMENT_EFFICIENCY).setBaseValue(0);
             }
         }else {
-            player.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE).setBaseValue(3);
+            player.getAttribute(Attribute.GENERIC_MOVEMENT_EFFICIENCY).setBaseValue(0);
         }
     }
 
