@@ -72,8 +72,8 @@ public class Airstone implements Listener {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             if (Stone.getStoneName(player).equalsIgnoreCase("air") && Stone.getStoneLevel(player) >= 6) {
-                if (event.getDamage() > 55) {
-                    event.setDamage(55);
+                if (event.getDamage() > 50) {
+                    event.setDamage(50);
                     player.playEffect(player.getLocation(),Effect.SPONGE_DRY,0);
                 }
             }
