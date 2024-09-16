@@ -120,361 +120,16 @@ public class Waterstone implements Listener {
                     if (!(cooldown.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown.put(p.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
                         //cooldown-ability
-                        if (i ==10){
-                            timer = 15;
-                            Location location = p.getLocation();
-                            FountainEffect effect = new FountainEffect(NikeyV1.em);
-                            effect.setLocation(location);
-                            effect.duration = 20000;
-                            effect.particlesStrand = 30;
-                            effect.particlesSpout = 50;
-                            effect.start();
-                            //Ability
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    timer--;
-                                    if (timer == 0){
-                                        cancel();
-                                        return;
-                                    }
-                                    for (Entity e : location.getNearbyEntities(7,7,7)){
-
-                                        String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
-                                        if (damageEntityType.equalsIgnoreCase("all")) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (e instanceof Player) {
-                                                Player player = (Player) e;
-                                                if (playersInSameTeam.contains(player)) {
-                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
-                                                }
-
-                                                if (e == p){
-                                                    if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
-                                                }
-                                            }else {
-                                                if (e instanceof LivingEntity){
-                                                    LivingEntity entity = (LivingEntity) e;
-                                                    entity.damage(2);
-                                                }
-                                            }
-                                        }else if (damageEntityType.equalsIgnoreCase("players")) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (e instanceof Player) {
-                                                Player player = (Player) e;
-                                                if (playersInSameTeam.contains(player)) {
-                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
-                                                }
-
-                                                if (e == p){
-                                                    if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
-                                                }
-                                            }
-                                        }else if (damageEntityType.equalsIgnoreCase("monsters")) {
-                                            if (e instanceof Monster) {
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entity.damage(2);
-                                            }
-                                        }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (e instanceof Player) {
-                                                Player player = (Player) e;
-                                                if (playersInSameTeam.contains(player)) {
-                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
-                                                }
-
-                                                if (e == p){
-                                                    if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
-                                                }
-                                            }else if (e instanceof Monster){
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entity.damage(2);
-                                            }
-                                        }
-                                    }
-                                }
-                            }.runTaskTimer(NikeyV1.getPlugin(), 30,30);
+                        if (i == 10) {
+                            startFountainEffect(p, 7, 8, 7, 15, 3, 2, false);
                         } else if (i == 11) {
-                            timer = 15;
-                            Location location = p.getLocation();
-                            FountainEffect effect = new FountainEffect(NikeyV1.em);
-                            effect.setLocation(location);
-                            effect.duration = 20000;
-                            effect.particlesStrand = 30;
-                            effect.particlesSpout = 50;
-                            effect.start();
-                            //Ability
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    timer--;
-                                    if (timer == 0){
-                                        cancel();
-                                        return;
-                                    }
-                                    for (Entity e : location.getNearbyEntities(10,8,10)){
-
-                                        String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
-                                        if (damageEntityType.equalsIgnoreCase("all")) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (e instanceof Player) {
-                                                Player player = (Player) e;
-                                                if (playersInSameTeam.contains(player)) {
-                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
-                                                }
-
-                                                if (e == p){
-                                                    if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
-                                                }
-                                            }else {
-                                                if (e instanceof LivingEntity){
-                                                    LivingEntity entity = (LivingEntity) e;
-                                                    entity.damage(2);
-                                                }
-                                            }
-                                        }else if (damageEntityType.equalsIgnoreCase("players")) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (e instanceof Player) {
-                                                Player player = (Player) e;
-                                                if (playersInSameTeam.contains(player)) {
-                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
-                                                }
-
-                                                if (e == p){
-                                                    if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
-                                                }
-                                            }
-                                        }else if (damageEntityType.equalsIgnoreCase("monsters")) {
-                                            if (e instanceof Monster) {
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entity.damage(2);
-                                            }
-                                        }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (e instanceof Player) {
-                                                Player player = (Player) e;
-                                                if (playersInSameTeam.contains(player)) {
-                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
-                                                }
-
-                                                if (e == p){
-                                                    if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
-                                                }
-                                            }else if (e instanceof Monster){
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entity.damage(2);
-                                            }
-                                        }
-                                    }
-                                }
-                            }.runTaskTimer(NikeyV1.getPlugin(), 30,30);
+                            startFountainEffect(p, 9, 8, 9, 15, 3, 2, false);
                         } else if (i == 12) {
-                            timer = 15;
-                            Location location = p.getLocation();
-                            FountainEffect effect = new FountainEffect(NikeyV1.em);
-                            effect.setLocation(location);
-                            effect.duration = 20000;
-                            effect.particlesStrand = 30;
-                            effect.particlesSpout = 50;
-                            effect.start();
-                            //Ability
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    timer--;
-                                    if (timer == 0){
-                                        cancel();
-                                        return;
-                                    }
-                                    for (Entity e : location.getNearbyEntities(10,8,10)){
-
-
-                                        String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
-                                        if (damageEntityType.equalsIgnoreCase("all")) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (e instanceof Player) {
-                                                Player player = (Player) e;
-                                                if (playersInSameTeam.contains(player)) {
-                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
-                                                }
-
-                                                if (e == p){
-                                                    if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
-                                                }
-                                            }else {
-                                                if (e instanceof LivingEntity){
-                                                    LivingEntity entity = (LivingEntity) e;
-                                                    entity.damage(2);
-                                                }
-                                            }
-                                        }else if (damageEntityType.equalsIgnoreCase("players")) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (e instanceof Player) {
-                                                Player player = (Player) e;
-                                                if (playersInSameTeam.contains(player)) {
-                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
-                                                }
-
-                                                if (e == p){
-                                                    if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
-                                                }
-                                            }
-                                        }else if (damageEntityType.equalsIgnoreCase("monsters")) {
-                                            if (e instanceof Monster) {
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entity.damage(2);
-                                            }
-                                        }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (e instanceof Player) {
-                                                Player player = (Player) e;
-                                                if (playersInSameTeam.contains(player)) {
-                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
-                                                }
-
-                                                if (e == p){
-                                                    if (p.getHealth() < 18 && !p.isDead())p.setHealth(p.getHealth()+3);
-                                                }
-                                            }else if (e instanceof Monster){
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entity.damage(2);
-                                            }
-                                        }
-                                    }
-                                }
-                            }.runTaskTimer(NikeyV1.getPlugin(), 30,30);
-                        }else if (i == 13) {
-                            timer = 15;
-                            Location location = p.getLocation();
-                            FountainEffect effect = new FountainEffect(NikeyV1.em);
-                            effect.setLocation(location);
-                            effect.duration = 20000;
-                            effect.particlesStrand = 30;
-                            effect.particlesSpout = 50;
-                            effect.start();
-                            //Ability
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    timer--;
-                                    if (timer == 0){
-                                        cancel();
-                                        return;
-                                    }
-                                    for (Entity e : location.getNearbyEntities(10,8,10)){
-
-                                        String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
-                                        if (damageEntityType.equalsIgnoreCase("all")) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (e instanceof Player) {
-                                                Player player = (Player) e;
-                                                if (playersInSameTeam.contains(player) || e == p) {
-                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+4);
-                                                }
-                                            }else {
-                                                if (e instanceof LivingEntity){
-                                                    LivingEntity entity = (LivingEntity) e;
-                                                    entity.damage(4);
-                                                }
-                                            }
-                                        }else if (damageEntityType.equalsIgnoreCase("players")) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (e instanceof Player) {
-                                                Player player = (Player) e;
-                                                if (playersInSameTeam.contains(player) || e == p) {
-                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+4);
-                                                }
-                                            }
-                                        }else if (damageEntityType.equalsIgnoreCase("monsters")) {
-                                            if (e instanceof Monster) {
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entity.damage(4);
-                                            }
-                                        }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (e instanceof Player) {
-                                                Player player = (Player) e;
-                                                if (playersInSameTeam.contains(player) || e == p) {
-                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+4);
-                                                }
-
-                                            }else {
-                                                if (e instanceof Monster){
-                                                    LivingEntity entity = (LivingEntity) e;
-                                                    entity.damage(4);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }.runTaskTimer(NikeyV1.getPlugin(), 30,30);
-                        }else if (i >= 14) {
-                            timer = 15;
-                            Location location = p.getLocation();
-                            FountainEffect effect = new FountainEffect(NikeyV1.em);
-                            effect.setLocation(location);
-                            effect.duration = 20000;
-                            effect.particlesStrand = 30;
-                            effect.particlesSpout = 50;
-                            effect.start();
-                            //Ability
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    timer--;
-                                    if (timer == 0){
-                                        cancel();
-                                        return;
-                                    }
-                                    for (Entity e : location.getNearbyEntities(10,8,10)){
-
-                                        String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
-                                        if (damageEntityType.equalsIgnoreCase("all")) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (e instanceof Player) {
-                                                Player player = (Player) e;
-                                                if (playersInSameTeam.contains(player) || e == p) {
-                                                    player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
-                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
-                                                }
-                                            }else {
-                                                if (e instanceof LivingEntity){
-                                                    LivingEntity entity = (LivingEntity) e;
-                                                    entity.damage(4);
-                                                }
-                                            }
-                                        }else if (damageEntityType.equalsIgnoreCase("players")) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (e instanceof Player) {
-                                                Player player = (Player) e;
-                                                if (playersInSameTeam.contains(player) || e == p) {
-                                                    player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
-                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+3);
-                                                }
-                                            }
-                                        }else if (damageEntityType.equalsIgnoreCase("monsters")) {
-                                            if (e instanceof Monster) {
-                                                LivingEntity entity = (LivingEntity) e;
-                                                entity.damage(4);
-                                            }
-                                        }else if (damageEntityType.equalsIgnoreCase("monsters-player")) {
-                                            List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                            if (e instanceof Player) {
-                                                Player player = (Player) e;
-                                                if (playersInSameTeam.contains(player) || e == p) {
-                                                    player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400,0,false));
-                                                    if (player.getHealth() < 18 && !player.isDead())player.setHealth(player.getHealth()+4);
-                                                }
-                                            }else {
-                                                if (e instanceof Monster){
-                                                    LivingEntity entity = (LivingEntity) e;
-                                                    entity.damage(4);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }.runTaskTimer(NikeyV1.getPlugin(), 30,30);
+                            startFountainEffect(p, 9, 8, 9, 15, 3, 4, false);
+                        } else if (i == 13) {
+                            startFountainEffect(p, 9, 8, 9, 15, 4, 4, false);
+                        } else if (i >= 14) {
+                            startFountainEffect(p, 9, 8, 9, 15, 4, 4, true);
                         }
                     }
                 }
@@ -632,6 +287,55 @@ public class Waterstone implements Listener {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private void startFountainEffect(Player p, int radiusX, int radiusY, int radiusZ, int timerDuration, double healAmount, double damageAmount, boolean applyAbsorption) {
+        Location location = p.getLocation();
+        FountainEffect effect = new FountainEffect(NikeyV1.em);
+        effect.setLocation(location);
+        effect.duration = 20000;
+        effect.particlesStrand = 30;
+        effect.particlesSpout = 50;
+        effect.start();
+
+        new BukkitRunnable() {
+            int timer = timerDuration;
+
+            @Override
+            public void run() {
+                timer--;
+                if (timer == 0) {
+                    cancel();
+                    return;
+                }
+                handleEntitiesAround(p, location, radiusX, radiusY, radiusZ, healAmount, damageAmount, applyAbsorption);
+            }
+        }.runTaskTimer(NikeyV1.getPlugin(), 30, 30);
+    }
+
+    private void handleEntitiesAround(Player p, Location location, int radiusX, int radiusY, int radiusZ, double healAmount, double damageAmount, boolean applyAbsorption) {
+        for (Entity e : location.getNearbyEntities(radiusX, radiusY, radiusZ)) {
+            healOrDamageEntity(p, e, healAmount, damageAmount, applyAbsorption);
+        }
+    }
+
+    private void healOrDamageEntity(Player p, Entity e, double healAmount, double damageAmount, boolean applyAbsorption) {
+        if (e instanceof Player) {
+            Player player = (Player) e;
+            if (HelpUtil.getPlayersInSameTeam(p).contains(player) || e == p) {
+                if (applyAbsorption) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400, 0, false));
+                }
+                if (!player.isValid()) {
+                    player.setHealth(Math.min(player.getHealth() + healAmount, 20));
+                }
+            }
+        } else if (e instanceof LivingEntity) {
+            LivingEntity entity = (LivingEntity) e;
+            if (HelpUtil.shouldDamageEntity(entity, p)) {
+                entity.damage(damageAmount);
             }
         }
     }

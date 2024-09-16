@@ -245,7 +245,7 @@ public class Ghoststone implements Listener {
             Player player = (Player) event.getEntity();
             String attacking = Stone.getAttacking(player);
             if (event.getCause() == EntityDamageEvent.DamageCause.FALL && teleportedPlayers.contains(player.getUniqueId())) {
-                event.setCancelled(true); // Prevent fall damage for the player
+                event.setCancelled(true);
 
                 int level = Stone.getStoneLevel(player);
                 if (level == 20) {
