@@ -244,11 +244,11 @@ public class Airstone implements Listener {
                         used.remove(player.getName());
 
                         if (level == 15) {
-                            timer.put(player,8);
-                        }else if (level == 16 || level == 17 || level == 18) {
                             timer.put(player,10);
-                        }else {
+                        }else if (level == 16 || level == 17 || level == 18) {
                             timer.put(player,12);
+                        }else {
+                            timer.put(player,14);
                         }
                         new BukkitRunnable() {
                             @Override
@@ -577,9 +577,9 @@ public class Airstone implements Listener {
         double pullStrength = 2.5;
         double damage;
         if (Stone.getStoneLevel(player) >= 17) {
-            damage = 5;
+            damage = 3;
         }else {
-            damage = 3.5;
+            damage = 1.5;
         }
         int particlesPerCircle = 20;
         double beamAttackRange = 3.5;
