@@ -38,7 +38,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("ALL")
 public class Firestone implements Listener {
-    private ArrayList<Entity> entities = new ArrayList<>();
+    private HashMap<String, ArrayList<Entity>> entityMap = new HashMap<>();
     private int timer;
     private int time;
     private HashMap<Player , Integer> timecooldown = new HashMap<>();
@@ -96,7 +96,9 @@ public class Firestone implements Listener {
 
                         int finalRadius = radius;
                         double finalDamage = damage;
+                        entityMap.putIfAbsent(p.getName(), new ArrayList<>());
                         BukkitRunnable runnable = new BukkitRunnable() {
+                            ArrayList<Entity> entities = entityMap.get(p.getName());
                             @Override
                             public void run() {
                                 for (Entity e : p.getLocation().getWorld().getNearbyEntities(p.getLocation(), finalRadius, finalRadius, finalRadius)) {
@@ -104,6 +106,9 @@ public class Firestone implements Listener {
                                         if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
                                             if (e != p) {
                                                 setEntityOnFire((LivingEntity) e, finalDamage);
+                                                if (!entities.contains(e)) {
+                                                    entities.add(e);
+                                                }
                                             }
                                         }
                                     }
