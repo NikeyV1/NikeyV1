@@ -328,7 +328,7 @@ public class Waterstone implements Listener {
                 if (applyAbsorption) {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400, 0, false));
                 }
-                if (!player.isValid()) {
+                if (player.isValid()) {
                     player.setHealth(Math.min(player.getHealth() + healAmount, 20));
                 }
             }
