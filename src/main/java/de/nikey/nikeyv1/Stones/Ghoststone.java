@@ -281,23 +281,20 @@ public class Ghoststone implements Listener {
                             LivingEntity livingEntity = (LivingEntity) entity;
                             if (HelpUtil.shouldDamageEntity(livingEntity,player)) {
                                 if (entity instanceof Player) {
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                    if (!playersInSameTeam.contains(entity)) {
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*15,3,true));
-                                        double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                                        double damage = maxHealth * 0.3;
-                                        livingEntity.playHurtAnimation(0);
-                                        if (livingEntity.getHealth()-damage >= 1) {
-                                            livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                        }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
-                                        }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
-                                        }
-
-                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*15, 1));
-                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
+                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*15,3,true));
+                                    double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                                    double damage = maxHealth * 0.3;
+                                    livingEntity.playHurtAnimation(0);
+                                    if (livingEntity.getHealth()-damage >= 1) {
+                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
+                                    }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
+                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
+                                    }else {
+                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                     }
+
+                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*15, 1));
+                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
                                 }else {
                                     livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*15,3,true));
                                     double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
@@ -358,21 +355,18 @@ public class Ghoststone implements Listener {
                             LivingEntity livingEntity = (LivingEntity) entity;
                             if (HelpUtil.shouldDamageEntity(livingEntity,player)) {
                                 if (entity instanceof Player) {
-                                    List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                                    if (!playersInSameTeam.contains(entity)) {
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*30,3,true));
-                                        double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                                        double damage = maxHealth * 0.4;
-                                        livingEntity.playHurtAnimation(0);
-                                        if (livingEntity.getHealth()-damage >= 1) {
-                                            livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                        }else {
-                                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
-                                        }
-
-                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*30, 1));
-                                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));
+                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*30,3,true));
+                                    double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                                    double damage = maxHealth * 0.4;
+                                    livingEntity.playHurtAnimation(0);
+                                    if (livingEntity.getHealth()-damage >= 1) {
+                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
+                                    }else {
+                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                                     }
+
+                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*30, 1));
+                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));
                                 }else {
                                     livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*30,3,true));
                                     double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();

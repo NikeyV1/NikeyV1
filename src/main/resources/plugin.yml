@@ -17,3 +17,8 @@ commands:
   attack:
     description: Allows you to set what entity-types are damaged with stone ability's
     usage: </attack [Players,Monsters,Monsters-Players,All]>
+  board:
+    description: Scoreboard settings
+  trust:
+    description: Allows you to set what players you trust
+    usage: </trust [add/remove/list] [Player]>

@@ -27,6 +27,7 @@ import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class Airstone implements Listener {
@@ -42,7 +43,7 @@ public class Airstone implements Listener {
     private final HashMap<Player, BossBar> bossBars = new HashMap<>();
     private final HashMap<Player, Boolean> isCharging = new HashMap<>();
     private final long MAX_CHARGE_TIME = 60 * 1000;
-    public static final HashMap<UUID, WindCharge> windCharges = new HashMap<>();
+    private Map<UUID, BukkitRunnable> activeTasks = new HashMap<>();
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -348,15 +349,13 @@ public class Airstone implements Listener {
 
                 if (chargePercentage == 1) {
                     player.getWorld().spawnParticle(Particle.CRIT, player.getLocation().add(0, 1.5, 0), 7);
-                }else {
-                    player.getWorld().spawnParticle(Particle.ENCHANTED_HIT, player.getLocation().add(0, 1.5, 0), 5);
                 }
             }
         }.runTaskTimer(NikeyV1.getPlugin(), 0, 10);
     }
 
     private void releaseAirSwipe(Player player) {
-        killWindCharge(player);
+        cancelWindChargeTask(player);
         int level = Stone.getStoneLevel(player);
         isCharging.put(player, false);
         BossBar bossBar = bossBars.remove(player);
@@ -458,65 +457,36 @@ public class Airstone implements Listener {
     }
 
     private void summonWindCharge(Player player) {
-        // Überprüfen, ob der Spieler bereits eine Wind Charge hat
-        if (windCharges.containsKey(player.getUniqueId())) {
+        if (activeTasks.containsKey(player.getUniqueId())) {
             player.sendMessage("§cError: windcharge cannot be summoned");
             return;
         }
 
-        // Erstelle einen unsichtbaren Armor Stand als "Wind Charge"
-        Location loc = player.getLocation();
-        WindCharge charge = (WindCharge) player.getWorld().spawnEntity(loc,EntityType.WIND_CHARGE);
-        ArmorStand windCharge = player.getWorld().spawn(loc, ArmorStand.class);
-        windCharge.setVisible(false);
-        windCharge.setMarker(true);  // Macht den Armor Stand unzerstörbar
-        windCharge.setGravity(false); // Erlaubt es ihm, in der Luft zu schweben
-        windCharge.setInvulnerable(true); // Macht ihn unzerstörbar
-
-        // Speichere den Armor Stand in der Map
-        //windCharges.put(player.getUniqueId(), windCharge);
-
-        // Starten einer Rotation um den Spieler
-        new BukkitRunnable() {
+        BukkitRunnable task = new BukkitRunnable() {
             double t = 0;
 
             @Override
             public void run() {
-                if (!player.isOnline() || windCharge.isDead()) {
-                    windCharge.remove();
-                    windCharges.remove(player.getUniqueId());
-                    cancel();
+                if (!player.isOnline()) {
+                    cancel(); // Beendet den Task
+                    activeTasks.remove(player.getUniqueId()); // Entfernt den Task aus der Map
                     return;
                 }
 
-                // Berechne eine kreisförmige Bewegung um den Spieler
-                t += Math.PI / 64;  // Verlangsamt die Rotation, indem der Schritt kleiner gemacht wird
-                double x = Math.cos(t) * 2; // Radius des Kreises
-                double z = Math.sin(t) * 2;
+                t += Math.PI / 16;
+                double x = Math.cos(t) * 1.5;
+                double z = Math.sin(t) * 1.5;
                 Location playerLoc = player.getLocation();
-                Location windLoc = playerLoc.clone().add(x, 1.5, z); // Höhe leicht über dem Spieler
+                Location windLoc = playerLoc.clone().add(x, 1, z);
 
-                // Teleportiere den unsichtbaren Armor Stand
-                windCharge.teleport(windLoc);
-                charge.teleport(windLoc);
-
-                // Erstelle visuelle Effekte für die Wind Charge
-                windCharge.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, windLoc, 3, 0.1, 0.1, 0.1, 0.01); // Elektrische Funken
-
-                // OPTIONAL: Füge einen Soundeffekt hinzu
+                windLoc.getWorld().spawnParticle(Particle.CLOUD, windLoc, 2, 0.1, 0.1, 0.1, 0.01);
             }
-        }.runTaskTimer(NikeyV1.getPlugin(), 0, 1); // Führt die Aufgabe wiederholt aus
+        };
 
-        player.sendMessage("Eine Wind Charge wurde beschworen!");
-    }
+        // Starte den Task und speichere ihn
+        task.runTaskTimer(NikeyV1.getPlugin(), 0, 1);
+        activeTasks.put(player.getUniqueId(), task); // Task speichern
 
-    private void killWindCharge(Player player) {
-        WindCharge windCharge = windCharges.get(player.getUniqueId());
-        if (windCharge != null && !windCharge.isDead()) {
-            windCharge.remove();
-            windCharges.remove(player.getUniqueId());
-
-        }
     }
 
     // Helper method to rotate a vector around the Y-axis (used to create the half-circle arc)
@@ -694,6 +664,13 @@ public class Airstone implements Listener {
             return new Vector(1, 0, 0);
         } else {
             return new Vector(-direction.getZ(), 0, direction.getX());
+        }
+    }
+    public void cancelWindChargeTask(Player player) {
+        BukkitRunnable task = activeTasks.get(player.getUniqueId());
+        if (task != null) {
+            task.cancel(); // Beendet den Task
+            activeTasks.remove(player.getUniqueId()); // Entfernt den Task aus der Map
         }
     }
 }

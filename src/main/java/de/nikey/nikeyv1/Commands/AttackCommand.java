@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DamageEntityType implements CommandExecutor , TabCompleter {
+public class AttackCommand implements CommandExecutor , TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 

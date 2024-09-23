@@ -201,8 +201,7 @@ public class Electrostone implements Listener {
                                 if (e != p) {
                                     e.getWorld().strikeLightningEffect(e.getLocation());
                                     if (e instanceof Player) {
-                                        List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(p);
-                                        if (!playersInSameTeam.contains(e)) {
+                                        if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
                                             Player player = (Player) e;
                                             player.damage(8, p);
                                             stunned.add(player);

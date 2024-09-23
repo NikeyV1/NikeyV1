@@ -1,8 +1,11 @@
 package de.nikey.nikeyv1.Util;
 
+import de.nikey.nikeyv1.Commands.Trust;
+import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.api.Stone;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
@@ -82,6 +85,11 @@ public class HelpUtil {
         }
         return blocks;
     }
+    public static boolean isTrusted(Player player, Player target) {
+        FileConfiguration config = NikeyV1.getPlugin().getConfig();
+        List<String> trustedList = config.getStringList(player.getName() + ".trust");
+        return trustedList.contains(target.getName());
+    }
 
 
     public static boolean shouldDamageEntity(LivingEntity entity, Player p) {
@@ -89,17 +97,19 @@ public class HelpUtil {
         if (entity == p)return false;
         switch (damageEntityType.toLowerCase()) {
             case "all":
-                if ((entity instanceof Player && !HelpUtil.getPlayersInSameTeam(p).contains(entity)) && p.canSee(entity)) {
-                    return true;
+                if (entity instanceof Player ) {
+                    if (!isTrusted(p, (Player) entity) && p.canSee(entity)) {
+                        return true;
+                    }
                 }else if (!(entity instanceof Player)){
                     return true;
                 }
             case "players":
-                return (entity instanceof Player && !HelpUtil.getPlayersInSameTeam(p).contains(entity)) && p.canSee(entity);
+                return (entity instanceof Player && !isTrusted(p, (Player) entity) && p.canSee(entity));
             case "monsters":
                 return entity instanceof Monster && p.canSee(entity);
             case "monsters-player":
-                if (entity instanceof Player && !HelpUtil.getPlayersInSameTeam(p).contains(entity) && p.canSee(entity)) {
+                if (entity instanceof Player && !isTrusted(p, (Player) entity) && p.canSee(entity)) {
                     return true;
                 }else if (entity instanceof Monster && p.canSee(entity)) {
                     return true;
@@ -154,23 +164,6 @@ public class HelpUtil {
         Vector direction = targetEntity.getLocation().toVector().subtract(entity.getLocation().toVector()).normalize();
         Vector boost = direction.multiply(boostStrength);
         entity.setVelocity(boost);
-    }
-
-    public static List<Player> getPlayersInSameTeam(Player player) {
-        List<Player> playersInSameTeam = new ArrayList<>();
-        Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
-        Team playerTeam = scoreboard.getEntryTeam(player.getName());
-
-        if (playerTeam != null) {
-            for (String entry : playerTeam.getEntries()) {
-                Player teamPlayer = Bukkit.getPlayer(entry);
-                if (teamPlayer != null) {
-                    playersInSameTeam.add(teamPlayer);
-                }
-            }
-        }
-
-        return playersInSameTeam;
     }
 
     public static void spawnParticles(Location center, int radius, int offsetX, int offsetY, int offsetZ, Particle particle) {

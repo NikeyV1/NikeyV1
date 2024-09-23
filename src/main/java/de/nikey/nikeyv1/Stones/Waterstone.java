@@ -324,13 +324,15 @@ public class Waterstone implements Listener {
     private void healOrDamageEntity(Player p, Entity e, double healAmount, double damageAmount, boolean applyAbsorption) {
         if (e instanceof Player) {
             Player player = (Player) e;
-            if (HelpUtil.getPlayersInSameTeam(p).contains(player) || e == p) {
+            if (HelpUtil.isTrusted(p,player) || e == p) {
                 if (applyAbsorption) {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400, 0, false));
                 }
                 if (player.isValid()) {
                     player.setHealth(Math.min(player.getHealth() + healAmount, 20));
                 }
+            }else {
+                player.damage(damageAmount);
             }
         } else if (e instanceof LivingEntity) {
             LivingEntity entity = (LivingEntity) e;

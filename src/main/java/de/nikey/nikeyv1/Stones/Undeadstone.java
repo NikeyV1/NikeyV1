@@ -553,7 +553,7 @@ public class Undeadstone implements Listener {
                 Player p = Bukkit.getPlayer(arr[0]);
                 if (p == null) return;
                 if (Stone.isSummoned(p,event.getEntity()) && HelpUtil.shouldDamageEntity(living,p) ) {
-                    if (living != event.getEntity() && !HelpUtil.getPlayersInSameTeam(p).contains(living) && living != p && !Stone.isSummoned(p,living)) {
+                    if (living != event.getEntity() && !Stone.isSummoned(p,living)) {
                         HelpUtil.spawnParticles(loc,3,0,-2,0,Particle.LARGE_SMOKE);
                         if (!entity.getCustomName().contains("low")) {
                             if (!entity.getCustomName().contains("strong")) {
@@ -789,8 +789,7 @@ public class Undeadstone implements Listener {
                 if (player == null) {
                     return;
                 }
-                List<Player> playersInSameTeam = HelpUtil.getPlayersInSameTeam(player);
-                if (playersInSameTeam.contains(event.getTarget())) {
+                if (HelpUtil.isTrusted(player, (Player) event.getTarget())) {
                     event.setCancelled(true);
                 }
             }

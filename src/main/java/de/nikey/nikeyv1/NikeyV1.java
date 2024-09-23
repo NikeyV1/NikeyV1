@@ -1,9 +1,7 @@
 package de.nikey.nikeyv1;
 
 import de.nikey.nikeyv1.Anti_Exploits.StoneSwapping;
-import de.nikey.nikeyv1.Commands.DamageEntityType;
-import de.nikey.nikeyv1.Commands.PEffectCMD;
-import de.nikey.nikeyv1.Commands.GiveStone;
+import de.nikey.nikeyv1.Commands.*;
 import de.nikey.nikeyv1.Listeners.*;
 import de.nikey.nikeyv1.Stones.*;
 import de.nikey.nikeyv1.Util.Items;
@@ -12,7 +10,6 @@ import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.WindCharge;
@@ -70,8 +67,10 @@ public final class NikeyV1 extends JavaPlugin{
         //Command
         getCommand("stone").setExecutor(new GiveStone());
         getCommand("peffect").setExecutor(new PEffectCMD());
-        getCommand("attack").setExecutor(new DamageEntityType());
-        getCommand("attack").setTabCompleter(new DamageEntityType());
+        getCommand("attack").setExecutor(new AttackCommand());
+        getCommand("attack").setTabCompleter(new AttackCommand());
+        getCommand("board").setExecutor(new ToggleScoreboard());
+        getCommand("trust").setExecutor(new Trust());
         //resipes
         Items.EnchantedAnvil();
         Items.Soulrecepie();
@@ -93,12 +92,6 @@ public final class NikeyV1 extends JavaPlugin{
         }
         Holystone.auraTasks.clear();
         removeGiants();
-        for (WindCharge charge : Airstone.windCharges.values()) {
-            if (charge != null && !charge.isDead()) {
-                charge.remove();
-            }
-        }
-        Airstone.windCharges.clear();
     }
 
     private void removeGiants() {
