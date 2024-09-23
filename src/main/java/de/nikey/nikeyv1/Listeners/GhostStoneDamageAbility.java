@@ -194,7 +194,7 @@ public class GhostStoneDamageAbility implements Listener {
             @Override
             public void run() {
                 stealtimer.replace(user,stealtimer.get(user)-1);
-                if (stealtimer.get(user) == 0) cancel();
+                if (stealtimer.get(user) == 0 || !victim.isValid() || !user.isValid()) cancel();
 
                 if (level == 15 || level == 16) {
                     if (victim.getAbsorptionAmount() == 0) {
