@@ -12,8 +12,10 @@ import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.WindCharge;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -91,6 +93,12 @@ public final class NikeyV1 extends JavaPlugin{
         }
         Holystone.auraTasks.clear();
         removeGiants();
+        for (WindCharge charge : Airstone.windCharges.values()) {
+            if (charge != null && !charge.isDead()) {
+                charge.remove();
+            }
+        }
+        Airstone.windCharges.clear();
     }
 
     private void removeGiants() {
