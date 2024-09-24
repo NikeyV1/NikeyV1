@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class GiveStone implements CommandExecutor {
+public class GiveStone implements CommandExecutor , TabCompleter{
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         org.bukkit.entity.Player p = (Player) sender;
@@ -78,5 +78,22 @@ public class GiveStone implements CommandExecutor {
             }
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        final List<String> completions = new ArrayList<>();
+        List<String> commands = new ArrayList<>();
+        commands.add("Fire");
+        commands.add("Electric");
+        commands.add("Water");
+        commands.add("Frozen");
+        commands.add("Undead");
+        commands.add("Holy");
+        commands.add("Ghost");
+        commands.add("Air");
+        commands.add("Elemental");
+        StringUtil.copyPartialMatches(args[0], commands, completions);
+        return completions;
     }
 }
