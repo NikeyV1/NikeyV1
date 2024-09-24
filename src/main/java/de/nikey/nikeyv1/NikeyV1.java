@@ -66,6 +66,7 @@ public final class NikeyV1 extends JavaPlugin{
         manager.registerEvents(new Airstone(),this);
         //Command
         getCommand("stone").setExecutor(new GiveStone());
+        getCommand("stone").setTabCompleter(new GiveStone());
         getCommand("peffect").setExecutor(new PEffectCMD());
         getCommand("attack").setExecutor(new AttackCommand());
         getCommand("attack").setTabCompleter(new AttackCommand());
