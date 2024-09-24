@@ -72,6 +72,7 @@ public final class NikeyV1 extends JavaPlugin{
         getCommand("attack").setTabCompleter(new AttackCommand());
         getCommand("board").setExecutor(new ToggleScoreboard());
         getCommand("trust").setExecutor(new Trust());
+        getCommand("trust").setTabCompleter(new Trust());
         //resipes
         Items.EnchantedAnvil();
         Items.Soulrecepie();
