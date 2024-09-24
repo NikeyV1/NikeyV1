@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class Trust implements CommandExecutor {
+public class Trust implements CommandExecutor , TabCompleter{
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -91,5 +91,28 @@ public class Trust implements CommandExecutor {
                 break;
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if(args.lenght == 0){
+            final List<String> completions = new ArrayList<>();
+            List<String> commands = new ArrayList<>();
+            commands.add("add");
+            commands.add("remove");
+            commands.add("list");
+            StringUtil.copyPartialMatches(args[0], commands, completions);
+            return completions;
+        }else{
+            final List<String> completions = new ArrayList<>();
+            List<String> commands = new ArrayList<>();
+            Collection<Player> players = Bukkit.getOnlinePlayers();
+            for (Player player : players) {
+                commands.add(player.getName());
+            }
+
+            StringUtil.copyPartialMatches(args[0], commands, completions);
+            return completions;
+        }
     }
 }
