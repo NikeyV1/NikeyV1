@@ -280,6 +280,16 @@ public class Items {
         smeta.setLore(slore);
         soul.setItemMeta(smeta);
 
+        ItemStack beacon = new ItemStack(Material.PRISMARINE_SHARD);
+        ItemMeta bmeta = beacon.getItemMeta();
+        bmeta.setDisplayName(ChatColor.of("#D0B4F4")+"Upgrade Token");
+        beacon.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        bmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        ArrayList<String> plore = new ArrayList<>();
+        plore.add("§6The strenght core");
+        bmeta.setLore(plore);
+        beacon.setItemMeta(bmeta);
+
         ItemStack anvil = new ItemStack(Material.PAPER);
         ItemMeta meta = anvil.getItemMeta();
         meta.setDisplayName("§3Stone Switcher");
@@ -291,10 +301,10 @@ public class Items {
         meta.setLore(lore);
         anvil.setItemMeta(meta);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(NikeyV1.getPlugin(),"stoneswitcher"),anvil);
-        recipe.shape("YTY","TWT","EYE");
+        recipe.shape("YTY","TWT",YEY");
         recipe.setIngredient('T',Material.TOTEM_OF_UNDYING);
         recipe.setIngredient('W',Material.RECOVERY_COMPASS);
-        recipe.setIngredient('Y',Material.NETHERITE_INGOT);
+        recipe.setIngredient('Y',new RecipeChoice.ExactChoice(beacon));
         recipe.setIngredient('E', new RecipeChoice.ExactChoice(soul));
         NikeyV1.getPlugin().getServer().addRecipe((Recipe) recipe);
     }
