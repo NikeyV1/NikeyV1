@@ -4,7 +4,6 @@ import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.DonutEffect;
-import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
@@ -23,12 +22,10 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Airstone implements Listener {
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
@@ -44,6 +41,7 @@ public class Airstone implements Listener {
     private final HashMap<Player, Boolean> isCharging = new HashMap<>();
     private final long MAX_CHARGE_TIME = 60 * 1000;
     private Map<UUID, BukkitRunnable> activeTasks = new HashMap<>();
+    private final Map<UUID, BukkitTask> haloTasks = new HashMap<>();
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -320,7 +318,7 @@ public class Airstone implements Listener {
     }
 
     private void startCharging(Player player) {
-        summonWindCharge(player);
+        summonWindEffect(player);
         isCharging.put(player, true);
         chargeStartTime.put(player, System.currentTimeMillis());
 
@@ -456,9 +454,9 @@ public class Airstone implements Listener {
         }.runTaskTimer(NikeyV1.getPlugin(), 0, swipeInterval);  // Run the next swipe after swipeInterval ticks
     }
 
-    private void summonWindCharge(Player player) {
+    private void summonWindEffect(Player player) {
         if (activeTasks.containsKey(player.getUniqueId())) {
-            player.sendMessage("§cError: windcharge cannot be summoned");
+            player.sendMessage("§cError: windeffect already active");
             return;
         }
 
@@ -469,17 +467,20 @@ public class Airstone implements Listener {
             public void run() {
                 if (!player.isOnline()) {
                     cancel(); // Beendet den Task
-                    activeTasks.remove(player.getUniqueId()); // Entfernt den Task aus der Map
+                    activeTasks.remove(player.getUniqueId());
                     return;
                 }
 
                 t += Math.PI / 16;
                 double x = Math.cos(t) * 1.5;
                 double z = Math.sin(t) * 1.5;
-                Location playerLoc = player.getLocation();
-                Location windLoc = playerLoc.clone().add(x, 1, z);
+                double yOffset = Math.sin(t) * 0.5;
 
-                windLoc.getWorld().spawnParticle(Particle.CLOUD, windLoc, 2, 0.1, 0.1, 0.1, 0.01);
+                Location playerLoc = player.getLocation();
+                Location windLoc = playerLoc.clone().add(x, yOffset+1, z);
+
+
+                windLoc.getWorld().spawnParticle(Particle.CLOUD, windLoc, 3, 0.1, 0.1, 0.1, 0.01);
             }
         };
 
@@ -623,8 +624,7 @@ public class Airstone implements Listener {
 
         for (int i = 0; i < beamLength; i++) {
             Location beamLocation = startLocation.clone().add(direction.clone().multiply(i));
-
-            // Generate a circle of particles at each step along the beam
+            
             for (int j = 0; j < particlesPerCircle; j++) {
                 double angle = 2 * Math.PI * j / particlesPerCircle;
                 double xOffset = perpVector1.getX() * Math.cos(angle) + perpVector2.getX() * Math.sin(angle);
@@ -634,7 +634,6 @@ public class Airstone implements Listener {
                 Location particleLocation = beamLocation.clone().add(xOffset, yOffset, zOffset);
                 particleLocation.getWorld().spawnParticle(Particle.SMALL_GUST, particleLocation, 1, 0, 0, 0, 0);
 
-                // Play sound effect at the center of the circle
                 if (j == 0) {
                     beamLocation.getWorld().playSound(beamLocation, Sound.ENTITY_ELDER_GUARDIAN_HURT, 1.0f, 1.0f);
                 }
@@ -658,7 +657,6 @@ public class Airstone implements Listener {
         }
     }
 
-    // Helper method to get a vector perpendicular to the given direction vector
     private Vector getPerpendicularVector(Vector direction) {
         if (direction.getX() == 0 && direction.getZ() == 0) {
             return new Vector(1, 0, 0);
@@ -670,7 +668,7 @@ public class Airstone implements Listener {
         BukkitRunnable task = activeTasks.get(player.getUniqueId());
         if (task != null) {
             task.cancel(); // Beendet den Task
-            activeTasks.remove(player.getUniqueId()); // Entfernt den Task aus der Map
+            activeTasks.remove(player.getUniqueId());
         }
     }
 }

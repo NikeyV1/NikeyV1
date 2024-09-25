@@ -5,12 +5,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-public class Trust implements CommandExecutor , TabCompleter{
+public class Trust implements CommandExecutor , TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -94,8 +98,8 @@ public class Trust implements CommandExecutor , TabCompleter{
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(args.lenght == 0){
+    public List<String> onTabComplete( CommandSender sender,  Command command,  String label,  String[] args) {
+        if(args.length == 0){
             final List<String> completions = new ArrayList<>();
             List<String> commands = new ArrayList<>();
             commands.add("add");
@@ -106,8 +110,7 @@ public class Trust implements CommandExecutor , TabCompleter{
         }else{
             final List<String> completions = new ArrayList<>();
             List<String> commands = new ArrayList<>();
-            Collection<Player> players = Bukkit.getOnlinePlayers();
-            for (Player player : players) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
                 commands.add(player.getName());
             }
 

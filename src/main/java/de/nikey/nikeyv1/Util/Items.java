@@ -301,7 +301,7 @@ public class Items {
         meta.setLore(lore);
         anvil.setItemMeta(meta);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(NikeyV1.getPlugin(),"stoneswitcher"),anvil);
-        recipe.shape("YTY","TWT",YEY");
+        recipe.shape("YTY","TWT","YEY");
         recipe.setIngredient('T',Material.TOTEM_OF_UNDYING);
         recipe.setIngredient('W',Material.RECOVERY_COMPASS);
         recipe.setIngredient('Y',new RecipeChoice.ExactChoice(beacon));
