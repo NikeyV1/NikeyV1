@@ -7,16 +7,17 @@ import de.nikey.nikeyv1.api.EntityTypeDamage;
 import de.slikey.effectlib.effect.EquationEffect;
 import de.slikey.effectlib.effect.FountainEffect;
 import io.papermc.paper.tag.EntityTags;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import net.kyori.adventure.text.Component;
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityAirChangeEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -81,6 +82,18 @@ public class Waterstone implements Listener {
             }
         }    
     }
+
+    @EventHandler
+    public void onEntityChangeBlock(EntityChangeBlockEvent event) {
+        if (event.getEntity() instanceof FallingBlock) {
+            FallingBlock fallingBlock = (FallingBlock) event.getEntity();
+            if (fallingBlock.getBlockData().getMaterial() == Material.STONE) {
+                fallingBlock.remove();
+                event.setCancelled(true);
+            }
+        }
+    }
+
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {

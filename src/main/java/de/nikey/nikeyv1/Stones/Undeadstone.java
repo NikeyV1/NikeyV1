@@ -472,11 +472,10 @@ public class Undeadstone implements Listener {
         zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(8);
         zombie.getAttribute(Attribute.GENERIC_STEP_HEIGHT).setBaseValue(6);
         zombie.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE).setBaseValue(7);
-        zombie.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(18);
-        zombie.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(10);
+        zombie.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(10);
+        zombie.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(6);
         zombie.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(10);
         zombie.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(100);
-        zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.5F);
         zombie.setMetadata("master", new FixedMetadataValue(NikeyV1.getPlugin(), true));
         zombie.setCanBreakDoors(true);
         zombie.setAdult();
@@ -491,7 +490,6 @@ public class Undeadstone implements Listener {
         }
         zombie.setCustomNameVisible(false);
 
-        // Remove zombie after 10 min
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -519,16 +517,20 @@ public class Undeadstone implements Listener {
         if (!(entity instanceof LivingEntity)) return;
         if (Stone.isUndeadMaster((LivingEntity) entity)) {
             Zombie zombie = (Zombie) entity;
-            if (event.getFinalDamage() > 12) {
-                event.setDamage(12);
+            if (event.getFinalDamage() > 15) {
+                event.setDamage(15);
             }
             if (event.getCause() == EntityDamageEvent.DamageCause.FALL && zombie.getCustomName().contains("low")) {
                 for (Entity nearbyEntity : zombie.getNearbyEntities(30, 30, 30)) {
                     if (nearbyEntity instanceof LivingEntity) {
-                        LivingEntity player = (LivingEntity) nearbyEntity;
-                        Vector dir = player.getLocation().toVector().subtract(zombie.getLocation().toVector()).normalize();
-                        player.setVelocity(dir.multiply(-2.5F).add(new Vector(0,1.5F,0)));
-                        player.damage(20+player.getHealth(),zombie);
+                        String[] arr = entity.getCustomName().split("'");
+                        Player p = Bukkit.getPlayer(arr[0]);
+                        if (HelpUtil.shouldDamageEntity((LivingEntity) nearbyEntity,p)) {
+                            LivingEntity player = (LivingEntity) nearbyEntity;
+                            Vector dir = player.getLocation().toVector().subtract(zombie.getLocation().toVector()).normalize();
+                            player.setVelocity(dir.multiply(-2.5F).add(new Vector(0,1.5F,0)));
+                            player.damage(player.getHealth(),zombie);
+                        }
                     }
                 }
                 zombie.getWorld().playSound(zombie,Sound.ENTITY_WITHER_BREAK_BLOCK,1,1);
