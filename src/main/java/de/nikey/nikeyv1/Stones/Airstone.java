@@ -115,14 +115,19 @@ public class Airstone implements Listener {
         double damage = fallHeight * dmgmultiplier;
 
         player.getWorld().playSound(player.getLocation(), Sound.ITEM_MACE_SMASH_AIR, 0.3f, 1.0f);
-        SphereEffect effect = new SphereEffect(NikeyV1.em);
-        effect.setLocation(player.getLocation());
-        effect.duration = 500;
-        effect.particle = Particle.GUST_EMITTER_SMALL;
-        effect.particles = (int) (fallHeight*0.43+1);
-        effect.radius = radius;
-        effect.visibleRange = 120;
-        effect.start();
+
+        if (radius>= 3.5) {
+            SphereEffect effect = new SphereEffect(NikeyV1.em);
+            effect.setLocation(player.getLocation());
+            effect.duration = 500;
+            effect.particle = Particle.GUST_EMITTER_SMALL;
+            effect.particles = (int) (fallHeight*0.43+1);
+            effect.radius = radius;
+            effect.visibleRange = 120;
+            effect.start();
+        }else {
+            player.getWorld().spawnParticle(Particle.GUST_EMITTER_SMALL, player.getLocation(), 4);
+        }
 
         for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
             if (entity instanceof LivingEntity) {
