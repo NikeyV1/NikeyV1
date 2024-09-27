@@ -556,7 +556,7 @@ public class Undeadstone implements Listener {
                 if (p == null) return;
                 if (Stone.isSummoned(p,event.getEntity()) && HelpUtil.shouldDamageEntity(living,p) ) {
                     if (living != event.getEntity() && !Stone.isSummoned(p,living)) {
-                        HelpUtil.spawnParticles(loc,3,0,-2,0,Particle.LARGE_SMOKE);
+                        HelpUtil.spawnParticles(loc,3,0,-2,0,Particle.LARGE_SMOKE,0);
                         if (!entity.getCustomName().contains("low")) {
                             if (!entity.getCustomName().contains("strong")) {
                                 double armor = living.getAttribute(Attribute.GENERIC_ARMOR).getValue();

@@ -166,7 +166,7 @@ public class HelpUtil {
         entity.setVelocity(boost);
     }
 
-    public static void spawnParticles(Location center, int radius, int offsetX, int offsetY, int offsetZ, Particle particle) {
+    public static void spawnParticles(Location center, int radius, double offsetX, double offsetY, double offsetZ, Particle particle,int count) {
         World world = center.getWorld();
 
         for (int x = -radius; x <= radius; x++) {
@@ -174,7 +174,7 @@ public class HelpUtil {
                 for (int z = -radius; z <= radius; z++) {
                     Location loc = center.clone().add(x + offsetX, y + offsetY, z + offsetZ);
                     if (center.distance(loc) <= radius) {
-                        world.spawnParticle(particle, loc, 0 ,0,0,0);
+                        world.spawnParticle(particle, loc, count ,0,0,0);
                     }
                 }
             }

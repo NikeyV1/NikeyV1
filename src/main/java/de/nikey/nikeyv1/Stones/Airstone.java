@@ -4,6 +4,7 @@ import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.DonutEffect;
+import de.slikey.effectlib.effect.SphereEffect;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
@@ -114,17 +115,25 @@ public class Airstone implements Listener {
         double damage = fallHeight * dmgmultiplier;
 
         player.getWorld().playSound(player.getLocation(), Sound.ITEM_MACE_SMASH_AIR, 0.3f, 1.0f);
-        player.getWorld().spawnParticle(Particle.GUST_EMITTER_SMALL, player.getLocation(), 4);
+        SphereEffect effect = new SphereEffect(NikeyV1.em);
+        effect.setLocation(player.getLocation());
+        effect.duration = 500;
+        effect.particle = Particle.GUST_EMITTER_SMALL;
+        effect.particles = (int) (fallHeight*0.4+1);
+        effect.radius = radius;
+        effect.visibleRange = 120;
+        effect.start();
 
         for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
             if (entity instanceof LivingEntity) {
                 LivingEntity target = (LivingEntity) entity;
+                if (HelpUtil.shouldDamageEntity(target,player)) {
+                    target.damage(damage, player);
 
-                target.damage(damage, player);
-
-                Vector knockback = target.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().multiply(1.5);
-                knockback.setY(0.5);
-                target.setVelocity(knockback);
+                    Vector knockback = target.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().multiply(1.5);
+                    knockback.setY(0.5);
+                    target.setVelocity(knockback);
+                }
             }
         }
     }
@@ -559,7 +568,7 @@ public class Airstone implements Listener {
             }
         }
 
-        HelpUtil.spawnParticles(player.getLocation(), (int) radius,0,0,0,Particle.TRIAL_SPAWNER_DETECTION);
+        HelpUtil.spawnParticles(player.getLocation(), (int) radius,0,0,0,Particle.TRIAL_SPAWNER_DETECTION,0);
     }
 
     @EventHandler
