@@ -111,7 +111,7 @@ public class Airstone implements Listener {
     }
 
     private void performShockwave(Player player, double fallHeight, double dmgmultiplier) {
-        double radius =fallHeight * 0.1;
+        double radius =fallHeight * 0.05;
         double damage = fallHeight * dmgmultiplier;
 
         player.getWorld().playSound(player.getLocation(), Sound.ITEM_MACE_SMASH_AIR, 0.3f, 1.0f);
@@ -119,7 +119,7 @@ public class Airstone implements Listener {
         effect.setLocation(player.getLocation());
         effect.duration = 500;
         effect.particle = Particle.GUST_EMITTER_SMALL;
-        effect.particles = (int) (fallHeight*0.4+1);
+        effect.particles = (int) (fallHeight*0.43+1);
         effect.radius = radius;
         effect.visibleRange = 120;
         effect.start();
