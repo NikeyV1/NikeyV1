@@ -1,6 +1,7 @@
 package de.nikey.nikeyv1.Listeners;
 
 import de.nikey.nikeyv1.NikeyV1;
+import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.BleedEffect;
 import io.papermc.paper.event.entity.EntityMoveEvent;
@@ -116,29 +117,28 @@ public class InfernoBlade implements Listener {
         List<LivingEntity> target;
         if (attacking.equalsIgnoreCase("all")) {
             target = player.getWorld().getLivingEntities().stream()
-                    .filter(entity -> !entity.equals(player) && entity.getLocation().distance(player.getLocation()) <= 30)
+                    .filter(entity -> HelpUtil.shouldDamageEntity(entity,player) && entity.getLocation().distance(player.getLocation()) <= 30)
                     .sorted(Comparator.comparingDouble(entity -> entity.getLocation().distance(player.getLocation())))
                     .limit(6)
                     .collect(Collectors.toList());
             targetsmap.put(player.getName(),target);
         }else if (attacking.equalsIgnoreCase("players")) {
             target = player.getWorld().getLivingEntities().stream()
-                    .filter(entity -> entity instanceof Player && !entity.equals(player) && entity.getLocation().distance(player.getLocation()) <= 30)
+                    .filter(entity -> HelpUtil.shouldDamageEntity(entity,player) && entity.getLocation().distance(player.getLocation()) <= 30)
                     .sorted(Comparator.comparingDouble(entity -> entity.getLocation().distance(player.getLocation())))
                     .limit(6)
                     .collect(Collectors.toList());
             targetsmap.put(player.getName(),target);
         }else if (attacking.equalsIgnoreCase("monsters")) {
             target = player.getWorld().getLivingEntities().stream()
-                    .filter(entity -> entity instanceof Monster && !entity.equals(player) && entity.getLocation().distance(player.getLocation()) <= 30)
+                    .filter(entity -> HelpUtil.shouldDamageEntity(entity,player) && entity.getLocation().distance(player.getLocation()) <= 30)
                     .sorted(Comparator.comparingDouble(entity -> entity.getLocation().distance(player.getLocation())))
                     .limit(6)
                     .collect(Collectors.toList());
             targetsmap.put(player.getName(),target);
         }else if (attacking.equalsIgnoreCase("monsters-player")) {
             target = player.getWorld().getLivingEntities().stream()
-                    .filter(entity -> (entity instanceof Monster || entity instanceof Player) &&
-                            !entity.equals(player) && entity.getLocation().distance(player.getLocation()) <= 30)
+                    .filter(entity -> HelpUtil.shouldDamageEntity(entity,player) && entity.getLocation().distance(player.getLocation()) <= 30)
                     .sorted(Comparator.comparingDouble(entity -> entity.getLocation().distance(player.getLocation())))
                     .limit(6)
                     .collect(Collectors.toList());
@@ -275,7 +275,7 @@ public class InfernoBlade implements Listener {
         Player player = event.getPlayer();
         if (player.getKiller() != null ) {
             Player killer = player.getKiller();
-            if (killer.getInventory().getItemInMainHand().getType() == Material.NETHERITE_SWORD && killer.getInventory().getItemInMainHand().getItemMeta().hasLore()) {
+            if (Stone.isInfernoBlade(killer.getInventory().getItemInMainHand())) {
                 BleedEffect effect = new BleedEffect(NikeyV1.em);
                 effect.setLocation(player.getLocation());
                 effect.iterations = 0;

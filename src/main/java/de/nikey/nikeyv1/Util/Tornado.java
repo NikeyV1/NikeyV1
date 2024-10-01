@@ -76,37 +76,21 @@ public class Tornado implements Listener {
             @SuppressWarnings("deprecation")
             public VortexBlock(Location l, Material m, byte d) {
 
-                if (l.getBlock().getType() != Material.AIR && l.getBlock().getType() != Material.BEDROCK && l.getBlock().getType() != Material.DRAGON_EGG) {
+                Block b = l.getBlock();
+                FallingBlock entity1 = l.getWorld().spawnFallingBlock(l, Material.STONE, b.getData());
+                entity = entity1;
+                entity1.setCancelDrop(true);
+                entity1.setDropItem(false);
+                entity.getWorld().spawnParticle(Particle.DRIPPING_WATER,entity.getLocation(),10);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        entity.remove();
+                    }
+                }.runTaskLater(NikeyV1.getPlugin(),20*3);
 
-                    Block b = l.getBlock();
-                    FallingBlock entity1 = l.getWorld().spawnFallingBlock(l, Material.STONE, b.getData());
-                    entity = entity1;
-                    entity1.setDropItem(false);
-                    entity.getWorld().spawnParticle(Particle.DRIPPING_WATER,entity.getLocation(),10);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            entity.remove();
-                        }
-                    }.runTaskLater(NikeyV1.getPlugin(),20*3);
 
-
-                    removable = !spew;
-                }
-                else {
-                    FallingBlock entity1 = l.getWorld().spawnFallingBlock(l, m, d);
-                    entity = entity1;
-                    entity1.setDropItem(false);
-
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            entity.remove();
-                        }
-                    }.runTaskLater(NikeyV1.getPlugin(),20*3);
-                    entity.getWorld().spawnParticle(Particle.DRIPPING_WATER,entity.getLocation(),10);
-                    removable = !explode;
-                }
+                removable = !spew;
 
                 addMetadata();
             }
@@ -141,9 +125,7 @@ public class Tornado implements Listener {
 
                 // Pick up blocks
                 Block b = entity.getLocation().add(v.clone().normalize()).getBlock();
-                if(b.getType() != Material.AIR && b.getType() != Material.BEDROCK && b.getType() != Material.DRAGON_EGG) {
-                    new_blocks.add(new VortexBlock(b.getLocation(), Material.STONE , b.getData()));
-                }
+                new_blocks.add(new VortexBlock(b.getLocation(), Material.STONE , b.getData()));
 
                 // Pick up other entities
                 List<org.bukkit.entity.Entity> entities = entity.getNearbyEntities(1.5D, 1.5D, 1.5D);

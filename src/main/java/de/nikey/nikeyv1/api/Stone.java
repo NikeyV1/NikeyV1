@@ -5,12 +5,14 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Map;
 import java.util.Objects;
 
 @SuppressWarnings("ALL")
@@ -69,9 +71,12 @@ public class Stone {
     public static boolean isInfernoBlade(ItemStack item) {
         if (!item.hasItemMeta())return false;
         if (!item.getItemMeta().hasLore())return false;
+        if (!item.getEnchantments().containsKey(Enchantment.SHARPNESS)) return false;
+
+        Map<Enchantment, Integer> enchantments = item.getEnchantments();
 
         ItemMeta meta = item.getItemMeta();
-        return meta.hasCustomModelData() && meta.isUnbreakable() && meta.getLore().contains("§7What will you do?") && item.getType() == Material.NETHERITE_SWORD;
+        return meta.hasCustomModelData() && enchantments.get(Enchantment.SHARPNESS) == 7 && meta.isUnbreakable() && meta.getLore().contains("§7What will you do?") && item.getType() == Material.NETHERITE_SWORD;
     }
 
     public static String whatStone(ItemStack item) {

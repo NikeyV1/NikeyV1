@@ -20,10 +20,7 @@ import org.bukkit.event.entity.EntityAirChangeEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -82,6 +79,24 @@ public class Waterstone implements Listener {
             }
         }    
     }
+
+    @EventHandler
+    public void onPlayerToggleSprint(PlayerToggleSprintEvent event) {
+        Player player = event.getPlayer();
+        int level = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
+        String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
+        if (stone.equalsIgnoreCase("water") && level >= 6) {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE,PotionEffect.INFINITE_DURATION,0,true,false,false));
+        }else {
+            PotionEffect dolphinGrace = player.getPotionEffect(PotionEffectType.DOLPHINS_GRACE);
+            if (dolphinGrace != null) {
+                if (dolphinGrace.getDuration() == PotionEffect.INFINITE_DURATION) {
+                    player.removePotionEffect(PotionEffectType.DOLPHINS_GRACE);
+                }
+            }
+        }
+    }
+
 
     @EventHandler
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
