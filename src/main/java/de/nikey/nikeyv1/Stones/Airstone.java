@@ -535,8 +535,6 @@ public class Airstone implements Listener {
     public void onEntityToggleGlide(EntityToggleGlideEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-
-            // Überprüfen, ob der Spieler versucht, das Gleiten zu deaktivieren, während der Timer läuft
             if (flyingtimer.containsKey(player.getName()) && !event.isGliding()) {
                 event.setCancelled(true);
             }

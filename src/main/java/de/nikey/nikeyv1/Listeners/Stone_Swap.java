@@ -2,6 +2,7 @@ package de.nikey.nikeyv1.Listeners;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.Items;
+import de.nikey.nikeyv1.api.Stone;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -22,24 +23,25 @@ public class Stone_Swap implements Listener {
         ItemStack mainHand = player.getInventory().getItemInMainHand();
         ItemStack offHand = player.getInventory().getItemInOffHand();
         if (event.getAction() == Action.RIGHT_CLICK_AIR) {
-            if (mainHand.getType() == Material.PAPER && offHand.getType() == Material.FIREWORK_STAR && mainHand.getItemMeta().getDisplayName().equalsIgnoreCase("§3Stone Switcher") && offHand.getItemMeta().hasLore()) {
+            if (mainHand.getType() == Material.PAPER && Stone.isStone(offHand) && mainHand.getItemMeta().getDisplayName().equalsIgnoreCase("§3Stone Switcher")) {
+                event.setCancelled(true);
+                boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
+                if (buffed) {
+                    player.sendMessage("§cDon't even try!");
+                    return;
+                }
                 if (mainHand.getAmount() > 1) {
                     mainHand.setAmount(mainHand.getAmount() - 1);
                 } else {
                     player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
                 }
-                boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
-                if (!buffed) {
-                    player.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
-                    FileConfiguration config = NikeyV1.getPlugin().getConfig();
-                    String stone = config.getString(player.getName() + ".stone");
-                    Integer level = config.getInt(player.getName() + ".level");
-                    player.getActivePotionEffects().clear();
-                    swap(player,level, stone);
-                    player.getWorld().playSound(player.getLocation(),Sound.BLOCK_BEACON_POWER_SELECT,1,1);
-                }else {
-                    player.sendMessage("§cDon't even try!");
-                }
+                player.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
+                FileConfiguration config = NikeyV1.getPlugin().getConfig();
+                String stone = config.getString(player.getName() + ".stone");
+                Integer level = config.getInt(player.getName() + ".level");
+                player.getActivePotionEffects().clear();
+                swap(player,level, stone);
+                player.getWorld().playSound(player.getLocation(),Sound.BLOCK_BEACON_POWER_SELECT,1,1);
             }
         }
     }

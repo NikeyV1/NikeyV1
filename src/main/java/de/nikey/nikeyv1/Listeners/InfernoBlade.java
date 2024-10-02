@@ -87,7 +87,7 @@ public class InfernoBlade implements Listener {
                                                 return;
                                             }
                                         }.runTaskLater(NikeyV1.getPlugin(),20*6);
-                                        Block b = player.getTargetBlock((Set)null, 8);
+                                        Block b = player.getTargetBlock(HelpUtil.transparentBlocks(), 8);
                                         Location loc = new Location(b.getWorld(), (double)b.getX(), (double)b.getY(), (double)b.getZ(), player.getLocation().getYaw(), player.getLocation().getPitch());
                                         for (int i = 0; i < 3; i++) {
                                             Location loca = loc.clone().subtract(0, i, 0);

@@ -3,19 +3,15 @@ package de.nikey.nikeyv1.Stones;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.Util.Tornado;
-import de.nikey.nikeyv1.api.EntityTypeDamage;
 import de.slikey.effectlib.effect.EquationEffect;
 import de.slikey.effectlib.effect.FountainEffect;
 import io.papermc.paper.tag.EntityTags;
-import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockPhysicsEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityAirChangeEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -27,7 +23,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 

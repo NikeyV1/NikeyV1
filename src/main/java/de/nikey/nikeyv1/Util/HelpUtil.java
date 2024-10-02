@@ -130,7 +130,6 @@ public class HelpUtil {
             }else if (nearbySummoned instanceof Warden) {
                 Warden entity = (Warden) nearbySummoned;
                 if (entity.getName().contains(p.getName()+"'s")) {
-                    entity.setTarget(damagedEntity);
                     entity.clearAnger(damagedEntity);
                     entity.setAnger(damagedEntity,80);
                 }
@@ -139,6 +138,9 @@ public class HelpUtil {
                 if (entity.getName().contains(p.getName()+"'s")) {
                     entity.setTarget(damagedEntity);
                 }
+            }else if (nearbySummoned instanceof Mob) {
+                Mob mob = (Mob) nearbySummoned;
+                mob.setTarget(damagedEntity);
             }
         }
     }
@@ -198,5 +200,37 @@ public class HelpUtil {
         Vector direction = playerLocation.getDirection().normalize(); // Blickrichtung normalisieren
         Location locationInFront = playerLocation.add(direction.multiply(blocksAhead));
         return locationInFront;
+    }
+
+    public static Set<Material> transparentBlocks(){
+        Set<Material> durchlauffaehigeMaterialien = new HashSet<>();
+
+        // Hinzufügen aller Materialien, durch die ein Spieler durchlaufen kann
+        durchlauffaehigeMaterialien.add(Material.AIR);
+        durchlauffaehigeMaterialien.add(Material.WATER);
+        durchlauffaehigeMaterialien.add(Material.LAVA);
+        durchlauffaehigeMaterialien.add(Material.TALL_GRASS);
+        durchlauffaehigeMaterialien.add(Material.SHORT_GRASS);
+        durchlauffaehigeMaterialien.add(Material.DANDELION);
+        durchlauffaehigeMaterialien.add(Material.POPPY);
+        durchlauffaehigeMaterialien.add(Material.BLUE_ORCHID);
+        durchlauffaehigeMaterialien.add(Material.ALLIUM);
+        durchlauffaehigeMaterialien.add(Material.AZURE_BLUET);
+        durchlauffaehigeMaterialien.add(Material.RED_TULIP);
+        durchlauffaehigeMaterialien.add(Material.ORANGE_TULIP);
+        durchlauffaehigeMaterialien.add(Material.WHITE_TULIP);
+        durchlauffaehigeMaterialien.add(Material.PINK_TULIP);
+        durchlauffaehigeMaterialien.add(Material.OXEYE_DAISY);
+        durchlauffaehigeMaterialien.add(Material.SUNFLOWER);
+        durchlauffaehigeMaterialien.add(Material.LILAC);
+        durchlauffaehigeMaterialien.add(Material.ROSE_BUSH);
+        durchlauffaehigeMaterialien.add(Material.PEONY);
+        durchlauffaehigeMaterialien.add(Material.LIGHT);
+        durchlauffaehigeMaterialien.add(Material.SUGAR_CANE);
+        durchlauffaehigeMaterialien.add(Material.WARPED_ROOTS);
+        durchlauffaehigeMaterialien.add(Material.TWISTING_VINES);
+        durchlauffaehigeMaterialien.add(Material.TALL_SEAGRASS);
+
+        return durchlauffaehigeMaterialien;
     }
 }
