@@ -661,8 +661,10 @@ public class Undeadstone implements Listener {
     public void onProjectileHit(ProjectileHitEvent event) {
         if (event.getHitEntity() != null) {
             Entity hitEntity = event.getHitEntity();
-            if (Stone.isUndeadMaster((LivingEntity) hitEntity) && hitEntity.getCustomName().contains("low") ) {
-                event.setCancelled(true);
+            if (hitEntity instanceof LivingEntity) {
+                if (Stone.isUndeadMaster((LivingEntity) hitEntity) && hitEntity.getCustomName().contains("low") ) {
+                    event.setCancelled(true);
+                }
             }
         }
     }
