@@ -53,6 +53,7 @@ public class Undeadstone implements Listener {
         Player p = event.getPlayer();
         ItemStack item = event.getItem();
         if (item == null) return;
+        if (!item.hasItemMeta())return;
         if (event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.of("#100613")+"Undead Stone")&& event.getItem().getType() == Material.FIREWORK_STAR){
             String[] arr = item.getLore().get(1).split(":");
             int i = Integer.parseInt(arr[1]);
