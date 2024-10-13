@@ -6,6 +6,8 @@ import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.EntityTypeDamage;
 import de.slikey.effectlib.effect.SmokeEffect;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -170,7 +172,8 @@ public class Frozenstone implements Listener {
                         arrowsShot.replace(p,shot+1);
                         if (arrowsShot.get(p) == 5) {
                             abilityActivated = false;
-                            p.sendMessage(ChatColor.RED + "You have shot 5 Frozen Daggers. Ability deactivated!");
+                            Component textComponent = Component.text("You have shot 5 Frozen Daggers").color(NamedTextColor.RED);
+                            p.sendActionBar(textComponent);
                             arrowsShot.put(p,0);
                         }
                     }
@@ -472,7 +475,7 @@ public class Frozenstone implements Listener {
             arrow.setCustomNameVisible(false);
             arrow.setDamage(10);
             arrow.setCritical(true);
-            arrow.setPierceLevel(2);
+            arrow.setPierceLevel(3);
             arrow.setGravity(false); // Disable arrow gravity
             arrow.setMetadata(ICE_ARROW_METADATA, new FixedMetadataValue(NikeyV1.getPlugin(), true)); // Set metadata to mark arrow as ice arrow for no reason
             Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), arrow::remove, 20 * 6L); // Remove arrow after 6 seconds
@@ -480,20 +483,25 @@ public class Frozenstone implements Listener {
                 @Override
                 public void run() {
                     if (!arrow.isDead()){
-                        arrow.getWorld().spawnParticle(Particle.SNOWFLAKE,arrow.getLocation(),2);
+                        arrow.getWorld().spawnParticle(Particle.SNOWFLAKE,arrow.getLocation(),0,0.2,0.2,0.2);
+                        arrow.getWorld().spawnParticle(Particle.SNOWFLAKE,arrow.getLocation(),0,0.2,0.2,0.2);
+                        arrow.getWorld().spawnParticle(Particle.SNOWFLAKE,arrow.getLocation(),0,0.2,0.2,0.2);
+                        arrow.getWorld().spawnParticle(Particle.SNOWFLAKE,arrow.getLocation(),0,0.2,0.2,0.2);
+                        arrow.getWorld().spawnParticle(Particle.SNOWFLAKE,arrow.getLocation(),0,0.2,0.2,0.2);
                     }else {
                         cancel();
                         return;
                     }
                 }
-            }.runTaskTimer(NikeyV1.getPlugin(),0L,3L);
+            }.runTaskTimer(NikeyV1.getPlugin(),0L,3);
         }
     }
 
     public void activateAbility(Player player) {
         abilityActivated = true;
         arrowsShot.put(player,0);
-        player.sendMessage(ChatColor.GREEN + "Ability activated! You can now throw Frozen Daggers for 20 seconds.");
+        Component textComponent = Component.text("You can now throw Frozen Daggers for 20 seconds").color(NamedTextColor.GREEN);
+        player.sendActionBar(textComponent);
         Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
             abilityActivated = false;
             arrowsShot.remove(player);

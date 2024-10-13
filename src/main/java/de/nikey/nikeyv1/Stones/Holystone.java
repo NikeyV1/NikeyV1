@@ -5,6 +5,8 @@ import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.EntityTypeDamage;
 import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.CircleEffect;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.*;
@@ -563,7 +565,8 @@ public class Holystone implements Listener {
                         effect.enableRotation=false;
                         effect.particle=Particle.INSTANT_EFFECT;
                         effect.start();
-                        selectedPlayer.sendMessage(ChatColor.BLUE+player.getName()+ChatColor.GREEN+" buffed you");
+                        Component textComponent = Component.text(player.getName()).color(NamedTextColor.BLUE).append(Component.text(" buffed you").color(NamedTextColor.GREEN));
+                        player.sendActionBar(textComponent);
                         //Remove Buff
                         new BukkitRunnable() {
                             @Override
@@ -587,9 +590,9 @@ public class Holystone implements Listener {
 
                             int delayTicks;
                             if (level == 20) {
-                                delayTicks = 20 * 20; // 20 seconds
+                                delayTicks = 20 * 15; // 20 seconds
                             } else if (level == 21) {
-                                delayTicks = 20 * 30; // 30 seconds
+                                delayTicks = 20 * 25; // 30 seconds
                             } else {
                                 continue;
                             }

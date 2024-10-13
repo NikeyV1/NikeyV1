@@ -98,24 +98,21 @@ public class Trust implements CommandExecutor , TabCompleter {
     }
 
     @Override
-    public List<String> onTabComplete( CommandSender sender,  Command command,  String label,  String[] args) {
-        if(args.length == 0){
-            final List<String> completions = new ArrayList<>();
-            List<String> commands = new ArrayList<>();
+    public List<String> onTabComplete(CommandSender sender,  Command command,  String label,  String[] args) {
+        List<String> commands = new ArrayList<>();
+        if(args.length == 1){
             commands.add("add");
             commands.add("remove");
             commands.add("list");
-            StringUtil.copyPartialMatches(args[0], commands, completions);
-            return completions;
-        }else{
-            final List<String> completions = new ArrayList<>();
-            List<String> commands = new ArrayList<>();
+        }else if (args.length == 2){
+            if (!(sender instanceof Player)) return null;
+            Player s = (Player) sender;
             for (Player player : Bukkit.getOnlinePlayers()) {
-                commands.add(player.getName());
+                if (s.canSee(player) && s != player) {
+                    commands.add(player.getName());
+                }
             }
-
-            StringUtil.copyPartialMatches(args[0], commands, completions);
-            return completions;
         }
+        return commands;
     }
 }

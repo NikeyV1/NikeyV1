@@ -42,7 +42,6 @@ public class Airstone implements Listener {
     private final HashMap<Player, Boolean> isCharging = new HashMap<>();
     private final long MAX_CHARGE_TIME = 60 * 1000;
     private Map<UUID, BukkitRunnable> activeTasks = new HashMap<>();
-    private final Map<UUID, BukkitTask> haloTasks = new HashMap<>();
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
