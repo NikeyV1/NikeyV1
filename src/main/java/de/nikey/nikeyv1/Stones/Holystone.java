@@ -596,6 +596,7 @@ public class Holystone implements Listener {
                             } else {
                                 continue;
                             }
+                            vanishedPlayers.add(player);
 
                             Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
                                 for (Player p : Bukkit.getOnlinePlayers()) {
@@ -604,8 +605,6 @@ public class Holystone implements Listener {
                                 vanishedPlayers.remove(player);
                                 selectedPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, new net.md_5.bungee.api.chat.TextComponent(org.bukkit.ChatColor.AQUA + "You are now visible!"));
                             }, delayTicks);
-
-                            vanishedPlayers.add(player);
                         }
                     }
                 }

@@ -5,7 +5,6 @@ import de.nikey.nikeyv1.Commands.*;
 import de.nikey.nikeyv1.Listeners.*;
 import de.nikey.nikeyv1.Stones.*;
 import de.nikey.nikeyv1.Util.Items;
-import de.nikey.nikeyv1.Util.Tornado;
 import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
@@ -54,7 +53,6 @@ public final class NikeyV1 extends JavaPlugin{
         manager.registerEvents(new InventoryListener(),this);
         manager.registerEvents(new StoneSwapping(),this);
         manager.registerEvents(new Stone_Swap(),this);
-        manager.registerEvents(new Tornado(),this);
         manager.registerEvents(new InfernoBlade(),this);
         manager.registerEvents(new Elementalstone(),this);
         manager.registerEvents(new UndeadStoneListener(),this);

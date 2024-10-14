@@ -2,29 +2,26 @@ package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
-import de.nikey.nikeyv1.Util.Tornado;
 import de.slikey.effectlib.effect.EquationEffect;
 import de.slikey.effectlib.effect.FountainEffect;
 import io.papermc.paper.tag.EntityTags;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityAirChangeEvent;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
-import java.util.HashMap;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("ALL")
 public class Waterstone implements Listener {
@@ -33,6 +30,7 @@ public class Waterstone implements Listener {
 
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
     private int timer;
+    private final HashMap<LivingEntity, Long> teleportCooldown = new HashMap<>();
     public static long remainingTime1;
     public static long remainingTime2;
     public static long remainingTime3;
@@ -381,26 +379,175 @@ public class Waterstone implements Listener {
             NikeyV1.getPlugin().saveConfig();
             String stone = config.getString(p.getName() + ".stone");
             if (p.isSneaking()) {
-                if (i== 20){
+                if (i == 20){
                     if (!(cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
 
-                        p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH, 1.0f, 1.0f);
                         Location BlocksAway = p.getLocation().add(p.getLocation().getDirection().multiply(4));
-                        Tornado.spawnTornado(NikeyV1.getPlugin(),BlocksAway,Material.STONE,p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getData(),p.getLocation().getDirection().multiply(4),0.4,275,20*20,false,p,false);
+                        spawnWaterTornado(BlocksAway,20,p);
                     }
                 } else if (i == 21) {
                     if (!(cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
 
-                        p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH, 1.0f, 1.0f);
-                        Location BlocksAway = p.getLocation().add(p.getLocation().getDirection().multiply(4));
-                        Tornado.spawnTornado(NikeyV1.getPlugin(),BlocksAway,Material.STONE,p.getLocation().getWorld().getHighestBlockAt(p.getLocation()).getData(),p.getLocation().getDirection().multiply(4.5),0.4,300,20*30,false,p,false);
+                        Location BlocksAway = p.getLocation().add(p.getLocation().getDirection().multiply(3));
+                        spawnWaterTornado(BlocksAway,21,p);
                     }
                 }
             }
         }
     }
+
+    public void spawnWaterTornado(Location location, int level, Player player) {
+        World world = location.getWorld();
+        Random random = new Random();
+
+        int dmg;
+        double speed;
+        int time;
+        if (level == 21) {
+            dmg = 9;
+            speed = 0.076;
+            time = 30*20;
+        }else {
+            dmg = 5;
+            speed = 0.06;
+            time = 20*20;
+        }
+        new BukkitRunnable() {
+            int duration = time;
+            Vector randomOffset = new Vector(0, 0, 0);
+
+            @Override
+            public void run() {
+                if (duration <= 0) {
+                    this.cancel();
+                    return;
+                }
+
+                // Flugbahn des Tornados basierend auf der Blickrichtung des Spielers
+                Vector direction = location.getDirection().normalize(); // Richtung des Spielers
+                if (random.nextDouble() < 0.1) {
+                    randomOffset = new Vector(random.nextDouble() - 0.5, 0, random.nextDouble() - 0.5); // Zufälliger Offset
+
+                    // Tornado bewegt sich in die Richtung des Spielers mit langsamer Geschwindigkeit und bleibt auf dem höchsten Block
+                    location.add(direction.multiply(speed).add(randomOffset)); // Tornado bewegt sich sehr langsam
+                }else {
+                    location.add(direction.multiply(speed)); // Tornado bewegt sich sehr langsam
+                }
+
+                // Höhe auf dem höchsten Block anpassen
+                Block highestBlock = world.getHighestBlockAt(location).getLocation().getBlock();
+                location.setY(highestBlock.getY() + 1); // Setze den Tornado 1 Block über dem höchsten Block
+
+                // Spieler in der Nähe beeinflussen
+                for (Entity entity : world.getEntities()) {
+                    if (entity instanceof LivingEntity) {
+                        LivingEntity living = (LivingEntity) entity;
+                        if (living.getLocation().distance(location) <= 11 && HelpUtil.shouldDamageEntity(living,player)) {
+                            Vector direc = living.getLocation().toVector().subtract(location.toVector()).normalize().multiply(-1);
+                            direc.setY(0.5);
+                            living.setVelocity(direc);
+
+                        }
+                    }else {
+                        if (entity.getLocation().distance(location) <= 11) {
+                            Vector direc = entity.getLocation().toVector().subtract(location.toVector()).normalize().multiply(-1);
+                            direc.setY(0.5);
+                            entity.setVelocity(direc);
+                        }
+                    }
+                }
+                if (random.nextDouble() < 0.03) {
+                    int x = (int) location.getX();
+                    int z = (int) location.getZ();
+                    int randomX = ThreadLocalRandom.current().nextInt(x - 4, x + 4);
+                    int randomZ = ThreadLocalRandom.current().nextInt(z - 4, z + 4);
+                    int randomY = world.getHighestBlockYAt(randomX, randomZ);
+                    Location blockLocation = new Location(world, randomX, randomY + 1, randomZ);
+
+                    FallingBlock fallingBlock = world.spawnFallingBlock(blockLocation, location.getWorld().getHighestBlockAt(location).getType(), (byte) 0);
+                    fallingBlock.setCancelDrop(true);
+                    fallingBlock.setHurtEntities(true);
+                    fallingBlock.setDamagePerBlock(5);
+
+                    // Setze die Velocity des Blocks, um ihn leicht nach außen zu schieben
+                    fallingBlock.setVelocity(new Vector((random.nextDouble() - 0.5) * 0.2, 0.4, (random.nextDouble() - 0.5) * 0.2));
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            fallingBlock.remove();
+                        }
+                    }.runTaskLater(NikeyV1.getPlugin(), 32);
+                }
+
+                List<Entity> entities = new ArrayList<>();
+                for (int i = 0; i < 12; i++) {
+                    double radius = 3.5 - (i * 0.2);
+                    for (int j = 0; j < 360; j += 30) {
+                        double angle = Math.toRadians(j);
+                        double x = radius * Math.cos(angle);
+                        double z = radius * Math.sin(angle);
+
+                        Location particleLocation = location.clone().add(x, -i, z);
+                        particleLocation.add(0, 12, 0);
+
+                        for (Entity entity : particleLocation.getNearbyEntities(3.5,3,3.5)) {
+                            entities.add(entity);
+                        }
+                        // Hauptpartikel für den Tornado (Wolken)
+                        world.spawnParticle(Particle.CLOUD, particleLocation, 5, 0.15, 0.15, 0.15, 0.01); // Wolkenpartikel
+
+                        // Zusätzliche Wasserpartikel, um den Effekt eines Wassertornados zu erzeugen
+                        if (random.nextDouble() < 0.35) { // 35% der Partikel sind Wasser
+                            world.spawnParticle(Particle.SPLASH, particleLocation, 2, 0.1, 0.1, 0.1, 0.01); // Wasserspritzer
+                            world.spawnParticle(Particle.FALLING_WATER, particleLocation, 3, 0.1, 0.1, 0.1, 0.01); // Tropfendes Wasser
+                        }
+                    }
+                }
+
+                for (Entity entity : entities) {
+                    if (entity instanceof LivingEntity) {
+                        LivingEntity living = (LivingEntity) entity;
+                        if (HelpUtil.shouldDamageEntity(living,player)) {
+                            living.damage(dmg,player);
+
+                            teleportCooldown.put(living, System.currentTimeMillis() + 3000);
+                        }
+                    }
+                }
+
+                world.playSound(location, Sound.ENTITY_DOLPHIN_SPLASH, 1.2f, 1f);
+
+                duration--;
+            }
+        }.runTaskTimer(NikeyV1.getPlugin(), 0, 1);
+    }
+
+    // Beispielmethode um Teleport zu verhindern
+    public boolean canTeleport(LivingEntity entity) {
+        return !teleportCooldown.containsKey(entity) || teleportCooldown.get(entity) < System.currentTimeMillis();
+    }
+
+    @EventHandler
+    public void onEntityTeleport(EntityTeleportEvent event) {
+        if (event.getEntity() instanceof LivingEntity) {
+            LivingEntity entity = (LivingEntity) event.getEntity();
+            if (!canTeleport(entity)) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    // EventHandler speziell für Spieler
+    @EventHandler
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        Player player = event.getPlayer();
+        if (!canTeleport(player)) {
+            event.setCancelled(true); // Verhindert den Teleport
+        }
+    }
+
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
