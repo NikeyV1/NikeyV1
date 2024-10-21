@@ -224,6 +224,7 @@ public class Holystone implements Listener {
                                             DamageSource source = DamageSource.builder(DamageType.MAGIC).withDirectEntity(p).withCausingEntity(p).build();
                                             player.damage(armor+10,source);
                                         }
+                                        break;
                                     }
                                 }
                             }
@@ -253,6 +254,7 @@ public class Holystone implements Listener {
                                             DamageSource source = DamageSource.builder(DamageType.MAGIC).withDirectEntity(p).withCausingEntity(p).build();
                                             player.damage(armor+10,source);
                                         }
+                                        break;
                                     }
                                 }
                             }
@@ -282,6 +284,7 @@ public class Holystone implements Listener {
                                             DamageSource source = DamageSource.builder(DamageType.MAGIC).withDirectEntity(p).withCausingEntity(p).build();
                                             player.damage(armor+15,source);
                                         }
+                                        break;
                                     }
                                 }
                             }
@@ -311,6 +314,7 @@ public class Holystone implements Listener {
                                             DamageSource source = DamageSource.builder(DamageType.MAGIC).withDirectEntity(p).withCausingEntity(p).build();
                                             player.damage(armor+15,source);
                                         }
+                                        break;
                                     }
                                 }
                             }
@@ -340,6 +344,7 @@ public class Holystone implements Listener {
                                             DamageSource source = DamageSource.builder(DamageType.MAGIC).withDirectEntity(p).withCausingEntity(p).build();
                                             player.damage(armor+15,source);
                                         }
+                                        break;
                                     }
                                 }
                             }
