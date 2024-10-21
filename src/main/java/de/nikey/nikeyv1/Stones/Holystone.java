@@ -199,153 +199,42 @@ public class Holystone implements Listener {
             }else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR){
                 String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
                 if (!p.isSneaking()) {
-                    if (i == 15){
-                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
-                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            //Cooldown-Ability
-                            p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
-                            for (Entity e : p.getNearbyEntities(10,10,10)){
-                                if (e instanceof LivingEntity) {
-                                    if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
-                                        LivingEntity player =(LivingEntity) e;
-                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                        armor = armor*1.8;
-                                        int players = p.getNearbyEntities(10, 10, 10).size();
-                                        if (players == 1){
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                                        } else if (players  == 2 || players == 3 || players == 4) {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
-                                        }else {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
-                                        }
-                                        if (player instanceof Player) {
-                                            player.damage(armor+5,p);
-                                        }else {
-                                            DamageSource source = DamageSource.builder(DamageType.MAGIC).withDirectEntity(p).withCausingEntity(p).build();
-                                            player.damage(armor+10,source);
-                                        }
-                                        break;
+                    double radius = 7.5;
+                    if (i >= 16)radius = 10;
+                    double multiplyer = 1.6;
+                    if (i >= 18)multiplyer = 1.9;
+                    int extraDamage = 5;
+                    if (i >= 17)extraDamage = 10;
+                    int extraLevel = 0;
+                    if (i >= 19)extraLevel = 1;
+
+                    if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
+                        ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+
+                        p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1, 1);
+                        for (Entity e : p.getNearbyEntities(radius, radius, radius)) {
+                            if (e instanceof LivingEntity) {
+                                if (HelpUtil.shouldDamageEntity((LivingEntity) e, p)) {
+                                    LivingEntity entity = (LivingEntity) e;
+                                    double armor = entity.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                    armor = armor * multiplyer;
+
+                                    double damage;
+
+                                    DamageSource source = DamageSource.builder(DamageType.PLAYER_ATTACK)
+                                            .withDirectEntity(p).withCausingEntity(p).build();
+                                    damage = armor + extraDamage;
+                                    entity.damage(damage, source);
+
+                                    if (damage < 20) {
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 10 * 20, 0+extraLevel)); // Regeneration I
+                                    } else if (damage >= 20 && damage < 30) {
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 15 * 20, 1+extraLevel)); // Regeneration II
+                                    } else {
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20 * 20, 2+extraLevel)); // Regeneration III
                                     }
-                                }
-                            }
-                        }
-                    } else if (i == 16) {
-                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
-                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            //Cooldown-Ability
-                            p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
-                            for (Entity e : p.getNearbyEntities(15,15,15)){
-                                if (e instanceof LivingEntity) {
-                                    if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
-                                        LivingEntity player =(LivingEntity) e;
-                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                        armor = armor*1.8;
-                                        int players = p.getNearbyEntities(15, 15, 15).size();
-                                        if (players == 1){
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                                        } else if (players  == 2 || players == 3 || players == 4) {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
-                                        }else {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
-                                        }
-                                        if (player instanceof Player) {
-                                            player.damage(armor+5,p);
-                                        }else {
-                                            DamageSource source = DamageSource.builder(DamageType.MAGIC).withDirectEntity(p).withCausingEntity(p).build();
-                                            player.damage(armor+10,source);
-                                        }
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }else if (i == 17) {
-                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
-                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            //Cooldown-Ability
-                            p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
-                            for (Entity e : p.getNearbyEntities(15,15,15)){
-                                if (e instanceof LivingEntity) {
-                                    if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
-                                        LivingEntity player =(LivingEntity) e;
-                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                        armor = armor*1.8;
-                                        int players = p.getNearbyEntities(15, 15, 15).size();
-                                        if (players == 1){
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                                        } else if (players  == 2 || players == 3 || players == 4) {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
-                                        }else {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
-                                        }
-                                        if (player instanceof Player) {
-                                            player.damage(armor+10,p);
-                                        }else {
-                                            DamageSource source = DamageSource.builder(DamageType.MAGIC).withDirectEntity(p).withCausingEntity(p).build();
-                                            player.damage(armor+15,source);
-                                        }
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    } else if (i == 18) {
-                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
-                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            //Cooldown-Ability
-                            p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
-                            for (Entity e : p.getNearbyEntities(15,15,15)){
-                                if (e instanceof LivingEntity) {
-                                    if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
-                                        LivingEntity player =(LivingEntity) e;
-                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                        armor = armor*2.1;
-                                        int players = p.getNearbyEntities(15, 15, 15).size();
-                                        if (players == 1){
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,0));
-                                        } else if (players  == 2 || players == 3 || players == 4) {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
-                                        }else {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
-                                        }
-                                        if (player instanceof Player) {
-                                            player.damage(armor+10,p);
-                                        }else {
-                                            DamageSource source = DamageSource.builder(DamageType.MAGIC).withDirectEntity(p).withCausingEntity(p).build();
-                                            player.damage(armor+15,source);
-                                        }
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }else if (i >= 19) {
-                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
-                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            //Cooldown-Ability
-                            p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1,1);
-                            for (Entity e : p.getNearbyEntities(15,15,15)){
-                                if (e instanceof LivingEntity) {
-                                    if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
-                                        LivingEntity player =(LivingEntity) e;
-                                        double armor = player.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                        armor = armor*2.1;
-                                        int players = p.getNearbyEntities(15, 15, 15).size();
-                                        if (players == 1){
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,1));
-                                        } else if (players  == 2 || players == 3 || players == 4) {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,2));
-                                        }else {
-                                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*20,3));
-                                        }
-                                        if (player instanceof Player) {
-                                            player.damage(armor+10,p);
-                                        }else {
-                                            DamageSource source = DamageSource.builder(DamageType.MAGIC).withDirectEntity(p).withCausingEntity(p).build();
-                                            player.damage(armor+15,source);
-                                        }
-                                        break;
-                                    }
+
+                                    break;
                                 }
                             }
                         }

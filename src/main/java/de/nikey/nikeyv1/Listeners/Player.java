@@ -36,8 +36,6 @@ import java.util.Random;
 
 @SuppressWarnings("ALL")
 public class Player implements Listener {
-    int a;
-    int b;
     int times;
     public static Inventory inv = Bukkit.createInventory(null, 27, "Enchanted Anvil");
 
@@ -288,10 +286,8 @@ public class Player implements Listener {
         }else {
             for (ItemStack item : player.getInventory().getContents()) {
                 if (item != null) {
-                    if (item.getType() == Material.FIREWORK_STAR || item.getType() == Material.NETHERITE_SWORD) {
-                        if (item.getItemMeta().hasLore()) {
-                            event.getDrops().remove(item);
-                        }
+                    if (Stone.isStone(item) || Stone.isInfernoBlade(item)) {
+                        event.getDrops().remove(item);
                     }
                 }
             }
@@ -581,7 +577,7 @@ public class Player implements Listener {
             Material itemMaterial = event.getCursor().getType();
 
             if (isMinecartInventory(clickedInventory)) {
-                if (itemMaterial == Material.FIREWORK_STAR || itemMaterial == Material.NETHERITE_SWORD && event.getCursor().getItemMeta().hasLore()) {
+                if (Stone.isStone(event.getCursor()) || Stone.isInfernoBlade(event.getCursor())) {
                     event.setCancelled(true);
                     player.sendMessage("§cYou are not allowed to do that!");
                     player.damage(4);
@@ -590,7 +586,7 @@ public class Player implements Listener {
 
             // Überprüfen, ob es sich um eine Truhe handelt und der Spieler versucht, Diamanten zu legen
             if (clickedInventory != null && isChest(clickedInventory)) {
-                if ( itemMaterial == Material.FIREWORK_STAR || itemMaterial == Material.NETHERITE_SWORD && event.getCursor().getItemMeta().hasLore()) {
+                if (Stone.isStone(event.getCursor()) || Stone.isInfernoBlade(event.getCursor())) {
                     event.setCancelled(true);
                     player.sendMessage("§cYou are not allowed to do that!");
                     player.damage(4);
@@ -603,7 +599,7 @@ public class Player implements Listener {
 
             if (bottom.getType() == InventoryType.PLAYER) {
                 if (event.getCurrentItem() != null) {
-                    if ( event.getCurrentItem().getType() == Material.FIREWORK_STAR ||event.getCurrentItem().getType() == Material.NETHERITE_SWORD && event.getCurrentItem().getItemMeta().hasLore()) {
+                    if (Stone.isStone(event.getCurrentItem()) || Stone.isInfernoBlade(event.getCurrentItem())) {
                         if (top.getType() == InventoryType.CHEST  || event.getInventory().getType() == InventoryType.ANVIL|| event.getInventory().getType() == InventoryType.BARREL|| event.getInventory().getType() == InventoryType.BEACON|| event.getInventory().getType() == InventoryType.BLAST_FURNACE|| event.getInventory().getType() == InventoryType.BREWING|| event.getInventory().getType() == InventoryType.CARTOGRAPHY|| event.getInventory().getType() == InventoryType.LOOM
                                 || event.getInventory().getType() == InventoryType.SMOKER|| event.getInventory().getType() == InventoryType.ENDER_CHEST|| event.getInventory().getType() == InventoryType.STONECUTTER|| event.getInventory().getType() == InventoryType.SHULKER_BOX|| event.getInventory().getType() == InventoryType.SMITHING|| event.getInventory().getType() == InventoryType.GRINDSTONE|| event.getInventory().getType() == InventoryType.FURNACE|| event.getInventory().getType() == InventoryType.ENCHANTING|| event.getInventory().getType() == InventoryType.HOPPER|| event.getInventory().getType() == InventoryType.DROPPER|| event.getInventory().getType() == InventoryType.DISPENSER
                         ) {
@@ -623,9 +619,6 @@ public class Player implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         Block clickedBlock = event.getClickedBlock();
         if (event.getItem() != null) {
-            if (event.getItem().getType() == Material.FIREWORK_STAR) {
-                event.setCancelled(true);
-            }
             if (Stone.isStone(event.getItem())||Stone.isInfernoBlade(event.getItem())){
                 if (clickedBlock.getType() == Material.DECORATED_POT && event.getItem().getItemMeta().hasLore()) {
                     event.setCancelled(true);
@@ -638,7 +631,7 @@ public class Player implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
-        if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() == Material.FIREWORK_STAR || event.getPlayer().getItemInHand().getType() == Material.NETHERITE_SWORD && event.getPlayer().getItemInHand().getItemMeta().hasLore()) {
+        if (event.getPlayer().getItemInHand() != null && Stone.isStone(event.getPlayer().getItemInHand()) || Stone.isInfernoBlade(event.getPlayer().getItemInHand())) {
             if (event.getRightClicked() != null && event.getRightClicked().getType() == EntityType.ITEM_FRAME || event.getRightClicked() != null && event.getRightClicked().getType() == EntityType.GLOW_ITEM_FRAME) {
                 event.getPlayer().damage(4);
                 event.getPlayer().sendMessage("§cYou are not allowed to do that!");
