@@ -5,12 +5,13 @@ import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.DonutEffect;
 import de.slikey.effectlib.effect.SphereEffect;
+import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
 import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -23,7 +24,6 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -46,38 +46,37 @@ public class Airstone implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        int level = Stone.getStoneLevel(player);
-        String stone = Stone.getStoneName(player);
+        int level = Stone.getLevel(player);
+        String stone = Stone.getName(player);
         if (stone.equalsIgnoreCase("air")) {
             if (level >= 3) {
                 if (level == 3) {
-                    player.getAttribute(Attribute.GENERIC_MOVEMENT_EFFICIENCY).setBaseValue(0.3);
+                    player.getAttribute(Attribute.MOVEMENT_EFFICIENCY).setBaseValue(0.3);
                 } else if (level == 4) {
-                    player.getAttribute(Attribute.GENERIC_MOVEMENT_EFFICIENCY).setBaseValue(0.6);
+                    player.getAttribute(Attribute.MOVEMENT_EFFICIENCY).setBaseValue(0.6);
                 }else {
-                    player.getAttribute(Attribute.GENERIC_MOVEMENT_EFFICIENCY).setBaseValue(1);
+                    player.getAttribute(Attribute.MOVEMENT_EFFICIENCY).setBaseValue(1);
                 }
             }else {
-                player.getAttribute(Attribute.GENERIC_MOVEMENT_EFFICIENCY).setBaseValue(0);
+                player.getAttribute(Attribute.MOVEMENT_EFFICIENCY).setBaseValue(0);
             }
         }else {
-            player.getAttribute(Attribute.GENERIC_MOVEMENT_EFFICIENCY).setBaseValue(0);
+            player.getAttribute(Attribute.MOVEMENT_EFFICIENCY).setBaseValue(0);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            if (Stone.getStoneName(player).equalsIgnoreCase("air") && Stone.getStoneLevel(player) >= 6) {
+        if (event.getEntity() instanceof Player player) {
+            if (Stone.getName(player).equalsIgnoreCase("air") && Stone.getLevel(player) >= 6) {
                 if (event.getDamage() > 50) {
                     event.setDamage(50);
-                    player.playEffect(player.getLocation(),Effect.SPONGE_DRY,0);
+                    player.playEffect(player.getLocation(),Effect.SPONGE_DRY,null);
                 }
             }
 
-            int level = Stone.getStoneLevel(player);
-            if (Stone.getStoneName(player).equalsIgnoreCase("air") && level >= 7) {
+            int level = Stone.getLevel(player);
+            if (Stone.getName(player).equalsIgnoreCase("air") && level >= 7) {
                 if (event.getCause() == EntityDamageEvent.DamageCause.FALL && !flyingtimer.containsKey(player.getName())) {
                     if (!player.isGliding() ) {
                         if (player.getInventory().getChestplate() == null) {
@@ -149,7 +148,7 @@ public class Airstone implements Listener {
         ItemStack item = event.getItem();
         if (item == null) return;
         if (Stone.whatStone(item).equalsIgnoreCase("Air")) {
-            int level = Stone.getStoneLevelFromItem(item);
+            int level = Stone.getLevelFromItem(item);
             FileConfiguration config = NikeyV1.getPlugin().getConfig();
             config.set(player.getName()+".stone","Air");
             config.set(player.getName()+".level",level);
@@ -174,7 +173,7 @@ public class Airstone implements Listener {
                         player.setVelocity(direction);
 
                         int maxsec;
-                        int stoneLevel = Stone.getStoneLevel(player);
+                        int stoneLevel = Stone.getLevel(player);
                         if (stoneLevel >= 13) {
                             maxsec = 20;
 
@@ -191,7 +190,7 @@ public class Airstone implements Listener {
                                     int timeLeft = flyingtimer.get(player.getName());
 
                                     if (timeLeft > 0) {
-                                        player.sendActionBar(ChatColor.YELLOW +""+ flyingtimer.get(player.getName()) +"/"+maxsec);
+                                        player.sendActionBar(Component.text(flyingtimer.get(player.getName()) + "/" + maxsec).color(NamedTextColor.YELLOW));
 
                                         flyingtimer.put(player.getName(), timeLeft - 1);
                                     } else {
@@ -219,11 +218,9 @@ public class Airstone implements Listener {
                     if (!(ability.getOrDefault(player.getUniqueId(),0L) > System.currentTimeMillis())){
 
                         if (HelpUtil.isLookingDown(player) && level >= 17 && event.getAction() == Action.LEFT_CLICK_BLOCK) {
-                            int max;
+                            int max = 5;
                             if (level >= 19) {
                                 max = 7;
-                            }else {
-                                max = 5;
                             }
                             if (!playerBoostCooldown.containsKey(player)) {
                                 if (used.get(player.getName()) == null) {
@@ -245,7 +242,8 @@ public class Airstone implements Listener {
                                 if (used.get(player.getName()) == null) {
                                     return;
                                 }
-                                player.sendActionBar(ChatColor.YELLOW +""+ used.get(player.getName())+"/"+max);
+                                player.sendActionBar(Component.text(used.get(player.getName()) + "/" + max)
+                                        .color(NamedTextColor.YELLOW));
                             }
                             return;
                         }
@@ -254,25 +252,8 @@ public class Airstone implements Listener {
                         ability.put(player.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
                         used.remove(player.getName());
 
-                        if (level == 15) {
-                            timer.put(player,10);
-                        }else if (level == 16 || level == 17 || level == 18) {
-                            timer.put(player,12);
-                        }else {
-                            timer.put(player,14);
-                        }
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                if (timer.get(player) == 0 || !player.isValid()) {
-                                    cancel();
-                                    return;
-                                }
 
-                                castKillerWail(player);
-                                timer.replace(player,timer.get(player)-1);
-                            }
-                        }.runTaskTimer(NikeyV1.getPlugin(),0,5);
+                        castKillerWail(player);
                     }
                 }
             }
@@ -285,7 +266,7 @@ public class Airstone implements Listener {
         Player p = event.getPlayer();
         ItemStack item = event.getItemDrop().getItemStack();
         if (Stone.whatStone(item).equalsIgnoreCase("Air")){
-            int level = Stone.getStoneLevelFromItem(item);
+            int level = Stone.getLevelFromItem(item);
             FileConfiguration config = NikeyV1.getPlugin().getConfig();
             config.set(p.getName()+".stone","Air");
             config.set(p.getName()+".level",level);
@@ -307,16 +288,15 @@ public class Airstone implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPluginEnable(PluginDisableEvent event) {
+    public void onPluginDisable(PluginDisableEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             BossBar bossBar = bossBars.remove(player);
             if (bossBar != null) {
-                bossBar.removeAll();
+                bossBar.removeViewer(player);
             }
             chargeStartTime.remove(player);
             isCharging.remove(player);
         }
-
     }
 
     @EventHandler
@@ -324,7 +304,7 @@ public class Airstone implements Listener {
         Player player = event.getPlayer();
         BossBar bossBar = bossBars.remove(player);
         if (bossBar != null) {
-            bossBar.removeAll();
+            bossBar.removeViewer(player);
         }
         chargeStartTime.remove(player);
         isCharging.remove(player);
@@ -335,8 +315,9 @@ public class Airstone implements Listener {
         isCharging.put(player, true);
         chargeStartTime.put(player, System.currentTimeMillis());
 
-        BossBar bossBar = Bukkit.createBossBar(ChatColor.AQUA + "Charging Air Swipe...", BarColor.BLUE, BarStyle.SOLID);
-        bossBar.addPlayer(player);
+
+        BossBar bossBar = net.kyori.adventure.bossbar.BossBar.bossBar(Component.text("Charging Air Swipe..."), 0.0f, net.kyori.adventure.bossbar.BossBar.Color.BLUE, net.kyori.adventure.bossbar.BossBar.Overlay.PROGRESS);
+        bossBar.addViewer(player);
         bossBars.put(player, bossBar);
 
 
@@ -353,10 +334,11 @@ public class Airstone implements Listener {
                     elapsedTime = MAX_CHARGE_TIME;
                 }
 
-                double chargePercentage = (double) elapsedTime / MAX_CHARGE_TIME;
+                float chargePercentage = (float) elapsedTime / MAX_CHARGE_TIME;
 
-                bossBar.setProgress(chargePercentage);
-                bossBar.setTitle(ChatColor.AQUA + "Charging Air Swipe... " + (int) (chargePercentage * 100) + "%");
+                bossBar.progress(chargePercentage);
+                bossBar.name(Component.text("Charging Air Swipe.. " + (int) (chargePercentage * 100) + "%")
+                        .color(NamedTextColor.AQUA));
 
                 if (chargePercentage == 1) {
                     player.getWorld().spawnParticle(Particle.CRIT, player.getLocation().add(0, 1.5, 0), 7);
@@ -367,11 +349,11 @@ public class Airstone implements Listener {
 
     private void releaseAirSwipe(Player player) {
         cancelWindChargeTask(player);
-        int level = Stone.getStoneLevel(player);
+        int level = Stone.getLevel(player);
         isCharging.put(player, false);
         BossBar bossBar = bossBars.remove(player);
         if (bossBar != null) {
-            bossBar.removeAll();
+            bossBar.removeViewer(player);
         }
         long elapsedTime = System.currentTimeMillis() - chargeStartTime.get(player);
         if (elapsedTime >= MAX_CHARGE_TIME) {
@@ -425,46 +407,37 @@ public class Airstone implements Listener {
                             return;
                         }
 
-                        // Define the number of particles based on the radius (increase with distance)
                         int particlesPerStep = (int) (currentRadius * 10);
 
-                        // Generate particles along a half-circle in front of the player
                         for (int i = 0; i <= particlesPerStep; i++) {
                             double angle = -sweepAngle / 2 + (sweepAngle / particlesPerStep) * i;
 
                             Vector particleDirection = rotateAroundAxisY(direction.clone(), Math.toRadians(angle));
 
-                            // Calculate the location of the particle based on the player's position and the radius
                             Location particleLocation = playerLocation.clone().add(particleDirection.multiply(currentRadius));
 
                             player.getWorld().spawnParticle(Particle.SWEEP_ATTACK, particleLocation, 0, 0.1, 0.1, 0.1, 0.05);
 
-                            // Damage entities within the swipe area
-                            for (Entity entity : player.getWorld().getNearbyEntities(particleLocation, 1.0, 1.0, 1.0)) {
-                                if (entity instanceof LivingEntity) {
-                                    if (HelpUtil.shouldDamageEntity((LivingEntity) entity,player)) {
-                                        LivingEntity target = (LivingEntity) entity;
-                                        if (swipeCount == numberOfSwipes) {
-                                            Vector knockback = particleDirection.clone().normalize().multiply(1.0).setY(0.5);
-                                            target.setVelocity(knockback);
-                                        }
-                                        target.damage(damage, player);
-                                        if (target instanceof Player) {
-                                            target.setNoDamageTicks(7);
-                                        }
-                                        target.getWorld().playSound(target.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.0f, 0.8f);
+                            for (Player players : player.getWorld().getNearbyPlayers(particleLocation, 1.0)) {
+                                if (HelpUtil.shouldDamageEntity(players,player)) {
+                                    if (swipeCount == numberOfSwipes) {
+                                        Vector knockback = particleDirection.clone().normalize().multiply(1.0).setY(0.5);
+                                        players.setVelocity(knockback);
                                     }
+                                    players.damage(damage, player);
+                                    players.setNoDamageTicks(7);
+                                    players.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.0f, 0.8f);
                                 }
                             }
                         }
 
                         currentRadius += speedMultiplier;
                     }
-                }.runTaskTimer(NikeyV1.getPlugin(), 0, 1);  // Run each swipe every tick
+                }.runTaskTimer(NikeyV1.getPlugin(), 0, 1);
 
                 swipeCount++;
             }
-        }.runTaskTimer(NikeyV1.getPlugin(), 0, swipeInterval);  // Run the next swipe after swipeInterval ticks
+        }.runTaskTimer(NikeyV1.getPlugin(), 0, swipeInterval);
     }
 
     private void summonWindEffect(Player player) {
@@ -550,7 +523,7 @@ public class Airstone implements Listener {
 
 
         double radius = 3.0;
-        int stoneLevel = Stone.getStoneLevel(player);
+        int stoneLevel = Stone.getLevel(player);
         if (stoneLevel >= 11) {
             radius = 4.0;
         }
@@ -595,7 +568,7 @@ public class Airstone implements Listener {
             // Verhindere Fallschaden, wenn der Spieler mit der Fähigkeit gelandet ist
             if ((event.getCause() == EntityDamageEvent.DamageCause.FALL ||event.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL) && flyingtimer.containsKey(player.getName())) {
                 event.setCancelled(true);
-                int stoneLevel = Stone.getStoneLevel(player);
+                int stoneLevel = Stone.getLevel(player);
                 if (stoneLevel >= 14) {
                     triggerLanding((Player) event.getEntity(),event.getDamage()*0.6);
                 }else {
@@ -608,28 +581,22 @@ public class Airstone implements Listener {
 
 
     private void castKillerWail(Player player) {
-        // Get the direction the player is looking at
         Vector direction = player.getEyeLocation().getDirection().normalize();
         Location startLocation = player.getEyeLocation().clone().add(direction.multiply(1.5));
 
-        int beamLength;
-        if (Stone.getStoneLevel(player) >= 18) {
+        int beamLength = 20;
+        if (Stone.getLevel(player) >= 18) {
             beamLength = 30;
-        }else {
-            beamLength = 20;
         }
         double beamRadius = 1.5;
         double pullStrength = 2.5;
-        double damage;
-        if (Stone.getStoneLevel(player) >= 17) {
-            damage = 3;
-        }else {
-            damage = 1.5;
+        double damage = 40;
+        if (Stone.getLevel(player) >= 17) {
+            damage = 50;
         }
         int particlesPerCircle = 20;
         double beamAttackRange = 3.5;
 
-        // Create a vector perpendicular to the direction the player is looking
         Vector perpVector1 = getPerpendicularVector(direction).normalize().multiply(beamRadius);
         Vector perpVector2 = perpVector1.clone().crossProduct(direction).normalize().multiply(beamRadius);
 
@@ -650,19 +617,13 @@ public class Airstone implements Listener {
                 }
             }
 
-            // Get entities within the circular area of the beam
-            List<Entity> nearbyEntities = beamLocation.getWorld().getEntities();
-            for (Entity entity : nearbyEntities) {
-                if (entity instanceof LivingEntity) {
-                    if (entity.getLocation().distance(beamLocation) <= beamAttackRange && entity != player && HelpUtil.shouldDamageEntity((LivingEntity) entity,player)) {
-                        // Apply damage and pull effect
-                        LivingEntity living = (LivingEntity) entity;
-                        living.damage(damage,player);
-                        living.setNoDamageTicks(0);
+            List<Player> playerList = beamLocation.getWorld().getPlayers();
+            for (Player p : playerList) {
+                if (p.getLocation().distance(beamLocation) <= beamAttackRange && p != player && HelpUtil.shouldDamageEntity(p,player)) {
+                    p.damage(damage, player);
 
-                        Vector pullDirection = player.getLocation().toVector().subtract(entity.getLocation().toVector()).normalize();
-                        entity.setVelocity(pullDirection.multiply(pullStrength));
-                    }
+                    Vector pullDirection = player.getLocation().toVector().subtract(p.getLocation().toVector()).normalize();
+                    p.setVelocity(pullDirection.multiply(pullStrength));
                 }
             }
         }
@@ -678,7 +639,7 @@ public class Airstone implements Listener {
     public void cancelWindChargeTask(Player player) {
         BukkitRunnable task = activeTasks.get(player.getUniqueId());
         if (task != null) {
-            task.cancel(); // Beendet den Task
+            task.cancel();
             activeTasks.remove(player.getUniqueId());
         }
     }

@@ -25,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -38,8 +39,11 @@ public class Ghoststone implements Listener {
     private HashSet<UUID> ghostPlayers = new HashSet<>();
     private HashMap<UUID, HashSet<Block>> removedBlocks = new HashMap<>();
     private final Set<UUID> teleportedPlayers = new HashSet<>();
+
+    //Master Ability
     private HashMap<String, Integer> particletimes = new HashMap<>();
-    private final Set<UUID> damageReductionPlayers = new HashSet<>();
+    public static HashMap<UUID, BukkitTask> darkNight = new HashMap<>();
+
 
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
@@ -52,8 +56,8 @@ public class Ghoststone implements Listener {
     if (!(event.getEntity() instanceof Player)) return;
 
     Player player = (Player) event.getEntity();
-    String name = Stone.getStoneName(player);
-    int level = Stone.getStoneLevel(player);
+    String name = Stone.getName(player);
+    int level = Stone.getLevel(player);
 
     if (name.equalsIgnoreCase("Ghost") && level >= 7) {
         int hitCount = playerHitCount.getOrDefault(player.getUniqueId(), 0);
@@ -79,9 +83,6 @@ public class Ghoststone implements Listener {
         }
         playerHitCount.put(player.getUniqueId(), hitCount);
     }
-
-
-
     }
 
     @EventHandler
@@ -90,8 +91,8 @@ public class Ghoststone implements Listener {
         if (!(event.getEntity().getShooter() instanceof Player)) return;
 
         Player shooter = (Player) event.getEntity().getShooter();
-        String stoneName = Stone.getStoneName(shooter);
-        int stoneLevel = Stone.getStoneLevel(shooter);
+        String stoneName = Stone.getName(shooter);
+        int stoneLevel = Stone.getLevel(shooter);
         if (stoneName.equalsIgnoreCase("Ghost") && stoneLevel >= 6) {
             if (entity instanceof Arrow) {
                 Arrow arrow = (Arrow) entity;
@@ -108,10 +109,10 @@ public class Ghoststone implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                String stone = Stone.getStoneName(event.getPlayer());
+                String stone = Stone.getName(event.getPlayer());
                 if (stone.equalsIgnoreCase("Ghost")) {
                     Player player = event.getPlayer();
-                    int level = Stone.getStoneLevel(player);
+                    int level = Stone.getLevel(player);
                     String attacking = Stone.getAttacking(player);
                     int range;
                     if (level == 3) {
@@ -151,7 +152,7 @@ public class Ghoststone implements Listener {
         ItemStack item = event.getItem();
         if (item == null) return;
         if (Stone.whatStone(item).equalsIgnoreCase("Ghost")) {
-            int level = Stone.getStoneLevelFromItem(item);
+            int level = Stone.getLevelFromItem(item);
             FileConfiguration config = NikeyV1.getPlugin().getConfig();
             config.set(p.getName()+".stone","Ghost");
             config.set(p.getName()+".level",level);
@@ -205,7 +206,7 @@ public class Ghoststone implements Listener {
         ItemStack item = event.getItemDrop().getItemStack();
         if (item == null) return;
         if (Stone.whatStone(item).equalsIgnoreCase("Ghost")){
-            int level = Stone.getStoneLevelFromItem(item);
+            int level = Stone.getLevelFromItem(item);
             FileConfiguration config = NikeyV1.getPlugin().getConfig();
             config.set(p.getName()+".stone","Ghost");
             config.set(p.getName()+".level",level);
@@ -218,14 +219,8 @@ public class Ghoststone implements Listener {
                        Vector up = new Vector(0, 3, 0);
                         p.setVelocity(up);
                         teleportedPlayers.add(p.getUniqueId());
-                        damageReductionPlayers.add(p.getUniqueId());
 
                         Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> teleportedPlayers.remove(p.getUniqueId()), 120L);
-                        if (level == 20) {
-                            Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> damageReductionPlayers.remove(p.getUniqueId()), 300L);
-                        }else {
-                            Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> damageReductionPlayers.remove(p.getUniqueId()), 600L);
-                        }
 
                         Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
                             Vector down = new Vector(0, -3, 0); // Boost nach unten
@@ -247,21 +242,51 @@ public class Ghoststone implements Listener {
             if (event.getCause() == EntityDamageEvent.DamageCause.FALL && teleportedPlayers.contains(player.getUniqueId())) {
                 event.setCancelled(true);
 
-                int level = Stone.getStoneLevel(player);
+                int level = Stone.getLevel(player);
                 if (level == 20) {
-                    player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(3);
+                    Bukkit.getServerTickManager().setTickRate(10);
+
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED ,20*15,4,false,false));
                     player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE,20*15,3,false,false));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,20*15,3,false,false));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,20*15,0,false,false));
 
-                    // Create smoke particles around the player
+                    BukkitTask task = new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            for (Player playersNearby : player.getWorld().getNearbyPlayers(player.getLocation(),50)) {
+                                if (HelpUtil.shouldDamageEntity(playersNearby,player)) {
+                                    playersNearby.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 100, 0));
+                                    playersNearby.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 100, 0));
+                                    playersNearby.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,100,0));
+                                }
+                            }
+                        }
+                    }.runTaskTimer(NikeyV1.getPlugin(),0,20);
+
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            task.cancel();
+                        }
+                    }.runTaskLaterAsynchronously(NikeyV1.getPlugin(),20*15);
+
+
+                    BukkitTask endDarkNight = new BukkitRunnable() {
+                        @Override
+                        public void run() {
+
+                        }
+                    }
+
+                    darkNight.put(player.getUniqueId(),task);
+
                     particletimes.put(player.getName(),8);
                     new BukkitRunnable() {
                         @Override
                         public void run() {
 
                             if (particletimes.get(player.getName()) == 0) {
-                                player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(1);
+                                player.getAttribute(Attribute.ATTACK_DAMAGE).setBaseValue(1);
                                 particletimes.remove(player.getName());
                                 cancel();
                                 return;
@@ -275,47 +300,8 @@ public class Ghoststone implements Listener {
                             particletimes.replace(player.getName(),particletimes.get(player.getName())-1);
                         }
                     }.runTaskTimer(NikeyV1.getPlugin(),0,40);
-                    
-                    for (Entity entity : player.getNearbyEntities(30, 30, 30)) {
-                        if (entity instanceof LivingEntity && entity != player) {
-                            LivingEntity livingEntity = (LivingEntity) entity;
-                            if (HelpUtil.shouldDamageEntity(livingEntity,player)) {
-                                if (entity instanceof Player) {
-                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*15,3,true));
-                                    double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                                    double damage = maxHealth * 0.3;
-                                    livingEntity.playHurtAnimation(0);
-                                    if (livingEntity.getHealth()-damage >= 1) {
-                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                    }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
-                                    }else {
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
-                                    }
 
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*15, 1));
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
-                                }else {
-                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*15,3,true));
-                                    double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                                    double damage = maxHealth * 0.3;
-                                    livingEntity.playHurtAnimation(0);
-                                    if (livingEntity.getHealth()-damage >= 1) {
-                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                    }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
-                                    }else {
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
-                                    }
-
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*15, 1));
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
-                                }
-                            }
-                        }
-                    }
-
-                    teleportedPlayers.remove(player.getUniqueId()); // Remove player from the teleported set
+                    teleportedPlayers.remove(player.getUniqueId());
 
                     // Schedule task to slow down the server after 2 seconds
                     Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 10"), 1L); // 2 seconds later
@@ -440,10 +426,10 @@ public class Ghoststone implements Listener {
     public void onPlayerHit(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
             Player damager = (Player) event.getDamager();
-            if (Stone.getStoneName(damager).equalsIgnoreCase("ghost")) {
+            if (Stone.getName(damager).equalsIgnoreCase("ghost")) {
                 if (playerHitted.containsKey(damager.getName())) {
                     int hits = playerHitted.get(damager.getName()) + 1;
-                    int level = Stone.getStoneLevel(damager);
+                    int level = Stone.getLevel(damager);
                     double damageMultiplier = 1;
                     if (level == 10) {
                         damageMultiplier = 1.0 + (hits * 0.1);

@@ -2,7 +2,6 @@ package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
-import de.nikey.nikeyv1.api.EntityTypeDamage;
 import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.CircleEffect;
 import net.kyori.adventure.text.Component;
@@ -28,32 +27,29 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
 import static org.bukkit.Bukkit.getServer;
 
-@SuppressWarnings("ALL")
 public class Holystone implements Listener {
     public static ArrayList<Entity> stunned = new ArrayList<>();
     public static ArrayList<Player> hitted = new ArrayList<>();
     private final List<UUID> selectedPlayers = new ArrayList<>();
     public static final Set<Player> vanishedPlayers = new HashSet<>();
     public static final Map<Player, BukkitRunnable> auraTasks = new HashMap<>();
-    public static HashMap<Player, Boolean> repairing = new HashMap<>();
+    public static HashMap<Player, BukkitTask> repairing = new HashMap<>();
     
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> ability = new HashMap<>();
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
-
-    public static long remainingTime1;
-    public static long remainingTime2;
-    public static long remainingTime3;
 
 
     @EventHandler
@@ -77,67 +73,48 @@ public class Holystone implements Listener {
         }
     }
 
-    public static void repairfunc(Player player) {
-        int level = Stone.getStoneLevel(player);
-        String stone = Stone.getStoneName(player);
+    public static void startRepairing(Player player) {
+        int level = Stone.getLevel(player);
+        String stone = Stone.getName(player);
 
-        if (stone.equalsIgnoreCase("Holy") && !repairing.containsKey(player)){
-                if (level == 7){
-                    repairing.put(player,true);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if(stone.equalsIgnoreCase("Holy") && level == 7 && player.isValid()){
-                                repairRandomArmorPiece(player);
-                            }else{
-                                repairfunc(player);
-                                repairing.remove(player);
-                                cancel();
-                            }
-                        }
-                    }.runTaskTimer(NikeyV1.getPlugin(),0,40);
-                }else if (level == 8){
-                    repairing.put(player,true);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if(stone.equalsIgnoreCase("Holy") && level == 8 && player.isValid()){
-                                repairRandomArmorPiece(player);
-                            }else{
-                                repairfunc(player);
-                                repairing.remove(player);
-                                cancel();
-                            }
-                        }
-                    }.runTaskTimer(NikeyV1.getPlugin(),0,20);
-                }else if (level >= 9){
-                    repairing.put(player,true);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if(stone.equalsIgnoreCase("Holy") && level >= 9 && player.isValid()){
-                                repairRandomArmorPiece(player);
-                            }else{
-                                repairfunc(player);
-                                repairing.remove(player);
-                                cancel();
-                            }
-                        }
-                    }.runTaskTimer(NikeyV1.getPlugin(),0,10);
+        if (!stone.equalsIgnoreCase("Holy"))return;
+        if (!(level >= 7))return;
+
+        int period = 40;
+        if (level == 8) {
+            period = 20;
+        } else if (level >= 9) {
+            period = 10;
+        }
+
+        BukkitTask task = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!Stone.getName(player).equalsIgnoreCase("Holy")) {
+                    repairing.remove(player);
+                    cancel();
+                    return;
                 }
-            }
-    }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerToggleSprint(PlayerToggleSprintEvent event) {
-        repairfunc(event.getPlayer());
+                if (level != Stone.getLevel(player)) {
+                    startRepairing(player);
+                    repairing.remove(player);
+                    cancel();
+                    return;
+                }
+
+                repairRandomArmorPiece(player);
+            }
+        }.runTaskTimer(NikeyV1.getPlugin(),0,period);
+
+        repairing.put(player,task);
     }
 
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player p =  event.getPlayer();
-        repairfunc(p);
+        startRepairing(p);
     }
 
     @EventHandler
@@ -145,98 +122,60 @@ public class Holystone implements Listener {
         Player p = event.getPlayer();
         ItemStack item = event.getItem();
         if (item == null) return;
-        if (Stone.isStone(item) && Stone.whatStone(item).equalsIgnoreCase("Holy")){
-            String[] arr = item.getLore().get(1).split(":");
-            int i = Integer.parseInt(arr[1]);
-            FileConfiguration config = NikeyV1.getPlugin().getConfig();
-            config.set(p.getName()+".stone","Holy");
-            config.set(p.getName()+".level",i);
-            NikeyV1.getPlugin().saveConfig();
-            String stone = config.getString(p.getName() + ".stone");
+        if (Stone.whatStone(item).equalsIgnoreCase("Holy")){
+            int level = Stone.getLevelFromItem(item);
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
-                if (i >= 10){
+                if (level >= 10){
                     if (!(cooldown.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown.put(p.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
-                        //Ability
 
-                        switch (i) {
-                            case 10:
-                                applyEffect(p, 20, 8, 1, 30 * 30);
-                                break;
-                            case 11:
-                                applyEffect(p, 20, 18, 1, 30 * 30);
-                                break;
-                            case 12:
-                                applyEffect(p, 25, 18, 2, 30 * 30);
-                                break;
-                            case 13:
-                                applyEffect(p, 25, 18, 2, 20 * 30);
-                                p.removePotionEffect(PotionEffectType.WEAKNESS);
-                                p.removePotionEffect(PotionEffectType.POISON);
-                                p.removePotionEffect(PotionEffectType.DARKNESS);
-                                p.removePotionEffect(PotionEffectType.LEVITATION);
-                                p.removePotionEffect(PotionEffectType.BLINDNESS);
-                                p.removePotionEffect(PotionEffectType.SLOWNESS);
-                                p.removePotionEffect(PotionEffectType.NAUSEA);
-                                p.removePotionEffect(PotionEffectType.WITHER);
-                                break;
-                            default:
-                                if (i >= 14) {
-                                    applyEffect(p, 25, 18, 2, 20 * 40);
-                                    p.removePotionEffect(PotionEffectType.WEAKNESS);
-                                    p.removePotionEffect(PotionEffectType.POISON);
-                                    p.removePotionEffect(PotionEffectType.DARKNESS);
-                                    p.removePotionEffect(PotionEffectType.LEVITATION);
-                                    p.removePotionEffect(PotionEffectType.BLINDNESS);
-                                    p.removePotionEffect(PotionEffectType.SLOWNESS);
-                                    p.removePotionEffect(PotionEffectType.NAUSEA);
-                                    p.removePotionEffect(PotionEffectType.WITHER);
-                                }
-                                break;
+                        applyEffect(p,30*30);
+
+                        if (level >= 13) {
+                            p.removePotionEffect(PotionEffectType.WEAKNESS);
+                            p.removePotionEffect(PotionEffectType.POISON);
+                            p.removePotionEffect(PotionEffectType.DARKNESS);
+                            p.removePotionEffect(PotionEffectType.LEVITATION);
+                            p.removePotionEffect(PotionEffectType.BLINDNESS);
+                            p.removePotionEffect(PotionEffectType.SLOWNESS);
+                            p.removePotionEffect(PotionEffectType.NAUSEA);
+                            p.removePotionEffect(PotionEffectType.WITHER);
                         }
                     }            
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR){
-                String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
                 if (!p.isSneaking()) {
                     double radius = 7.5;
-                    if (i >= 16)radius = 10;
+                    if (level >= 16)radius = 10;
                     double multiplyer = 1.6;
-                    if (i >= 18)multiplyer = 1.9;
+                    if (level >= 18)multiplyer = 1.9;
                     int extraDamage = 5;
-                    if (i >= 17)extraDamage = 10;
+                    if (level >= 17)extraDamage = 10;
                     int extraLevel = 0;
-                    if (i >= 19)extraLevel = 1;
+                    if (level >= 19)extraLevel = 1;
 
                     if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
 
                         p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1, 1);
-                        for (Entity e : p.getNearbyEntities(radius, radius, radius)) {
-                            if (e instanceof LivingEntity) {
-                                if (HelpUtil.shouldDamageEntity((LivingEntity) e, p)) {
-                                    LivingEntity entity = (LivingEntity) e;
-                                    double armor = entity.getAttribute(Attribute.GENERIC_ARMOR).getValue();
-                                    armor = armor * multiplyer;
+                        for (Player player : p.getWorld().getNearbyPlayers(p.getLocation(),radius)) {
+                            double armor = player.getAttribute(Attribute.ARMOR).getValue();
+                            armor = armor * multiplyer;
 
-                                    double damage;
+                            double damage;
 
-                                    DamageSource source = DamageSource.builder(DamageType.PLAYER_ATTACK)
-                                            .withDirectEntity(p).withCausingEntity(p).build();
-                                    damage = armor + extraDamage;
-                                    entity.damage(damage, source);
+                            damage = armor + extraDamage;
+                            player.damage(damage, p);
 
-                                    if (damage < 20) {
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 10 * 20, 0+extraLevel)); // Regeneration I
-                                    } else if (damage >= 20 && damage < 30) {
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 15 * 20, 1+extraLevel)); // Regeneration II
-                                    } else {
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20 * 20, 2+extraLevel)); // Regeneration III
-                                    }
-
-                                    break;
-                                }
+                            if (damage < 20) {
+                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 10 * 20, extraLevel));
+                            } else if (damage >= 20 && damage < 30) {
+                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 15 * 20, 1+extraLevel));
+                            } else {
+                                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20 * 20, 2+extraLevel));
                             }
+
+                            break;
                         }
                     }
                 }
@@ -250,23 +189,34 @@ public class Holystone implements Listener {
     }
 
 
-    public void applyEffect(Player p, int radius, int maxPlayers, int yOffset, int taskDelay) {
-        World world = p.getWorld();
-        int players = Math.min(p.getNearbyEntities(radius, radius, radius).size(), maxPlayers);
-        p.setMaxHealth(22 + players);
-        p.setHealth(22 + players);
+    public void applyEffect(Player player, int taskDelay) {
+        int level = Stone.getLevel(player);
 
-        Location location = p.getLocation().add(0, yOffset, 0);
-        p.spawnParticle(Particle.HEART, location, 3);
+        int hearts = 8;
+
+        if (level == 11) {
+            hearts = 12;
+        } else if (level == 12) {
+            hearts = 16;
+        }else if (level >= 14) {
+            hearts = 20;
+        }
+
+        player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(20+hearts);
+
+        player.heal(40, EntityRegainHealthEvent.RegainReason.CUSTOM);
 
         CircleEffect effect = new CircleEffect(NikeyV1.em);
-        effect.setEntity(p);
+        effect.setEntity(player);
+        effect.duration = taskDelay;
         effect.start();
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (p.isOnline()) p.setMaxHealth(20);
+                if (player.isOnline()) {
+                    player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(20);
+                }
             }
         }.runTaskLater(NikeyV1.getPlugin(), taskDelay);
     }
@@ -283,21 +233,13 @@ public class Holystone implements Listener {
         }
     }
 
-    //Master Ability
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         Player p = event.getPlayer();
         ItemStack item = event.getItemDrop().getItemStack();
-        if (item == null) return;
-        if (event.getItemDrop().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase("§aHoly Stone")&& event.getItemDrop().getItemStack().getType() == Material.FIREWORK_STAR){
-            String[] arr = item.getLore().get(1).split(":");
-            int i = Integer.parseInt(arr[1]);
-            FileConfiguration config = NikeyV1.getPlugin().getConfig();
-            config.set(p.getName()+".stone","Holy");
-            config.set(p.getName()+".level",i);
-            NikeyV1.getPlugin().saveConfig();
-            String stone = config.getString(p.getName() + ".stone");
-            if (i == 20 || i == 21){
+        if (Stone.whatStone(item).equalsIgnoreCase("Holy")){
+            int level = Stone.getLevel(p);
+            if (level == 20 || level == 21){
                 if (p.isSneaking()) {
                     if (!(cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown2.put(p.getUniqueId(), System.currentTimeMillis() + (300 * 1000));
@@ -310,8 +252,7 @@ public class Holystone implements Listener {
 
     @EventHandler
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Player ) {
-            Player damager = (Player) event.getDamager();
+        if (event.getDamager() instanceof Player damager) {
             if (selectedPlayers.contains(damager.getUniqueId())) {
                 if (event.getEntity() instanceof Player) {
                     if (!hitted.contains((Player) event.getEntity())) {
@@ -330,7 +271,6 @@ public class Holystone implements Listener {
                             public void run() {
                                 if (!hitted.contains(entity)){
                                     cancel();
-                                    return;
                                 }else {
                                     Location location = entity.getLocation().add(0,2.5F,0);
                                     entity.getWorld().spawnParticle(Particle.WHITE_ASH,location,5);
@@ -339,9 +279,7 @@ public class Holystone implements Listener {
                         }.runTaskTimer(NikeyV1.getPlugin(),0,3);
                     }
                 }
-                if (damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() >= damager.getHealth() + event.getFinalDamage()*0.5) {
-                    damager.setHealth(damager.getHealth() + event.getFinalDamage()*0.5);
-                }
+                damager.heal(event.getFinalDamage() * 0.5, EntityRegainHealthEvent.RegainReason.CUSTOM);
             }
         }
     }
@@ -352,24 +290,22 @@ public class Holystone implements Listener {
         Inventory clickedInventory = event.getClickedInventory();
         ItemStack clickedItem = event.getCurrentItem();
 
-        if (clickedInventory != null && event.getView().getTitle().equals("§aSelect Players to Buff")) {
-            event.setCancelled(true); // Prevents players from taking items out of the inventory
+        if (clickedInventory != null && event.getView().title() == Component.text("Select Players to Buff").color(NamedTextColor.GREEN)) {
+            event.setCancelled(true);
 
             if (clickedItem != null && clickedItem.getType() == Material.PLAYER_HEAD) {
-                // Toggle player selection
-                UUID selectedPlayerUUID = Bukkit.getOfflinePlayer(clickedItem.getItemMeta().getDisplayName()).getUniqueId();
+                UUID selectedPlayerUUID = Bukkit.getOfflinePlayer(clickedItem.getItemMeta().customName().toString()).getUniqueId();
                 if (selectedPlayers.contains(selectedPlayerUUID)) {
                     selectedPlayers.remove(selectedPlayerUUID);
                 } else {
                     if (selectedPlayers.size() < 5) {
                         selectedPlayers.add(selectedPlayerUUID);
                     } else {
-                        player.sendMessage("§cYou can only select up to 5 players!");
+                        player.sendMessage(Component.text("You can only select up to 5 players!").color(NamedTextColor.RED));
                         return;
                     }
                 }
 
-                // Update lore to reflect selection status
                 updateItemLore(clickedItem, selectedPlayers.contains(selectedPlayerUUID));
 
                 player.updateInventory();
@@ -378,15 +314,13 @@ public class Holystone implements Listener {
     }
 
     private void openMenu(Player player) {
-        Inventory menu = Bukkit.createInventory(player, 27, "§aSelect Players to Buff");
+        Inventory menu = Bukkit.createInventory(player, 27, Component.text("Select Players to Buff").color(NamedTextColor.GREEN));
 
-        // Get online players
         List<Player> onlinePlayers = new ArrayList<>(Bukkit.getOnlinePlayers());
 
-        // Populate the menu with online players
         for (Player onlinePlayer : onlinePlayers) {
             ItemStack playerHead = getPlayerHeadItem(onlinePlayer);
-            updateItemLore(playerHead, selectedPlayers.contains(onlinePlayer.getUniqueId())); // Update lore based on selection status
+            updateItemLore(playerHead, selectedPlayers.contains(onlinePlayer.getUniqueId()));
             menu.addItem(playerHead);
         }
 
@@ -396,48 +330,49 @@ public class Holystone implements Listener {
     private ItemStack getPlayerHeadItem(Player player) {
         ItemStack headItem = new ItemStack(Material.PLAYER_HEAD, 1);
         SkullMeta headMeta = (SkullMeta) headItem.getItemMeta();
-        headMeta.setDisplayName("§r"+player.getName());
-        headMeta.setOwningPlayer(player);
+        headMeta.displayName(Component.text(player.getName()).color(NamedTextColor.GRAY));
+        headMeta.setPlayerProfile(player.getPlayerProfile());
         headItem.setItemMeta(headMeta);
         return headItem;
     }
 
     private void updateItemLore(ItemStack item, boolean isSelected) {
         ItemMeta meta = item.getItemMeta();
-        List<String> lore = new ArrayList<>();
+        List<Component> lore = new ArrayList<>();
         if (isSelected) {
-            lore.add("§aSelected"); // Add lore indicating selected status
+            lore.add(Component.text("Selected").color(NamedTextColor.GREEN));
         } else {
-            lore.add("§cNot Selected"); // Add lore indicating not selected status
+            lore.add(Component.text("Not Selected").color(NamedTextColor.RED));
         }
-        meta.setLore(lore);
+        meta.lore(lore);
         item.setItemMeta(meta);
     }
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
         Player player = (Player) event.getPlayer();
-        if (event.getView().getTitle().equals("§aSelect Players to Buff")) {
+        if (event.getView().title() == Component.text("Select Players to Buff").color(NamedTextColor.GREEN)) {
             int level = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
-            // Apply strength effect to selected players
             for (UUID selectedPlayerUUID : selectedPlayers) {
                 Player selectedPlayer = Bukkit.getPlayer(selectedPlayerUUID);
                 if (selectedPlayer != null) {
                     selectedPlayer.getWorld().playSound(selectedPlayer.getLocation(),Sound.BLOCK_AMETHYST_BLOCK_BREAK,1.2F,1);
                     if (level == 20) {
-                        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 20*30, 0)); // Strength effect
-                        selectedPlayer.setHealth(selectedPlayer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 20*30, 1)); // Strength effect
+                        selectedPlayer.heal(100, EntityRegainHealthEvent.RegainReason.CUSTOM);
                         selectedPlayer.setFoodLevel(20);
                         selectedPlayer.setSaturation(20);
                         selectedPlayer.setFireTicks(0);
-                        //Effect
+
                         CircleEffect effect = new CircleEffect(NikeyV1.em);
                         effect.setEntity(selectedPlayer);
                         effect.duration=1000*30;
                         effect.enableRotation=false;
                         effect.particle=Particle.INSTANT_EFFECT;
                         effect.start();
-                        selectedPlayer.sendMessage(ChatColor.BLUE+player.getName()+ChatColor.GREEN+" buffed you");
+
+                        selectedPlayer.sendMessage(Component.text(player.getName()).color(NamedTextColor.BLUE)
+                                .append(Component.text(" buffed you").color(NamedTextColor.GREEN)));
                         //Remove Buff
                         new BukkitRunnable() {
                             @Override
@@ -446,9 +381,9 @@ public class Holystone implements Listener {
                             }
                         }.runTaskLater(NikeyV1.getPlugin(),20*30);
                     } else if (level == 21) {
-                        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 20*45, 0)); // Strength effect
+                        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 20*45, 1));
                         selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*45, 1));
-                        selectedPlayer.setHealth(selectedPlayer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                        selectedPlayer.heal(100, EntityRegainHealthEvent.RegainReason.CUSTOM);
                         selectedPlayer.setFoodLevel(20);
                         selectedPlayer.setSaturation(20);
                         selectedPlayer.setFireTicks(0);
@@ -459,8 +394,9 @@ public class Holystone implements Listener {
                         effect.enableRotation=false;
                         effect.particle=Particle.INSTANT_EFFECT;
                         effect.start();
-                        Component textComponent = Component.text(player.getName()).color(NamedTextColor.BLUE).append(Component.text(" buffed you").color(NamedTextColor.GREEN));
-                        player.sendActionBar(textComponent);
+                        selectedPlayer.sendMessage(Component.text(player.getName()).color(NamedTextColor.BLUE)
+                                .append(Component.text(" buffed you").color(NamedTextColor.GREEN)));
+
                         //Remove Buff
                         new BukkitRunnable() {
                             @Override
@@ -468,9 +404,12 @@ public class Holystone implements Listener {
                                 selectedPlayers.remove(selectedPlayerUUID);
                             }
                         }.runTaskLater(NikeyV1.getPlugin(),20*45);
-                        //Repair Armor
+
                         for (ItemStack armor : selectedPlayer.getInventory().getArmorContents()) {
-                            armor.setDurability((short) 0);
+                            if (armor instanceof Damageable damageable) {
+                                damageable.resetDamage();
+                                armor.setItemMeta(damageable);
+                            }
                         }
                     }
                 }
@@ -493,11 +432,9 @@ public class Holystone implements Listener {
                             vanishedPlayers.add(player);
 
                             Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
-                                for (Player p : Bukkit.getOnlinePlayers()) {
-                                    onlinePlayer.showPlayer(NikeyV1.getPlugin(), selectedPlayer);
-                                }
+                                onlinePlayer.showPlayer(NikeyV1.getPlugin(), selectedPlayer);
                                 vanishedPlayers.remove(player);
-                                selectedPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, new net.md_5.bungee.api.chat.TextComponent(org.bukkit.ChatColor.AQUA + "You are now visible!"));
+                                player.sendMessage(Component.text("You are now visible!").color(NamedTextColor.AQUA));
                             }, delayTicks);
                         }
                     }
@@ -520,31 +457,29 @@ public class Holystone implements Listener {
     private static void repairRandomArmorPiece(Player player) {
         ItemStack[] nonRepairedArmorPieces = getNonRepairedArmorPieces(player.getInventory().getArmorContents());
 
-        if (nonRepairedArmorPieces.length == 0) {
-            // Alle Rüstungsteile sind bereits vollständig repariert
-            return;
+        for (ItemStack armor : nonRepairedArmorPieces) {
+            ItemMeta meta = armor.getItemMeta();
+            if (meta instanceof Damageable damageable) {
+                if (damageable.hasDamage()) {
+                    int damage = damageable.getDamage();
+                    if (damage > 1) {
+                        damageable.setDamage(damage - 1);
+                    } else {
+                        damageable.resetDamage();
+                    }
+
+                    armor.setItemMeta(damageable);
+                }
+            }
         }
 
-        // Wähle ein zufälliges nicht repariertes Rüstungsteil aus
-        Random random = new Random();
-        ItemStack armorToRepair = nonRepairedArmorPieces[random.nextInt(nonRepairedArmorPieces.length)];
-
-        // Repariere das ausgewählte Rüstungsteil um 1 Haltbarkeitspunkt
-        short currentDurability = armorToRepair.getDurability();
-        short maxDurability = armorToRepair.getType().getMaxDurability();
-        if (currentDurability < maxDurability) {
-            armorToRepair.setDurability((short) (currentDurability - 1));
-        }else {
-            repairRandomArmorPiece(player);
-        }
     }
 
-    // Methode zum Abrufen der nicht reparierten Rüstungsteile eines Spielers
     private static ItemStack[] getNonRepairedArmorPieces(ItemStack[] armorContents) {
         List<ItemStack> nonRepairedPieces = new ArrayList<>();
         for (ItemStack armorPiece : armorContents) {
-            if (armorPiece != null && armorPiece.getDurability() < armorPiece.getType().getMaxDurability()) {
-                nonRepairedPieces.add(armorPiece);
+            if (armorPiece.getItemMeta() instanceof Damageable damageable) {
+                if (damageable.hasDamage()) nonRepairedPieces.add(armorPiece);
             }
         }
         return nonRepairedPieces.toArray(new ItemStack[0]);

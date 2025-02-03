@@ -17,11 +17,11 @@ import java.util.Objects;
 
 @SuppressWarnings("ALL")
 public class Stone {
-    public static int getStoneLevel(Player player) {
+    public static int getLevel(Player player) {
         return NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
     }
 
-    public static String getStoneName(Player player) {
+    public static String getName(Player player) {
         return NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
     }
 
@@ -38,7 +38,7 @@ public class Stone {
     }
 
 
-    public static int getStoneLevelFromItem(ItemStack item) {
+    public static int getLevelFromItem(ItemStack item) {
         if (isStone(item)) {
             String[] arr = item.getLore().get(1).split(":");
             return Integer.parseInt(arr[1]);
@@ -107,14 +107,14 @@ public class Stone {
     }
 
     public static boolean shouldHaveStone(Player player, ItemStack item) {
-        return getStoneName(player).equalsIgnoreCase(whatStone(item));
+        return getName(player).equalsIgnoreCase(whatStone(item));
     }
 
 
     public static boolean isUndeadMaster(LivingEntity entity) {
         if (!(entity instanceof Zombie)) return false;
-        if (Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_SCALE)).getValue() == 3.5F) {
-            if (Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue() == 500) {
+        if (Objects.requireNonNull(entity.getAttribute(Attribute.SCALE)).getValue() == 3.5F) {
+            if (Objects.requireNonNull(entity.getAttribute(Attribute.MAX_HEALTH)).getValue() == 500) {
                 return entity.hasMetadata("master");
             }
         }
