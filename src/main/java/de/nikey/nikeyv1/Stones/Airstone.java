@@ -466,7 +466,7 @@ public class Airstone implements Listener {
         }
 
         BukkitRunnable task = new BukkitRunnable() {
-            double t = 0;
+            double angle = 0;
 
             @Override
             public void run() {
@@ -475,17 +475,16 @@ public class Airstone implements Listener {
                     activeTasks.remove(player.getUniqueId());
                     return;
                 }
+                Location loc = player.getLocation().add(0, 1, 0);
+                World world = player.getWorld();
 
-                t += Math.PI / 16;
-                double x = Math.cos(t) * 1.5;
-                double z = Math.sin(t) * 1.5;
-                double yOffset = Math.sin(t) * 0.5;
+                double x = Math.cos(angle) * 0.8;
+                double z = Math.sin(angle) * 0.8;
 
-                Location playerLoc = player.getLocation();
-                Location windLoc = playerLoc.clone().add(x, yOffset+1, z);
+                Location particleLoc = loc.clone().add(x, -0.5, z);
+                world.spawnParticle(Particle.POOF, particleLoc, 0, 0, -3, 0, 0.02);
 
-
-                windLoc.getWorld().spawnParticle(Particle.CLOUD, windLoc, 3, 0.1, 0.1, 0.1, 0.01);
+                angle += Math.PI / 16;
             }
         };
 
@@ -522,8 +521,7 @@ public class Airstone implements Listener {
 
     @EventHandler
     public void onEntityToggleGlide(EntityToggleGlideEvent event) {
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
+        if (event.getEntity() instanceof Player player) {
             if (flyingtimer.containsKey(player.getName()) && !event.isGliding()) {
                 event.setCancelled(true);
             }
@@ -567,12 +565,11 @@ public class Airstone implements Listener {
     public void onPlayerLand(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
-        // Überprüfen, ob der Spieler mit der Fähigkeit geglitten ist und nun den Boden berührt
         if (flyingtimer.containsKey(player.getName()) && !player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().isAir() && flyingtimer.get(player.getName()) < 14) {
             triggerLanding(player,0);
             Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
                 flyingtimer.remove(player.getName());
-            }, 10);
+            }, 5);
         }
     }
 
@@ -621,11 +618,10 @@ public class Airstone implements Listener {
                 particleLocation.getWorld().spawnParticle(Particle.SMALL_GUST, particleLocation, 1, 0, 0, 0, 0);
 
                 if (j == 0) {
-                    beamLocation.getWorld().playSound(beamLocation, Sound.ENTITY_ELDER_GUARDIAN_HURT, 1.0f, 1.0f);
+                    beamLocation.getWorld().playSound(beamLocation, Sound.ENTITY_ELDER_GUARDIAN_HURT, 1.0f, 0.8f);
                 }
             }
 
-            // Get entities within the circular area of the beam
             List<Entity> nearbyEntities = beamLocation.getWorld().getEntities();
             for (Entity entity : nearbyEntities) {
                 if (entity instanceof LivingEntity living && entity != player && entity.getLocation().distance(beamLocation) <= beamAttackRange) {

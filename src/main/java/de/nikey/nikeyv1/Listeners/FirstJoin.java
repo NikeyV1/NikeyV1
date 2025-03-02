@@ -4,7 +4,6 @@ import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
 import de.nikey.nikeyv1.Util.Items;
 import de.nikey.nikeyv1.api.ConfigAPI;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -15,7 +14,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.util.Random;
 
 @SuppressWarnings("ALL")
-public class JoinListener implements Listener {
+public class FirstJoin implements Listener {
     int level = ConfigAPI.getStartLevel();
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {

@@ -2,7 +2,6 @@ package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
-import de.nikey.nikeyv1.api.EntityTypeDamage;
 import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.CircleEffect;
 import net.kyori.adventure.text.Component;
@@ -197,7 +196,7 @@ public class Holystone implements Listener {
                     }            
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR){
-                String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
+                String damageEntityType = Stone.getAttacking(p);
                 if (!p.isSneaking()) {
                     double radius = 7.5;
                     if (i >= 16)radius = 10;
@@ -212,6 +211,19 @@ public class Holystone implements Listener {
                         ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
 
                         p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1, 1);
+                        int points = 50; // Anzahl der Punkte im Kreis
+                        Location center = p.getLocation();
+                        World world = p.getWorld();
+                        for (int a = 0; a < points; a++) {
+                            double angle = 2 * Math.PI * a / points;
+                            double x = center.getX() + radius * Math.cos(angle);
+                            double z = center.getZ() + radius * Math.sin(angle);
+                            Location particleLoc = new Location(world, x, center.getY() + 1, z);
+
+                            world.spawnParticle(Particle.END_ROD, particleLoc, 3, 0.1, 0.1, 0.1, 0.05);
+                            world.spawnParticle(Particle.ENCHANT, particleLoc, 5, 0.2, 0.2, 0.2, 0.1);
+                        }
+
                         for (Entity e : p.getNearbyEntities(radius, radius, radius)) {
                             if (e instanceof LivingEntity) {
                                 if (HelpUtil.shouldDamageEntity((LivingEntity) e, p)) {
@@ -228,13 +240,11 @@ public class Holystone implements Listener {
 
                                     if (damage < 20) {
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 10 * 20, 0+extraLevel)); // Regeneration I
-                                    } else if (damage >= 20 && damage < 30) {
+                                    } else if (damage >= 20 && damage < 40) {
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 15 * 20, 1+extraLevel)); // Regeneration II
                                     } else {
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20 * 20, 2+extraLevel)); // Regeneration III
                                     }
-
-                                    break;
                                 }
                             }
                         }

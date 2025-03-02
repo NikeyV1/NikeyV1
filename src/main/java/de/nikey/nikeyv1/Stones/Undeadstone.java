@@ -481,7 +481,7 @@ public class Undeadstone implements Listener {
         zombie.setCanBreakDoors(true);
         zombie.setAdult();
         zombie.getEquipment().setItem(EquipmentSlot.HAND,new ItemStack(Material.DIAMOND_SWORD));
-        int level = Stone.getLevel(player);
+        int level = Stone.getStoneLevel(player);
         if (level == 20) {
             zombie.setCustomName(player.getName()+"'s "+zombie.getType().getName());
             zombie.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.35F);
@@ -591,8 +591,8 @@ public class Undeadstone implements Listener {
 
         if (event.getEntity().getKiller() != null) {
             Player player = event.getEntity().getKiller();
-            int level = Stone.getLevel(player);
-            if (Stone.getName(player).equalsIgnoreCase("undead")) {
+            int level = Stone.getStoneLevel(player);
+            if (Stone.getStoneName(player).equalsIgnoreCase("undead")) {
                 if (player.getGameMode() == GameMode.SURVIVAL && level >= 3) {
                     player.getWorld().spawnParticle(Particle.RAID_OMEN, player.getLocation(), 30, 0.5, 0.5, 0.5, 0.1);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 20*6, 1));
@@ -680,7 +680,7 @@ public class Undeadstone implements Listener {
         FileConfiguration config = NikeyV1.getPlugin().getConfig();
         if (event.getEntity() instanceof Player) {
             Player p = (Player) event.getEntity();
-            String stone = Stone.getName(p);
+            String stone = Stone.getStoneName(p);
             if (stone.equalsIgnoreCase("Undead") ) {
                 if (event.getDamager() instanceof Projectile) {
                     Projectile projectile = (Projectile) event.getDamager();

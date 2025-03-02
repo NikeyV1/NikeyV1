@@ -4,6 +4,7 @@ import com.destroystokyo.paper.event.entity.EntityJumpEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
+import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.SmokeEffect;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -50,12 +51,10 @@ public class Frozenstone implements Listener {
 
 
     private boolean isColdBiome(Biome biome) {
-        // Define cold biomes (you can adjust this list based on your preferences)
         Biome[] coldBiomes = {Biome.FROZEN_OCEAN, Biome.FROZEN_RIVER, Biome.COLD_OCEAN, Biome.DEEP_COLD_OCEAN, Biome.ICE_SPIKES, Biome.OCEAN,
                 Biome.SNOWY_BEACH, Biome.SNOWY_PLAINS, Biome.SNOWY_SLOPES, Biome.SNOWY_TAIGA, Biome.STONY_SHORE, Biome.FROZEN_RIVER,Biome.DEEP_FROZEN_OCEAN,Biome.JAGGED_PEAKS,
                 Biome.GROVE};
 
-        // Check if the biome is in the list of cold biomes
         for (Biome coldBiome : coldBiomes) {
             if (biome.equals(coldBiome)) {
                 return true;
@@ -235,7 +234,7 @@ public class Frozenstone implements Listener {
                     }
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
-                String damageEntityType = EntityTypeDamage.getDamageEntityType(p);
+                String damageEntityType = Stone.getAttacking(p);
                 if (i == 15){
                     if (!p.isSneaking()) {
                         if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){

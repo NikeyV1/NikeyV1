@@ -12,6 +12,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
@@ -136,7 +137,7 @@ public class Elementalstone implements Listener {
                                                                 if (living instanceof Player){
                                                                     double damage = getArmorStrengthMultiplier(living);
                                                                     living.damage(damage*1.5,player);
-                                                                    dmg += damage*0.5;
+                                                                    dmg += damage*0.2;
                                                                 }else if (executionCount == 0){
                                                                     double health = living.getHealth();
                                                                     health = health * 0.65;
@@ -161,10 +162,9 @@ public class Elementalstone implements Listener {
                                                 loc.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION,loc,0,0,0,0,transition);
 
                                                 for (Entity e : loc.getNearbyEntities(2,2,2)) {
-                                                    if (e instanceof LivingEntity && e != player) {
+                                                    if (e instanceof LivingEntity living && e != player) {
                                                         if (HelpUtil.shouldDamageEntity((LivingEntity) e,player)) {
-                                                            LivingEntity living = (LivingEntity) e;
-                                                            living.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,20*20,1));
+                                                            living.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,20*20,0));
                                                             living.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*20,4));
                                                             living.playSound(Sound.sound(Key.key("block.beacon.deactivate"), Sound.Source.BLOCK,1,1));
                                                         }
@@ -208,7 +208,7 @@ public class Elementalstone implements Listener {
                                                         public void run() {
                                                             player.getAttribute(Attribute.MAX_ABSORPTION).setBaseValue(baseValue);
                                                         }
-                                                    }.runTaskLater(NikeyV1.getPlugin(),20*120);
+                                                    }.runTaskLater(NikeyV1.getPlugin(),20*60);
                                                 }
                                             }else {
                                                 player.setHealth(health + dmg);
@@ -358,13 +358,11 @@ public class Elementalstone implements Listener {
                         Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
                         world.strikeLightning(location);
                         for (Entity e : location.getWorld().getNearbyEntities(location,6,6,6)){
-                            if (e instanceof LivingEntity){
-                                LivingEntity entity = (LivingEntity) e;
-                                if (entity != p){
+                            if (e instanceof LivingEntity entity){
+                                if (entity != p && entity.isValid()){
                                     applyRandomNegativeEffect(entity);
                                     entity.damage(50,p);
                                     entity.setFreezeTicks(200);
-                                    entity.setNoDamageTicks(5);
                                 }
                             }
                         }
@@ -376,6 +374,12 @@ public class Elementalstone implements Listener {
             }
         }.runTaskTimer(NikeyV1.getPlugin(), 0, 20);
     }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        event.getEntity().sendMessage(String.valueOf(event.getFinalDamage()));
+    }
+
 
     private void applyRandomNegativeEffect(LivingEntity entity) {
         // List of negative potion effects

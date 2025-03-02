@@ -144,7 +144,7 @@ public class InfernoBlade implements Listener {
                     .collect(Collectors.toList());
             targetsmap.put(player.getName(),target);
         }else {
-            player.sendMessage("§cError: Config.Attack wrong input");
+            player.sendMessage("§cError: Config.Attack wrong input do /attack [choice]");
         }
 
         new BukkitRunnable() {

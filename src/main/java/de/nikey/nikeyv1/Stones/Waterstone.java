@@ -539,7 +539,6 @@ public class Waterstone implements Listener {
         }
     }
 
-    // EventHandler speziell für Spieler
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();

@@ -34,13 +34,11 @@ public class GhostStoneDamageAbility implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (!(event.getDamager() instanceof Player && event.getEntity() instanceof Player))return;
-        Player player = (Player) event.getDamager();
-        Player victim = (Player) event.getEntity();
+        if (!(event.getDamager() instanceof Player player&& event.getEntity() instanceof Player victim))return;
 
         if (player.getInventory().getItemInMainHand().getItemMeta() == null)return;
         if (Stone.whatStone(player.getInventory().getItemInMainHand()).equalsIgnoreCase("Ghost")){
-            int l = Stone.getLevelFromItem(player.getInventory().getItemInMainHand());
+            int l = Stone.getStoneLevelFromItem(player.getInventory().getItemInMainHand());
             FileConfiguration config = NikeyV1.getPlugin().getConfig();
             config.set(player.getName()+".stone","Ghost");
             config.set(player.getName()+".level",l);
@@ -51,7 +49,7 @@ public class GhostStoneDamageAbility implements Listener {
 
                     if (l == 15) {
                         setVisibility(victim,player);
-                        timer.put(player,80);
+                        timer.put(player,320);
                         new BukkitRunnable() {
                             @Override
                             public void run() {
@@ -59,23 +57,24 @@ public class GhostStoneDamageAbility implements Listener {
                                 if (timer.get(player) == 0){
                                     cancel();
                                 }
+                                if (!victim.isValid() || !player.isValid()) cancel();
 
                                 Location loc = player.getLocation().add(0, 1, 0);
                                 Location target = victim.getLocation().add(0, 1, 0);
                                 double distance = loc.distance(target);
-                                double step = 0.2;
+                                double step = 0.1;
                                 for (double d = 0; d < distance; d += step) {
                                     double t = d / distance;
                                     double x = loc.getX() + (target.getX() - loc.getX()) * t;
                                     double y = loc.getY() + (target.getY() - loc.getY()) * t;
                                     double z = loc.getZ() + (target.getZ() - loc.getZ()) * t;
-                                    player.getWorld().spawnParticle(Particle.ASH, new Location(player.getWorld(), x, y, z), 2);
+                                    player.getWorld().spawnParticle(Particle.ASH, new Location(player.getWorld(), x, y, z), 0, 0, 0, 0);
                                 }
                             }
-                        }.runTaskTimer(NikeyV1.getPlugin(),0,5);
+                        }.runTaskTimer(NikeyV1.getPlugin(),0,1);
                     } else if (l == 16 ) {
                         setVisibility(victim,player);
-                        timer.put(player,120);
+                        timer.put(player,480);
                         new BukkitRunnable() {
                             @Override
                             public void run() {
@@ -83,24 +82,25 @@ public class GhostStoneDamageAbility implements Listener {
                                 if (timer.get(player) == 0){
                                     cancel();
                                 }
+                                if (!victim.isValid() || !player.isValid()) cancel();
 
                                 Location loc = player.getLocation().add(0, 1, 0);
                                 Location target = victim.getLocation().add(0, 1, 0);
                                 double distance = loc.distance(target);
-                                double step = 0.2;
+                                double step = 0.1;
                                 for (double d = 0; d < distance; d += step) {
                                     double t = d / distance;
                                     double x = loc.getX() + (target.getX() - loc.getX()) * t;
                                     double y = loc.getY() + (target.getY() - loc.getY()) * t;
                                     double z = loc.getZ() + (target.getZ() - loc.getZ()) * t;
-                                    player.getWorld().spawnParticle(Particle.ASH, new Location(player.getWorld(), x, y, z), 2);
+                                    player.getWorld().spawnParticle(Particle.ASH, new Location(player.getWorld(), x, y, z), 0, 0, 0, 0);
                                 }
                             }
-                        }.runTaskTimer(NikeyV1.getPlugin(),0,5);
+                        }.runTaskTimer(NikeyV1.getPlugin(),0,1);
                     }else if (l == 17 || l == 18) {
                         startHealthSteal(player,victim);
                         setVisibility(victim,player);
-                        timer.put(player,120);
+                        timer.put(player,480);
                         new BukkitRunnable() {
                             @Override
                             public void run() {
@@ -108,24 +108,26 @@ public class GhostStoneDamageAbility implements Listener {
                                 if (timer.get(player) == 0){
                                     cancel();
                                 }
+                                if (!victim.isValid() || !player.isValid()) cancel();
 
                                 Location loc = player.getLocation().add(0, 1, 0);
                                 Location target = victim.getLocation().add(0, 1, 0);
                                 double distance = loc.distance(target);
-                                double step = 0.2;
+                                double step = 0.1;
                                 for (double d = 0; d < distance; d += step) {
                                     double t = d / distance;
                                     double x = loc.getX() + (target.getX() - loc.getX()) * t;
                                     double y = loc.getY() + (target.getY() - loc.getY()) * t;
                                     double z = loc.getZ() + (target.getZ() - loc.getZ()) * t;
-                                    player.getWorld().spawnParticle(Particle.ASH, new Location(player.getWorld(), x, y, z), 2);
+                                    player.getWorld().spawnParticle(Particle.ASH, new Location(player.getWorld(), x, y, z), 0, 0, 0, 0);
                                 }
                             }
-                        }.runTaskTimer(NikeyV1.getPlugin(),0,5);
+                        }.runTaskTimer(NikeyV1.getPlugin(),0,1);
                     }else if (l >= 19) {
                         startHealthSteal(player,victim);
                         setVisibility(victim,player);
-                        timer.put(player,160);
+                        timer.put(player,800);
+
                         new BukkitRunnable() {
                             @Override
                             public void run() {
@@ -133,20 +135,22 @@ public class GhostStoneDamageAbility implements Listener {
                                 if (timer.get(player) == 0){
                                     cancel();
                                 }
+                                if (!victim.isValid() || !player.isValid()) cancel();
+
 
                                 Location loc = player.getLocation().add(0, 1, 0);
                                 Location target = victim.getLocation().add(0, 1, 0);
                                 double distance = loc.distance(target);
-                                double step = 0.2;
+                                double step = 0.1;
                                 for (double d = 0; d < distance; d += step) {
                                     double t = d / distance;
                                     double x = loc.getX() + (target.getX() - loc.getX()) * t;
                                     double y = loc.getY() + (target.getY() - loc.getY()) * t;
                                     double z = loc.getZ() + (target.getZ() - loc.getZ()) * t;
-                                    player.getWorld().spawnParticle(Particle.ASH, new Location(player.getWorld(), x, y, z), 2);
+                                    player.getWorld().spawnParticle(Particle.ASH, new Location(player.getWorld(), x, y, z), 0, 0, 0, 0);
                                 }
                             }
-                        }.runTaskTimer(NikeyV1.getPlugin(),0,5);
+                        }.runTaskTimer(NikeyV1.getPlugin(),0,1);
                     }
                 }
             }
@@ -183,7 +187,7 @@ public class GhostStoneDamageAbility implements Listener {
 
 
     public void startHealthSteal(Player user , Player victim) {
-        int level = Stone.getLevel(user);
+        int level = Stone.getStoneLevel(user);
         if (level <= 18) {
             stealtimer.put(user,30);
         }else if (level >= 19) {
@@ -193,7 +197,12 @@ public class GhostStoneDamageAbility implements Listener {
             @Override
             public void run() {
                 stealtimer.replace(user,stealtimer.get(user)-1);
-                if (stealtimer.get(user) == 0 || !victim.isValid() || !user.isValid()) cancel();
+                if (stealtimer.get(user) == 0 || !victim.isValid() || !user.isValid()) {
+                    cancel();
+                    blockedPlayers.remove(victim);
+                    blockedPlayers.remove(user);
+                    return;
+                }
 
                 if (level == 15 || level == 16) {
                     if (victim.getAbsorptionAmount() == 0) {
@@ -237,12 +246,11 @@ public class GhostStoneDamageAbility implements Listener {
     }
 
     public void setVisibility(Player victim, Player damager) {
-        int level = Stone.getLevel(damager);
+        int level = Stone.getStoneLevel(damager);
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player != victim && player != damager) {
                 player.hidePlayer(NikeyV1.getPlugin(), victim);
                 player.hidePlayer(NikeyV1.getPlugin(), damager);
-                // Hide all other players from victim and damager
                 victim.hidePlayer(NikeyV1.getPlugin(), player);
                 damager.hidePlayer(NikeyV1.getPlugin(), player);
             }

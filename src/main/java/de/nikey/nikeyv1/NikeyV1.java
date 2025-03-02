@@ -63,7 +63,7 @@ public final class NikeyV1 extends JavaPlugin{
         manager.registerEvents(new Holystone(),this);
         manager.registerEvents(new CommandChanges(),this);
         manager.registerEvents(new ReloadModifyer(),this);
-        manager.registerEvents(new JoinListener(),this);
+        manager.registerEvents(new FirstJoin(),this);
         manager.registerEvents(new InventoryListener(),this);
         manager.registerEvents(new StoneSwapping(),this);
         manager.registerEvents(new Stone_Swap(),this);
