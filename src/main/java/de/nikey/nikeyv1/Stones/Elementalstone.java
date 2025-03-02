@@ -2,8 +2,6 @@ package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
-import de.nikey.nikeyv1.api.EntityTypeDamage;
-import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.FlameEffect;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import net.kyori.adventure.key.Key;

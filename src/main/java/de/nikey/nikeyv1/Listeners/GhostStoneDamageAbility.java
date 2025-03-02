@@ -13,7 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -41,7 +40,7 @@ public class GhostStoneDamageAbility implements Listener {
 
         if (player.getInventory().getItemInMainHand().getItemMeta() == null)return;
         if (Stone.whatStone(player.getInventory().getItemInMainHand()).equalsIgnoreCase("Ghost")){
-            int l = Stone.getStoneLevelFromItem(player.getInventory().getItemInMainHand());
+            int l = Stone.getLevelFromItem(player.getInventory().getItemInMainHand());
             FileConfiguration config = NikeyV1.getPlugin().getConfig();
             config.set(player.getName()+".stone","Ghost");
             config.set(player.getName()+".level",l);
@@ -184,7 +183,7 @@ public class GhostStoneDamageAbility implements Listener {
 
 
     public void startHealthSteal(Player user , Player victim) {
-        int level = Stone.getStoneLevel(user);
+        int level = Stone.getLevel(user);
         if (level <= 18) {
             stealtimer.put(user,30);
         }else if (level >= 19) {
@@ -238,7 +237,7 @@ public class GhostStoneDamageAbility implements Listener {
     }
 
     public void setVisibility(Player victim, Player damager) {
-        int level = Stone.getStoneLevel(damager);
+        int level = Stone.getLevel(damager);
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player != victim && player != damager) {
                 player.hidePlayer(NikeyV1.getPlugin(), victim);
