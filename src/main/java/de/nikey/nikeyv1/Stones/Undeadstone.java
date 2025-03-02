@@ -469,14 +469,14 @@ public class Undeadstone implements Listener {
         zombie.setMaxHealth(500);
         zombie.setHealth(500);
         zombie.setShouldBurnInDay(false);
-        zombie.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(3.5F);
-        zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(8);
-        zombie.getAttribute(Attribute.GENERIC_STEP_HEIGHT).setBaseValue(6);
-        zombie.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE).setBaseValue(7);
-        zombie.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(10);
-        zombie.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).setBaseValue(6);
-        zombie.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(10);
-        zombie.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(100);
+        zombie.getAttribute(Attribute.SCALE).setBaseValue(3.5F);
+        zombie.getAttribute(Attribute.ATTACK_DAMAGE).setBaseValue(8);
+        zombie.getAttribute(Attribute.STEP_HEIGHT).setBaseValue(6);
+        zombie.getAttribute(Attribute.SAFE_FALL_DISTANCE).setBaseValue(7);
+        zombie.getAttribute(Attribute.ARMOR).setBaseValue(10);
+        zombie.getAttribute(Attribute.ARMOR_TOUGHNESS).setBaseValue(6);
+        zombie.getAttribute(Attribute.KNOCKBACK_RESISTANCE).setBaseValue(10);
+        zombie.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(100);
         zombie.setMetadata("master", new FixedMetadataValue(NikeyV1.getPlugin(), true));
         zombie.setCanBreakDoors(true);
         zombie.setAdult();
@@ -484,10 +484,10 @@ public class Undeadstone implements Listener {
         int level = Stone.getStoneLevel(player);
         if (level == 20) {
             zombie.setCustomName(player.getName()+"'s "+zombie.getType().getName());
-            zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.35F);
+            zombie.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.35F);
         } else if (level == 21) {
             zombie.setCustomName(player.getName()+"'s "+zombie.getType().getName()+" strong");
-            zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.5F);
+            zombie.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.5F);
         }
         zombie.setCustomNameVisible(false);
 
@@ -560,21 +560,21 @@ public class Undeadstone implements Listener {
                         HelpUtil.spawnParticles(loc,3,0,-2,0,Particle.LARGE_SMOKE,0);
                         if (!entity.getCustomName().contains("low")) {
                             if (!entity.getCustomName().contains("strong")) {
-                                double armor = living.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                double armor = living.getAttribute(Attribute.ARMOR).getValue();
                                 armor = armor*0.10;
                                 living.damage(armor+1.5F,entity);
                             }else{
-                                double armor = living.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                double armor = living.getAttribute(Attribute.ARMOR).getValue();
                                 armor = armor*0.15;
                                 living.damage(armor+3.5F,entity);
                             }
                         }else {
                             if (!entity.getCustomName().contains("strong")) {
-                                double armor = living.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                double armor = living.getAttribute(Attribute.ARMOR).getValue();
                                 armor = armor*0.1;
                                 living.damage(armor+2.5F,entity);
                             }else{
-                                double armor = living.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                double armor = living.getAttribute(Attribute.ARMOR).getValue();
                                 armor = armor*0.15;
                                 living.damage(armor+4.5F,entity);
                             }
@@ -621,7 +621,7 @@ public class Undeadstone implements Listener {
                     }
 
                     if (level >= 5) {
-                        player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                        player.setHealth(player.getAttribute(Attribute.MAX_HEALTH).getValue());
                         player.setFoodLevel(20);
                         player.setSaturation(20);
                     }

@@ -16,24 +16,38 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-@SuppressWarnings("ALL")
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+
 public final class NikeyV1 extends JavaPlugin{
     public static EffectManager em;
     private static NikeyV1 plugin;
+    private static final String PLUGIN_NAME = "EffectLib";
+    private static final String DOWNLOAD_URL = "https://dev.bukkit.org/projects/effectlib/files/latest";
     @Override
     public void onEnable() {
         plugin = this;
-        //Effect Manager
-        em = new EffectManager(this);
-
 
         PluginManager pm = getServer().getPluginManager();
 
-        if (pm.getPlugin("EffectLib").isEnabled()) {
+        if (pm.getPlugin("EffectLib") != null) {
+            if (!pm.getPlugin("EffectLib").isEnabled()) {
+                pm.enablePlugin(pm.getPlugin("EffectLib"));
+            }
             getLogger().info("The plugin EffectLib was found successfully");
         }else {
-            getLogger().warning("The plugin EffectLib could not be found!");
+            if (downloadPlugin(DOWNLOAD_URL, "plugins/" + PLUGIN_NAME + ".jar")) {
+                getLogger().info(PLUGIN_NAME + " downloaded successfully! Restarting server...");
+                Bukkit.reload();
+            } else {
+                getLogger().severe("Failed to download " + PLUGIN_NAME);
+            }
         }
+        em = new EffectManager(this);
         if (Bukkit.getServerTickManager().getTickRate() == 10) {
             Bukkit.getServerTickManager().setTickRate(20);
         }
@@ -108,4 +122,15 @@ public final class NikeyV1 extends JavaPlugin{
     public static NikeyV1 getPlugin() {
         return plugin;
     }
+
+    private boolean downloadPlugin(String urlString, String destinationPath) {
+        try (InputStream in = new URL(urlString).openStream()) {
+            Files.copy(in, new File(destinationPath).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            return true;
+        } catch (IOException e) {
+            getLogger().severe("Error downloading plugin: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

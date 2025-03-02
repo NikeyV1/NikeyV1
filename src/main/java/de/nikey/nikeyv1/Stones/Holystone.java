@@ -161,16 +161,16 @@ public class Holystone implements Listener {
 
                         switch (i) {
                             case 10:
-                                applyEffect(p, 20, 8, 1, 30 * 30);
+                                applyEffect(p, 16,false, 30 * 30);
                                 break;
                             case 11:
-                                applyEffect(p, 20, 18, 1, 30 * 30);
+                                applyEffect(p, 18,false ,30 * 30);
                                 break;
                             case 12:
-                                applyEffect(p, 25, 18, 2, 30 * 30);
+                                applyEffect(p, 18, true , 30 * 30);
                                 break;
                             case 13:
-                                applyEffect(p, 25, 18, 2, 20 * 30);
+                                applyEffect(p, 18, true , 20 * 30);
                                 p.removePotionEffect(PotionEffectType.WEAKNESS);
                                 p.removePotionEffect(PotionEffectType.POISON);
                                 p.removePotionEffect(PotionEffectType.DARKNESS);
@@ -182,7 +182,7 @@ public class Holystone implements Listener {
                                 break;
                             default:
                                 if (i >= 14) {
-                                    applyEffect(p, 25, 18, 2, 20 * 40);
+                                    applyEffect(p, 20,true, 20 * 30);
                                     p.removePotionEffect(PotionEffectType.WEAKNESS);
                                     p.removePotionEffect(PotionEffectType.POISON);
                                     p.removePotionEffect(PotionEffectType.DARKNESS);
@@ -216,7 +216,7 @@ public class Holystone implements Listener {
                             if (e instanceof LivingEntity) {
                                 if (HelpUtil.shouldDamageEntity((LivingEntity) e, p)) {
                                     LivingEntity entity = (LivingEntity) e;
-                                    double armor = entity.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+                                    double armor = entity.getAttribute(Attribute.ARMOR).getValue();
                                     armor = armor * multiplyer;
 
                                     double damage;
@@ -250,14 +250,12 @@ public class Holystone implements Listener {
     }
 
 
-    public void applyEffect(Player p, int radius, int maxPlayers, int yOffset, int taskDelay) {
+    public void applyEffect(Player p, int hearts, boolean regenerate, int taskDelay) {
         World world = p.getWorld();
-        int players = Math.min(p.getNearbyEntities(radius, radius, radius).size(), maxPlayers);
-        p.setMaxHealth(22 + players);
-        p.setHealth(22 + players);
-
-        Location location = p.getLocation().add(0, yOffset, 0);
-        p.spawnParticle(Particle.HEART, location, 3);
+        p.setMaxHealth(20 + hearts);
+        if (regenerate) {
+            p.setHealth(20 + hearts);
+        }
 
         CircleEffect effect = new CircleEffect(NikeyV1.em);
         effect.setEntity(p);
@@ -339,7 +337,7 @@ public class Holystone implements Listener {
                         }.runTaskTimer(NikeyV1.getPlugin(),0,3);
                     }
                 }
-                if (damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() >= damager.getHealth() + event.getFinalDamage()*0.5) {
+                if (damager.getAttribute(Attribute.MAX_HEALTH).getValue() >= damager.getHealth() + event.getFinalDamage()*0.5) {
                     damager.setHealth(damager.getHealth() + event.getFinalDamage()*0.5);
                 }
             }
@@ -426,7 +424,7 @@ public class Holystone implements Listener {
                     selectedPlayer.getWorld().playSound(selectedPlayer.getLocation(),Sound.BLOCK_AMETHYST_BLOCK_BREAK,1.2F,1);
                     if (level == 20) {
                         selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 20*30, 0)); // Strength effect
-                        selectedPlayer.setHealth(selectedPlayer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                        selectedPlayer.setHealth(selectedPlayer.getAttribute(Attribute.MAX_HEALTH).getValue());
                         selectedPlayer.setFoodLevel(20);
                         selectedPlayer.setSaturation(20);
                         selectedPlayer.setFireTicks(0);
@@ -448,7 +446,7 @@ public class Holystone implements Listener {
                     } else if (level == 21) {
                         selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 20*45, 0)); // Strength effect
                         selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*45, 1));
-                        selectedPlayer.setHealth(selectedPlayer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                        selectedPlayer.setHealth(selectedPlayer.getAttribute(Attribute.MAX_HEALTH).getValue());
                         selectedPlayer.setFoodLevel(20);
                         selectedPlayer.setSaturation(20);
                         selectedPlayer.setFireTicks(0);
@@ -521,15 +519,12 @@ public class Holystone implements Listener {
         ItemStack[] nonRepairedArmorPieces = getNonRepairedArmorPieces(player.getInventory().getArmorContents());
 
         if (nonRepairedArmorPieces.length == 0) {
-            // Alle Rüstungsteile sind bereits vollständig repariert
             return;
         }
 
-        // Wähle ein zufälliges nicht repariertes Rüstungsteil aus
         Random random = new Random();
         ItemStack armorToRepair = nonRepairedArmorPieces[random.nextInt(nonRepairedArmorPieces.length)];
 
-        // Repariere das ausgewählte Rüstungsteil um 1 Haltbarkeitspunkt
         short currentDurability = armorToRepair.getDurability();
         short maxDurability = armorToRepair.getType().getMaxDurability();
         if (currentDurability < maxDurability) {
@@ -539,7 +534,6 @@ public class Holystone implements Listener {
         }
     }
 
-    // Methode zum Abrufen der nicht reparierten Rüstungsteile eines Spielers
     private static ItemStack[] getNonRepairedArmorPieces(ItemStack[] armorContents) {
         List<ItemStack> nonRepairedPieces = new ArrayList<>();
         for (ItemStack armorPiece : armorContents) {

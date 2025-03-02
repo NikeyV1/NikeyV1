@@ -22,6 +22,12 @@ public class Stone {
     }
 
     public static String getStoneName(Player player) {
+        String name = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
+        if (name.isEmpty() && NikeyV1.getPlugin().getConfig().getBoolean("autoKick")) {
+            player.kick();
+            return "null";
+        }
+
         return NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
     }
 
@@ -113,8 +119,8 @@ public class Stone {
 
     public static boolean isUndeadMaster(LivingEntity entity) {
         if (!(entity instanceof Zombie)) return false;
-        if (Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_SCALE)).getValue() == 3.5F) {
-            if (Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue() == 500) {
+        if (Objects.requireNonNull(entity.getAttribute(Attribute.SCALE)).getValue() == 3.5F) {
+            if (Objects.requireNonNull(entity.getAttribute(Attribute.MAX_HEALTH)).getValue() == 500) {
                 return entity.hasMetadata("master");
             }
         }

@@ -206,14 +206,15 @@ public class GhostStoneDamageAbility implements Listener {
                         }
                     }else {
                         if (victim.getAbsorptionAmount()-0.5F >= 0.5F) {
-                            victim.setAbsorptionAmount(victim.getAbsorptionAmount()-0.5F);
+                            double newAbsorption = Math.max(0, victim.getAbsorptionAmount() - 1);
+                            victim.setAbsorptionAmount(newAbsorption);
                             victim.playHurtAnimation(0);
                         }else {
                             victim.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                         }
                     }
                     if (user.getHealth() < 20) {
-                        user.setHealth(user.getHealth()+0.5F);
+                        user.heal(0.5);
                     }
                 } else if (level >= 17) {
                     if (victim.getAbsorptionAmount() == 0) {
@@ -224,13 +225,12 @@ public class GhostStoneDamageAbility implements Listener {
                             victim.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
                         }
                     }else {
-                        if (victim.getAbsorptionAmount()-1 >= 1) {
-                            victim.setAbsorptionAmount(victim.getAbsorptionAmount()-1);
-                            victim.playHurtAnimation(0);
-                        }
+                        double newAbsorption = Math.max(0, victim.getAbsorptionAmount() - 1);
+                        victim.setAbsorptionAmount(newAbsorption);
+                        victim.playHurtAnimation(0);
                     }
                     if (user.getHealth() <= 19) {
-                        user.setHealth(user.getHealth()+1);
+                        user.heal(1);
                     }
                 }
             }

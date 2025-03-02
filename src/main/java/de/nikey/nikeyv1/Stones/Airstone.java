@@ -5,6 +5,8 @@ import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.DonutEffect;
 import de.slikey.effectlib.effect.SphereEffect;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
@@ -12,6 +14,7 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.damage.DamageSource;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -40,7 +43,6 @@ public class Airstone implements Listener {
     private final HashMap<Player, Long> chargeStartTime = new HashMap<>();
     private final HashMap<Player, BossBar> bossBars = new HashMap<>();
     private final HashMap<Player, Boolean> isCharging = new HashMap<>();
-    private final long MAX_CHARGE_TIME = 60 * 1000;
     private Map<UUID, BukkitRunnable> activeTasks = new HashMap<>();
 
     @EventHandler
@@ -51,17 +53,17 @@ public class Airstone implements Listener {
         if (stone.equalsIgnoreCase("air")) {
             if (level >= 3) {
                 if (level == 3) {
-                    player.getAttribute(Attribute.GENERIC_MOVEMENT_EFFICIENCY).setBaseValue(0.3);
+                    player.getAttribute(Attribute.MOVEMENT_EFFICIENCY).setBaseValue(0.3);
                 } else if (level == 4) {
-                    player.getAttribute(Attribute.GENERIC_MOVEMENT_EFFICIENCY).setBaseValue(0.6);
+                    player.getAttribute(Attribute.MOVEMENT_EFFICIENCY).setBaseValue(0.6);
                 }else {
-                    player.getAttribute(Attribute.GENERIC_MOVEMENT_EFFICIENCY).setBaseValue(1);
+                    player.getAttribute(Attribute.MOVEMENT_EFFICIENCY).setBaseValue(1);
                 }
             }else {
-                player.getAttribute(Attribute.GENERIC_MOVEMENT_EFFICIENCY).setBaseValue(0);
+                player.getAttribute(Attribute.MOVEMENT_EFFICIENCY).setBaseValue(0);
             }
         }else {
-            player.getAttribute(Attribute.GENERIC_MOVEMENT_EFFICIENCY).setBaseValue(0);
+            player.getAttribute(Attribute.MOVEMENT_EFFICIENCY).setBaseValue(0);
         }
     }
 
@@ -245,7 +247,7 @@ public class Airstone implements Listener {
                                 if (used.get(player.getName()) == null) {
                                     return;
                                 }
-                                player.sendActionBar(ChatColor.YELLOW +""+ used.get(player.getName())+"/"+max);
+                                player.sendActionBar(Component.text(used.get(player.getName())+"/"+max).color(NamedTextColor.YELLOW));
                             }
                             return;
                         }
@@ -261,18 +263,7 @@ public class Airstone implements Listener {
                         }else {
                             timer.put(player,14);
                         }
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                if (timer.get(player) == 0 || !player.isValid()) {
-                                    cancel();
-                                    return;
-                                }
-
-                                castKillerWail(player);
-                                timer.replace(player,timer.get(player)-1);
-                            }
-                        }.runTaskTimer(NikeyV1.getPlugin(),0,5);
+                        castKillerWail(player);
                     }
                 }
             }
@@ -348,21 +339,22 @@ public class Airstone implements Listener {
                     return;
                 }
 
-                long elapsedTime = System.currentTimeMillis() - chargeStartTime.get(player);
-                if (elapsedTime >= MAX_CHARGE_TIME) {
-                    elapsedTime = MAX_CHARGE_TIME;
+                long elapsedTime = (System.currentTimeMillis() - chargeStartTime.get(player)) / 1000;
+                if (elapsedTime >= 100) {
+                    elapsedTime = 100;
                 }
 
-                double chargePercentage = (double) elapsedTime / MAX_CHARGE_TIME;
+                double chargePercentage = elapsedTime / 100.0;
 
                 bossBar.setProgress(chargePercentage);
                 bossBar.setTitle(ChatColor.AQUA + "Charging Air Swipe... " + (int) (chargePercentage * 100) + "%");
 
                 if (chargePercentage == 1) {
-                    player.getWorld().spawnParticle(Particle.CRIT, player.getLocation().add(0, 1.5, 0), 7);
+                    player.getWorld().spawnParticle(Particle.CRIT, player.getLocation().add(0, 1, 0), 7);
                 }
             }
-        }.runTaskTimer(NikeyV1.getPlugin(), 0, 10);
+        }.runTaskTimer(NikeyV1.getPlugin(), 0, 20);
+
     }
 
     private void releaseAirSwipe(Player player) {
@@ -374,6 +366,7 @@ public class Airstone implements Listener {
             bossBar.removeAll();
         }
         long elapsedTime = System.currentTimeMillis() - chargeStartTime.get(player);
+        long MAX_CHARGE_TIME = 60 * 1000;
         if (elapsedTime >= MAX_CHARGE_TIME) {
             elapsedTime = MAX_CHARGE_TIME;
         }
@@ -384,10 +377,10 @@ public class Airstone implements Listener {
         double maxRadius;
         double sweepAngle = 180.0;
         if (level == 21) {
-            maxDamage = 27.5;
+            maxDamage = 30;
             maxRadius = 18.0;
         }else {
-            maxDamage = 32.5;
+            maxDamage = 25;
             maxRadius = 15;
         }
         double damage = 5.0 + chargePercentage * maxDamage;
@@ -414,6 +407,7 @@ public class Airstone implements Listener {
                     return;
                 }
 
+                Set<UUID> damagedEntities = new HashSet<>();
                 new BukkitRunnable() {
                     double currentRadius = initialRadius;
                     final double speedMultiplier = 1.5;
@@ -425,7 +419,6 @@ public class Airstone implements Listener {
                             return;
                         }
 
-                        // Define the number of particles based on the radius (increase with distance)
                         int particlesPerStep = (int) (currentRadius * 10);
 
                         // Generate particles along a half-circle in front of the player
@@ -439,20 +432,19 @@ public class Airstone implements Listener {
 
                             player.getWorld().spawnParticle(Particle.SWEEP_ATTACK, particleLocation, 0, 0.1, 0.1, 0.1, 0.05);
 
-                            // Damage entities within the swipe area
-                            for (Entity entity : player.getWorld().getNearbyEntities(particleLocation, 1.0, 1.0, 1.0)) {
-                                if (entity instanceof LivingEntity) {
-                                    if (HelpUtil.shouldDamageEntity((LivingEntity) entity,player)) {
-                                        LivingEntity target = (LivingEntity) entity;
+                            for (Entity entity : player.getWorld().getNearbyEntities(particleLocation, 0.5, 0.5, 0.5)) {
+                                if (entity instanceof LivingEntity target) {
+                                    if (HelpUtil.shouldDamageEntity(target,player)) {
                                         if (swipeCount == numberOfSwipes) {
                                             Vector knockback = particleDirection.clone().normalize().multiply(1.0).setY(0.5);
                                             target.setVelocity(knockback);
                                         }
-                                        target.damage(damage, player);
-                                        if (target instanceof Player) {
-                                            target.setNoDamageTicks(7);
+                                        if (!damagedEntities.contains(target.getUniqueId())) {
+                                            target.setNoDamageTicks(swipeInterval);
+                                            target.damage(damage, player);
+                                            damagedEntities.add(target.getUniqueId());
                                         }
-                                        target.getWorld().playSound(target.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.0f, 0.8f);
+                                        target.getWorld().playSound(target.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.9f, 0.6f);
                                     }
                                 }
                             }
@@ -460,16 +452,16 @@ public class Airstone implements Listener {
 
                         currentRadius += speedMultiplier;
                     }
-                }.runTaskTimer(NikeyV1.getPlugin(), 0, 1);  // Run each swipe every tick
+                }.runTaskTimer(NikeyV1.getPlugin(), 0, 1);
 
                 swipeCount++;
             }
-        }.runTaskTimer(NikeyV1.getPlugin(), 0, swipeInterval);  // Run the next swipe after swipeInterval ticks
+        }.runTaskTimer(NikeyV1.getPlugin(), 0, swipeInterval);
     }
 
     private void summonWindEffect(Player player) {
         if (activeTasks.containsKey(player.getUniqueId())) {
-            player.sendMessage("§cError: windeffect already active");
+            player.sendMessage("§cError: windeffect already active. Please report this error!");
             return;
         }
 
@@ -497,13 +489,11 @@ public class Airstone implements Listener {
             }
         };
 
-        // Starte den Task und speichere ihn
         task.runTaskTimer(NikeyV1.getPlugin(), 0, 1);
         activeTasks.put(player.getUniqueId(), task); // Task speichern
 
     }
 
-    // Helper method to rotate a vector around the Y-axis (used to create the half-circle arc)
     private Vector rotateAroundAxisY(Vector vector, double angle) {
         double cos = Math.cos(angle);
         double sin = Math.sin(angle);
@@ -589,17 +579,14 @@ public class Airstone implements Listener {
 
     @EventHandler
     public void onPlayerDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-
-            // Verhindere Fallschaden, wenn der Spieler mit der Fähigkeit gelandet ist
+        if (event.getEntity() instanceof Player player) {
             if ((event.getCause() == EntityDamageEvent.DamageCause.FALL ||event.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL) && flyingtimer.containsKey(player.getName())) {
                 event.setCancelled(true);
                 int stoneLevel = Stone.getStoneLevel(player);
                 if (stoneLevel >= 14) {
-                    triggerLanding((Player) event.getEntity(),event.getDamage()*0.6);
+                    triggerLanding(player,event.getDamage()*0.5);
                 }else {
-                    triggerLanding((Player) event.getEntity(),event.getDamage()*0.5);
+                    triggerLanding(player,event.getDamage()*0.4);
                 }
                 flyingtimer.remove(player.getName());
             }
@@ -608,34 +595,22 @@ public class Airstone implements Listener {
 
 
     private void castKillerWail(Player player) {
-        // Get the direction the player is looking at
         Vector direction = player.getEyeLocation().getDirection().normalize();
         Location startLocation = player.getEyeLocation().clone().add(direction.multiply(1.5));
 
-        int beamLength;
-        if (Stone.getStoneLevel(player) >= 18) {
-            beamLength = 30;
-        }else {
-            beamLength = 20;
-        }
+        int beamLength = (Stone.getStoneLevel(player) >= 18) ? 30 : 20;
         double beamRadius = 1.5;
         double pullStrength = 2.5;
-        double damage;
-        if (Stone.getStoneLevel(player) >= 17) {
-            damage = 3;
-        }else {
-            damage = 1.5;
-        }
+        double damage = (Stone.getStoneLevel(player) >= 17) ? 20 : 25;
         int particlesPerCircle = 20;
         double beamAttackRange = 3.5;
 
-        // Create a vector perpendicular to the direction the player is looking
         Vector perpVector1 = getPerpendicularVector(direction).normalize().multiply(beamRadius);
         Vector perpVector2 = perpVector1.clone().crossProduct(direction).normalize().multiply(beamRadius);
 
         for (int i = 0; i < beamLength; i++) {
             Location beamLocation = startLocation.clone().add(direction.clone().multiply(i));
-            
+
             for (int j = 0; j < particlesPerCircle; j++) {
                 double angle = 2 * Math.PI * j / particlesPerCircle;
                 double xOffset = perpVector1.getX() * Math.cos(angle) + perpVector2.getX() * Math.sin(angle);
@@ -653,20 +628,25 @@ public class Airstone implements Listener {
             // Get entities within the circular area of the beam
             List<Entity> nearbyEntities = beamLocation.getWorld().getEntities();
             for (Entity entity : nearbyEntities) {
-                if (entity instanceof LivingEntity) {
-                    if (entity.getLocation().distance(beamLocation) <= beamAttackRange && entity != player && HelpUtil.shouldDamageEntity((LivingEntity) entity,player)) {
-                        // Apply damage and pull effect
-                        LivingEntity living = (LivingEntity) entity;
-                        living.damage(damage,player);
+                if (entity instanceof LivingEntity living && entity != player && entity.getLocation().distance(beamLocation) <= beamAttackRange) {
+                    if (HelpUtil.shouldDamageEntity(living, player)) {
+                        living.damage(damage, player);
                         living.setNoDamageTicks(0);
 
                         Vector pullDirection = player.getLocation().toVector().subtract(entity.getLocation().toVector()).normalize();
-                        entity.setVelocity(pullDirection.multiply(pullStrength));
+
+                        double distance = entity.getLocation().distance(player.getLocation());
+
+                        if (distance > 1.0) {
+                            double adjustedPullStrength = Math.min(pullStrength, distance * 0.5);
+                            entity.setVelocity(pullDirection.add(new Vector(0,0.1,0)).multiply(adjustedPullStrength));
+                        }
                     }
                 }
             }
         }
     }
+
 
     private Vector getPerpendicularVector(Vector direction) {
         if (direction.getX() == 0 && direction.getZ() == 0) {

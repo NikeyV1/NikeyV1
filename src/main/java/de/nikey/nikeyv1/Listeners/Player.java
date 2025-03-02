@@ -60,8 +60,7 @@ public class Player implements Listener {
             }
             Holystone.hitted.remove(p);
             p.setMaxHealth(20);
-            p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(1);
-            p.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).setBaseValue(0);
+            p.getAttribute(Attribute.MAX_ABSORPTION).setBaseValue(0);
 
             if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) {
                 p.setInvulnerable(false);
@@ -90,26 +89,6 @@ public class Player implements Listener {
 
             for (org.bukkit.entity.Player player : Bukkit.getOnlinePlayers()) {
                 player.showPlayer(NikeyV1.getPlugin(),p);
-            }
-        }
-    }
-
-    @EventHandler
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        FileConfiguration config = NikeyV1.getPlugin().getConfig();
-        Entity damager = event.getDamager();
-        Entity entity = event.getEntity();
-        if (Electrostone.stunned.contains(entity)){
-            Integer i = config.getInt(damager.getName() + ".level");
-            if (i == 15) {
-                float damg = (float) ((float) event.getDamage()*1.4);
-                event.setDamage(damg);
-            } else if (i == 16 || i == 17) {
-                float damg = (float) ((float) event.getDamage()*1.5);
-                event.setDamage(damg);
-            }else if (i >= 18) {
-                float damg = (float) ((float) event.getDamage()*1.6);
-                event.setDamage(damg);
             }
         }
     }

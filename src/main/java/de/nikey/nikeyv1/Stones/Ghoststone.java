@@ -4,9 +4,10 @@ import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.WarpEffect;
-import io.papermc.paper.tag.EntityTags;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
@@ -37,9 +38,13 @@ public class Ghoststone implements Listener {
     private ArrayList<Entity> ghost = new ArrayList<>();
     private HashSet<UUID> ghostPlayers = new HashSet<>();
     private HashMap<UUID, HashSet<Block>> removedBlocks = new HashMap<>();
+
+    //Master Ability
     private final Set<UUID> teleportedPlayers = new HashSet<>();
-    private HashMap<String, Integer> particletimes = new HashMap<>();
-    private final Set<UUID> damageReductionPlayers = new HashSet<>();
+    private Long storedWorldTime = null;
+    private final Map<UUID, Integer> activePlayers = new HashMap<>();
+    private boolean isDarkNightActive = false;
+
 
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
@@ -115,11 +120,11 @@ public class Ghoststone implements Listener {
                     String attacking = Stone.getAttacking(player);
                     int range;
                     if (level == 3) {
-                        range = 4;
+                        range = 3;
                     } else if (level == 4) {
-                        range = 7;
+                        range = 5;
                     } else if (level >= 5) {
-                        range = 10;
+                        range = 8;
                     } else {
                         return;
                     }
@@ -128,7 +133,7 @@ public class Ghoststone implements Listener {
                         if (e instanceof LivingEntity && e != player) {
                             LivingEntity entity = (LivingEntity) e;
                             if (HelpUtil.shouldDamageEntity(entity, player)) {
-                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 20 * 3, 1, true, false, false));
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 20 * 3, 0, true, false, false));
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, 20 * 3, 0, true, false, false));
                                 entity.getWorld().spawnParticle(Particle.SNOWFLAKE, entity.getLocation().add(0, 0.5F, 0), 0, 0, 0, 0);
                             }
@@ -178,7 +183,7 @@ public class Ghoststone implements Listener {
                                 public void run() {
                                     if (playerHitted.containsKey(p.getName())) {
                                         makePlayerVisible(p);
-                                        p.sendMessage("§3You are now visible!");
+                                        p.sendActionBar(Component.text("You are now visible!").color(NamedTextColor.DARK_AQUA));
                                     }
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(),20*20);
@@ -188,7 +193,7 @@ public class Ghoststone implements Listener {
                                 public void run() {
                                     if (playerHitted.containsKey(p.getName())) {
                                         makePlayerVisible(p);
-                                        p.sendMessage("§3You are now visible!");
+                                        p.sendActionBar(Component.text("You are now visible!").color(NamedTextColor.DARK_AQUA));
                                     }
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(),20*30);
@@ -206,10 +211,6 @@ public class Ghoststone implements Listener {
         if (item == null) return;
         if (Stone.whatStone(item).equalsIgnoreCase("Ghost")){
             int level = Stone.getStoneLevelFromItem(item);
-            FileConfiguration config = NikeyV1.getPlugin().getConfig();
-            config.set(p.getName()+".stone","Ghost");
-            config.set(p.getName()+".level",level);
-            NikeyV1.getPlugin().saveConfig();
             if (level == 20 || level == 21){
                 if (p.isSneaking() && Bukkit.getServer().getServerTickManager().isRunningNormally()) {
                     if (!(cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
@@ -218,17 +219,11 @@ public class Ghoststone implements Listener {
                        Vector up = new Vector(0, 3, 0);
                         p.setVelocity(up);
                         teleportedPlayers.add(p.getUniqueId());
-                        damageReductionPlayers.add(p.getUniqueId());
 
                         Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> teleportedPlayers.remove(p.getUniqueId()), 120L);
-                        if (level == 20) {
-                            Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> damageReductionPlayers.remove(p.getUniqueId()), 300L);
-                        }else {
-                            Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> damageReductionPlayers.remove(p.getUniqueId()), 600L);
-                        }
 
                         Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> {
-                            Vector down = new Vector(0, -3, 0); // Boost nach unten
+                            Vector down = new Vector(0, -3, 0);
                             p.setVelocity(down);
                         }, 20L);
                     }
@@ -245,165 +240,127 @@ public class Ghoststone implements Listener {
             Player player = (Player) event.getEntity();
             String attacking = Stone.getAttacking(player);
             if (event.getCause() == EntityDamageEvent.DamageCause.FALL && teleportedPlayers.contains(player.getUniqueId())) {
+                player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ITEM_BREAK,1,1);
                 event.setCancelled(true);
 
                 int level = Stone.getStoneLevel(player);
                 if (level == 20) {
-                    player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(3);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED ,20*15,4,false,false));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE,20*15,3,false,false));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,20*15,3,false,false));
-
-                    // Create smoke particles around the player
-                    particletimes.put(player.getName(),8);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-
-                            if (particletimes.get(player.getName()) == 0) {
-                                player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(1);
-                                particletimes.remove(player.getName());
-                                cancel();
-                                return;
-                            }
-
-                            for (int i = 0; i < 3500; i++) {
-                                Location smokeLocation = player.getLocation().add((Math.random() - 0.5) * 30, (Math.random() - 0.5) * 10, (Math.random() - 0.5) * 30);
-                                player.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, smokeLocation, 0, 0, 0, 0, 0.1);
-                            }
-
-                            particletimes.replace(player.getName(),particletimes.get(player.getName())-1);
-                        }
-                    }.runTaskTimer(NikeyV1.getPlugin(),0,40);
-                    
-                    for (Entity entity : player.getNearbyEntities(30, 30, 30)) {
-                        if (entity instanceof LivingEntity && entity != player) {
-                            LivingEntity livingEntity = (LivingEntity) entity;
-                            if (HelpUtil.shouldDamageEntity(livingEntity,player)) {
-                                if (entity instanceof Player) {
-                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*15,3,true));
-                                    double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                                    double damage = maxHealth * 0.3;
-                                    livingEntity.playHurtAnimation(0);
-                                    if (livingEntity.getHealth()-damage >= 1) {
-                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                    }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
-                                    }else {
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
-                                    }
-
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*15, 1));
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
-                                }else {
-                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*15,3,true));
-                                    double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                                    double damage = maxHealth * 0.3;
-                                    livingEntity.playHurtAnimation(0);
-                                    if (livingEntity.getHealth()-damage >= 1) {
-                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                    }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
-                                    }else {
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
-                                    }
-
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*15, 1));
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*15, 1));
-                                }
-                            }
-                        }
-                    }
-
-                    teleportedPlayers.remove(player.getUniqueId()); // Remove player from the teleported set
-
-                    // Schedule task to slow down the server after 2 seconds
-                    Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 10"), 1L); // 2 seconds later
-                    // Schedule task to reset the tick rate after 10 seconds
-                    Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick rate 20"), 300L);
+                    activateDarkNight(player, 15);
                 }else if (level == 21) {
-                    player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(5);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED ,20*30,4,false,false));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE,20*30,3,false,false));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,20*30,3,false,false));
-
-                    // Create smoke particles around the player
-                    particletimes.put(player.getName(),16);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-
-                            if (particletimes.get(player.getName()) == 0) {
-                                player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(1);
-                                particletimes.remove(player.getName());
-                                cancel();
-                                return;
-                            }
-
-                            for (int i = 0; i < 3500; i++) {
-                                Location smokeLocation = player.getLocation().add((Math.random() - 0.5) * 30, (Math.random() - 0.5) * 10, (Math.random() - 0.5) * 30);
-                                player.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, smokeLocation, 0, 0, 0, 0, 0.1);
-                            }
-
-                            particletimes.replace(player.getName(),particletimes.get(player.getName())-1);
-                        }
-                    }.runTaskTimer(NikeyV1.getPlugin(),0,40);
-
-                    // Give blindness effect to nearby players
-                    for (Entity entity : player.getNearbyEntities(30, 30, 30)) {
-                        if (entity instanceof LivingEntity && entity != player) {
-                            LivingEntity livingEntity = (LivingEntity) entity;
-                            if (HelpUtil.shouldDamageEntity(livingEntity,player)) {
-                                if (entity instanceof Player) {
-                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*30,3,true));
-                                    double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                                    double damage = maxHealth * 0.4;
-                                    livingEntity.playHurtAnimation(0);
-                                    if (livingEntity.getHealth()-damage >= 1) {
-                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                    }else {
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
-                                    }
-
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*30, 1));
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));
-                                }else {
-                                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,20*30,3,true));
-                                    double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                                    double damage = maxHealth * 0.4;
-                                    livingEntity.playHurtAnimation(0);
-                                    if (livingEntity.getHealth()-damage >= 1) {
-                                        livingEntity.setHealth(livingEntity.getHealth()-damage);
-                                    }else if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())){
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
-                                    }else {
-                                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
-                                    }
-
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20*30, 1));
-                                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*30, 1));
-                                }
-                            }
-                        }
-                    }
-
-                    teleportedPlayers.remove(player.getUniqueId());
-
-                    // Schedule task to slow down the server after 2 seconds
-                    Bukkit.getServerTickManager().setTickRate(10);
-                    Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> Bukkit.getServerTickManager().setTickRate(10), 1L);
-                    // Schedule task to reset the tick rate after 30 seconds
-                    Bukkit.getScheduler().runTaskLater(NikeyV1.getPlugin(), () -> Bukkit.getServerTickManager().setTickRate(20), 600L);
-                }
-            }else if (damageReductionPlayers.contains(player.getUniqueId())) {
-                Random r = new Random();
-                int choice = r.nextInt(2);
-                if (choice == 0) {
-                    event.setCancelled(true);
+                    activateDarkNight(player, 30);
                 }
             }
         }
     }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onDamageDealt(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (!activePlayers.containsKey(player.getUniqueId())) return;
+
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            onlinePlayer.hidePlayer(NikeyV1.getPlugin(), player);
+        }
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20,0,false,false));
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                    onlinePlayer.showPlayer(NikeyV1.getPlugin(), player);
+                }
+            }
+        }.runTaskLater(NikeyV1.getPlugin(), 20);
+
+        double increasedDamage = event.getDamage() * 1.1;
+        event.setDamage(increasedDamage);
+    }
+
+
+    public void activateDarkNight(Player player, int durationSeconds) {
+        if (activePlayers.containsKey(player.getUniqueId())) return; // Bereits aktiv? -> Ignorieren
+
+        World world = player.getWorld();
+        if (storedWorldTime == null) {
+            storedWorldTime = world.getTime();
+        }
+        activePlayers.put(player.getUniqueId(), durationSeconds);
+
+        Location loc = player.getLocation();
+
+        for (int i = 0; i < 8; i++) {
+            double angle = i * (Math.PI / 4);
+            double x = loc.getX() + Math.cos(angle) * 1.5;
+            double z = loc.getZ() + Math.sin(angle) * 1.5;
+            Location particleLoc = new Location(world, x, loc.getY() + 1.0, z);
+
+            world.spawnParticle(Particle.LARGE_SMOKE, particleLoc, 1, 0, 0, 0, 0);
+            world.spawnParticle(Particle.SOUL, particleLoc, 1, 0, 0, 0, 0);
+            world.spawnParticle(Particle.ASH, particleLoc, 1, 0, 0, 0, 0);
+        }
+
+        world.spawnParticle(Particle.END_ROD, loc.clone().add(0, 1, 0), 10, 0.5, 0.5, 0.5, 0.05);
+
+        world.playSound(net.kyori.adventure.sound.Sound.sound(Key.key("entity.vex.charge"), net.kyori.adventure.sound.Sound.Source.AMBIENT,2,0.8f));
+
+        if (!isDarkNightActive) {
+            startDarkNight(world);
+        }
+
+        new BukkitRunnable() {
+            int timer = durationSeconds;
+
+            @Override
+            public void run() {
+                if (!activePlayers.containsKey(player.getUniqueId())) {
+                    cancel();
+                    return;
+                }
+
+                if (timer <= 0) {
+                    deactivateDarkNight(player);
+                    cancel();
+                    return;
+                }
+
+                for (Entity entity : player.getNearbyEntities(50, 50, 50)) {
+                    if (entity instanceof Player target) {
+                        target.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 60, 0, false, false));
+                        target.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 60, 0, false, false));
+                    }
+                }
+
+                activePlayers.put(player.getUniqueId(), timer--);
+            }
+        }.runTaskTimer(NikeyV1.getPlugin(), 0L, 20L);
+    }
+
+    private void startDarkNight(World world) {
+        world.setTime(18000);
+        world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+
+        Bukkit.getServerTickManager().setTickRate(10);
+
+        isDarkNightActive = true;
+    }
+
+    private void deactivateDarkNight(Player player) {
+        activePlayers.remove(player.getUniqueId());
+        player.playSound(player.getLocation(),Sound.BLOCK_ENDER_CHEST_OPEN,0.5f,0.9f);
+        if (activePlayers.isEmpty()) {
+            resetWorldTime(player.getWorld());
+        }
+    }
+
+    private void resetWorldTime(World world) {
+        world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
+        world.setTime(storedWorldTime);
+        storedWorldTime = null;
+
+        Bukkit.getServerTickManager().setTickRate(20);
+        isDarkNightActive = false;
+    }
+
 
 
 

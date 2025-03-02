@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.*;
@@ -519,6 +520,11 @@ public class Frozenstone implements Listener {
         Player player = event.getPlayer();
         if (notp.contains(player)) event.setCancelled(true);
     }
+
+    @EventHandler
+    public void onEntityPotionEffect(EntityPotionEffectEvent event) {
+    }
+
 
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {

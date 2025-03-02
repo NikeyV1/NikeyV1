@@ -228,17 +228,17 @@ public class Electrostone implements Listener {
         if (stone.equalsIgnoreCase("electric")) {
             if (level >= 7) {
                 if (level == 7) {
-                    player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.1);
+                    player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(4.1);
                 } else if (level == 8) {
-                    player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.2);
+                    player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(4.2);
                 }else if (level >= 9) {
-                    player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.3);
+                    player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(4.3);
                 }
             }else {
-                player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
+                player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(4);
             }
         }else {
-            player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
+            player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(4);
         }
     }
 
@@ -262,17 +262,37 @@ public class Electrostone implements Listener {
     }
 
 
+    @EventHandler
+    public void onStunnedDamage(EntityDamageByEntityEvent event) {
+        FileConfiguration config = NikeyV1.getPlugin().getConfig();
+        Entity damager = event.getDamager();
+        Entity entity = event.getEntity();
+        if (Electrostone.stunned.contains(entity)){
+            Integer i = config.getInt(damager.getName() + ".level");
+            if (i == 15) {
+                float damg = (float) ((float) event.getDamage()*1.3);
+                event.setDamage(damg);
+            } else if (i == 16 || i == 17) {
+                float damg = (float) ((float) event.getDamage()*1.4);
+                event.setDamage(damg);
+            }else if (i >= 18) {
+                float damg = (float) ((float) event.getDamage()*1.5);
+                event.setDamage(damg);
+            }
+        }
+    }
+
+
 
     private void applyShieldEffect(Player p, int i) {
-        long cooldown = 300 * 1000; // 5 Minuten in Millisekunden
+        long cooldown = 300 * 1000;
         int timerDuration = (i == 20) ? 40 : 100;
         int radius = (i == 20) ? 6 : 10;
-        int sphere = (i == 20) ? 1 : 2;
         int particleAmount = 50;
         int duration = (i == 20) ? 20000 : 26250;
         int damage = (i == 20) ? 1 : 2;
-        double velocityMultiplier = (i == 20) ? 1.5 : 2;
-        int interval = (i == 20) ? 10 : 5;
+        double velocityMultiplier = (i == 20) ? 0.3 : 0.6;
+        int interval = (i == 20) ? 8 : 4;
         int entityRadius = (i == 20) ? 5 : 8;
 
         mtimer.put(p, timerDuration);
@@ -282,7 +302,7 @@ public class Electrostone implements Listener {
             // Create and start the shield effect
             ShieldEffect effect = new ShieldEffect(NikeyV1.em);
             effect.radius = radius;
-            effect.sphere = sphere == 1;
+            effect.sphere = true;
             effect.setEntity(p);
             effect.duration = duration;
             effect.particle = Particle.SCRAPE;

@@ -16,10 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -91,7 +88,7 @@ public class Firestone implements Listener {
                         effect.particles = particles;
                         effect.particle = Particle.FLAME;
                         effect.radius = radius;
-                        effect.visibleRange = 100;
+                        effect.visibleRange = 120;
                         effect.start();
 
                         int finalRadius = radius;
@@ -146,7 +143,7 @@ public class Firestone implements Listener {
                                         return;
                                     }else {
                                         double health = p.getHealth();
-                                        if (p.getHealth() <=18 && !p.isDead())p.setHealth(health+1.2);
+                                        if (p.getHealth() <=18 && !p.isDead())p.heal(1.2, EntityRegainHealthEvent.RegainReason.MAGIC);
                                     }
                                     time--;
                                 }
@@ -490,12 +487,9 @@ public class Firestone implements Listener {
     }
 
     private void playDangerousWarning(Player player) {
-
-        // Die Melodie abspielen
         for (int i=0;i<7;i++) {
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
             try {
-                // Eine kurze Pause zwischen den Tönen
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();

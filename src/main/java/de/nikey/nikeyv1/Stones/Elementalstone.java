@@ -202,13 +202,13 @@ public class Elementalstone implements Listener {
                                                 dmg -= missinghealth;
                                                 player.setHealth(player.getMaxHealth());
                                                 if (!(player.getAbsorptionAmount() > dmg)) {
-                                                    double baseValue = player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).getBaseValue();
-                                                    player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).setBaseValue(dmg);
+                                                    double baseValue = player.getAttribute(Attribute.MAX_ABSORPTION).getBaseValue();
+                                                    player.getAttribute(Attribute.MAX_ABSORPTION).setBaseValue(dmg);
                                                     player.setAbsorptionAmount(dmg);
                                                     new BukkitRunnable() {
                                                         @Override
                                                         public void run() {
-                                                            player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).setBaseValue(baseValue);
+                                                            player.getAttribute(Attribute.MAX_ABSORPTION).setBaseValue(baseValue);
                                                         }
                                                     }.runTaskLater(NikeyV1.getPlugin(),20*120);
                                                 }
