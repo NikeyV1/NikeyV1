@@ -350,7 +350,7 @@ public class Waterstone implements Listener {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400, 0, false));
                 }
                 if (player.isValid()) {
-                    player.setHealth(Math.min(player.getHealth() + healAmount, 20));
+                    player.heal(healAmount);
                 }
             }else {
                 player.damage(damageAmount);
@@ -425,22 +425,19 @@ public class Waterstone implements Listener {
                     return;
                 }
 
-                // Flugbahn des Tornados basierend auf der Blickrichtung des Spielers
-                Vector direction = location.getDirection().normalize(); // Richtung des Spielers
+                
+                Vector direction = location.getDirection().normalize(); 
                 if (random.nextDouble() < 0.1) {
-                    randomOffset = new Vector(random.nextDouble() - 0.5, 0, random.nextDouble() - 0.5); // Zufälliger Offset
+                    randomOffset = new Vector(random.nextDouble() - 0.5, 0, random.nextDouble() - 0.5); 
 
-                    // Tornado bewegt sich in die Richtung des Spielers mit langsamer Geschwindigkeit und bleibt auf dem höchsten Block
-                    location.add(direction.multiply(speed).add(randomOffset)); // Tornado bewegt sich sehr langsam
+                    location.add(direction.multiply(speed).add(randomOffset));
                 }else {
-                    location.add(direction.multiply(speed)); // Tornado bewegt sich sehr langsam
+                    location.add(direction.multiply(speed)); 
                 }
 
-                // Höhe auf dem höchsten Block anpassen
                 Block highestBlock = world.getHighestBlockAt(location).getLocation().getBlock();
-                location.setY(highestBlock.getY() + 1); // Setze den Tornado 1 Block über dem höchsten Block
+                location.setY(highestBlock.getY() + 1);
 
-                // Spieler in der Nähe beeinflussen
                 for (Entity entity : world.getEntities()) {
                     if (entity instanceof LivingEntity) {
                         LivingEntity living = (LivingEntity) entity;
@@ -471,7 +468,6 @@ public class Waterstone implements Listener {
                     fallingBlock.setHurtEntities(true);
                     fallingBlock.setDamagePerBlock(5);
 
-                    // Setze die Velocity des Blocks, um ihn leicht nach außen zu schieben
                     fallingBlock.setVelocity(new Vector((random.nextDouble() - 0.5) * 0.2, 0.4, (random.nextDouble() - 0.5) * 0.2));
                     new BukkitRunnable() {
                         @Override
@@ -495,13 +491,11 @@ public class Waterstone implements Listener {
                         for (Entity entity : particleLocation.getNearbyEntities(3.5,3,3.5)) {
                             entities.add(entity);
                         }
-                        // Hauptpartikel für den Tornado (Wolken)
-                        world.spawnParticle(Particle.CLOUD, particleLocation, 5, 0.15, 0.15, 0.15, 0.01); // Wolkenpartikel
+                        world.spawnParticle(Particle.CLOUD, particleLocation, 5, 0.15, 0.15, 0.15, 0.01); 
 
-                        // Zusätzliche Wasserpartikel, um den Effekt eines Wassertornados zu erzeugen
                         if (random.nextDouble() < 0.35) { // 35% der Partikel sind Wasser
-                            world.spawnParticle(Particle.SPLASH, particleLocation, 2, 0.1, 0.1, 0.1, 0.01); // Wasserspritzer
-                            world.spawnParticle(Particle.FALLING_WATER, particleLocation, 3, 0.1, 0.1, 0.1, 0.01); // Tropfendes Wasser
+                            world.spawnParticle(Particle.SPLASH, particleLocation, 2, 0.1, 0.1, 0.1, 0.01);
+                            world.spawnParticle(Particle.FALLING_WATER, particleLocation, 3, 0.1, 0.1, 0.1, 0.01);
                         }
                     }
                 }
@@ -524,7 +518,6 @@ public class Waterstone implements Listener {
         }.runTaskTimer(NikeyV1.getPlugin(), 0, 1);
     }
 
-    // Beispielmethode um Teleport zu verhindern
     public boolean canTeleport(LivingEntity entity) {
         return !teleportCooldown.containsKey(entity) || teleportCooldown.get(entity) < System.currentTimeMillis();
     }
@@ -543,7 +536,7 @@ public class Waterstone implements Listener {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
         if (!canTeleport(player)) {
-            event.setCancelled(true); // Verhindert den Teleport
+            event.setCancelled(true);
         }
     }
 
