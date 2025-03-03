@@ -314,7 +314,7 @@ public class Undeadstone implements Listener {
                         if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
                             //cooldown-ability
-                            timer.put(p,60);
+                            timer.put(p,50);
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
@@ -371,7 +371,7 @@ public class Undeadstone implements Listener {
                         if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                             ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
                             //cooldown-ability
-                            timer.put(p,60);
+                            timer.put(p,50);
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
@@ -518,8 +518,8 @@ public class Undeadstone implements Listener {
         if (!(entity instanceof LivingEntity)) return;
         if (Stone.isUndeadMaster((LivingEntity) entity)) {
             Zombie zombie = (Zombie) entity;
-            if (event.getFinalDamage() > 15) {
-                event.setDamage(15);
+            if (event.getFinalDamage() > 20) {
+                event.setDamage(20);
             }
             if (event.getCause() == EntityDamageEvent.DamageCause.FALL && zombie.getCustomName().contains("low")) {
                 for (Entity nearbyEntity : zombie.getNearbyEntities(30, 30, 30)) {
