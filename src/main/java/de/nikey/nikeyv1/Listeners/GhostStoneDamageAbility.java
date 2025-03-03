@@ -126,7 +126,7 @@ public class GhostStoneDamageAbility implements Listener {
                     }else if (l >= 19) {
                         startHealthSteal(player,victim);
                         setVisibility(victim,player);
-                        timer.put(player,800);
+                        timer.put(player,600);
 
                         new BukkitRunnable() {
                             @Override
@@ -188,10 +188,10 @@ public class GhostStoneDamageAbility implements Listener {
 
     public void startHealthSteal(Player user , Player victim) {
         int level = Stone.getStoneLevel(user);
-        if (level <= 18) {
-            stealtimer.put(user,30);
+        if(level == 17 || level == 18){
+            stealtimer.put(user, 24)
         }else if (level >= 19) {
-            stealtimer.put(user,40);
+            stealtimer.put(user,30);
         }
         new BukkitRunnable() {
             @Override
