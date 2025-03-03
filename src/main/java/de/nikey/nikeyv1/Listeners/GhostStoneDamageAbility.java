@@ -259,26 +259,15 @@ public class GhostStoneDamageAbility implements Listener {
         victim.showPlayer(NikeyV1.getPlugin(), damager);
         damager.showPlayer(NikeyV1.getPlugin(), victim);
 
-        victim.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent("§8§lLocked!"));
-        damager.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent("§8§lLocked!"));
+        victim.sendActionBar(Component.text("Locked!").color(NamedTextColor.DARK_GRAY).decoration(TextDecoration.BOLD, true));
+        damager.sendActionBar(Component.text("Locked!").color(NamedTextColor.DARK_GRAY).decoration(TextDecoration.BOLD, true));
 
-        //Effects
-        if (level == 15) {
-            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*20,2,true));
-            victim.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*20,1,true));
-        }else if (level == 16 ||level == 17) {
-            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*30,2,true));
-            victim.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*30,1,true));
-        }else if (level == 18) {
-            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*30,2,true));
-            victim.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*30,1,true));
+        if (level >= 18) {
             damager.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,20*30,1,true));
-        }else if (level >= 19) {
-            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,20*40,2,true));
-            victim.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,20*40,1,true));
-            damager.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,20*40,1,true));
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 20*30,1,true));
         }
         damager.setHealth(damager.getMaxHealth());
+        victim.setHealth(victim.getMaxHealth());
 
         // Add victim and damager to blockedPlayers set to prevent teleportation
         blockedPlayers.add(victim);
