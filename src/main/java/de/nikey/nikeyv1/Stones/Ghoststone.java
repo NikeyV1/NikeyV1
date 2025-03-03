@@ -65,19 +65,19 @@ public class Ghoststone implements Listener {
         hitCount++;
         if (level == 7) {
             if (hitCount % 15 == 0) {
-                player.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE,player.getLocation().add(0,1,0),8,0.1,0.1,0.1);
+                player.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE,player.getLocation().add(0,1,0),6,0.1,0.1,0.1);
                 event.setCancelled(true);
                 playerHitCount.remove(player.getUniqueId());
             }
         } else if (level == 8) {
             if (hitCount % 12 == 0) {
-                player.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE,player.getLocation().add(0,1,0),8,0.1,0.1,0.1);
+                player.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE,player.getLocation().add(0,1,0),6,0.1,0.1,0.1);
                 event.setCancelled(true);
                 playerHitCount.remove(player.getUniqueId());
             }
         }else if (level >= 9) {
             if (hitCount % 9 == 0) {
-                player.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE,player.getLocation().add(0,1,0),8,0.1,0.1,0.1);
+                player.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE,player.getLocation().add(0,1,0),6,0.1,0.1,0.1);
                 event.setCancelled(true);
                 playerHitCount.remove(player.getUniqueId());
             }
@@ -130,17 +130,16 @@ public class Ghoststone implements Listener {
                     }
 
                     for (Entity e : player.getNearbyEntities(range, range, range)) {
-                        if (e instanceof LivingEntity && e != player) {
-                            LivingEntity entity = (LivingEntity) e;
+                        if (e instanceof LivingEntity entity && e != player) {
                             if (HelpUtil.shouldDamageEntity(entity, player)) {
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 20 * 3, 0, true, false, false));
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, 20 * 3, 0, true, false, false));
-                                entity.getWorld().spawnParticle(Particle.SNOWFLAKE, entity.getLocation().add(0, 0.5F, 0), 0, 0, 0, 0);
+                                entity.getWorld().spawnParticle(Particle.SNOWFLAKE, entity.getLocation().add(0, 0.2F, 0), 0, 0, 0, 0);
                             }
                         }
                     }
 
-                    if (!player.isValid()) {
+                    if (!player.isOnline()) {
                         cancel();
                         return;
                     }
@@ -339,7 +338,7 @@ public class Ghoststone implements Listener {
         world.setTime(18000);
         world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
 
-        Bukkit.getServerTickManager().setTickRate(10);
+        Bukkit.getServerTickManager().setTickRate(15);
 
         isDarkNightActive = true;
     }
