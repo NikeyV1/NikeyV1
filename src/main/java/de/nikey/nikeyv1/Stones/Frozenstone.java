@@ -432,9 +432,10 @@ public class Frozenstone implements Listener {
                 }.runTaskLater(NikeyV1.getPlugin(),20*20);
             }
         }
-        if (entity instanceof SpectralArrow && entity.getCustomName() != null && entity.getCustomName().equals(ChatColor.DARK_AQUA + "FD") && shooter instanceof Player) {
+        if (entity instanceof SpectralArrow arrow && entity.getCustomName() != null && entity.getCustomName().equals(ChatColor.DARK_AQUA + "FD") && shooter instanceof Player) {
             Player p = (Player) shooter;
             int i = NikeyV1.getPlugin().getConfig().getInt(p.getName() + ".level");
+            arrow.remove();
             if (hitEntity != null) {
                 LivingEntity e = (LivingEntity) hitEntity;
 
