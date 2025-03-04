@@ -79,7 +79,7 @@ public class GiveStone implements CommandExecutor , TabCompleter {
                     Items.GiveElementalStone(p);
                 }
             }else {
-                p.sendMessage("§cThat doesnt work like so!");
+                p.sendMessage("§cWrong usage: /stone <Stone> <Level>");
             }
         }
         return true;
