@@ -235,165 +235,17 @@ public class Frozenstone implements Listener {
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
                 String damageEntityType = Stone.getAttacking(p);
-                if (i == 15){
-                    if (!p.isSneaking()) {
-                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
-                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            //Cooldown-Ability
-                            for (Entity e : p.getNearbyEntities(40,40,40)){
-                                if (e instanceof LivingEntity){
-                                    if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
-                                        LivingEntity entity = (LivingEntity) e;
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
-                                        notp.add(entity);
-                                        entity.damage(18,p);
-                                        entity.setFreezeTicks(600);
-                                        SmokeEffect effect = new SmokeEffect(NikeyV1.em);
-                                        effect.setEntity(entity);
-                                        effect.particle = Particle.SNOWFLAKE;
-                                        effect.duration = 20000;
-                                        effect.particles = 2;
-                                        effect.start();
-                                        new BukkitRunnable() {
-                                            @Override
-                                            public void run() {
-                                                notp.remove(entity);
-                                            }
-                                        }.runTaskLater(NikeyV1.getPlugin(),400);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else if (i == 16) {
-                    if (!p.isSneaking()) {
-                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
-                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            //Cooldown-Ability
+                if (p.isSneaking() || ability.getOrDefault(p.getUniqueId(), 0L) > System.currentTimeMillis()) return;
 
-                            for (Entity e : p.getNearbyEntities(50,50,50)){
-                                if (e instanceof LivingEntity){
-                                    if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
-                                        LivingEntity entity = (LivingEntity) e;
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
-                                        notp.add(entity);
-                                        entity.damage(18,p);
-                                        entity.setFreezeTicks(600);
-                                        SmokeEffect effect = new SmokeEffect(NikeyV1.em);
-                                        effect.setEntity(entity);
-                                        effect.particle = Particle.SNOWFLAKE;
-                                        effect.duration = 20000;
-                                        effect.particles = 2;
-                                        effect.start();
-                                        new BukkitRunnable() {
-                                            @Override
-                                            public void run() {
-                                                notp.remove(entity);
-                                            }
-                                        }.runTaskLater(NikeyV1.getPlugin(),400);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }else if (i == 17) {
-                    if (!p.isSneaking()) {
-                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
-                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            //Cooldown-Ability
+                ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000)); // Cooldown-Ability
 
-                            for (Entity e : p.getNearbyEntities(50,50,50)){
-                                if (e instanceof LivingEntity){
-                                    if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
-                                        LivingEntity entity = (LivingEntity) e;
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
-                                        notp.add(entity);
-                                        entity.damage(24,p);
-                                        entity.setFreezeTicks(600);
-                                        SmokeEffect effect = new SmokeEffect(NikeyV1.em);
-                                        effect.setEntity(entity);
-                                        effect.particle = Particle.SNOWFLAKE;
-                                        effect.duration = 20000;
-                                        effect.particles = 2;
-                                        effect.start();
-                                        new BukkitRunnable() {
-                                            @Override
-                                            public void run() {
-                                                notp.remove(entity);
-                                            }
-                                        }.runTaskLater(NikeyV1.getPlugin(),400);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }else if (i == 18) {
-                    if (!p.isSneaking()) {
-                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
-                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                int range = (i == 15) ? 40 : 50;
+                int damage = (i >= 17) ? 24 : 18;
+                int freezeTicks = (i >= 18) ? 700 : 600;
+                int slownessLevel = (i >= 19) ? 3 : 2;
 
-                            //Cooldown-Ability
-                            for (Entity e : p.getNearbyEntities(50,50,50)){
-                                if (e instanceof LivingEntity){
-                                    if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
-                                        LivingEntity entity = (LivingEntity) e;
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,2,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
-                                        notp.add(entity);
-                                        entity.damage(24,p);
-                                        entity.setFreezeTicks(700);
-                                        SmokeEffect effect = new SmokeEffect(NikeyV1.em);
-                                        effect.setEntity(entity);
-                                        effect.particle = Particle.SNOWFLAKE;
-                                        effect.duration = 20000;
-                                        effect.particles = 2;
-                                        effect.start();
-                                        new BukkitRunnable() {
-                                            @Override
-                                            public void run() {
-                                                notp.remove(entity);
-                                            }
-                                        }.runTaskLater(NikeyV1.getPlugin(),400);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else if (i >=19){
-                    if (!p.isSneaking()) {
-                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
-                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            //Cooldown-Ability
-                            for (Entity e : p.getNearbyEntities(50,50,50)){
-                                if (e instanceof LivingEntity){
-                                    if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
-                                        LivingEntity entity = (LivingEntity) e;
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,400,3,false));
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,400,0,false));
-                                        notp.add(entity);
-                                        entity.damage(24,p);
-                                        entity.setFreezeTicks(700);
-                                        SmokeEffect effect = new SmokeEffect(NikeyV1.em);
-                                        effect.setEntity(entity);
-                                        effect.particle = Particle.SNOWFLAKE;
-                                        effect.duration = 20000;
-                                        effect.particles = 2;
-                                        effect.start();
-                                        new BukkitRunnable() {
-                                            @Override
-                                            public void run() {
-                                                notp.remove(entity);
-                                            }
-                                        }.runTaskLater(NikeyV1.getPlugin(),400);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+
+
             }
         }
     }
