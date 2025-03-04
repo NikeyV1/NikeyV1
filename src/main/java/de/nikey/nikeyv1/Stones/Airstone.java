@@ -482,7 +482,7 @@ public class Airstone implements Listener {
                 double z = Math.sin(angle) * 0.8;
 
                 Location particleLoc = loc.clone().add(x, -0.5, z);
-                world.spawnParticle(Particle.POOF, particleLoc, 0, 0, -3, 0, 0.02);
+                world.spawnParticle(Particle.DUST_PLUME, particleLoc, 0, 0, -3, 0, 0.02);
 
                 angle += Math.PI / 16;
             }

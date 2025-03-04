@@ -134,7 +134,7 @@ public class Ghoststone implements Listener {
                             if (HelpUtil.shouldDamageEntity(entity, player)) {
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 20 * 3, 0, true, false, false));
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, 20 * 3, 0, true, false, false));
-                                entity.getWorld().spawnParticle(Particle.SNOWFLAKE, entity.getLocation().add(0, 0.2F, 0), 0, 0, 0, 0);
+                                entity.getWorld().spawnParticle(Particle.SNOWFLAKE, entity.getLocation().add(0, 0.3F, 0), 0, 0, 0, 0);
                             }
                         }
                     }

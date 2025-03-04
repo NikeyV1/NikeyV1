@@ -75,6 +75,7 @@ public final class NikeyV1 extends JavaPlugin{
         manager.registerEvents(new Ghoststone(),this);
         manager.registerEvents(new GhostStoneDamageAbility(),this);
         manager.registerEvents(new Airstone(),this);
+        manager.registerEvents(new Naturestone(), this);
         //Command
         getCommand("stone").setExecutor(new GiveStone());
         getCommand("stone").setTabCompleter(new GiveStone());

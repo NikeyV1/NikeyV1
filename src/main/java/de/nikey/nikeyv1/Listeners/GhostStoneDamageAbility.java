@@ -3,6 +3,9 @@ package de.nikey.nikeyv1.Listeners;
 import com.destroystokyo.paper.event.player.PlayerElytraBoostEvent;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.api.Stone;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -189,7 +192,7 @@ public class GhostStoneDamageAbility implements Listener {
     public void startHealthSteal(Player user , Player victim) {
         int level = Stone.getStoneLevel(user);
         if(level == 17 || level == 18){
-            stealtimer.put(user, 24)
+            stealtimer.put(user, 24);
         }else if (level >= 19) {
             stealtimer.put(user,30);
         }
@@ -280,7 +283,6 @@ public class GhostStoneDamageAbility implements Listener {
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         player.showPlayer(NikeyV1.getPlugin(), victim);
                         player.showPlayer(NikeyV1.getPlugin(), damager);
-                        // Show all other players to victim and damager
                         victim.showPlayer(NikeyV1.getPlugin(), player);
                         damager.showPlayer(NikeyV1.getPlugin(), player);
                     }

@@ -375,11 +375,6 @@ public class Elementalstone implements Listener {
         }.runTaskTimer(NikeyV1.getPlugin(), 0, 20);
     }
 
-    @EventHandler
-    public void onEntityDamage(EntityDamageEvent event) {
-        event.getEntity().sendMessage(String.valueOf(event.getFinalDamage()));
-    }
-
 
     private void applyRandomNegativeEffect(LivingEntity entity) {
         // List of negative potion effects

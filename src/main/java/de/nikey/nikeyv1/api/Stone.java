@@ -104,6 +104,8 @@ public class Stone {
                 return "Fire";
             }else if (displayName.equalsIgnoreCase(ChatColor.of("#b4d4ce")+"Air Stone")) {
                 return "Air";
+            }else if (displayName.equalsIgnoreCase(ChatColor.of("#228B22") + "Nature Stone")) {
+                return "Nature";
             }else {
                 return "";
             }

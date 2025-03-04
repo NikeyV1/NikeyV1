@@ -240,6 +240,8 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 return Ghoststone.cooldown.getOrDefault(player.getUniqueId(), 0L);
             case "air":
                 return Airstone.cooldown.getOrDefault(player.getUniqueId(), 0L);
+            case "nature":
+                return Naturestone.cooldown.getOrDefault(player.getUniqueId(),0L);
             default:
                 return 0L;
         }
@@ -279,6 +281,8 @@ public class ServerScoreboard extends ScoreboardBuilder {
                             color = net.md_5.bungee.api.ChatColor.of("#dddddd");
                         case "air":
                             color = net.md_5.bungee.api.ChatColor.of("#b4d4ce");
+                        case "nature":
+                            color = net.md_5.bungee.api.ChatColor.of("#228B22");
                         default:
                             color = ChatColor.WHITE.asBungee();
                             break;

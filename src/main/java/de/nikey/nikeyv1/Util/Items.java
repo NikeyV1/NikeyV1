@@ -271,6 +271,33 @@ public class Items {
         }
     }
 
+    public static void Naturestone(Player player , Integer level){
+        ItemStack natureStone = new ItemStack(Material.FIREWORK_STAR);
+        ItemMeta meta = natureStone.getItemMeta();
+        FireworkEffectMeta metaFw = (FireworkEffectMeta) meta;
+
+        FireworkEffect effect = FireworkEffect.builder()
+                .withColor(Color.fromRGB(34, 139, 34)) // Dunkles Naturgrün
+                .build();
+
+        metaFw.setEffect(effect);
+        metaFw.setDisplayName(ChatColor.of("#228B22") + "Nature Stone");
+        metaFw.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES,ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add(ChatColor.of("#75d175") + "The heart of the forest pulses in this stone");
+        lore.add(ChatColor.of("#00FFAA") + "Level:" + level);
+        metaFw.setLore(lore);
+
+        natureStone.setItemMeta(metaFw);
+
+        if (player.getInventory().firstEmpty() != -1) {
+            player.getInventory().addItem(natureStone);
+        } else {
+            player.getInventory().setItemInOffHand(natureStone);
+        }
+    }
+
     public static void switcher() {
         ItemStack soul = new ItemStack(Material.SOUL_LANTERN);
         ItemMeta smeta = soul.getItemMeta();

@@ -75,6 +75,13 @@ public class GiveStone implements CommandExecutor , TabCompleter {
                     }catch (NumberFormatException e){
                         p.sendMessage("§cTake a Number");
                     }
+                }else if (stone.equalsIgnoreCase("Nature")){
+                    try {
+                        int level = Integer.parseInt(args[1]);
+                        Items.Naturestone(p,level);
+                    }catch (NumberFormatException e){
+                        p.sendMessage("§cTake a Number");
+                    }
                 }else if (stone.equalsIgnoreCase("Elemental")){
                     Items.GiveElementalStone(p);
                 }
@@ -97,6 +104,7 @@ public class GiveStone implements CommandExecutor , TabCompleter {
         commands.add("Holy");
         commands.add("Ghost");
         commands.add("Air");
+        commands.add("Nature");
         commands.add("Elemental");
         StringUtil.copyPartialMatches(args[0], commands, completions);
         return completions;
