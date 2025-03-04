@@ -242,10 +242,32 @@ public class Frozenstone implements Listener {
                 int range = (i == 15) ? 40 : 50;
                 int damage = (i >= 17) ? 24 : 18;
                 int freezeTicks = (i >= 18) ? 700 : 600;
-                int slownessLevel = (i >= 19) ? 3 : 2;
+                int slownessLevel = (i >= 19) ? 3 : 2
+                    
 
+                for (Entity e : p.getNearbyEntities(range, range, range)) {
+                    if (e instanceof LivingEntity entity && HelpUtil.shouldDamageEntity(entity, p)) {
+                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 400, slownessLevel, false));
+                        entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 400, 0, false));
+                        notp.add(entity);
+                        entity.damage(damage, p);
+                        entity.setFreezeTicks(freezeTicks);
 
+                        SmokeEffect effect = new SmokeEffect(NikeyV1.em);
+                        effect.setEntity(entity);
+                        effect.particle = Particle.SNOWFLAKE;
+                        effect.duration = 20000;
+                        effect.particles = 2;
+                        effect.start();
 
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                notp.remove(entity);
+                            }
+                        }.runTaskLater(NikeyV1.getPlugin(), 400);
+                    }
+                }
             }
         }
     }
