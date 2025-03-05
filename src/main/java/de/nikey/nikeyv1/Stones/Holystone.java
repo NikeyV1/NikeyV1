@@ -236,6 +236,7 @@ public class Holystone implements Listener {
                                     DamageSource source = DamageSource.builder(DamageType.PLAYER_ATTACK)
                                             .withDirectEntity(p).withCausingEntity(p).build();
                                     damage = armor + extraDamage;
+                                    entity.setNoDamageTicks(0);
                                     entity.damage(damage, source);
 
                                     if (damage < 20) {
