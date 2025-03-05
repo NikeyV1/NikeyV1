@@ -193,7 +193,7 @@ public class HelpUtil {
     public static boolean isLookingDown(Player player) {
         float pitch = player.getLocation().getPitch();
 
-        return pitch >= 60.0f;
+        return pitch >= 50.0f;
     }
 
     public static Location getLocationInFrontOfPlayer(Player player, int blocksAhead) {
