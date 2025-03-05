@@ -49,18 +49,10 @@ public class Player implements Listener {
             Integer level = config.getInt(p.getName() + ".level");
             p.setWalkSpeed(0.2F);
             p.setFlySpeed(0.1f);
-            if (stone.equalsIgnoreCase("Electric")) {
-                if (level == 3){
-                    p.setWalkSpeed(0.21F);
-                } else if (level == 4) {
-                    p.setWalkSpeed(0.22F);
-                }else if (level == 5) {
-                    p.setWalkSpeed(0.23F);
-                }else if (level >= 6) p.setWalkSpeed(0.24F);
-            }
             Holystone.hitted.remove(p);
             p.setMaxHealth(20);
             p.getAttribute(Attribute.MAX_ABSORPTION).setBaseValue(0);
+            p.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(0.41999998688697815);
 
             if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) {
                 p.setInvulnerable(false);

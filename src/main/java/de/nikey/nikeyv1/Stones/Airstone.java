@@ -1,5 +1,6 @@
 package de.nikey.nikeyv1.Stones;
 
+import com.destroystokyo.paper.event.entity.EntityKnockbackByEntityEvent;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
@@ -67,17 +68,37 @@ public class Airstone implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onEntityDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            if (Stone.getStoneName(player).equalsIgnoreCase("air") && Stone.getStoneLevel(player) >= 6) {
-                if (event.getDamage() > 50) {
-                    event.setDamage(50);
-                    player.playEffect(player.getLocation(),Effect.SPONGE_DRY,0);
-                }
+    @EventHandler
+    public void onKnockback(EntityKnockbackByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (!(event.getHitBy() instanceof LivingEntity))return;
+        if ((event.getHitBy() == player))return;
+        if (!Stone.getStoneName(player).equalsIgnoreCase("air")) return;
+
+        Random random = new Random();
+        int level = Stone.getStoneLevel(player);
+        if (level >= 3) {
+            double amount;
+            if (level == 3) {
+                amount = 0.03;
+            }else if (level == 4) {
+                amount = 0.06;
+            }else if (level == 5) {
+                amount = 0.09;
+            }else {
+                amount = 0.12;
             }
 
+            if (random.nextDouble() <= amount) {
+                player.sendMessage(event.getHitBy().getName());
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player player) {
             int level = Stone.getStoneLevel(player);
             if (Stone.getStoneName(player).equalsIgnoreCase("air") && level >= 7) {
                 if (event.getCause() == EntityDamageEvent.DamageCause.FALL && !flyingtimer.containsKey(player.getName())) {

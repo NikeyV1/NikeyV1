@@ -1,15 +1,12 @@
 package de.nikey.nikeyv1.Stones;
 
-import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
-import de.slikey.effectlib.effect.CylinderEffect;
-import de.slikey.effectlib.effect.DonutEffect;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
@@ -19,10 +16,12 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionEffectTypeCategory;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
@@ -35,10 +34,6 @@ public class Naturestone implements Listener {
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
     public static HashMap<UUID, Long> ability = new HashMap<>();
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
-
-    public static long remainingTime1;
-    public static long remainingTime2;
-    public static long remainingTime3;
 
     private final Set<Player> rootedPlayers = new HashSet<>();
 
@@ -148,10 +143,82 @@ public class Naturestone implements Listener {
         }
     }
 
+    @EventHandler
+    public void onDamage(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (!Stone.getStoneName(player).equalsIgnoreCase("Nature"))return;
+        if (Stone.getStoneLevel(player) < 3)return;
+
+        Biome biome = player.getLocation().getBlock().getBiome();
+
+        double reduction;
+
+        int level = Stone.getStoneLevel(player);
+
+        if (level == 3) {
+            reduction = 0.95;
+        }else if (level == 4) {
+            reduction = 0.9;
+        }else {
+            reduction = 0.85;
+        }
+        if (biome.getKey().value().contains("forest")) {
+            event.setDamage(event.getDamage() * reduction);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        if (!Stone.getStoneName(player).equalsIgnoreCase("Nature"))return;
+        if (Stone.getStoneLevel(player) < 6)return;
+
+        int level = Stone.getStoneLevel(player);
+
+        int radius = 0;
+
+        if (level == 6){
+            radius = 5;
+        }else if (level == 7){
+            radius = 6;
+        }else if (level == 8){
+            radius = 7;
+        }else if (level >= 9){
+            radius = 8;
+        }
+        int finalRadius = radius;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!player.isOnline() || Stone.getStoneLevel(player) < 6) {
+                    cancel();
+                    return;
+                }
+
+                for (Entity entity : player.getNearbyEntities(finalRadius,finalRadius,finalRadius)) {
+                    if (entity instanceof Animals) {
+                        player.setSaturation(Math.min(20,player.getSaturation()+1));
+                        player.sendHealthUpdate();
+                        player.sendMessage(String.valueOf(Math.min(20,player.getSaturation()+1)));
+                        break;
+                    }
+                }
+            }
+        }.runTaskTimer(NikeyV1.getPlugin(), 0, 100);
+    }
+
+
+
     public void castRootsAbility(Player target) {
         if (rootedPlayers.contains(target)) return;
 
-        int abilityLength = 10;
+        int level = Stone.getStoneLevel(target);
+        int abilityLength = 8;
+        if (level == 11 || level == 12 || level == 13) {
+            abilityLength = 10;
+        }else if (level >= 14) {
+            abilityLength = 12;
+        }
 
         rootedPlayers.add(target);
         Location startLocation = target.getLocation().clone();
@@ -161,11 +228,27 @@ public class Naturestone implements Listener {
         target.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(0);
         target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 0, false, false));
         target.addPotionEffect(new PotionEffect(PotionEffectType.POISON,abilityLength*20,5));
+
+        if (level >= 12) {
+            for (PotionEffect effect : target.getActivePotionEffects()) {
+                if (effect.getType().getCategory() == PotionEffectTypeCategory.BENEFICIAL) {
+                    target.removePotionEffect(effect.getType());
+                }
+            }
+        }
+
         target.getWorld().playSound(target.getLocation(), Sound.ENTITY_SPIDER_HURT, 0.5f, 1.2f);
 
+        int damage = 3;
+
+        if (level >= 13) {
+            damage = 4;
+        }
+        int finalAbilityLength = abilityLength;
+        int finalDamage = damage;
         new BukkitRunnable() {
             int ticks = 0;
-            final int maxTicks = 20*abilityLength;
+            final int maxTicks = 20* finalAbilityLength;
 
             @Override
             public void run() {
@@ -175,6 +258,7 @@ public class Naturestone implements Listener {
                     cancel();
                     return;
                 }
+                target.damage(finalDamage);
 
                 ticks += 5;
             }

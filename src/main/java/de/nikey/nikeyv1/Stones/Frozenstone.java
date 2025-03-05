@@ -242,7 +242,7 @@ public class Frozenstone implements Listener {
                 int range = (i == 15) ? 40 : 50;
                 int damage = (i >= 17) ? 24 : 18;
                 int freezeTicks = (i >= 18) ? 700 : 600;
-                int slownessLevel = (i >= 19) ? 3 : 2
+                int slownessLevel = (i >= 19) ? 3 : 2;
                     
 
                 for (Entity e : p.getNearbyEntities(range, range, range)) {
@@ -250,6 +250,7 @@ public class Frozenstone implements Listener {
                         entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 400, slownessLevel, false));
                         entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 400, 0, false));
                         notp.add(entity);
+                        entity.setNoDamageTicks(0);
                         entity.damage(damage, p);
                         entity.setFreezeTicks(freezeTicks);
 

@@ -279,10 +279,13 @@ public class ServerScoreboard extends ScoreboardBuilder {
                             break;
                         case "ghost":
                             color = net.md_5.bungee.api.ChatColor.of("#dddddd");
+                            break;
                         case "air":
                             color = net.md_5.bungee.api.ChatColor.of("#b4d4ce");
+                            break;
                         case "nature":
                             color = net.md_5.bungee.api.ChatColor.of("#228B22");
+                            break;
                         default:
                             color = ChatColor.WHITE.asBungee();
                             break;
