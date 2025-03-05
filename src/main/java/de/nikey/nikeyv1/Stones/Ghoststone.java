@@ -64,19 +64,19 @@ public class Ghoststone implements Listener {
         int hitCount = playerHitCount.getOrDefault(player.getUniqueId(), 0);
         hitCount++;
         if (level == 7) {
-            if (hitCount % 15 == 0) {
+            if (hitCount % 16 == 0) {
                 player.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE,player.getLocation().add(0,1,0),6,0.1,0.1,0.1);
                 event.setCancelled(true);
                 playerHitCount.remove(player.getUniqueId());
             }
         } else if (level == 8) {
-            if (hitCount % 12 == 0) {
+            if (hitCount % 14 == 0) {
                 player.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE,player.getLocation().add(0,1,0),6,0.1,0.1,0.1);
                 event.setCancelled(true);
                 playerHitCount.remove(player.getUniqueId());
             }
         }else if (level >= 9) {
-            if (hitCount % 9 == 0) {
+            if (hitCount % 12 == 0) {
                 player.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE,player.getLocation().add(0,1,0),6,0.1,0.1,0.1);
                 event.setCancelled(true);
                 playerHitCount.remove(player.getUniqueId());
