@@ -94,6 +94,8 @@ public final class NikeyV1 extends JavaPlugin{
         Items.Soulrecepie2();
         Items.Soulrecepie3();
         saveDefaultConfig();
+
+        Naturestone.start();
     }
 
     @Override

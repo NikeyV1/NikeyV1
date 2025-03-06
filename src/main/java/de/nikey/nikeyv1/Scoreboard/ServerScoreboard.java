@@ -66,7 +66,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
                 long remainingTime3 = 0;
-                if (Arrays.asList("Electric", "Fire", "Water", "Frozen", "Undead", "Holy", "Ghost", "Air").contains(stone)) {
+                if (Arrays.asList("Electric", "Fire", "Water", "Frozen", "Undead", "Holy", "Ghost", "Air", "Nature").contains(stone)) {
                     boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
                     if (!buffed) {
                         remainingTime3 = getMasterCooldown(player,stone);
@@ -87,7 +87,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
             @Override
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
-                if (Arrays.asList("Electric", "Fire", "Water", "Frozen", "Undead", "Holy", "Ghost", "Air").contains(stone)) {
+                if (Arrays.asList("Electric", "Fire", "Water", "Frozen", "Undead", "Holy", "Ghost", "Air", "Nature").contains(stone)) {
                     boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
                     if (!buffed) {
                         long remainingTime2 = getAbilityCooldown(player, stone);
@@ -123,7 +123,7 @@ public class ServerScoreboard extends ScoreboardBuilder {
             @Override
             public void run() {
                 String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
-                if (Arrays.asList("Electric", "Fire", "Water", "Frozen", "Undead", "Holy", "Ghost", "Air").contains(stone)) {
+                if (Arrays.asList("Electric", "Fire", "Water", "Frozen", "Undead", "Holy", "Ghost", "Air", "Nature").contains(stone)) {
                     boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
                     if (!buffed) {
                         long remainingTime = getCooldown(player, stone);
@@ -167,6 +167,8 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 return GhostStoneDamageAbility.ability.getOrDefault(player.getUniqueId(), 0L);
             case "air":
                 return Airstone.ability.getOrDefault(player.getUniqueId(), 0L);
+            case "nature":
+                return Naturestone.ability.getOrDefault(player.getUniqueId(),0L);
             default:
                 return 0L;
         }
@@ -190,6 +192,8 @@ public class ServerScoreboard extends ScoreboardBuilder {
                 return Ghoststone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
             case "air":
                 return Airstone.cooldown2.getOrDefault(player.getUniqueId(), 0L);
+            case "nature":
+                return Naturestone.cooldown2.getOrDefault(player.getUniqueId(),0L);
             default:
                 return 0L;
         }

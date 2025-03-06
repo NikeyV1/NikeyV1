@@ -225,6 +225,19 @@ public class Electrostone implements Listener {
         Player player = event.getPlayer();
         int level = NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
         String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
+        if (stone.equalsIgnoreCase("Electric")) {
+            if (level == 3){
+                player.setWalkSpeed(0.21F);
+            } else if (level == 4) {
+                player.setWalkSpeed(0.22F);
+            }else if (level == 5) {
+                player.setWalkSpeed(0.23F);
+            }else if (level >= 6){
+                player.setWalkSpeed(0.24F);
+            }else {
+                player.setWalkSpeed(0.2F);
+            }
+        }
         if (stone.equalsIgnoreCase("electric")) {
             if (level >= 7) {
                 if (level == 7) {
