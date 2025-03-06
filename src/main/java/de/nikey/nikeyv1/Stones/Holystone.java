@@ -348,9 +348,7 @@ public class Holystone implements Listener {
                         }.runTaskTimer(NikeyV1.getPlugin(),0,3);
                     }
                 }
-                if (damager.getAttribute(Attribute.MAX_HEALTH).getValue() >= damager.getHealth() + event.getFinalDamage()*0.5) {
-                    damager.setHealth(damager.getHealth() + event.getFinalDamage()*0.5);
-                }
+                damager.heal(event.getFinalDamage() * 0.5);
             }
         }
     }
