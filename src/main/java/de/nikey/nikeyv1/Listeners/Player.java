@@ -211,6 +211,8 @@ public class Player implements Listener {
                     Items.Ghoststone(player,level);
                 }else if (stone.equalsIgnoreCase("Air")){
                     Items.Airstone(player,level);
+                }else if (stone.equalsIgnoreCase("Nature")){
+                    Items.Naturestone(player,level);
                 }
             }
             new BukkitRunnable() {
