@@ -90,7 +90,6 @@ public class Airstone implements Listener {
             }
 
             if (random.nextDouble() <= amount) {
-                player.sendMessage(event.getHitBy().getName());
                 event.setCancelled(true);
             }
         }

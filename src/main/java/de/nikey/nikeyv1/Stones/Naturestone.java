@@ -3,6 +3,7 @@ package de.nikey.nikeyv1.Stones;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
+import io.papermc.paper.tag.EntityTags;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
@@ -61,7 +62,7 @@ public class Naturestone implements Listener {
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
                 if (level >= 10){
                     if (!(cooldown.getOrDefault(player.getUniqueId(),0L) > System.currentTimeMillis())){
-                        //cooldown.put(player.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
+                        cooldown.put(player.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
 
                         for (Player target : player.getWorld().getNearbyPlayers(player.getLocation(), 9)) {
                             if (HelpUtil.shouldDamageEntity(target, player)) {
@@ -73,12 +74,12 @@ public class Naturestone implements Listener {
                                 List<List<BlockDisplay>> allBranches = new ArrayList<>();
 
                                 for (int i = 0; i < branchCount; i++) {
-                                    double angleOffset = Math.toRadians(random.nextInt(360)); // Zufälliger Startwinkel
+                                    double angleOffset = Math.toRadians(random.nextInt(360));
                                     List<BlockDisplay> branch = new ArrayList<>();
-                                    double radius = 0.35; // Wie eng die Äste um die Beine wachsen
+                                    double radius = 0.35;
 
                                     new BukkitRunnable() {
-                                        int j = 0; // Zähler für die Schleifeniteration
+                                        int j = 0;
 
                                         @Override
                                         public void run() {
@@ -145,11 +146,124 @@ public class Naturestone implements Listener {
             }else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
                 if (!player.isSneaking() && level >= 15) {
                     if (!(ability.getOrDefault(player.getUniqueId(),0L) > System.currentTimeMillis())){
+
+                        LivingEntity target = getNearestTarget(player);
+                        if (target == null) return;
                         ability.put(player.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
 
+                        executeNatureCleave(player, target);
                     }
                 }
             }
+        }
+    }
+
+    private LivingEntity getNearestTarget(Player player) {
+        List<Entity> nearbyEntities = player.getNearbyEntities(6, 3, 6);
+        LivingEntity nearest = null;
+        double closestDistance = Double.MAX_VALUE;
+
+        for (Entity entity : nearbyEntities) {
+            if (entity instanceof LivingEntity && entity != player) {
+                if (entity.isDead())continue;
+                double distance = entity.getLocation().distance(player.getLocation());
+                if (distance < closestDistance && HelpUtil.shouldDamageEntity((LivingEntity) entity,player)) {
+                    closestDistance = distance;
+                    nearest = (LivingEntity) entity;
+                }
+            }
+        }
+        return nearest;
+    }
+
+    private void executeNatureCleave(Player player, LivingEntity target) {
+        Location targetLocation = target.getLocation();
+        Vector direction = targetLocation.getDirection().normalize();
+        Location behindTarget = targetLocation.subtract(direction.multiply(1.5));
+
+        behindTarget.setDirection(targetLocation.getDirection());
+        behindTarget.setY(behindTarget.getY()+1);
+
+        player.teleport(behindTarget);
+
+        spawnNatureCrossSlash(target.getLocation(),target);
+
+        player.playHurtAnimation(90);
+
+        player.getWorld().playSound(target.getLocation(), Sound.ENTITY_PLAYER_ATTACK_CRIT, 1.0f, 1.2f);
+
+        dealTrueDamage(target, 6);
+        player.heal(6);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+
+                player.getWorld().playSound(target.getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0f, 1.0f);
+
+                dealTrueDamage(target, 6);
+                player.heal(6);
+
+                target.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20*10, 1));
+                target.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 20*10, 0));
+
+                List<Entity> nearbyEnemies = target.getNearbyEntities(5, 3, 5);
+                for (Entity entity : nearbyEnemies) {
+                    if (entity instanceof LivingEntity enemy && entity != player) {
+                        Vector knockback = enemy.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().multiply(0.5);
+                        enemy.setVelocity(knockback);
+                        enemy.getWorld().playSound(enemy.getLocation(), Sound.BLOCK_STONE_BREAK, 0.8f, 0.8f);
+                    }
+                }
+
+                player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 20*60, 0));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 20*60, 1));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*60, 1));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20*180, 0));
+            }
+        }.runTaskLater(NikeyV1.getPlugin(), 10);
+    }
+
+    public void spawnNatureCrossSlash(Location location, LivingEntity player) {
+        World world = location.getWorld();
+        if (world == null) return;
+
+        double size = 1.5;
+        int points = 15;
+        double step = size / points;
+
+        Vector direction = player.getLocation().getDirection();
+        direction = direction.normalize();
+
+        Location behindLocation = location.clone().subtract(direction.multiply(1));
+        behindLocation.setY(behindLocation.getY()-0.5);
+
+        for (int i = 0; i < points; i++) {
+            double offset = i * step - (size / 2);
+            double y = behindLocation.getY() + 1 + (i * 0.1);
+
+            world.spawnParticle(Particle.DUST, new Location(world, behindLocation.getX() + offset, y, behindLocation.getZ() + offset), 1, new Particle.DustOptions(Color.LIME, 1));
+
+            world.spawnParticle(Particle.DUST, new Location(world, behindLocation.getX() - offset, y, behindLocation.getZ() + offset), 1, new Particle.DustOptions(Color.LIME, 1));
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+    private void dealTrueDamage(LivingEntity entity, double damage) {
+        if (entity.getHealth() - damage >= 1) {
+            entity.setHealth(entity.getHealth() - damage);
+        } else if (!EntityTags.UNDEADS.isTagged(entity.getType())) {
+            entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE, 1, 240));
+        } else {
+            entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH, 1, 240));
         }
     }
 
@@ -248,10 +362,10 @@ public class Naturestone implements Listener {
 
         target.getWorld().playSound(target.getLocation(), Sound.ENTITY_SPIDER_HURT, 0.5f, 1.2f);
 
-        int damage = 3;
+        int damage = 2;
 
         if (level >= 13) {
-            damage = 4;
+            damage = 3;
         }
         int finalAbilityLength = abilityLength;
         int finalDamage = damage;
