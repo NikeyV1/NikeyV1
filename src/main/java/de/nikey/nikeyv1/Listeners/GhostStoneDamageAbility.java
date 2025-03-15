@@ -291,7 +291,7 @@ public class GhostStoneDamageAbility implements Listener {
                     blockedPlayers.remove(victim);
                     blockedPlayers.remove(damager);
                 }
-            }.runTaskLater(NikeyV1.getPlugin(), 20 * 20);
+            }.runTaskLater(NikeyV1.getPlugin(), 20 * 16);
         }else if (level == 16 || level == 17 || level == 18) {
             new BukkitRunnable() {
                 @Override
@@ -308,7 +308,7 @@ public class GhostStoneDamageAbility implements Listener {
                     blockedPlayers.remove(victim);
                     blockedPlayers.remove(damager);
                 }
-            }.runTaskLater(NikeyV1.getPlugin(), 20 * 30);
+            }.runTaskLater(NikeyV1.getPlugin(), 20 * 24);
         } else if (level >= 19) {
             new BukkitRunnable() {
                 @Override
@@ -325,7 +325,7 @@ public class GhostStoneDamageAbility implements Listener {
                     blockedPlayers.remove(victim);
                     blockedPlayers.remove(damager);
                 }
-            }.runTaskLater(NikeyV1.getPlugin(), 20 * 40);
+            }.runTaskLater(NikeyV1.getPlugin(), 20 * 30);
         }
     }
 }

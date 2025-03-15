@@ -169,7 +169,6 @@ public class Waterstone implements Listener {
                             p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH,1,1);
                             Entity e = HelpUtil.getNearestEntityInSight(p, 30);
                             if (e != null) {
-                                e.getLocation().getWorld().createExplosion(e.getLocation(),1F);
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 400,0));
@@ -182,8 +181,9 @@ public class Waterstone implements Listener {
                                     }else {
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                     }
-                                    entity.setVisualFire(false);
+                                    entity.setFireTicks(0);
                                 }
+                                e.getLocation().getWorld().createExplosion(e.getLocation(),1F);
                             }
                         }
                     } else if (i == 16) {
@@ -199,7 +199,6 @@ public class Waterstone implements Listener {
                             p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH,1,1);
                             Entity e = HelpUtil.getNearestEntityInSight(p, 40);
                             if (e != null) {
-                                e.getLocation().getWorld().createExplosion(e.getLocation(),1F);
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 400,0));
@@ -212,8 +211,9 @@ public class Waterstone implements Listener {
                                     }else {
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                     }
-                                    entity.setVisualFire(false);
+                                    entity.setFireTicks(0);
                                 }
+                                e.getLocation().getWorld().createExplosion(e.getLocation(),1F);
                             }
                         }
                     }else if (i == 17) {
@@ -229,7 +229,6 @@ public class Waterstone implements Listener {
                             p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH,1,1);
                             Entity e = HelpUtil.getNearestEntityInSight(p, 40);
                             if (e != null) {
-                                e.getLocation().getWorld().createExplosion(e.getLocation(),1F);
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 400,0));
@@ -242,8 +241,9 @@ public class Waterstone implements Listener {
                                     }else {
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                     }
-                                    entity.setVisualFire(false);
+                                    entity.setFireTicks(0);
                                 }
+                                e.getLocation().getWorld().createExplosion(e.getLocation(),1F);
                             }
                         }
                     } else if (i == 18){
@@ -259,7 +259,6 @@ public class Waterstone implements Listener {
                             p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH,1,1);
                             Entity e = HelpUtil.getNearestEntityInSight(p, 40);
                             if (e != null) {
-                                e.getLocation().getWorld().createExplosion(e.getLocation(),2F);
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 450,0));
@@ -272,8 +271,9 @@ public class Waterstone implements Listener {
                                     }else {
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                     }
-                                    entity.setVisualFire(false);
+                                    entity.setFireTicks(0);
                                 }
+                                e.getLocation().getWorld().createExplosion(e.getLocation(),2F);
                             }
                         }
                     }else if (i >=19){
@@ -289,7 +289,6 @@ public class Waterstone implements Listener {
                             p.getLocation().getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_SPLASH,1,1);
                             Entity e = HelpUtil.getNearestEntityInSight(p, 50);
                             if (e != null) {
-                                e.getLocation().getWorld().createExplosion(e.getLocation(),2F);
                                 if (e instanceof LivingEntity){
                                     LivingEntity entity = (LivingEntity) e;
                                     entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 450,0));
@@ -302,8 +301,9 @@ public class Waterstone implements Listener {
                                     }else {
                                         entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,1,240));
                                     }
-                                    entity.setVisualFire(false);
+                                    entity.setFireTicks(0);
                                 }
+                                e.getLocation().getWorld().createExplosion(e.getLocation(),2F);
                             }
                         }
                     }
@@ -505,6 +505,7 @@ public class Waterstone implements Listener {
                         LivingEntity living = (LivingEntity) entity;
                         if (HelpUtil.shouldDamageEntity(living,player)) {
                             living.damage(dmg,player);
+                            mend(living);
 
                             teleportCooldown.put(living, System.currentTimeMillis() + 3000);
                         }
@@ -516,6 +517,15 @@ public class Waterstone implements Listener {
                 duration--;
             }
         }.runTaskTimer(NikeyV1.getPlugin(), 0, 1);
+    }
+
+    public static void mend(LivingEntity entity) {
+        if (!(entity instanceof Player player))return;
+
+        Random random = new Random();
+        if (random.nextInt(500) < 2) {
+            player.applyMending(1);
+        }
     }
 
     public boolean canTeleport(LivingEntity entity) {

@@ -360,9 +360,6 @@ public class Ghoststone implements Listener {
         isDarkNightActive = false;
     }
 
-
-
-
     public void makePlayerInvisible(Player player) {
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (!onlinePlayer.equals(player)) {

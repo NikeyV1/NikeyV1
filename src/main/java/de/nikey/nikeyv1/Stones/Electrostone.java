@@ -193,22 +193,17 @@ public class Electrostone implements Listener {
                                 @Override
                                 public void run() {
                                     stunned.clear();
-                                    ((Player)entity).setAllowFlight(false);
                                 }
                             }.runTaskLater(NikeyV1.getPlugin(), 20 * (duration / 1000));
 
                             for (Entity e : entity.getNearbyEntities(radius, radius, radius)) {
                                 if (e != p) {
                                     e.getWorld().strikeLightningEffect(e.getLocation());
-                                    if (e instanceof Player) {
+                                    if (e instanceof Player player) {
                                         if (HelpUtil.shouldDamageEntity((LivingEntity) e,p)) {
-                                            Player player = (Player) e;
-                                            player.damage(8, p);
                                             stunned.add(player);
                                         }
-                                    } else if (e instanceof LivingEntity) {
-                                        LivingEntity livingEntity = (LivingEntity) e;
-                                        livingEntity.damage(8, p);
+                                    } else if (e instanceof LivingEntity livingEntity) {
                                         stunned.add(livingEntity);
                                     }
                                 }
@@ -299,12 +294,11 @@ public class Electrostone implements Listener {
 
     private void applyShieldEffect(Player p, int i) {
         long cooldown = 300 * 1000;
-        int timerDuration = (i == 20) ? 40 : 100;
+        int timerDuration = (i == 20) ? 50 : 125;
         int radius = (i == 20) ? 6 : 10;
-        int particleAmount = 50;
-        int duration = (i == 20) ? 20000 : 26250;
+        int duration = (i == 20) ? 20000 : 25000;
         int damage = (i == 20) ? 1 : 2;
-        double velocityMultiplier = (i == 20) ? 0.3 : 0.6;
+        double velocityMultiplier = (i == 20) ? 0.4 : 0.6;
         int interval = (i == 20) ? 8 : 4;
         int entityRadius = (i == 20) ? 5 : 8;
 
@@ -319,11 +313,10 @@ public class Electrostone implements Listener {
             effect.setEntity(p);
             effect.duration = duration;
             effect.particle = Particle.SCRAPE;
-            effect.particles = particleAmount;
+            effect.particles = 80;
             effect.visibleRange = 100;
             effect.start();
 
-            // Start the BukkitRunnable task
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -332,12 +325,14 @@ public class Electrostone implements Listener {
                         Location difference = entity.getLocation().subtract(p.getLocation());
                         Vector normalizedDifference = difference.toVector().normalize();
                         Vector multiplied = normalizedDifference.multiply(velocityMultiplier);
-                        entity.setVelocity(multiplied);
-                        if (entity instanceof LivingEntity) {
-                            LivingEntity target = (LivingEntity) entity;
+
+                        if (entity instanceof LivingEntity target) {
                             if (target != p && HelpUtil.shouldDamageEntity(target, p)) {
+                                target.setVelocity(multiplied);
                                 target.damage(damage);
                             }
+                        }else {
+                            entity.setVelocity(multiplied);
                         }
                     }
                     if (mtimer.get(p) == 0) {
@@ -363,7 +358,6 @@ public class Electrostone implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         Player entity = event.getPlayer();
         if (stunned.contains(entity)){
-            entity.setAllowFlight(true);
             event.setCancelled(true);
         }
     }

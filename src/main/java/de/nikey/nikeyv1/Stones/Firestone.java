@@ -365,7 +365,6 @@ public class Firestone implements Listener {
                     if (cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis()){
                         remainingTime3 = cooldown2.get(p.getUniqueId()) - System.currentTimeMillis();
                     }else {
-                        //Cooldown-Ability
                         openPlayerSelectionInventory(p);
                     }
                 }
@@ -402,6 +401,7 @@ public class Firestone implements Listener {
         List<Player> nearbyPlayers = new ArrayList<>();
 
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            if (onlinePlayer.getWorld() != location.getWorld())continue;
             if (onlinePlayer.getLocation().distanceSquared(location) <= Math.pow(radius, 2)) {
                 nearbyPlayers.add(onlinePlayer);
             }
