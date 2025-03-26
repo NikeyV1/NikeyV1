@@ -11,8 +11,7 @@ import org.bukkit.entity.Player;
 public class PEffectCMD implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player p = (Player) sender;
+        if (sender instanceof Player p) {
             if (args.length == 1){
                 if (p.isOp() || p.getName().equalsIgnoreCase("NikeyV1") || p.getName().equalsIgnoreCase("NikeyV3")) {
                     if (args[0].equalsIgnoreCase("Ball")){

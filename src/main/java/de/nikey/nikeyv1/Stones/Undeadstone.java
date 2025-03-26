@@ -4,6 +4,7 @@ import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.effect.SmokeEffect;
+import io.papermc.paper.entity.TeleportFlag;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import io.papermc.paper.event.entity.WardenAngerChangeEvent;
 import net.md_5.bungee.api.ChatColor;
@@ -20,6 +21,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -32,8 +34,6 @@ import org.bukkit.util.Vector;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static org.bukkit.Bukkit.getServer;
 
 @SuppressWarnings("ALL")
 public class Undeadstone implements Listener {
@@ -721,7 +721,7 @@ public class Undeadstone implements Listener {
                             y += 50;
                             int x = (int) giant.getLocation().getX();
                             int z = (int) giant.getLocation().getZ();
-                            getServer().dispatchCommand(Bukkit.getConsoleSender(),"tp "+giant.getUniqueId()+" "+x+" " +y+" "+z);
+                            giant.teleport(new Location(giant.getWorld(),x,y,z), PlayerTeleportEvent.TeleportCause.PLUGIN, TeleportFlag.EntityState.RETAIN_PASSENGERS);
                             giant.setCustomName(giant.getCustomName() +" low");
                             giant.setHealth(200);
                             new BukkitRunnable() {
@@ -729,7 +729,7 @@ public class Undeadstone implements Listener {
                                 public void run() {
                                     giant.setVelocity(new Vector(0, -1, 0));
                                 }
-                            }.runTaskLater(NikeyV1.getPlugin(), 20L);  //40 Tick (2 Sekunden) später
+                            }.runTaskLater(NikeyV1.getPlugin(), 20L);
                         }
                     }
                 }

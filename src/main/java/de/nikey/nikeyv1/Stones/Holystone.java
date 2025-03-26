@@ -477,6 +477,7 @@ public class Holystone implements Listener {
                         }.runTaskLater(NikeyV1.getPlugin(),20*45);
                         //Repair Armor
                         for (ItemStack armor : selectedPlayer.getInventory().getArmorContents()) {
+                            if (armor == null)continue;
                             armor.setDurability((short) 0);
                         }
                     }

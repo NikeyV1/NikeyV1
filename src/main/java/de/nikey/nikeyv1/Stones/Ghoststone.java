@@ -324,6 +324,7 @@ public class Ghoststone implements Listener {
 
                 for (Entity entity : player.getNearbyEntities(50, 50, 50)) {
                     if (entity instanceof Player target) {
+                        if (!HelpUtil.shouldDamageEntity(target,player))continue;
                         target.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 60, 0, false, false));
                         target.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 60, 0, false, false));
                     }

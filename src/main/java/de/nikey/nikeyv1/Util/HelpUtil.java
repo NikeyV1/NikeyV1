@@ -95,6 +95,7 @@ public class HelpUtil {
 
     public static boolean shouldDamageEntity(LivingEntity entity, Player p) {
         String damageEntityType = Stone.getAttacking(p);
+        if (damageEntityType == null) damageEntityType = "all";
         if (entity == p)return false;
         switch (damageEntityType.toLowerCase()) {
             case "all":
