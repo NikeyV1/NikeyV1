@@ -3,7 +3,6 @@ package de.nikey.nikeyv1.Listeners;
 import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
 import de.nikey.nikeyv1.Util.Items;
 import de.nikey.nikeyv1.api.Stone;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

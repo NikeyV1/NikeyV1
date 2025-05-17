@@ -8,6 +8,8 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
@@ -133,7 +135,24 @@ public class Ghoststone implements Listener {
                         if (e instanceof LivingEntity entity && e != player) {
                             if (HelpUtil.shouldDamageEntity(entity, player)) {
                                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 20 * 3, 0, true, false, false));
-                                entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, 20 * 3, 0, true, false, false));
+
+                                AttributeInstance attr = entity.getAttribute(Attribute.BLOCK_BREAK_SPEED);
+                                if (attr != null) {
+                                    double defaultValue = attr.getDefaultValue();
+                                    double reduction = defaultValue * 0.33;
+                                    attr.setBaseValue(defaultValue - reduction);
+
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            if (!entity.isValid() || entity.getLocation().distanceSquared(player.getLocation()) > range * range) {
+                                                attr.setBaseValue(defaultValue);
+                                                cancel();
+                                            }
+                                        }
+                                    }.runTaskLater(NikeyV1.getPlugin(), 10);
+                                }
+
                                 entity.getWorld().spawnParticle(Particle.SNOWFLAKE, entity.getLocation().add(0, 0.3F, 0), 0, 0, 0, 0);
                             }
                         }
