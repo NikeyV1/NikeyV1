@@ -4,8 +4,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import static org.bukkit.Material.ANVIL;
-
 @SuppressWarnings("ALL")
 public class Inventory {
     public static void anvilinv(org.bukkit.inventory.Inventory inv){

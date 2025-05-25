@@ -1,17 +1,17 @@
 package de.nikey.nikeyv1.Util;
 
-import de.nikey.nikeyv1.Commands.Trust;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.api.Stone;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("ALL")
 public class HelpUtil {

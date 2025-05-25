@@ -3,12 +3,16 @@ package de.nikey.nikeyv1.Stones;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
 import de.nikey.nikeyv1.api.Stone;
-import de.slikey.effectlib.effect.*;
+import de.slikey.effectlib.effect.AnimatedBallEffect;
+import de.slikey.effectlib.effect.SphereEffect;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Fireball;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -436,6 +440,7 @@ public class Firestone implements Listener {
         FileConfiguration config = NikeyV1.getPlugin().getConfig();
         Integer level = config.getInt(launcherPlayer.getName() + ".level");
         playDangerousWarning(selectedPlayer);
+        selectedPlayer.setCooldown(Material.WIND_CHARGE,20*15);
         new BukkitRunnable() {
             @Override
             public void run() {

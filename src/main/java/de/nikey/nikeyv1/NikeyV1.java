@@ -100,7 +100,7 @@ public final class NikeyV1 extends JavaPlugin{
 
     @Override
     public void onDisable() {
-        em.disposeAll();
+        EffectManager.disposeAll();
         HandlerList.unregisterAll();
 
         for (BukkitRunnable task : Holystone.auraTasks.values()) {

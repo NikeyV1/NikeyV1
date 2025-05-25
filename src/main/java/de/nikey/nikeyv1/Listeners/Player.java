@@ -53,6 +53,9 @@ public class Player implements Listener {
             p.setMaxHealth(20);
             p.getAttribute(Attribute.MAX_ABSORPTION).setBaseValue(0);
             p.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(0.41999998688697815);
+            p.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(4.0);
+            p.getAttribute(Attribute.BLOCK_BREAK_SPEED).setBaseValue(1.0);
+            p.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1);
 
             if (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) {
                 p.setInvulnerable(false);

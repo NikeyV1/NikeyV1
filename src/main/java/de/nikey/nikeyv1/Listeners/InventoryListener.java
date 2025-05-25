@@ -1,10 +1,8 @@
 package de.nikey.nikeyv1.Listeners;
 
 import de.nikey.nikeyv1.api.Stone;
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;

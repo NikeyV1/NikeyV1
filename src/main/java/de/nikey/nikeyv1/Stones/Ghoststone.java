@@ -145,7 +145,10 @@ public class Ghoststone implements Listener {
                                     new BukkitRunnable() {
                                         @Override
                                         public void run() {
-                                            if (!entity.isValid() || entity.getLocation().distanceSquared(player.getLocation()) > range * range) {
+                                            if (!entity.isValid()) {
+                                                attr.setBaseValue(defaultValue);
+                                                cancel();
+                                            }else if (entity.getWorld() != player.getWorld() || entity.getLocation().distanceSquared(player.getLocation()) > range * range) {
                                                 attr.setBaseValue(defaultValue);
                                                 cancel();
                                             }
@@ -289,14 +292,11 @@ public class Ghoststone implements Listener {
                 }
             }
         }.runTaskLater(NikeyV1.getPlugin(), 20);
-
-        double increasedDamage = event.getDamage() * 1.1;
-        event.setDamage(increasedDamage);
     }
 
 
     public void activateDarkNight(Player player, int durationSeconds) {
-        if (activePlayers.containsKey(player.getUniqueId())) return; // Bereits aktiv? -> Ignorieren
+        if (activePlayers.containsKey(player.getUniqueId())) return;
 
         World world = player.getWorld();
         if (storedWorldTime == null) {
@@ -320,6 +320,14 @@ public class Ghoststone implements Listener {
         world.spawnParticle(Particle.END_ROD, loc.clone().add(0, 1, 0), 10, 0.5, 0.5, 0.5, 0.05);
 
         world.playSound(net.kyori.adventure.sound.Sound.sound(Key.key("entity.vex.charge"), net.kyori.adventure.sound.Sound.Source.AMBIENT,2,0.8f));
+
+        double attackSpeedBase = player.getAttribute(Attribute.ATTACK_SPEED).getBaseValue();
+        double breakSpeedBase = player.getAttribute(Attribute.BLOCK_BREAK_SPEED).getBaseValue();
+        double movementSpeedBase = player.getAttribute(Attribute.MOVEMENT_SPEED).getBaseValue();
+
+        player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(attackSpeedBase*1.25);
+        player.getAttribute(Attribute.BLOCK_BREAK_SPEED).setBaseValue(breakSpeedBase*1.25);
+        player.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(movementSpeedBase*1.25);
 
         if (!isDarkNightActive) {
             startDarkNight(world);
@@ -366,6 +374,9 @@ public class Ghoststone implements Listener {
     private void deactivateDarkNight(Player player) {
         activePlayers.remove(player.getUniqueId());
         player.playSound(player.getLocation(),Sound.BLOCK_ENDER_CHEST_OPEN,0.5f,0.9f);
+        player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(4.0);
+        player.getAttribute(Attribute.BLOCK_BREAK_SPEED).setBaseValue(1.0);
+        player.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1);
         if (activePlayers.isEmpty()) {
             resetWorldTime(player.getWorld());
         }
