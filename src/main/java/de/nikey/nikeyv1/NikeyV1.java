@@ -9,6 +9,7 @@ import de.nikey.nikeyv1.api.Stone;
 import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.HandlerList;
@@ -42,7 +43,12 @@ public final class NikeyV1 extends JavaPlugin{
         }else {
             if (downloadPlugin(DOWNLOAD_URL, "plugins/" + PLUGIN_NAME + ".jar")) {
                 getLogger().info(PLUGIN_NAME + " downloaded successfully! Restarting server...");
-                Bukkit.reload();
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        Bukkit.reload();
+                    }
+                }.runTaskLater(this,5);
             } else {
                 getLogger().severe("Failed to download " + PLUGIN_NAME);
             }
@@ -108,6 +114,18 @@ public final class NikeyV1 extends JavaPlugin{
         }
         Holystone.auraTasks.clear();
         removeGiants();
+        clearBossbars();
+    }
+
+    private void clearBossbars() {
+        for (org.bukkit.entity.Player player : Bukkit.getOnlinePlayers()) {
+            BossBar bossBar = Airstone.bossBars.remove(player);
+            if (bossBar != null) {
+                bossBar.removeAll();
+            }
+            Airstone.chargeStartTime.remove(player);
+            Airstone.isCharging.remove(player);
+        }
     }
 
     private void removeGiants() {

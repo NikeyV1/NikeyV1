@@ -492,9 +492,9 @@ public class Holystone implements Listener {
 
                             int delayTicks;
                             if (level == 20) {
-                                delayTicks = 20 * 15; // 20 seconds
+                                delayTicks = 20 * 15; // 15 seconds
                             } else if (level == 21) {
-                                delayTicks = 20 * 25; // 30 seconds
+                                delayTicks = 20 * 25; // 25 seconds
                             } else {
                                 continue;
                             }

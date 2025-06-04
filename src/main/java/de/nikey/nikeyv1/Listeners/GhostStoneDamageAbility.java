@@ -264,13 +264,14 @@ public class GhostStoneDamageAbility implements Listener {
         damager.sendActionBar(Component.text("Locked!").color(NamedTextColor.DARK_GRAY).decoration(TextDecoration.BOLD, true));
 
         if (level >= 18) {
+            victim.setCooldown(Material.WIND_CHARGE,20*30);
+            damager.setCooldown(Material.WIND_CHARGE,20*30);
             damager.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,20*30,1,true));
             victim.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 20*30,1,true));
         }
         damager.setHealth(damager.getMaxHealth());
         victim.setHealth(victim.getMaxHealth());
 
-        // Add victim and damager to blockedPlayers set to prevent teleportation
         blockedPlayers.add(victim);
         blockedPlayers.add(damager);
 
@@ -285,7 +286,6 @@ public class GhostStoneDamageAbility implements Listener {
                         damager.showPlayer(NikeyV1.getPlugin(), player);
                     }
 
-                    // Remove victim and damager from blockedPlayers set
                     blockedPlayers.remove(victim);
                     blockedPlayers.remove(damager);
                 }
@@ -297,12 +297,10 @@ public class GhostStoneDamageAbility implements Listener {
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         player.showPlayer(NikeyV1.getPlugin(), victim);
                         player.showPlayer(NikeyV1.getPlugin(), damager);
-                        // Show all other players to victim and damager
                         victim.showPlayer(NikeyV1.getPlugin(), player);
                         damager.showPlayer(NikeyV1.getPlugin(), player);
                     }
 
-                    // Remove victim and damager from blockedPlayers set
                     blockedPlayers.remove(victim);
                     blockedPlayers.remove(damager);
                 }
@@ -314,12 +312,10 @@ public class GhostStoneDamageAbility implements Listener {
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         player.showPlayer(NikeyV1.getPlugin(), victim);
                         player.showPlayer(NikeyV1.getPlugin(), damager);
-                        // Show all other players to victim and damager
                         victim.showPlayer(NikeyV1.getPlugin(), player);
                         damager.showPlayer(NikeyV1.getPlugin(), player);
                     }
 
-                    // Remove victim and damager from blockedPlayers set
                     blockedPlayers.remove(victim);
                     blockedPlayers.remove(damager);
                 }

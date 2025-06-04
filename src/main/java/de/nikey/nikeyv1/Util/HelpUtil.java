@@ -41,7 +41,8 @@ public class HelpUtil {
         durchlauffaehigeMaterialien.add(Material.PEONY);
         durchlauffaehigeMaterialien.add(Material.LIGHT);
 
-        ArrayList<Entity> entities = new ArrayList<>(player.getNearbyEntities(range, range, range));
+        ArrayList<Entity> entities = new ArrayList<>(player.getWorld().getNearbyLivingEntities(player.getLocation(),range, range, range));
+        entities.remove(player);
         ArrayList<Block> sightBlock = new ArrayList<>(player.getLineOfSight(durchlauffaehigeMaterialien, range));
         ArrayList<Location> sight = new ArrayList<>();
 

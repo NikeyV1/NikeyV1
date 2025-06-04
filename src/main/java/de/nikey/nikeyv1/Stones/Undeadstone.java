@@ -62,377 +62,102 @@ public class Undeadstone implements Listener {
             config.set(p.getName()+".level",i);
             NikeyV1.getPlugin().saveConfig();
             String stone = config.getString(p.getName() + ".stone");
-            if (event.getAction() == Action.RIGHT_CLICK_AIR||event.getAction() == Action.RIGHT_CLICK_BLOCK){
-                if (!Soul.isEmpty()){
+            if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                if (!Soul.isEmpty()) {
                     EntityType type = Soul.get(0).getType();
-                    if (type.equals(EntityType.WITHER)||type.equals(EntityType.ENDER_DRAGON)||type.equals(EntityType.EVOKER)||type.equals(EntityType.GIANT)){
-                    }else {
-                        if (i == 10){
-                            LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
-                            summoned.setCustomName(p.getDisplayName()+"'s "+type.getName());
-                            Soul.clear();
-                            p.getWorld().playSound(p.getLocation(),Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
-                            ItemStack hand = p.getInventory().getItemInMainHand();
-                            ItemMeta meta = hand.getItemMeta();
-                            ArrayList<String> list = new ArrayList<>();
-                            list.add(ChatColor.of("#221726")+"Souls wander around in this stone");
-                            list.add(ChatColor.of("#00FFAA")+"Level:"+i);
-                            meta.setLore(list);
-                            hand.setItemMeta(meta);
-                        } else if (i == 11) {
-                            LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
-                            summoned.setCustomName(p.getDisplayName()+"'s "+type.getName());
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,1));
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
-                            Soul.clear();
-                            p.getWorld().playSound(p.getLocation(),Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
-                            ItemStack hand = p.getInventory().getItemInMainHand();
-                            ItemMeta meta = hand.getItemMeta();
-                            ArrayList<String> list = new ArrayList<>();
-                            list.add(ChatColor.of("#221726")+"Souls wander around in this stone");
-                            list.add(ChatColor.of("#00FFAA")+"Level:"+i);
-                            meta.setLore(list);
-                            hand.setItemMeta(meta);
-                        } else if (i == 12){
-                            LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
-                            summoned.setCustomName(p.getDisplayName()+"'s "+type.getName());
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,1));
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,19200,0));
-                            Soul.clear();
-                            p.getWorld().playSound(p.getLocation(),Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
-                            ItemStack hand = p.getInventory().getItemInMainHand();
-                            ItemMeta meta = hand.getItemMeta();
-                            ArrayList<String> list = new ArrayList<>();
-                            list.add(ChatColor.of("#221726")+"Souls wander around in this stone");
-                            list.add(ChatColor.of("#00FFAA")+"Level:"+i);
-                            meta.setLore(list);
-                            hand.setItemMeta(meta);
-                        }else if (i == 13){
-                            LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
-                            summoned.setCustomName(p.getDisplayName()+"'s "+type.getName());
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,1));
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,19200,0));
-                            summoned.setAbsorptionAmount(4);
-                            Soul.clear();
-                            p.getWorld().playSound(p.getLocation(),Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
-                            ItemStack hand = p.getInventory().getItemInMainHand();
-                            ItemMeta meta = hand.getItemMeta();
-                            ArrayList<String> list = new ArrayList<>();
-                            list.add(ChatColor.of("#221726")+"Souls wander around in this stone");
-                            list.add(ChatColor.of("#00FFAA")+"Level:"+i);
-                            meta.setLore(list);
-                            hand.setItemMeta(meta);
-                        }else if (i >= 14){
-                            LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
-                            summoned.setCustomName(p.getDisplayName()+"'s "+type.getName());
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,1));
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,19200,0));
-                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,19200,0));
-                            summoned.setAbsorptionAmount(4);
-                            Soul.clear();
-                            p.getWorld().playSound(p.getLocation(),Sound.ENTITY_EVOKER_CAST_SPELL,1,1);
-                            ItemStack hand = p.getInventory().getItemInMainHand();
-                            ItemMeta meta = hand.getItemMeta();
-                            ArrayList<String> list = new ArrayList<>();
-                            list.add(ChatColor.of("#221726")+"Souls wander around in this stone");
-                            list.add(ChatColor.of("#00FFAA")+"Level:"+i);
-                            meta.setLore(list);
-                            hand.setItemMeta(meta);
+                    if (!(type == EntityType.WITHER || type == EntityType.ENDER_DRAGON || type == EntityType.EVOKER || type == EntityType.GIANT)) {
+
+                        LivingEntity summoned = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), type);
+                        summoned.setCustomName(p.getDisplayName() + "'s " + type.getName());
+
+                        if (i >= 11) {
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 400, 1));
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 400, 1));
                         }
+                        if (i >= 12) {
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 19200, 0));
+                        }
+                        if (i >= 13) {
+                            summoned.setAbsorptionAmount(4);
+                        }
+                        if (i >= 14) {
+                            summoned.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 19200, 0));
+                        }
+
+                        Soul.clear();
+                        p.getWorld().playSound(p.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, 1, 1);
+
+                        ItemStack hand = p.getInventory().getItemInMainHand();
+                        ItemMeta meta = hand.getItemMeta();
+                        List<String> lore = new ArrayList<>();
+                        lore.add(ChatColor.of("#221726") + "Souls wander around in this stone");
+                        lore.add(ChatColor.of("#00FFAA") + "Level:" + i);
+                        meta.setLore(lore);
+                        hand.setItemMeta(meta);
                     }
                 }
-            }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
-                if (p.isSneaking()){
-                    if (i == 15){
-                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
-                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            timer.put(p,40);
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    if (timer.get(p) == 0){
-                                        timer.remove(p);
-                                        cancel();
-                                        return;
-                                    }else {
-                                        int x = (int) (p.getLocation().getX());
-                                        int z = (int) (p.getLocation().getZ());
-                                        int randomX = ThreadLocalRandom.current().nextInt(x-6, x+6);
-                                        int randomZ = ThreadLocalRandom.current().nextInt(z-6, z+6);
-                                        int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
-                                        Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
-                                        Random random = new Random();
-                                        int r = random.nextInt(2);
-                                        SmokeEffect effect = new SmokeEffect(NikeyV1.em);
-                                        effect.setLocation(location);
-                                        effect.particle = Particle.SOUL;
-                                        effect.duration = 100;
-                                        effect.particles = 3;
-                                        effect.start();
-                                        if (r == 0){
-                                            Zombie zombie = location.getWorld().spawn(location, Zombie.class);
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
-                                            zombie.setCustomName(p.getDisplayName()+"'s "+zombie.getType().getName());
-                                        }else if (r ==1){
-                                            ZombieVillager spawn = location.getWorld().spawn(location, ZombieVillager.class);
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
-                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
-                                        }else{
-                                            Zombie spawn = location.getWorld().spawn(location, Zombie.class);
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
-                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
-                                        }
-                                    }
-                                    timer.replace(p,timer.get(p)-1);
-                                }
-                            }.runTaskTimer(NikeyV1.getPlugin(),10,10);
+            } else if ((event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) && p.isSneaking()) {
+                if (i >= 15 && ability.getOrDefault(p.getUniqueId(), 0L) <= System.currentTimeMillis()) {
+                    int duration = (i >= 18) ? 50 : 40;
+                    ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
+                    timer.put(p, duration);
+
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (timer.get(p) == 0) {
+                                timer.remove(p);
+                                cancel();
+                                return;
+                            }
+
+                            int x = p.getLocation().getBlockX();
+                            int z = p.getLocation().getBlockZ();
+                            int randomX = ThreadLocalRandom.current().nextInt(x - 6, x + 6);
+                            int randomZ = ThreadLocalRandom.current().nextInt(z - 6, z + 6);
+                            int randomY = p.getWorld().getHighestBlockYAt(randomX, randomZ);
+                            Location location = new Location(p.getWorld(), randomX, randomY + 1, randomZ);
+
+                            // SmokeEffect
+                            SmokeEffect effect = new SmokeEffect(NikeyV1.em);
+                            effect.setLocation(location);
+                            effect.particle = Particle.SOUL;
+                            effect.duration = 100;
+                            effect.particles = 3;
+                            effect.start();
+
+                            // Mob-Auswahl
+                            Random random = new Random();
+                            int r = (i == 15) ? random.nextInt(2) : random.nextInt(3); // nur 0-1 bei Level 15
+
+                            LivingEntity mob;
+                            switch (r) {
+                                case 1:
+                                    mob = location.getWorld().spawn(location, ZombieVillager.class);
+                                    break;
+                                case 2:
+                                    mob = location.getWorld().spawn(location, WitherSkeleton.class);
+                                    break;
+                                default:
+                                    mob = location.getWorld().spawn(location, Zombie.class);
+                                    break;
+                            }
+
+                            // Effekte
+                            mob.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 400, 0));
+                            mob.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400, 4));
+                            int fireDuration = (i >= 17) ? 12000 : 400;
+                            mob.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, fireDuration, 0));
+
+                            if (i >= 19) {
+                                mob.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 400, 1));
+                                mob.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 400, 1));
+                            }
+
+                            mob.setCustomName(p.getDisplayName() + "'s " + mob.getType().getName());
+                            timer.replace(p, timer.get(p) - 1);
                         }
-                    } else if (i == 16) {
-                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
-                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            //cooldown-ability
-                            timer.put(p,40);
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    if (timer.get(p) == 0){
-                                        timer.remove(p);
-                                        cancel();
-                                        return;
-                                    }else {
-                                        int x = (int) (p.getLocation().getX());
-                                        int z = (int) (p.getLocation().getZ());
-                                        int randomX = ThreadLocalRandom.current().nextInt(x-6, x+6);
-                                        int randomZ = ThreadLocalRandom.current().nextInt(z-6, z+6);
-                                        int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
-                                        Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
-                                        Random random = new Random();
-                                        int r = random.nextInt(3);
-                                        SmokeEffect effect = new SmokeEffect(NikeyV1.em);
-                                        effect.setLocation(location);
-                                        effect.particle = Particle.SOUL;
-                                        effect.duration = 100;
-                                        effect.particles = 3;
-                                        effect.start();
-                                        if (r == 0){
-                                            Zombie zombie = location.getWorld().spawn(location, Zombie.class);
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
-                                            zombie.setCustomName(p.getDisplayName()+"'s "+zombie.getType().getName());
-                                        }else if (r ==1){
-                                            ZombieVillager spawn = location.getWorld().spawn(location, ZombieVillager.class);
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
-                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
-                                        }else if (r == 2){
-                                            WitherSkeleton spawn = location.getWorld().spawn(location, WitherSkeleton.class);
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
-                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
-                                        }else{
-                                            Zombie spawn = location.getWorld().spawn(location, Zombie.class);
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,400,0));
-                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
-                                        }
-                                    }
-                                    timer.replace(p,timer.get(p)-1);
-                                }
-                            }.runTaskTimer(NikeyV1.getPlugin(),10,10);
-                        }
-                    }else if (i == 17) {
-                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
-                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            //cooldown-ability
-                            timer.put(p,40);
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    if (timer.get(p) == 0){
-                                        timer.remove(p);
-                                        cancel();
-                                        return;
-                                    }else {
-                                        int x = (int) (p.getLocation().getX());
-                                        int z = (int) (p.getLocation().getZ());
-                                        int randomX = ThreadLocalRandom.current().nextInt(x-6, x+6);
-                                        int randomZ = ThreadLocalRandom.current().nextInt(z-6, z+6);
-                                        int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
-                                        Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
-                                        Random random = new Random();
-                                        int r = random.nextInt(3);
-                                        SmokeEffect effect = new SmokeEffect(NikeyV1.em);
-                                        effect.setLocation(location);
-                                        effect.particle = Particle.SOUL;
-                                        effect.duration = 100;
-                                        effect.particles = 3;
-                                        effect.start();
-                                        if (r == 0){
-                                            Zombie zombie = location.getWorld().spawn(location, Zombie.class);
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
-                                            zombie.setCustomName(p.getDisplayName()+"'s "+zombie.getType().getName());
-                                        }else if (r ==1){
-                                            ZombieVillager spawn = location.getWorld().spawn(location, ZombieVillager.class);
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
-                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
-                                        }else if (r == 2){
-                                            WitherSkeleton spawn = location.getWorld().spawn(location, WitherSkeleton.class);
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
-                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
-                                        }else{
-                                            Zombie spawn = location.getWorld().spawn(location, Zombie.class);
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
-                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
-                                        }
-                                    }
-                                    timer.replace(p,timer.get(p)-1);
-                                }
-                            }.runTaskTimer(NikeyV1.getPlugin(),10,10);
-                        }
-                    }else if (i == 18) {
-                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
-                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            //cooldown-ability
-                            timer.put(p,50);
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    if (timer.get(p) == 0){
-                                        timer.remove(p);
-                                        cancel();
-                                        return;
-                                    }else {
-                                        int x = (int) (p.getLocation().getX());
-                                        int z = (int) (p.getLocation().getZ());
-                                        int randomX = ThreadLocalRandom.current().nextInt(x-6, x+6);
-                                        int randomZ = ThreadLocalRandom.current().nextInt(z-6, z+6);
-                                        int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
-                                        Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
-                                        Random random = new Random();
-                                        int r = random.nextInt(3);
-                                        SmokeEffect effect = new SmokeEffect(NikeyV1.em);
-                                        effect.setLocation(location);
-                                        effect.particle = Particle.SOUL;
-                                        effect.duration = 100;
-                                        effect.particles = 3;
-                                        effect.start();
-                                        if (r == 0){
-                                            Zombie zombie = location.getWorld().spawn(location, Zombie.class);
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
-                                            zombie.setCustomName(p.getDisplayName()+"'s "+zombie.getType().getName());
-                                        }else if (r ==1){
-                                            ZombieVillager spawn = location.getWorld().spawn(location, ZombieVillager.class);
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
-                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
-                                        }else if (r == 2){
-                                            WitherSkeleton spawn = location.getWorld().spawn(location, WitherSkeleton.class);
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
-                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
-                                        }else{
-                                            Zombie spawn = location.getWorld().spawn(location, Zombie.class);
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
-                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
-                                        }
-                                    }
-                                    timer.replace(p,timer.get(p)-1);
-                                }
-                            }.runTaskTimer(NikeyV1.getPlugin(),10,10);
-                        }
-                    } else if (i >=19){
-                        if (!(ability.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
-                            ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
-                            //cooldown-ability
-                            timer.put(p,50);
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    if (timer.get(p) == 0){
-                                        timer.remove(p);
-                                        cancel();
-                                        return;
-                                    }else {
-                                        int x = (int) (p.getLocation().getX());
-                                        int z = (int) (p.getLocation().getZ());
-                                        int randomX = ThreadLocalRandom.current().nextInt(x-6, x+6);
-                                        int randomZ = ThreadLocalRandom.current().nextInt(z-6, z+6);
-                                        int randomY = p.getWorld().getHighestBlockYAt(randomX,randomZ);
-                                        Location location = new Location(p.getWorld(),randomX,randomY+1,randomZ);
-                                        Random random = new Random();
-                                        int r = random.nextInt(3);
-                                        SmokeEffect effect = new SmokeEffect(NikeyV1.em);
-                                        effect.setLocation(location);
-                                        effect.particle = Particle.SOUL;
-                                        effect.duration = 100;
-                                        effect.particles = 3;
-                                        effect.start();
-                                        if (r == 0){
-                                            Zombie zombie = location.getWorld().spawn(location, Zombie.class);
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
-                                            zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
-                                            zombie.setCustomName(p.getDisplayName()+"'s "+zombie.getType().getName());
-                                        }else if (r ==1){
-                                            ZombieVillager spawn = location.getWorld().spawn(location, ZombieVillager.class);
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
-                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
-                                        }else if (r == 2){
-                                            WitherSkeleton spawn = location.getWorld().spawn(location, WitherSkeleton.class);
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
-                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
-                                        }else{
-                                            Zombie spawn = location.getWorld().spawn(location, Zombie.class);
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,400,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,400,1));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,400,4));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,12000,0));
-                                            spawn.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,400,1));
-                                            spawn.setCustomName(p.getDisplayName()+"'s "+spawn.getType().getName());
-                                        }
-                                    }
-                                    timer.replace(p,timer.get(p)-1);
-                                }
-                            }.runTaskTimer(NikeyV1.getPlugin(),10,10);
-                        }
-                    }
+                    }.runTaskTimer(NikeyV1.getPlugin(), 10, 10);
                 }
             }
         }

@@ -40,7 +40,7 @@ public class Naturestone implements Listener {
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
 
     //Ability 1
-    private final Set<Player> rootedPlayers = new HashSet<>();
+    private final Set<LivingEntity> rootedPlayers = new HashSet<>();
 
     //Master Ability
     private static final Set<SanctuaryZone> activeZones = new HashSet<>();
@@ -61,7 +61,7 @@ public class Naturestone implements Listener {
                     if (!(cooldown.getOrDefault(player.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown.put(player.getUniqueId(), System.currentTimeMillis() + (100 * 1000));
 
-                        for (Player target : player.getWorld().getNearbyPlayers(player.getLocation(), 9)) {
+                        for (LivingEntity target : player.getWorld().getNearbyLivingEntities(player.getLocation(), 8)) {
                             if (HelpUtil.shouldDamageEntity(target, player)) {
                                 Location baseLocation = target.getLocation().clone().add(0, 1.1, 0);
                                 BlockData branchBlock = Material.MANGROVE_LOG.createBlockData();
@@ -108,7 +108,7 @@ public class Naturestone implements Listener {
 
                                     allBranches.add(branch);
                                 }
-                                castRootsAbility(target);
+                                castRootsAbility(target,player);
 
                                 new BukkitRunnable() {
                                     int ticks = 0;
@@ -246,21 +246,18 @@ public class Naturestone implements Listener {
     }
 
 
-
-
-
-
-
-
-
-
     private void dealTrueDamage(LivingEntity entity, double damage) {
-        if (entity.getHealth() - damage >= 1) {
-            entity.setHealth(entity.getHealth() - damage);
-        } else if (!EntityTags.UNDEADS.isTagged(entity.getType())) {
-            entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE, 1, 240));
-        } else {
-            entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH, 1, 240));
+        if (entity.getAbsorptionAmount() == 0) {
+            if (entity.getHealth()-damage >= 0.5F) {
+                entity.setHealth(entity.getHealth()-damage);
+                entity.playHurtAnimation(0);
+            }else {
+                entity.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1,240));
+            }
+        }else {
+            double newAbsorption = Math.max(0, entity.getAbsorptionAmount() - damage);
+            entity.setAbsorptionAmount(newAbsorption);
+            entity.playHurtAnimation(0);
         }
     }
 
@@ -329,10 +326,10 @@ public class Naturestone implements Listener {
 
 
 
-    public void castRootsAbility(Player target) {
+    public void castRootsAbility(LivingEntity target, Player user) {
         if (rootedPlayers.contains(target)) return;
 
-        int level = Stone.getStoneLevel(target);
+        int level = Stone.getStoneLevel(user);
         int abilityLength = 8;
         if (level == 11 || level == 12 || level == 13) {
             abilityLength = 10;
@@ -344,7 +341,7 @@ public class Naturestone implements Listener {
         Location startLocation = target.getLocation().clone();
         startLocation.setY(startLocation.getY() - 1);
 
-        target.setWalkSpeed(0f);
+        target.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0);
         target.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(0);
         target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 0, false, false));
         target.addPotionEffect(new PotionEffect(PotionEffectType.POISON,abilityLength*20,5));
@@ -372,7 +369,7 @@ public class Naturestone implements Listener {
 
             @Override
             public void run() {
-                if (ticks >= maxTicks || target.isDead() || !target.isOnline()) {
+                if (ticks >= maxTicks || !target.isValid()) {
                     explodeRoots(target);
                     rootedPlayers.remove(target);
                     cancel();
@@ -555,12 +552,12 @@ public class Naturestone implements Listener {
         }
     }
 
-    private void explodeRoots(Player target) {
+    private void explodeRoots(LivingEntity target) {
         World world = target.getWorld();
         world.spawnParticle(Particle.EXPLOSION_EMITTER, target.getLocation(), 1);
         world.createExplosion(target.getLocation(),2.3f,false,false);
 
-        target.setWalkSpeed(0.2f);
+        target.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1);
         target.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(0.41999998688697815);
 
         Location originLocation = target.getLocation().clone().add(0, 1, 0);

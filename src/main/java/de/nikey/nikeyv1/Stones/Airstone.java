@@ -41,9 +41,9 @@ public class Airstone implements Listener {
     public static HashMap<String , Integer> flyingtimer = new HashMap<>();
     public static HashMap<String , Integer> used = new HashMap<>();
     public static HashMap<Player, Boolean> playerBoostCooldown = new HashMap<>();
-    private final HashMap<Player, Long> chargeStartTime = new HashMap<>();
-    private final HashMap<Player, BossBar> bossBars = new HashMap<>();
-    private final HashMap<Player, Boolean> isCharging = new HashMap<>();
+    public static final HashMap<Player, Long> chargeStartTime = new HashMap<>();
+    public static final HashMap<Player, BossBar> bossBars = new HashMap<>();
+    public static final HashMap<Player, Boolean> isCharging = new HashMap<>();
     private Map<UUID, BukkitRunnable> activeTasks = new HashMap<>();
 
     @EventHandler
@@ -151,8 +151,7 @@ public class Airstone implements Listener {
         }
 
         for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
-            if (entity instanceof LivingEntity) {
-                LivingEntity target = (LivingEntity) entity;
+            if (entity instanceof LivingEntity target) {
                 if (HelpUtil.shouldDamageEntity(target,player)) {
                     target.damage(damage, player);
 
@@ -290,7 +289,6 @@ public class Airstone implements Listener {
         }
     }
 
-
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         Player p = event.getPlayer();
@@ -315,19 +313,6 @@ public class Airstone implements Listener {
                 }
             }
         }
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    public void onPluginEnable(PluginDisableEvent event) {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            BossBar bossBar = bossBars.remove(player);
-            if (bossBar != null) {
-                bossBar.removeAll();
-            }
-            chargeStartTime.remove(player);
-            isCharging.remove(player);
-        }
-
     }
 
     @EventHandler
@@ -491,7 +476,7 @@ public class Airstone implements Listener {
             @Override
             public void run() {
                 if (!player.isOnline()) {
-                    cancel(); // Beendet den Task
+                    cancel();
                     activeTasks.remove(player.getUniqueId());
                     return;
                 }
@@ -549,13 +534,10 @@ public class Airstone implements Listener {
     }
 
     private void triggerLanding(Player player, double dmg) {
-        // Erzeuge eine Explosion ohne Schaden am Spieler, aber mit Partikeln und Schaden an anderen Entitäten
         Location location = player.getLocation();
 
-        // Erzeuge Partikel für die Explosion
         player.getWorld().spawnParticle(Particle.EXPLOSION, location, 1);
         player.getWorld().playSound(player.getLocation(),Sound.ENTITY_GENERIC_EXPLODE,1,1);
-
 
         double radius = 3.0;
         int stoneLevel = Stone.getStoneLevel(player);
@@ -601,9 +583,9 @@ public class Airstone implements Listener {
                 event.setCancelled(true);
                 int stoneLevel = Stone.getStoneLevel(player);
                 if (stoneLevel >= 14) {
-                    triggerLanding(player,event.getDamage()*0.5);
+                    triggerLanding(player,event.getDamage()*0.6);
                 }else {
-                    triggerLanding(player,event.getDamage()*0.4);
+                    triggerLanding(player,event.getDamage()*0.5);
                 }
                 flyingtimer.remove(player.getName());
             }
@@ -616,7 +598,7 @@ public class Airstone implements Listener {
         Location startLocation = player.getEyeLocation().clone().add(direction.multiply(1.5));
 
         int beamLength = (Stone.getStoneLevel(player) >= 18) ? 30 : 20;
-        double beamRadius = 1.5;
+        double beamRadius = 2;
         double pullStrength = 2.5;
         double damage = (Stone.getStoneLevel(player) >= 17) ? 20 : 25;
         int particlesPerCircle = 20;
@@ -663,7 +645,6 @@ public class Airstone implements Listener {
         }
     }
 
-
     private Vector getPerpendicularVector(Vector direction) {
         if (direction.getX() == 0 && direction.getZ() == 0) {
             return new Vector(1, 0, 0);
@@ -674,7 +655,7 @@ public class Airstone implements Listener {
     public void cancelWindChargeTask(Player player) {
         BukkitRunnable task = activeTasks.get(player.getUniqueId());
         if (task != null) {
-            task.cancel(); // Beendet den Task
+            task.cancel();
             activeTasks.remove(player.getUniqueId());
         }
     }
