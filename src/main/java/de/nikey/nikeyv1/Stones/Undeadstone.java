@@ -191,8 +191,8 @@ public class Undeadstone implements Listener {
         Location added = player.getLocation().getWorld().getHighestBlockAt(player.getLocation()).getLocation();
         Location l = added.clone().add(0,1,0);
         Zombie zombie = (Zombie) player.getLocation().getWorld().spawnEntity(l, EntityType.ZOMBIE);
-        zombie.setMaxHealth(500);
-        zombie.setHealth(500);
+        zombie.setMaxHealth(300);
+        zombie.setHealth(300);
         zombie.setShouldBurnInDay(false);
         zombie.getAttribute(Attribute.SCALE).setBaseValue(3.5F);
         zombie.getAttribute(Attribute.ATTACK_DAMAGE).setBaseValue(8);
