@@ -356,10 +356,10 @@ public class Naturestone implements Listener {
 
         target.getWorld().playSound(target.getLocation(), Sound.ENTITY_SPIDER_HURT, 0.5f, 1.2f);
 
-        int damage = 2;
+        int damage = 1;
 
         if (level >= 13) {
-            damage = 3;
+            damage = 2;
         }
         int finalAbilityLength = abilityLength;
         int finalDamage = damage;
