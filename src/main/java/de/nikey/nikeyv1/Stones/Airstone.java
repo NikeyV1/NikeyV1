@@ -47,28 +47,6 @@ public class Airstone implements Listener {
     private Map<UUID, BukkitRunnable> activeTasks = new HashMap<>();
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        int level = Stone.getStoneLevel(player);
-        String stone = Stone.getStoneName(player);
-        if (stone.equalsIgnoreCase("air")) {
-            if (level >= 3) {
-                if (level == 3) {
-                    player.getAttribute(Attribute.MOVEMENT_EFFICIENCY).setBaseValue(0.3);
-                } else if (level == 4) {
-                    player.getAttribute(Attribute.MOVEMENT_EFFICIENCY).setBaseValue(0.6);
-                }else {
-                    player.getAttribute(Attribute.MOVEMENT_EFFICIENCY).setBaseValue(1);
-                }
-            }else {
-                player.getAttribute(Attribute.MOVEMENT_EFFICIENCY).setBaseValue(0);
-            }
-        }else {
-            player.getAttribute(Attribute.MOVEMENT_EFFICIENCY).setBaseValue(0);
-        }
-    }
-
-    @EventHandler
     public void onKnockback(EntityKnockbackByEntityEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
         if (!(event.getHitBy() instanceof LivingEntity))return;

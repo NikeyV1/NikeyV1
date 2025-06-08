@@ -28,17 +28,11 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 public class InfernoBlade implements Listener {
-
     public static HashMap<UUID, Long> ability = new HashMap<>();
-
     public static long remainingTime2;
-
     public static boolean red;
-
     private HashMap<LivingEntity, Long> frozenPlayers = new HashMap<>();
-
     private final Random random = new Random();
-
     public static HashMap<String , List<LivingEntity>> targetsmap = new HashMap<>();
 
     @EventHandler

@@ -666,4 +666,17 @@ public class Player implements Listener {
         }
     }
 
+    @EventHandler
+    public void onBundleInsert(InventoryClickEvent event) {
+        ItemStack cursor = event.getCursor();
+        ItemStack currentItem = event.getCurrentItem();
+
+        if (cursor == null || currentItem == null) return;
+
+        if (currentItem.getType() == Material.BUNDLE) {
+            if (Stone.isStone(cursor) || Stone.isInfernoBlade(cursor)) {
+                event.setCancelled(true);
+            }
+        }
+    }
 }
