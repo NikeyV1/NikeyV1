@@ -54,7 +54,7 @@ public final class NikeyV1 extends JavaPlugin{
             }
         }
         em = new EffectManager(this);
-        if (Bukkit.getServerTickManager().getTickRate() == 10) {
+        if (Bukkit.getServerTickManager().getTickRate() == 15) {
             Bukkit.getServerTickManager().setTickRate(20);
         }
 
@@ -75,7 +75,6 @@ public final class NikeyV1 extends JavaPlugin{
         manager.registerEvents(new Stone_Swap(),this);
         manager.registerEvents(new InfernoBlade(),this);
         manager.registerEvents(new Elementalstone(),this);
-        manager.registerEvents(new UndeadStoneListener(),this);
         manager.registerEvents(new PowerBeacon(),this);
         manager.registerEvents(new ResourcePack(),this);
         manager.registerEvents(new Ghoststone(),this);

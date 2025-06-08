@@ -111,7 +111,7 @@ public class Frozenstone implements Listener {
         Player player = event.getPlayer();
         FileConfiguration config = NikeyV1.getPlugin().getConfig();
         String stone = config.getString(player.getName() + ".stone");
-        if (stone.equalsIgnoreCase("Frozen")&&player.getGameMode() == GameMode.SURVIVAL && config.getInt(player.getName()+".level") >=5){
+        if (stone.equalsIgnoreCase("Frozen") && player.getGameMode() == GameMode.SURVIVAL && config.getInt(player.getName()+".level") >=5){
             if (player.getLocation().getBlock().getType() == Material.POWDER_SNOW) {
                 player.setAllowFlight(true);
                 player.setFlying(true);
@@ -119,7 +119,7 @@ public class Frozenstone implements Listener {
                 player.setAllowFlight(false);
                 player.setFlying(false);
             }
-            if (config.getInt(player.getName()+".level") >=6) {
+            if (config.getInt(player.getName()+".level") >= 6) {
                 if (isColdBiome(player.getWorld().getBiome(player.getLocation()))) {
                     if (player.getFlySpeed() != 0.14F) {
                         player.setFlySpeed(0.14F);
@@ -395,10 +395,6 @@ public class Frozenstone implements Listener {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
         if (notp.contains(player)) event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onEntityPotionEffect(EntityPotionEffectEvent event) {
     }
 
 

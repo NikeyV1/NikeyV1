@@ -16,6 +16,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
@@ -530,6 +531,25 @@ public class Undeadstone implements Listener {
                 if (event.getEntity().getCustomName() != null) {
                     if (event.getEntity().getCustomName().equalsIgnoreCase(((Player) event.getTarget()).getDisplayName()+"'s "+event.getEntityType().getName())){
                         event.setCancelled(true);
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onEntityDamageByPlayer(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player) {
+            String stone = NikeyV1.getPlugin().getConfig().getString(event.getDamager().getName() + ".stone");
+            int level = NikeyV1.getPlugin().getConfig().getInt(event.getDamager().getName() + ".level");
+            if (stone.equalsIgnoreCase("Undead")) {
+                if (!(event.getEntity() instanceof Player)) {
+                    if (level == 7) {
+                        event.setDamage(event.getDamage() * 1.075);
+                    } else if (level == 8) {
+                        event.setDamage(event.getDamage() * 1.15);
+                    } else if (level >= 9) {
+                        event.setDamage(event.getDamage() * 1.225);
                     }
                 }
             }

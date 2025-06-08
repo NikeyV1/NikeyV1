@@ -279,9 +279,9 @@ public class Firestone implements Listener {
                     }
                 } else if (event.getCause() == EntityDamageEvent.DamageCause.LAVA) {
                     if (i == 8) {
-                        event.setDamage(event.getDamage()*0.8);
+                        event.setDamage(event.getDamage()*0.5);
                     }else if (i >= 9) {
-                        event.setDamage(event.getDamage()*0.6);
+                        event.setCancelled(true);
                     }
                 }
             }

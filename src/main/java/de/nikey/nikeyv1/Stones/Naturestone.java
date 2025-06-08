@@ -296,13 +296,13 @@ public class Naturestone implements Listener {
         int radius = 0;
 
         if (level == 6){
-            radius = 5;
+            radius = 4;
         }else if (level == 7){
             radius = 6;
         }else if (level == 8){
-            radius = 7;
-        }else if (level >= 9){
             radius = 8;
+        }else if (level >= 9){
+            radius = 10;
         }
         int finalRadius = radius;
         new BukkitRunnable() {
