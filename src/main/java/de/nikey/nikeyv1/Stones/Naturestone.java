@@ -2,8 +2,7 @@ package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
-import de.nikey.nikeyv1.api.Stone;
-import io.papermc.paper.tag.EntityTags;
+import de.nikey.nikeyv1.api.StoneHandler;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
@@ -50,8 +49,8 @@ public class Naturestone implements Listener {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
         if (item == null) return;
-        if (Stone.whatStone(item).equalsIgnoreCase("Nature")) {
-            int level = Stone.getStoneLevelFromItem(item);
+        if (StoneHandler.whatStone(item).equalsIgnoreCase("Nature")) {
+            int level = StoneHandler.getStoneLevelFromItem(item);
             FileConfiguration config = NikeyV1.getPlugin().getConfig();
             config.set(player.getName()+".stone","Nature");
             config.set(player.getName()+".level",level);
@@ -264,14 +263,14 @@ public class Naturestone implements Listener {
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
-        if (!Stone.getStoneName(player).equalsIgnoreCase("Nature"))return;
-        if (Stone.getStoneLevel(player) < 3)return;
+        if (!StoneHandler.getStoneName(player).equalsIgnoreCase("Nature"))return;
+        if (StoneHandler.getStoneLevel(player) < 3)return;
 
         Biome biome = player.getLocation().getBlock().getBiome();
 
         double reduction;
 
-        int level = Stone.getStoneLevel(player);
+        int level = StoneHandler.getStoneLevel(player);
 
         if (level == 3) {
             reduction = 0.95;
@@ -288,10 +287,10 @@ public class Naturestone implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (!Stone.getStoneName(player).equalsIgnoreCase("Nature"))return;
-        if (Stone.getStoneLevel(player) < 6)return;
+        if (!StoneHandler.getStoneName(player).equalsIgnoreCase("Nature"))return;
+        if (StoneHandler.getStoneLevel(player) < 6)return;
 
-        int level = Stone.getStoneLevel(player);
+        int level = StoneHandler.getStoneLevel(player);
 
         int radius = 0;
 
@@ -308,7 +307,7 @@ public class Naturestone implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!player.isOnline() || Stone.getStoneLevel(player) < 6) {
+                if (!player.isOnline() || StoneHandler.getStoneLevel(player) < 6) {
                     cancel();
                     return;
                 }
@@ -329,7 +328,7 @@ public class Naturestone implements Listener {
     public void castRootsAbility(LivingEntity target, Player user) {
         if (rootedPlayers.contains(target)) return;
 
-        int level = Stone.getStoneLevel(user);
+        int level = StoneHandler.getStoneLevel(user);
         int abilityLength = 8;
         if (level == 11 || level == 12 || level == 13) {
             abilityLength = 10;
@@ -386,7 +385,7 @@ public class Naturestone implements Listener {
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         Player p = event.getPlayer();
         ItemStack item = event.getItemDrop().getItemStack();
-        if (Stone.whatStone(item).equalsIgnoreCase("nature")){
+        if (StoneHandler.whatStone(item).equalsIgnoreCase("nature")){
             String[] arr = item.getLore().get(1).split(":");
             int i = Integer.parseInt(arr[1]);
             FileConfiguration config = NikeyV1.getPlugin().getConfig();
@@ -417,7 +416,7 @@ public class Naturestone implements Listener {
     }
 
     private void createSanctuaryZone(Player player) {
-        int level = Stone.getStoneLevel(player);
+        int level = StoneHandler.getStoneLevel(player);
         SanctuaryZone zone;
         if (level == 21) {
             zone = new SanctuaryZone(player, player.getLocation(), 40, 45);
@@ -488,7 +487,7 @@ public class Naturestone implements Listener {
             world.playSound(location, Sound.BLOCK_CONDUIT_ACTIVATE, 1, 1);
             for (int i = 0; i <= radius; i++) {
                 int later;
-                if (Stone.getStoneLevel(p) == 21) {
+                if (StoneHandler.getStoneLevel(p) == 21) {
                     later = i;
                 }else {
                     later = i*2;
@@ -517,7 +516,7 @@ public class Naturestone implements Listener {
         private void healTeammatesInZone() {
             for (Player player : location.getWorld().getPlayers()) {
                 if (isInZone(player) && !HelpUtil.shouldDamageEntity(player,p)) {
-                    if (Stone.getStoneLevel(player) == 21) {
+                    if (StoneHandler.getStoneLevel(player) == 21) {
                         player.heal(5, EntityRegainHealthEvent.RegainReason.MAGIC);
                         player.applyMending(12);
                     }else {
@@ -537,7 +536,7 @@ public class Naturestone implements Listener {
         public boolean tryResurrect(Player player) {
             if (resurrectedPlayers.contains(player.getUniqueId())) return false;
 
-            if (Stone.getStoneLevel(player) == 21) {
+            if (StoneHandler.getStoneLevel(player) == 21) {
                 player.setHealth(player.getAttribute(Attribute.MAX_HEALTH).getBaseValue());
             }else {
                 player.setHealth(8);

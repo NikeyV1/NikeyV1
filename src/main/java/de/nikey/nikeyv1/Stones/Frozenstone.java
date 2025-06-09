@@ -4,7 +4,7 @@ import com.destroystokyo.paper.event.entity.EntityJumpEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
-import de.nikey.nikeyv1.api.Stone;
+import de.nikey.nikeyv1.api.StoneHandler;
 import de.slikey.effectlib.effect.SmokeEffect;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -16,7 +16,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.*;
@@ -237,7 +236,7 @@ public class Frozenstone implements Listener {
                     }
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_AIR ||event.getAction() == Action.LEFT_CLICK_BLOCK){
-                String damageEntityType = Stone.getAttacking(p);
+                String damageEntityType = StoneHandler.getAttacking(p);
                 if (p.isSneaking() || ability.getOrDefault(p.getUniqueId(), 0L) > System.currentTimeMillis()) return;
 
                 ability.put(p.getUniqueId(), System.currentTimeMillis() + (180 * 1000)); // Cooldown-Ability

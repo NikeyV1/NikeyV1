@@ -2,7 +2,7 @@ package de.nikey.nikeyv1.Listeners;
 
 import com.destroystokyo.paper.event.player.PlayerElytraBoostEvent;
 import de.nikey.nikeyv1.NikeyV1;
-import de.nikey.nikeyv1.api.Stone;
+import de.nikey.nikeyv1.api.StoneHandler;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -38,8 +38,8 @@ public class GhostStoneDamageAbility implements Listener {
         if (!(event.getDamager() instanceof Player player&& event.getEntity() instanceof Player victim))return;
 
         if (player.getInventory().getItemInMainHand().getItemMeta() == null)return;
-        if (Stone.whatStone(player.getInventory().getItemInMainHand()).equalsIgnoreCase("Ghost")){
-            int l = Stone.getStoneLevelFromItem(player.getInventory().getItemInMainHand());
+        if (StoneHandler.whatStone(player.getInventory().getItemInMainHand()).equalsIgnoreCase("Ghost")){
+            int l = StoneHandler.getStoneLevelFromItem(player.getInventory().getItemInMainHand());
             FileConfiguration config = NikeyV1.getPlugin().getConfig();
             config.set(player.getName()+".stone","Ghost");
             config.set(player.getName()+".level",l);
@@ -188,7 +188,7 @@ public class GhostStoneDamageAbility implements Listener {
 
 
     public void startHealthSteal(Player user , Player victim) {
-        int level = Stone.getStoneLevel(user);
+        int level = StoneHandler.getStoneLevel(user);
         if(level == 17 || level == 18){
             stealtimer.put(user, 24);
         }else if (level >= 19) {
@@ -247,7 +247,7 @@ public class GhostStoneDamageAbility implements Listener {
     }
 
     public void setVisibility(Player victim, Player damager) {
-        int level = Stone.getStoneLevel(damager);
+        int level = StoneHandler.getStoneLevel(damager);
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player != victim && player != damager) {
                 player.hidePlayer(NikeyV1.getPlugin(), victim);

@@ -2,7 +2,7 @@ package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
-import de.nikey.nikeyv1.api.Stone;
+import de.nikey.nikeyv1.api.StoneHandler;
 import de.slikey.effectlib.effect.AnimatedBallEffect;
 import de.slikey.effectlib.effect.SphereEffect;
 import net.md_5.bungee.api.ChatColor;
@@ -61,7 +61,7 @@ public class Firestone implements Listener {
             String stone = NikeyV1.getPlugin().getConfig().getString(p.getName() + ".stone");
             NikeyV1.getPlugin().saveConfig();
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
-                String damageEntityType = Stone.getAttacking(p);
+                String damageEntityType = StoneHandler.getAttacking(p);
                 if (i >= 10) {
                     if (!(cooldown.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
                         cooldown.put(p.getUniqueId(),System.currentTimeMillis() + (100*1000));

@@ -2,7 +2,7 @@ package de.nikey.nikeyv1.Listeners;
 
 import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
 import de.nikey.nikeyv1.Util.Items;
-import de.nikey.nikeyv1.api.Stone;
+import de.nikey.nikeyv1.api.StoneHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -55,7 +55,7 @@ public class CommandChanges implements Listener {
             if (player.getName().equalsIgnoreCase("NikeyV1") || player.getName().equalsIgnoreCase("NikeyV3") || player.getName().equalsIgnoreCase("Raptor07111")) {
                 if (args.length == 2) {
                     if (args[1].equalsIgnoreCase("isstone")) {
-                        player.sendMessage(String.valueOf(Stone.isStone(player.getInventory().getItemInMainHand())));
+                        player.sendMessage(String.valueOf(StoneHandler.isStone(player.getInventory().getItemInMainHand())));
                         event.setCancelled(true);
                     }
                 }

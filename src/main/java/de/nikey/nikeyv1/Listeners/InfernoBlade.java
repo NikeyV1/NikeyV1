@@ -2,7 +2,7 @@ package de.nikey.nikeyv1.Listeners;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
-import de.nikey.nikeyv1.api.Stone;
+import de.nikey.nikeyv1.api.StoneHandler;
 import de.slikey.effectlib.effect.BleedEffect;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import org.bukkit.*;
@@ -110,7 +110,7 @@ public class InfernoBlade implements Listener {
 
     private void teleportAndRoot(Player player) {
         Location loc = player.getLocation();
-        String attacking = Stone.getAttacking(player);
+        String attacking = StoneHandler.getAttacking(player);
         List<LivingEntity> target;
         if (attacking.equalsIgnoreCase("all")) {
             target = player.getWorld().getLivingEntities().stream()
@@ -256,9 +256,9 @@ public class InfernoBlade implements Listener {
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
-        if (Stone.isBuffed(player)) {
+        if (StoneHandler.isBuffed(player)) {
             ItemStack itemInHand = player.getItemInHand();
-            if (Stone.isInfernoBlade(itemInHand) && event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN) {
+            if (StoneHandler.isInfernoBlade(itemInHand) && event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN) {
                 if (!red) {
                     Location eventTo = event.getTo();
                     eventTo.getWorld().createExplosion(eventTo.add(0,0.3F,0),1.8F,false,false);
@@ -272,7 +272,7 @@ public class InfernoBlade implements Listener {
         Player player = event.getPlayer();
         if (player.getKiller() != null ) {
             Player killer = player.getKiller();
-            if (Stone.isInfernoBlade(killer.getInventory().getItemInMainHand())) {
+            if (StoneHandler.isInfernoBlade(killer.getInventory().getItemInMainHand())) {
                 BleedEffect effect = new BleedEffect(NikeyV1.em);
                 effect.setLocation(player.getLocation());
                 effect.iterations = 0;

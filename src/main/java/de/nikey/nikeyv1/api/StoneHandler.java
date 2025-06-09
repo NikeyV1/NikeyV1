@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @SuppressWarnings("ALL")
-public class Stone {
+public class StoneHandler {
     public static int getStoneLevel(Player player) {
         return NikeyV1.getPlugin().getConfig().getInt(player.getName() + ".level");
     }

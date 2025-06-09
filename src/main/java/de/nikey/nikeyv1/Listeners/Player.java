@@ -2,30 +2,34 @@ package de.nikey.nikeyv1.Listeners;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Scoreboard.ServerScoreboard;
-import de.nikey.nikeyv1.Stones.Electrostone;
 import de.nikey.nikeyv1.Stones.Holystone;
 import de.nikey.nikeyv1.Timer.TimerBuild;
 import de.nikey.nikeyv1.Util.Items;
-import de.nikey.nikeyv1.api.Stone;
+import de.nikey.nikeyv1.api.StoneHandler;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -94,7 +98,7 @@ public class Player implements Listener {
             Item itemDrop = event.getItemDrop();
             org.bukkit.entity.Player player = event.getPlayer();
             PlayerInventory inventory = player.getInventory();
-            if (Stone.isStone(itemDrop.getItemStack()) || Stone.isInfernoBlade(itemDrop.getItemStack())){
+            if (StoneHandler.isStone(itemDrop.getItemStack()) || StoneHandler.isInfernoBlade(itemDrop.getItemStack())){
                 event.setCancelled(true);
                 if (isInventoryFull(player)) {
                     ItemStack droppedItem = event.getItemDrop().getItemStack();
@@ -153,7 +157,7 @@ public class Player implements Listener {
             for (ItemStack contents : inventory.getContents()){
                 if(contents == null || contents.getType() == Material.AIR || contents.getItemMeta().getDisplayName().equalsIgnoreCase("§dUpgrade") || contents.getType() == Material.PURPLE_STAINED_GLASS_PANE) continue;
                 org.bukkit.entity.Player player = (org.bukkit.entity.Player) event.getPlayer();
-                if (Stone.isStone(contents) || Stone.isInfernoBlade(contents)) {
+                if (StoneHandler.isStone(contents) || StoneHandler.isInfernoBlade(contents)) {
                     int i = player.getInventory().firstEmpty();
                     if (i == -1) {
                         player.getInventory().setItemInOffHand(contents);
@@ -243,7 +247,7 @@ public class Player implements Listener {
             config.set(player.getName() +".level",i-1);
             for (ItemStack item : player.getInventory().getContents()) {
                 if (item != null) {
-                    if (Stone.isStone(item)||Stone.isInfernoBlade(item)) {
+                    if (StoneHandler.isStone(item)|| StoneHandler.isInfernoBlade(item)) {
                         // Stone entfernen
                         player.getInventory().removeItemAnySlot(item);
                         event.getDrops().remove(item);
@@ -262,7 +266,7 @@ public class Player implements Listener {
         }else {
             for (ItemStack item : player.getInventory().getContents()) {
                 if (item != null) {
-                    if (Stone.isStone(item) || Stone.isInfernoBlade(item)) {
+                    if (StoneHandler.isStone(item) || StoneHandler.isInfernoBlade(item)) {
                         event.getDrops().remove(item);
                     }
                 }
@@ -553,7 +557,7 @@ public class Player implements Listener {
             Material itemMaterial = event.getCursor().getType();
 
             if (isMinecartInventory(clickedInventory)) {
-                if (Stone.isStone(event.getCursor()) || Stone.isInfernoBlade(event.getCursor())) {
+                if (StoneHandler.isStone(event.getCursor()) || StoneHandler.isInfernoBlade(event.getCursor())) {
                     event.setCancelled(true);
                     player.sendMessage("§cYou are not allowed to do that!");
                     player.damage(4);
@@ -562,7 +566,7 @@ public class Player implements Listener {
 
             // Überprüfen, ob es sich um eine Truhe handelt und der Spieler versucht, Diamanten zu legen
             if (clickedInventory != null && isChest(clickedInventory)) {
-                if (Stone.isStone(event.getCursor()) || Stone.isInfernoBlade(event.getCursor())) {
+                if (StoneHandler.isStone(event.getCursor()) || StoneHandler.isInfernoBlade(event.getCursor())) {
                     event.setCancelled(true);
                     player.sendMessage("§cYou are not allowed to do that!");
                     player.damage(4);
@@ -575,7 +579,7 @@ public class Player implements Listener {
 
             if (bottom.getType() == InventoryType.PLAYER) {
                 if (event.getCurrentItem() != null) {
-                    if (Stone.isStone(event.getCurrentItem()) || Stone.isInfernoBlade(event.getCurrentItem())) {
+                    if (StoneHandler.isStone(event.getCurrentItem()) || StoneHandler.isInfernoBlade(event.getCurrentItem())) {
                         if (top.getType() == InventoryType.CHEST  || event.getInventory().getType() == InventoryType.ANVIL|| event.getInventory().getType() == InventoryType.BARREL|| event.getInventory().getType() == InventoryType.BEACON|| event.getInventory().getType() == InventoryType.BLAST_FURNACE|| event.getInventory().getType() == InventoryType.BREWING|| event.getInventory().getType() == InventoryType.CARTOGRAPHY|| event.getInventory().getType() == InventoryType.LOOM
                                 || event.getInventory().getType() == InventoryType.SMOKER|| event.getInventory().getType() == InventoryType.ENDER_CHEST|| event.getInventory().getType() == InventoryType.STONECUTTER|| event.getInventory().getType() == InventoryType.SHULKER_BOX|| event.getInventory().getType() == InventoryType.SMITHING|| event.getInventory().getType() == InventoryType.GRINDSTONE|| event.getInventory().getType() == InventoryType.FURNACE|| event.getInventory().getType() == InventoryType.ENCHANTING|| event.getInventory().getType() == InventoryType.HOPPER|| event.getInventory().getType() == InventoryType.DROPPER|| event.getInventory().getType() == InventoryType.DISPENSER
                         ) {
@@ -595,7 +599,7 @@ public class Player implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         Block clickedBlock = event.getClickedBlock();
         if (event.getItem() != null) {
-            if (Stone.isStone(event.getItem())||Stone.isInfernoBlade(event.getItem())){
+            if (StoneHandler.isStone(event.getItem())|| StoneHandler.isInfernoBlade(event.getItem())){
                 if (clickedBlock.getType() == Material.DECORATED_POT && event.getItem().getItemMeta().hasLore()) {
                     event.setCancelled(true);
                     event.getPlayer().damage(4);
@@ -607,7 +611,7 @@ public class Player implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
-        if (event.getPlayer().getItemInHand() != null && Stone.isStone(event.getPlayer().getItemInHand()) || Stone.isInfernoBlade(event.getPlayer().getItemInHand())) {
+        if (event.getPlayer().getItemInHand() != null && StoneHandler.isStone(event.getPlayer().getItemInHand()) || StoneHandler.isInfernoBlade(event.getPlayer().getItemInHand())) {
             if (event.getRightClicked() != null && event.getRightClicked().getType() == EntityType.ITEM_FRAME || event.getRightClicked() != null && event.getRightClicked().getType() == EntityType.GLOW_ITEM_FRAME) {
                 event.getPlayer().damage(4);
                 event.getPlayer().sendMessage("§cYou are not allowed to do that!");
@@ -628,7 +632,7 @@ public class Player implements Listener {
         if (event.getEntity() instanceof org.bukkit.entity.Player) {
             org.bukkit.entity.Player p = (org.bukkit.entity.Player) event.getEntity();
             Item item = event.getItem();
-            if (Stone.isStone(item.getItemStack())||Stone.isInfernoBlade(item.getItemStack())) {
+            if (StoneHandler.isStone(item.getItemStack())|| StoneHandler.isInfernoBlade(item.getItemStack())) {
                 event.getEntity().damage(4);
                 event.getEntity().sendMessage("§cYou are not allowed to do that!");
                 Bukkit.broadcastMessage(ChatColor.RED+ event.getEntity().getName() +" triggered Stone-SMP anti Exploit!");
@@ -674,7 +678,7 @@ public class Player implements Listener {
         if (cursor == null || currentItem == null) return;
 
         if (currentItem.getType() == Material.BUNDLE) {
-            if (Stone.isStone(cursor) || Stone.isInfernoBlade(cursor)) {
+            if (StoneHandler.isStone(cursor) || StoneHandler.isInfernoBlade(cursor)) {
                 event.setCancelled(true);
             }
         }

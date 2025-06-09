@@ -2,7 +2,7 @@ package de.nikey.nikeyv1.Listeners;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.Items;
-import de.nikey.nikeyv1.api.Stone;
+import de.nikey.nikeyv1.api.StoneHandler;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -23,7 +23,7 @@ public class Stone_Swap implements Listener {
         ItemStack mainHand = player.getInventory().getItemInMainHand();
         ItemStack offHand = player.getInventory().getItemInOffHand();
         if (event.getAction() == Action.RIGHT_CLICK_AIR) {
-            if (mainHand.getType() == Material.PAPER && Stone.isStone(offHand) && mainHand.getItemMeta().getDisplayName().equalsIgnoreCase("§3Stone Switcher")) {
+            if (mainHand.getType() == Material.PAPER && StoneHandler.isStone(offHand) && mainHand.getItemMeta().getDisplayName().equalsIgnoreCase("§3Stone Switcher")) {
                 event.setCancelled(true);
                 boolean buffed = NikeyV1.getPlugin().getConfig().getBoolean(player.getName() + ".buffed");
                 if (buffed) {

@@ -2,7 +2,7 @@ package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
-import de.nikey.nikeyv1.api.Stone;
+import de.nikey.nikeyv1.api.StoneHandler;
 import de.slikey.effectlib.effect.SmokeEffect;
 import io.papermc.paper.entity.TeleportFlag;
 import io.papermc.paper.event.entity.EntityMoveEvent;
@@ -207,7 +207,7 @@ public class Undeadstone implements Listener {
         zombie.setCanBreakDoors(true);
         zombie.setAdult();
         zombie.getEquipment().setItem(EquipmentSlot.HAND,new ItemStack(Material.DIAMOND_SWORD));
-        int level = Stone.getStoneLevel(player);
+        int level = StoneHandler.getStoneLevel(player);
         if (level == 20) {
             zombie.setCustomName(player.getName()+"'s "+zombie.getType().getName());
             zombie.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.35F);
@@ -230,7 +230,7 @@ public class Undeadstone implements Listener {
     @EventHandler
     public void onEntityTransform(EntityTransformEvent event) {
         if (!(event.getEntity() instanceof Zombie)) return;
-        if (event.getTransformReason() == EntityTransformEvent.TransformReason.DROWNED && Stone.isUndeadMaster((LivingEntity) event.getEntity())) {
+        if (event.getTransformReason() == EntityTransformEvent.TransformReason.DROWNED && StoneHandler.isUndeadMaster((LivingEntity) event.getEntity())) {
             Zombie living = (Zombie) event.getEntity();
             event.setCancelled(true);
             living.setConversionTime(2400);
@@ -242,7 +242,7 @@ public class Undeadstone implements Listener {
     public void onEntityDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
         if (!(entity instanceof LivingEntity)) return;
-        if (Stone.isUndeadMaster((LivingEntity) entity)) {
+        if (StoneHandler.isUndeadMaster((LivingEntity) entity)) {
             Zombie zombie = (Zombie) entity;
             if (event.getFinalDamage() > 20) {
                 event.setDamage(20);
@@ -272,7 +272,7 @@ public class Undeadstone implements Listener {
     public void onEntityMove(EntityMoveEvent event) {
         Entity entity = event.getEntity();
         if (!(entity instanceof LivingEntity))return;
-        if (Stone.isUndeadMaster((LivingEntity) entity)) {
+        if (StoneHandler.isUndeadMaster((LivingEntity) entity)) {
             double eyeLocation = ((LivingEntity) entity).getEyeLocation().getY() -5;
             Location loc = new Location(entity.getWorld(),entity.getX(),eyeLocation,entity.getZ());
             for (Entity entitys : loc.getNearbyEntities(3,2,3)) {
@@ -281,8 +281,8 @@ public class Undeadstone implements Listener {
                 String[] arr = entity.getCustomName().split("'");
                 Player p = Bukkit.getPlayer(arr[0]);
                 if (p == null) return;
-                if (Stone.isSummoned(p,event.getEntity()) && HelpUtil.shouldDamageEntity(living,p) ) {
-                    if (living != event.getEntity() && !Stone.isSummoned(p,living)) {
+                if (StoneHandler.isSummoned(p,event.getEntity()) && HelpUtil.shouldDamageEntity(living,p) ) {
+                    if (living != event.getEntity() && !StoneHandler.isSummoned(p,living)) {
                         HelpUtil.spawnParticles(loc,3,0,-2,0,Particle.LARGE_SMOKE,0);
                         if (!entity.getCustomName().contains("low")) {
                             if (!entity.getCustomName().contains("strong")) {
@@ -317,8 +317,8 @@ public class Undeadstone implements Listener {
 
         if (event.getEntity().getKiller() != null) {
             Player player = event.getEntity().getKiller();
-            int level = Stone.getStoneLevel(player);
-            if (Stone.getStoneName(player).equalsIgnoreCase("undead")) {
+            int level = StoneHandler.getStoneLevel(player);
+            if (StoneHandler.getStoneName(player).equalsIgnoreCase("undead")) {
                 if (player.getGameMode() == GameMode.SURVIVAL && level >= 3) {
                     player.getWorld().spawnParticle(Particle.RAID_OMEN, player.getLocation(), 30, 0.5, 0.5, 0.5, 0.1);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 20*6, 1));
@@ -389,7 +389,7 @@ public class Undeadstone implements Listener {
         if (event.getHitEntity() != null) {
             Entity hitEntity = event.getHitEntity();
             if (hitEntity instanceof LivingEntity) {
-                if (Stone.isUndeadMaster((LivingEntity) hitEntity) && hitEntity.getCustomName().contains("low") ) {
+                if (StoneHandler.isUndeadMaster((LivingEntity) hitEntity) && hitEntity.getCustomName().contains("low") ) {
                     event.setCancelled(true);
                 }
             }
@@ -406,7 +406,7 @@ public class Undeadstone implements Listener {
         FileConfiguration config = NikeyV1.getPlugin().getConfig();
         if (event.getEntity() instanceof Player) {
             Player p = (Player) event.getEntity();
-            String stone = Stone.getStoneName(p);
+            String stone = StoneHandler.getStoneName(p);
             if (stone.equalsIgnoreCase("Undead") ) {
                 if (event.getDamager() instanceof Projectile) {
                     Projectile projectile = (Projectile) event.getDamager();
@@ -434,7 +434,7 @@ public class Undeadstone implements Listener {
         }
 
         if (event.getEntity() instanceof LivingEntity) {
-            if (Stone.isUndeadMaster((LivingEntity) event.getEntity())) {
+            if (StoneHandler.isUndeadMaster((LivingEntity) event.getEntity())) {
                 Zombie giant = (Zombie) event.getEntity();
                 double health = giant.getHealth();
                 if (health <= 100) {
@@ -503,7 +503,7 @@ public class Undeadstone implements Listener {
         if (event.getTarget() instanceof Player && event.getEntity() instanceof Zombie) {
             Zombie zombie = (Zombie) event.getEntity();
             Player player = (Player) event.getTarget();
-            if (Stone.isUndeadMaster(zombie)) {
+            if (StoneHandler.isUndeadMaster(zombie)) {
                 String[] arr = zombie.getCustomName().split("'");
                 if (player.getName().equalsIgnoreCase(arr[0])) {
                     event.setCancelled(true);

@@ -2,7 +2,7 @@ package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
-import de.nikey.nikeyv1.api.Stone;
+import de.nikey.nikeyv1.api.StoneHandler;
 import de.slikey.effectlib.effect.CircleEffect;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -77,8 +77,8 @@ public class Holystone implements Listener {
     }
 
     public static void repairfunc(Player player) {
-        int level = Stone.getStoneLevel(player);
-        String stone = Stone.getStoneName(player);
+        int level = StoneHandler.getStoneLevel(player);
+        String stone = StoneHandler.getStoneName(player);
 
         if (stone.equalsIgnoreCase("Holy") && !repairing.containsKey(player)){
                 if (level == 7){
@@ -144,7 +144,7 @@ public class Holystone implements Listener {
         Player p = event.getPlayer();
         ItemStack item = event.getItem();
         if (item == null) return;
-        if (Stone.isStone(item) && Stone.whatStone(item).equalsIgnoreCase("Holy")){
+        if (StoneHandler.isStone(item) && StoneHandler.whatStone(item).equalsIgnoreCase("Holy")){
             String[] arr = item.getLore().get(1).split(":");
             int i = Integer.parseInt(arr[1]);
             FileConfiguration config = NikeyV1.getPlugin().getConfig();
@@ -196,7 +196,7 @@ public class Holystone implements Listener {
                     }            
                 }
             }else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR){
-                String damageEntityType = Stone.getAttacking(p);
+                String damageEntityType = StoneHandler.getAttacking(p);
                 if (!p.isSneaking()) {
                     double radius = 7.5;
                     if (i >= 16)radius = 10;

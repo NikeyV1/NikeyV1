@@ -3,13 +3,12 @@ package de.nikey.nikeyv1.Stones;
 import com.destroystokyo.paper.event.entity.EntityKnockbackByEntityEvent;
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
-import de.nikey.nikeyv1.api.Stone;
+import de.nikey.nikeyv1.api.StoneHandler;
 import de.slikey.effectlib.effect.DonutEffect;
 import de.slikey.effectlib.effect.SphereEffect;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -24,7 +23,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -51,10 +49,10 @@ public class Airstone implements Listener {
         if (!(event.getEntity() instanceof Player player)) return;
         if (!(event.getHitBy() instanceof LivingEntity))return;
         if ((event.getHitBy() == player))return;
-        if (!Stone.getStoneName(player).equalsIgnoreCase("air")) return;
+        if (!StoneHandler.getStoneName(player).equalsIgnoreCase("air")) return;
 
         Random random = new Random();
-        int level = Stone.getStoneLevel(player);
+        int level = StoneHandler.getStoneLevel(player);
         if (level >= 3) {
             double amount;
             if (level == 3) {
@@ -76,8 +74,8 @@ public class Airstone implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player player) {
-            int level = Stone.getStoneLevel(player);
-            if (Stone.getStoneName(player).equalsIgnoreCase("air") && level >= 7) {
+            int level = StoneHandler.getStoneLevel(player);
+            if (StoneHandler.getStoneName(player).equalsIgnoreCase("air") && level >= 7) {
                 if (event.getCause() == EntityDamageEvent.DamageCause.FALL && !flyingtimer.containsKey(player.getName())) {
                     if (!player.isGliding() ) {
                         if (player.getInventory().getChestplate() == null) {
@@ -147,8 +145,8 @@ public class Airstone implements Listener {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
         if (item == null) return;
-        if (Stone.whatStone(item).equalsIgnoreCase("Air")) {
-            int level = Stone.getStoneLevelFromItem(item);
+        if (StoneHandler.whatStone(item).equalsIgnoreCase("Air")) {
+            int level = StoneHandler.getStoneLevelFromItem(item);
             FileConfiguration config = NikeyV1.getPlugin().getConfig();
             config.set(player.getName()+".stone","Air");
             config.set(player.getName()+".level",level);
@@ -173,7 +171,7 @@ public class Airstone implements Listener {
                         player.setVelocity(direction);
 
                         int maxsec;
-                        int stoneLevel = Stone.getStoneLevel(player);
+                        int stoneLevel = StoneHandler.getStoneLevel(player);
                         if (stoneLevel >= 13) {
                             maxsec = 20;
 
@@ -271,8 +269,8 @@ public class Airstone implements Listener {
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         Player p = event.getPlayer();
         ItemStack item = event.getItemDrop().getItemStack();
-        if (Stone.whatStone(item).equalsIgnoreCase("Air")){
-            int level = Stone.getStoneLevelFromItem(item);
+        if (StoneHandler.whatStone(item).equalsIgnoreCase("Air")){
+            int level = StoneHandler.getStoneLevelFromItem(item);
             FileConfiguration config = NikeyV1.getPlugin().getConfig();
             config.set(p.getName()+".stone","Air");
             config.set(p.getName()+".level",level);
@@ -342,7 +340,7 @@ public class Airstone implements Listener {
 
     private void releaseAirSwipe(Player player) {
         cancelWindChargeTask(player);
-        int level = Stone.getStoneLevel(player);
+        int level = StoneHandler.getStoneLevel(player);
         isCharging.put(player, false);
         BossBar bossBar = bossBars.remove(player);
         if (bossBar != null) {
@@ -518,7 +516,7 @@ public class Airstone implements Listener {
         player.getWorld().playSound(player.getLocation(),Sound.ENTITY_GENERIC_EXPLODE,1,1);
 
         double radius = 3.0;
-        int stoneLevel = Stone.getStoneLevel(player);
+        int stoneLevel = StoneHandler.getStoneLevel(player);
         if (stoneLevel >= 11) {
             radius = 4.0;
         }
@@ -559,7 +557,7 @@ public class Airstone implements Listener {
         if (event.getEntity() instanceof Player player) {
             if ((event.getCause() == EntityDamageEvent.DamageCause.FALL ||event.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL) && flyingtimer.containsKey(player.getName())) {
                 event.setCancelled(true);
-                int stoneLevel = Stone.getStoneLevel(player);
+                int stoneLevel = StoneHandler.getStoneLevel(player);
                 if (stoneLevel >= 14) {
                     triggerLanding(player,event.getDamage()*0.6);
                 }else {
@@ -575,10 +573,10 @@ public class Airstone implements Listener {
         Vector direction = player.getEyeLocation().getDirection().normalize();
         Location startLocation = player.getEyeLocation().clone().add(direction.multiply(1.5));
 
-        int beamLength = (Stone.getStoneLevel(player) >= 18) ? 30 : 20;
+        int beamLength = (StoneHandler.getStoneLevel(player) >= 18) ? 30 : 20;
         double beamRadius = 2;
         double pullStrength = 2.5;
-        double damage = (Stone.getStoneLevel(player) >= 17) ? 20 : 25;
+        double damage = (StoneHandler.getStoneLevel(player) >= 17) ? 20 : 25;
         int particlesPerCircle = 20;
         double beamAttackRange = 3.5;
 

@@ -5,7 +5,7 @@ import de.nikey.nikeyv1.Commands.*;
 import de.nikey.nikeyv1.Listeners.*;
 import de.nikey.nikeyv1.Stones.*;
 import de.nikey.nikeyv1.Util.Items;
-import de.nikey.nikeyv1.api.Stone;
+import de.nikey.nikeyv1.api.StoneHandler;
 import de.slikey.effectlib.EffectManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -131,7 +131,7 @@ public final class NikeyV1 extends JavaPlugin{
         for (World world : Bukkit.getWorlds()) {
             for (Entity entity : world.getEntities()) {
                 if (entity instanceof LivingEntity) {
-                    if (Stone.isUndeadMaster((LivingEntity) entity)) {
+                    if (StoneHandler.isUndeadMaster((LivingEntity) entity)) {
                         entity.remove();
                     }
                 }

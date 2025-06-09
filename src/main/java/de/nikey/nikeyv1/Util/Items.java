@@ -1,6 +1,10 @@
 package de.nikey.nikeyv1.Util;
 
 import de.nikey.nikeyv1.NikeyV1;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -13,38 +17,42 @@ import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("ALL")
 public class Items {
     public static void SoulofStrenght(Player player) {
         ItemStack soul = new ItemStack(Material.SOUL_LANTERN);
         ItemMeta meta = soul.getItemMeta();
-        meta.setDisplayName("§3Soul of Strenght");
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add("§7A §3Soul §7that contains the §cStrenght §7of 1000 Players");
-        meta.setLore(lore);
+        meta.displayName(Component.text("Soul of Strength").color(NamedTextColor.DARK_AQUA));
+        meta.lore(List.of(
+                Component.text("A ", NamedTextColor.GRAY)
+                        .append(Component.text("Soul", NamedTextColor.DARK_AQUA))
+                        .append(Component.text(" that contains the ", NamedTextColor.GRAY))
+                        .append(Component.text("Strength", NamedTextColor.RED))
+                        .append(Component.text(" of 1000 Players", NamedTextColor.GRAY))
+        ));
         soul.setItemMeta(meta);
-        if (player.getInventory().firstEmpty() != -1) {
-            player.getInventory().addItem(soul);
-        }else {
-            player.getWorld().dropItem(player.getLocation(),soul);
-        }
-        
+        player.give(soul);
     }
 
     public static void Soulrecepie(){
         ItemStack soul = new ItemStack(Material.SOUL_LANTERN);
         ItemMeta meta = soul.getItemMeta();
-        meta.setDisplayName("§3Soul of Strenght");
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add("§7A §3Soul §7that contains the §cStrenght §7of 1000 Players");
-        meta.setLore(lore);
+        meta.displayName(Component.text("Soul of Strength").color(NamedTextColor.DARK_AQUA));
+        meta.lore(List.of(
+                Component.text("A ", NamedTextColor.GRAY)
+                        .append(Component.text("Soul", NamedTextColor.DARK_AQUA))
+                        .append(Component.text(" that contains the ", NamedTextColor.GRAY))
+                        .append(Component.text("Strength", NamedTextColor.RED))
+                        .append(Component.text(" of 1000 Players", NamedTextColor.GRAY))
+        ));
         soul.setItemMeta(meta);
 
         //Needed
         ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
         ItemMeta smeta = essence.getItemMeta();
-        smeta.setDisplayName("§dEnchanted Essence");
+        smeta.displayName(Component.text("Enchanted Essence").color(NamedTextColor.LIGHT_PURPLE));
         essence.setItemMeta(smeta);
         //Recipe
 
@@ -59,16 +67,20 @@ public class Items {
     public static void Soulrecepie2(){
         ItemStack soul = new ItemStack(Material.SOUL_LANTERN);
         ItemMeta meta = soul.getItemMeta();
-        meta.setDisplayName("§3Soul of Strenght");
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add("§7A §3Soul §7that contains the §cStrenght §7of 1000 Players");
-        meta.setLore(lore);
+        meta.displayName(Component.text("Soul of Strength").color(NamedTextColor.DARK_AQUA));
+        meta.lore(List.of(
+                Component.text("A ", NamedTextColor.GRAY)
+                        .append(Component.text("Soul", NamedTextColor.DARK_AQUA))
+                        .append(Component.text(" that contains the ", NamedTextColor.GRAY))
+                        .append(Component.text("Strength", NamedTextColor.RED))
+                        .append(Component.text(" of 1000 Players", NamedTextColor.GRAY))
+        ));
         soul.setItemMeta(meta);
 
         //Needed
         ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
         ItemMeta smeta = essence.getItemMeta();
-        smeta.setDisplayName("§dEnchanted Essence");
+        smeta.displayName(Component.text("Enchanted Essence").color(NamedTextColor.LIGHT_PURPLE));
         essence.setItemMeta(smeta);
         //Recipe
 
@@ -83,16 +95,20 @@ public class Items {
     public static void Soulrecepie3(){
         ItemStack soul = new ItemStack(Material.SOUL_LANTERN);
         ItemMeta meta = soul.getItemMeta();
-        meta.setDisplayName("§3Soul of Strenght");
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add("§7A §3Soul §7that contains the §cStrenght §7of 1000 Players");
-        meta.setLore(lore);
+        meta.displayName(Component.text("Soul of Strength").color(NamedTextColor.DARK_AQUA));
+        meta.lore(List.of(
+                Component.text("A ", NamedTextColor.GRAY)
+                        .append(Component.text("Soul", NamedTextColor.DARK_AQUA))
+                        .append(Component.text(" that contains the ", NamedTextColor.GRAY))
+                        .append(Component.text("Strength", NamedTextColor.RED))
+                        .append(Component.text(" of 1000 Players", NamedTextColor.GRAY))
+        ));
         soul.setItemMeta(meta);
 
         //Needed
         ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
         ItemMeta smeta = essence.getItemMeta();
-        smeta.setDisplayName("§dEnchanted Essence");
+        smeta.displayName(Component.text("Enchanted Essence").color(NamedTextColor.LIGHT_PURPLE));
         essence.setItemMeta(smeta);
         //Recipe
 
@@ -115,18 +131,15 @@ public class Items {
         FireworkEffectMeta metaFw = (FireworkEffectMeta) meta;
         FireworkEffect aa = FireworkEffect.builder().withColor(Color.fromRGB(230,107,99)).build();
         metaFw.setEffect(aa);
-        metaFw.setDisplayName(ChatColor.of("#e66b63")+"Fire Stone");
-        metaFw.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        metaFw.displayName(Component.text("Fire Stone").color(TextColor.color(230, 107, 99)));
 
-        lavastein.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add("§7As hot as §clava");
-        lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
-        metaFw.setLore(lore);
+        metaFw.lore(List.of(Component.text("As hot as lava", NamedTextColor.RED),
+                Component.text("Level:" + level).color(NamedTextColor.AQUA)));
+
         lavastein.setItemMeta(metaFw);
         if (player.getInventory().firstEmpty() != -1) {
             player.getInventory().addItem(lavastein);
-        }else {
+        } else {
             player.getInventory().setItemInOffHand(lavastein);
         }
     }
@@ -134,19 +147,15 @@ public class Items {
         ItemStack elektrostein = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  elektrostein.getItemMeta();
         FireworkEffectMeta metaFw = (FireworkEffectMeta) meta;
-        FireworkEffect aa = FireworkEffect.builder().withColor(Color.YELLOW).build();
-        metaFw.setEffect(aa);
-        metaFw.setDisplayName("§eElectric Stone");
-        metaFw.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        elektrostein.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add(ChatColor.of("#B1A012")+ "Overloaded with electricity");
-        lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
-        metaFw.setLore(lore);
+        metaFw.setEffect(FireworkEffect.builder().withColor(Color.YELLOW).build());
+        metaFw.displayName(Component.text("Electric Stone").color(NamedTextColor.YELLOW));
+
+        metaFw.lore(List.of(Component.text("Overloaded with electricity", TextColor.color(177, 160, 18)),
+                Component.text("Level:" + level).color(NamedTextColor.AQUA)));
         elektrostein.setItemMeta(metaFw);
         if (player.getInventory().firstEmpty() != -1) {
             player.getInventory().addItem(elektrostein);
-        }else {
+        } else {
             player.getInventory().setItemInOffHand(elektrostein);
         }
     }
@@ -154,19 +163,15 @@ public class Items {
         ItemStack waterstone = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  waterstone.getItemMeta();
         FireworkEffectMeta metaFw = (FireworkEffectMeta) meta;
-        FireworkEffect aa = FireworkEffect.builder().withColor(Color.BLUE).build();
-        metaFw.setEffect(aa);
-        metaFw.setDisplayName("§9Water Stone");
-        metaFw.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        waterstone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add("§1A storm rages in this stone");
-        lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
-        metaFw.setLore(lore);
+        metaFw.setEffect(FireworkEffect.builder().withColor(Color.BLUE).build());
+        metaFw.displayName(Component.text("Water Stone").color(NamedTextColor.BLUE));
+
+        metaFw.lore(List.of(Component.text("A storm rages in this stone", TextColor.color(65,65,137)),
+                Component.text("Level:" + level).color(NamedTextColor.AQUA)));
         waterstone.setItemMeta(metaFw);
         if (player.getInventory().firstEmpty() != -1) {
             player.getInventory().addItem(waterstone);
-        }else {
+        } else {
             player.getInventory().setItemInOffHand(waterstone);
         }
     }
@@ -174,19 +179,14 @@ public class Items {
         ItemStack frozenstone = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  frozenstone.getItemMeta();
         FireworkEffectMeta metaFw = (FireworkEffectMeta) meta;
-        FireworkEffect aa = FireworkEffect.builder().withColor(Color.fromRGB(43690)).build();
-        metaFw.setEffect(aa);
-        metaFw.setDisplayName("§3Frozen Stone");
-        metaFw.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        frozenstone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add("§bCold enough to freeze fire");
-        lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
-        metaFw.setLore(lore);
+        metaFw.setEffect(FireworkEffect.builder().withColor(Color.fromRGB(43690)).build());
+        metaFw.displayName(Component.text("Frozen Stone").color(NamedTextColor.DARK_AQUA));
+        metaFw.lore(List.of(Component.text("Cold enough to freeze fire", NamedTextColor.AQUA),
+                Component.text("Level:" + level).color(NamedTextColor.AQUA)));
         frozenstone.setItemMeta(metaFw);
         if (player.getInventory().firstEmpty() != -1) {
             player.getInventory().addItem(frozenstone);
-        }else {
+        } else {
             player.getInventory().setItemInOffHand(frozenstone);
         }
     }
@@ -194,19 +194,14 @@ public class Items {
         ItemStack undeadstone = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  undeadstone.getItemMeta();
         FireworkEffectMeta metaFw = (FireworkEffectMeta) meta;
-        FireworkEffect aa = FireworkEffect.builder().withColor(Color.fromRGB(16,6,19)).build();
-        metaFw.setEffect(aa);
-        metaFw.setDisplayName(ChatColor.of("#100613")+"Undead Stone");
-        metaFw.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        undeadstone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add(ChatColor.of("#221726")+"Souls wander around in this stone");
-        lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
-        metaFw.setLore(lore);
+        metaFw.setEffect(FireworkEffect.builder().withColor(Color.fromRGB(16,6,19)).build());
+        metaFw.displayName(Component.text("Undead Stone").color(TextColor.color(16,6,19)));
+        metaFw.lore(List.of(Component.text("Souls wander around in this stone", TextColor.color(34, 23, 38)),
+                Component.text("Level:" + level).color(NamedTextColor.AQUA)));
         undeadstone.setItemMeta(metaFw);
         if (player.getInventory().firstEmpty() != -1) {
             player.getInventory().addItem(undeadstone);
-        }else {
+        } else {
             player.getInventory().setItemInOffHand(undeadstone);
         }
     }
@@ -214,19 +209,14 @@ public class Items {
         ItemStack holystone = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  holystone.getItemMeta();
         FireworkEffectMeta metaFw = (FireworkEffectMeta) meta;
-        FireworkEffect aa = FireworkEffect.builder().withColor(Color.fromRGB(5635925)).build();
-        metaFw.setEffect(aa);
-        metaFw.setDisplayName("§aHoly Stone");
-        metaFw.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        holystone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add("§2Forged by Farys");
-        lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
-        metaFw.setLore(lore);
+        metaFw.setEffect(FireworkEffect.builder().withColor(Color.fromRGB(5635925)).build());
+        metaFw.displayName(Component.text("Holy Stone").color(NamedTextColor.GREEN));
+        metaFw.lore(List.of(Component.text("Forged by Farys", NamedTextColor.DARK_GREEN),
+                Component.text("Level:" + level).color(NamedTextColor.AQUA)));
         holystone.setItemMeta(metaFw);
         if (player.getInventory().firstEmpty() != -1) {
             player.getInventory().addItem(holystone);
-        }else {
+        } else {
             player.getInventory().setItemInOffHand(holystone);
         }
     }
@@ -235,19 +225,14 @@ public class Items {
         ItemStack ghoststone = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  ghoststone.getItemMeta();
         FireworkEffectMeta metaFw = (FireworkEffectMeta) meta;
-        FireworkEffect aa = FireworkEffect.builder().withColor(Color.fromRGB(14540253)).build();
-        metaFw.setEffect(aa);
-        metaFw.setDisplayName(ChatColor.of("#dddddd")+"Ghost Stone");
-        metaFw.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        ghoststone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add("§fHaunted by ghosts");
-        lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
-        metaFw.setLore(lore);
+        metaFw.setEffect(FireworkEffect.builder().withColor(Color.fromRGB(14540253)).build());
+        metaFw.displayName(Component.text("Ghost Stone").color(TextColor.color(221,221,221)));
+        metaFw.lore(List.of(Component.text("Haunted by ghosts", NamedTextColor.WHITE),
+                Component.text("Level:" + level).color(NamedTextColor.AQUA)));
         ghoststone.setItemMeta(metaFw);
         if (player.getInventory().firstEmpty() != -1) {
             player.getInventory().addItem(ghoststone);
-        }else {
+        } else {
             player.getInventory().setItemInOffHand(ghoststone);
         }
     }
@@ -256,20 +241,14 @@ public class Items {
         ItemStack airstone = new ItemStack(Material.FIREWORK_STAR);
         ItemMeta meta =  airstone.getItemMeta();
         FireworkEffectMeta metaFw = (FireworkEffectMeta) meta;
-        FireworkEffect aa = FireworkEffect.builder().withColor(Color.fromRGB(180, 212, 206)).build();
-        metaFw.setEffect(aa);
-        metaFw.setDisplayName(ChatColor.of("#b4d4ce")+"Air Stone");
-        metaFw.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        metaFw.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        airstone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add("§fStrong winds storm in this stone");
-        lore.add(ChatColor.of("#00FFAA")+"Level:"+level);
-        metaFw.setLore(lore);
+        metaFw.setEffect(FireworkEffect.builder().withColor(Color.fromRGB(180, 212, 206)).build());
+        metaFw.displayName(Component.text("Air Stone").color(TextColor.color(180,212,206)));
+        metaFw.lore(List.of(Component.text("Strong winds storm in this stone", NamedTextColor.WHITE),
+                Component.text("Level:" + level).color(NamedTextColor.AQUA)));
         airstone.setItemMeta(metaFw);
         if (player.getInventory().firstEmpty() != -1) {
             player.getInventory().addItem(airstone);
-        }else {
+        } else {
             player.getInventory().setItemInOffHand(airstone);
         }
     }
@@ -279,18 +258,11 @@ public class Items {
         ItemMeta meta = natureStone.getItemMeta();
         FireworkEffectMeta metaFw = (FireworkEffectMeta) meta;
 
-        FireworkEffect effect = FireworkEffect.builder()
-                .withColor(Color.fromRGB(34, 139, 34)) // Dunkles Naturgrün
-                .build();
+        metaFw.setEffect(FireworkEffect.builder().withColor(Color.fromRGB(34, 139, 34)).build());
+        metaFw.displayName(Component.text("Nature Stone").color(TextColor.color(34,139,34)));
 
-        metaFw.setEffect(effect);
-        metaFw.setDisplayName(ChatColor.of("#228B22") + "Nature Stone");
-        metaFw.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES,ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add(ChatColor.of("#75d175") + "The heart of the forest pulses in this stone");
-        lore.add(ChatColor.of("#00FFAA") + "Level:" + level);
-        metaFw.setLore(lore);
+        metaFw.lore(List.of(Component.text("The heart of the forest pulses in this stone", TextColor.color(117, 209, 117)),
+                Component.text("Level:" + level).color(NamedTextColor.AQUA)));
 
         natureStone.setItemMeta(metaFw);
 
@@ -304,31 +276,32 @@ public class Items {
     public static void switcher() {
         ItemStack soul = new ItemStack(Material.SOUL_LANTERN);
         ItemMeta smeta = soul.getItemMeta();
-        smeta.setDisplayName("§3Soul of Strenght");
-        ArrayList<String> slore = new ArrayList<>();
-        slore.add("§7A §3Soul §7that contains the §cStrenght §7of 1000 Players");
-        smeta.setLore(slore);
+        smeta.displayName(Component.text("Soul of Strength").color(NamedTextColor.DARK_AQUA));
+        smeta.lore(List.of(
+                Component.text("A ", NamedTextColor.GRAY)
+                        .append(Component.text("Soul", NamedTextColor.DARK_AQUA))
+                        .append(Component.text(" that contains the ", NamedTextColor.GRAY))
+                        .append(Component.text("Strength", NamedTextColor.RED))
+                        .append(Component.text(" of 1000 Players", NamedTextColor.GRAY))
+        ));
         soul.setItemMeta(smeta);
 
         ItemStack beacon = new ItemStack(Material.PRISMARINE_SHARD);
         ItemMeta bmeta = beacon.getItemMeta();
-        bmeta.setDisplayName(ChatColor.of("#D0B4F4")+"Upgrade Token");
-        beacon.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        bmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        ArrayList<String> plore = new ArrayList<>();
-        plore.add("§6The strenght core");
-        bmeta.setLore(plore);
+        bmeta.displayName(Component.text("Upgrade Token").color(TextColor.color(208, 180, 244)));
+        bmeta.lore(List.of(Component.text("The strength core").color(NamedTextColor.GOLD)));
         beacon.setItemMeta(bmeta);
 
         ItemStack anvil = new ItemStack(Material.PAPER);
         ItemMeta meta = anvil.getItemMeta();
-        meta.setDisplayName("§3Stone Switcher");
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        anvil.addUnsafeEnchantment(Enchantment.EFFICIENCY,1);
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add("§7This Item has the Power to trick your §8Stone");
-        lore.add("§7into swapping itself for a outher random §8Stone");
-        meta.setLore(lore);
+        meta.displayName(Component.text("Stone Switcher").color(NamedTextColor.DARK_AQUA));
+        meta.lore(List.of(
+                Component.text("This Item has the Power to trick your ", NamedTextColor.GRAY)
+                        .append(Component.text("Stone", NamedTextColor.DARK_GRAY)),
+                Component.text("into swapping itself for a outher random ", NamedTextColor.GRAY)
+                        .append(Component.text("Stone", NamedTextColor.DARK_GRAY))
+        ));
+
         anvil.setItemMeta(meta);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(NikeyV1.getPlugin(),"stoneswitcher"),anvil);
         recipe.shape("YTY","TWT","YEY");
@@ -342,28 +315,27 @@ public class Items {
     public static void GiveSwitcher(Player player) {
         ItemStack anvil = new ItemStack(Material.PAPER);
         ItemMeta meta = anvil.getItemMeta();
-        meta.setDisplayName("§3Stone Switcher");
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        anvil.addUnsafeEnchantment(Enchantment.EFFICIENCY,1);
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add("§7This Item has the Power to trick your §8Stone");
-        lore.add("§7into swapping itself for a outher random §8Stone");
-        meta.setLore(lore);
+        meta.displayName(Component.text("Stone Switcher").color(NamedTextColor.DARK_AQUA));
+        meta.lore(List.of(
+                Component.text("This Item has the Power to trick your ", NamedTextColor.GRAY)
+                        .append(Component.text("Stone", NamedTextColor.DARK_GRAY)),
+                Component.text("into swapping itself for a outher random ", NamedTextColor.GRAY)
+                        .append(Component.text("Stone", NamedTextColor.DARK_GRAY))
+        ));
+
         anvil.setItemMeta(meta);
-        player.getInventory().addItem(anvil);
+        player.give(anvil);
     }
 
     public static void EnchantedAnvil(){
         ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
-        ItemMeta emeta = essence.getItemMeta();
-        emeta.setDisplayName("§dEnchanted Essence");
-        essence.setItemMeta(emeta);
+        ItemMeta smeta = essence.getItemMeta();
+        smeta.displayName(Component.text("Enchanted Essence").color(NamedTextColor.LIGHT_PURPLE));
+        essence.setItemMeta(smeta);
         //
         ItemStack anvil = new ItemStack(Material.ANVIL);
         ItemMeta meta = anvil.getItemMeta();
-        meta.setDisplayName("§dEnchanted Anvil");
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        anvil.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        meta.displayName(Component.text("Enchanted Anvil").color(NamedTextColor.LIGHT_PURPLE));
         anvil.setItemMeta(meta);
         NamespacedKey key = new NamespacedKey(NikeyV1.getPlugin(),"enchantedanvil");
         ShapedRecipe recipe = new ShapedRecipe(key,anvil);
@@ -375,15 +347,13 @@ public class Items {
     }
     public static void GiveEnchantedAnvil(Player player){
         ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
-        ItemMeta emeta = essence.getItemMeta();
-        emeta.setDisplayName("§dEnchanted Essence");
-        essence.setItemMeta(emeta);
+        ItemMeta smeta = essence.getItemMeta();
+        smeta.displayName(Component.text("Enchanted Essence").color(NamedTextColor.LIGHT_PURPLE));
+        essence.setItemMeta(smeta);
         //
         ItemStack anvil = new ItemStack(Material.ANVIL);
         ItemMeta meta = anvil.getItemMeta();
-        meta.setDisplayName("§dEnchanted Anvil");
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        anvil.addUnsafeEnchantment(Enchantment.CHANNELING,1);
+        meta.displayName(Component.text("Enchanted Anvil").color(NamedTextColor.LIGHT_PURPLE));
         anvil.setItemMeta(meta);
         player.getInventory().addItem(anvil);
     }
@@ -392,12 +362,13 @@ public class Items {
     public static void GiveInfernoBlade(Player player) {
         ItemStack sword = new ItemStack(Material.NETHERITE_SWORD);
         ItemMeta itemMeta = sword.getItemMeta();
-        itemMeta.setDisplayName("§dInferno Blade");
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add(null);
-        lore.add("§7What will you do?");
-        lore.add("§7§kDeath is inevitable");
-        itemMeta.setLore(lore);
+        itemMeta.displayName(Component.text("Inferno Blade").color(NamedTextColor.LIGHT_PURPLE));
+        itemMeta.lore(List.of(
+                Component.empty(),
+                Component.text("What will you do?", NamedTextColor.GRAY),
+                Component.text("Death is inevitable", NamedTextColor.GRAY, TextDecoration.OBFUSCATED)
+        ));
+
         itemMeta.setUnbreakable(true);
         itemMeta.setCustomModelData(1);
         sword.setItemMeta(itemMeta);
@@ -409,73 +380,71 @@ public class Items {
         }
     }
 
-    public static void GiveElementalStone(Player player){
+    public static void GiveElementalStone(Player player) {
         ItemStack elementalstone = new ItemStack(Material.FIREWORK_STAR);
-        ItemMeta meta =  elementalstone.getItemMeta();
-        meta.setDisplayName("§fElemental Stone");
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        elementalstone.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add("§fThe combined power of all §8stones");
-        meta.setLore(lore);
+        ItemMeta meta = elementalstone.getItemMeta();
+        meta.displayName(Component.text("Elemental Stone", NamedTextColor.WHITE));
+        meta.lore(List.of(
+                Component.text("The combined power of all ", NamedTextColor.WHITE)
+                        .append(Component.text("stones", NamedTextColor.DARK_GRAY))
+        ));
         elementalstone.setItemMeta(meta);
+
         if (player.getInventory().firstEmpty() != -1) {
             player.getInventory().addItem(elementalstone);
-        }else {
+        } else {
             player.getInventory().setItemInOffHand(elementalstone);
         }
     }
 
-    public static void PowerBeacon(){
+    public static void PowerBeacon() {
         ItemStack beacon = new ItemStack(Material.BEACON);
         ItemMeta bmeta = beacon.getItemMeta();
-        bmeta.setDisplayName(ChatColor.of("#f59542")+"Power Beacon");
-        beacon.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        bmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        ArrayList<String> plore = new ArrayList<>();
-        plore.add("§aA friend of every stone");
-        bmeta.setLore(plore);
+        bmeta.displayName(Component.text("Power Beacon", TextColor.fromHexString("#f59542")));
+        bmeta.lore(List.of(
+                Component.text("A friend of every stone", NamedTextColor.GREEN)
+        ));
         beacon.setItemMeta(bmeta);
-        //
+
         ItemStack soul = new ItemStack(Material.SOUL_LANTERN);
         ItemMeta meta = soul.getItemMeta();
-        meta.setDisplayName("§3Soul of Strenght");
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add("§7A §3Soul §7that contains the §cStrenght §7of 1000 Players");
-        meta.setLore(lore);
+        meta.displayName(Component.text("Soul of Strenght", NamedTextColor.DARK_AQUA));
+        meta.lore(List.of(
+                Component.text("A ", NamedTextColor.GRAY)
+                        .append(Component.text("Soul ", NamedTextColor.DARK_AQUA))
+                        .append(Component.text("that contains the ", NamedTextColor.GRAY))
+                        .append(Component.text("Strenght ", NamedTextColor.RED))
+                        .append(Component.text("of 1000 Players", NamedTextColor.GRAY))
+        ));
         soul.setItemMeta(meta);
-        //
-        NamespacedKey key = new NamespacedKey(NikeyV1.getPlugin(),"powerbeacon");
-        ShapedRecipe recipe = new ShapedRecipe(key,beacon);
-        recipe.shape("SHS","SBS","SHS");
-        recipe.setIngredient('H',new RecipeChoice.ExactChoice(soul));
-        recipe.setIngredient('B',Material.NETHER_STAR);
-        recipe.setIngredient('S',Material.TOTEM_OF_UNDYING);
+
+        NamespacedKey key = new NamespacedKey(NikeyV1.getPlugin(), "powerbeacon");
+        ShapedRecipe recipe = new ShapedRecipe(key, beacon);
+        recipe.shape("SHS", "SBS", "SHS");
+        recipe.setIngredient('H', new RecipeChoice.ExactChoice(soul));
+        recipe.setIngredient('B', Material.NETHER_STAR);
+        recipe.setIngredient('S', Material.TOTEM_OF_UNDYING);
         NikeyV1.getPlugin().getServer().addRecipe(recipe);
     }
 
-    public static void GivePowerBeacon(Player player){
+    public static void GivePowerBeacon(Player player) {
         ItemStack beacon = new ItemStack(Material.BEACON);
         ItemMeta bmeta = beacon.getItemMeta();
-        bmeta.setDisplayName(ChatColor.of("#f59542")+"Power Beacon");
-        beacon.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        bmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        ArrayList<String> plore = new ArrayList<>();
-        plore.add("§aA friend of every stone");
-        bmeta.setLore(plore);
+        bmeta.displayName(Component.text("Power Beacon", TextColor.fromHexString("#f59542")));
+        bmeta.lore(List.of(
+                Component.text("A friend of every stone", NamedTextColor.GREEN)
+        ));
         beacon.setItemMeta(bmeta);
         player.getInventory().addItem(beacon);
     }
 
-    public static void GiveUpgradeToken(Player player){
+    public static void GiveUpgradeToken(Player player) {
         ItemStack beacon = new ItemStack(Material.PRISMARINE_SHARD);
         ItemMeta bmeta = beacon.getItemMeta();
-        bmeta.setDisplayName(ChatColor.of("#D0B4F4")+"Upgrade Token");
-        beacon.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        bmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        ArrayList<String> plore = new ArrayList<>();
-        plore.add("§6The strenght core");
-        bmeta.setLore(plore);
+        bmeta.displayName(Component.text("Upgrade Token", TextColor.fromHexString("#D0B4F4")));
+        bmeta.lore(List.of(
+                Component.text("The strenght core", NamedTextColor.GOLD)
+        ));
         beacon.setItemMeta(bmeta);
         player.getInventory().addItem(beacon);
     }
@@ -483,17 +452,15 @@ public class Items {
     public static void UpgradeToken(){
         ItemStack beacon = new ItemStack(Material.PRISMARINE_SHARD);
         ItemMeta bmeta = beacon.getItemMeta();
-        bmeta.setDisplayName(ChatColor.of("#D0B4F4")+"Upgrade Token");
-        beacon.addUnsafeEnchantment(Enchantment.CHANNELING,1);
-        bmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        ArrayList<String> plore = new ArrayList<>();
-        plore.add("§6The strenght core");
-        bmeta.setLore(plore);
+        bmeta.displayName(Component.text("Upgrade Token", TextColor.fromHexString("#D0B4F4")));
+        bmeta.lore(List.of(
+                Component.text("The strenght core", NamedTextColor.GOLD)
+        ));
         beacon.setItemMeta(bmeta);
 
         ItemStack essence = new ItemStack(Material.DRAGON_BREATH);
         ItemMeta smeta = essence.getItemMeta();
-        smeta.setDisplayName("§dEnchanted Essence");
+        smeta.displayName(Component.text("Enchanted Essence", NamedTextColor.LIGHT_PURPLE));
         essence.setItemMeta(smeta);
 
         NamespacedKey key = new NamespacedKey(NikeyV1.getPlugin(),"upgradetoken");

@@ -2,7 +2,7 @@ package de.nikey.nikeyv1.Stones;
 
 import de.nikey.nikeyv1.NikeyV1;
 import de.nikey.nikeyv1.Util.HelpUtil;
-import de.nikey.nikeyv1.api.Stone;
+import de.nikey.nikeyv1.api.StoneHandler;
 import de.slikey.effectlib.effect.WarpEffect;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -59,8 +59,8 @@ public class Ghoststone implements Listener {
     if (!(event.getEntity() instanceof Player)) return;
 
     Player player = (Player) event.getEntity();
-    String name = Stone.getStoneName(player);
-    int level = Stone.getStoneLevel(player);
+    String name = StoneHandler.getStoneName(player);
+    int level = StoneHandler.getStoneLevel(player);
 
     if (name.equalsIgnoreCase("Ghost") && level >= 7) {
         int hitCount = playerHitCount.getOrDefault(player.getUniqueId(), 0);
@@ -97,8 +97,8 @@ public class Ghoststone implements Listener {
         if (!(event.getEntity().getShooter() instanceof Player)) return;
 
         Player shooter = (Player) event.getEntity().getShooter();
-        String stoneName = Stone.getStoneName(shooter);
-        int stoneLevel = Stone.getStoneLevel(shooter);
+        String stoneName = StoneHandler.getStoneName(shooter);
+        int stoneLevel = StoneHandler.getStoneLevel(shooter);
         if (stoneName.equalsIgnoreCase("Ghost") && stoneLevel >= 6) {
             if (entity instanceof Arrow) {
                 Arrow arrow = (Arrow) entity;
@@ -115,11 +115,11 @@ public class Ghoststone implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                String stone = Stone.getStoneName(event.getPlayer());
+                String stone = StoneHandler.getStoneName(event.getPlayer());
                 if (stone.equalsIgnoreCase("Ghost")) {
                     Player player = event.getPlayer();
-                    int level = Stone.getStoneLevel(player);
-                    String attacking = Stone.getAttacking(player);
+                    int level = StoneHandler.getStoneLevel(player);
+                    String attacking = StoneHandler.getAttacking(player);
                     int range;
                     if (level == 3) {
                         range = 3;
@@ -176,8 +176,8 @@ public class Ghoststone implements Listener {
         Player p = event.getPlayer();
         ItemStack item = event.getItem();
         if (item == null) return;
-        if (Stone.whatStone(item).equalsIgnoreCase("Ghost")) {
-            int level = Stone.getStoneLevelFromItem(item);
+        if (StoneHandler.whatStone(item).equalsIgnoreCase("Ghost")) {
+            int level = StoneHandler.getStoneLevelFromItem(item);
             FileConfiguration config = NikeyV1.getPlugin().getConfig();
             config.set(p.getName()+".stone","Ghost");
             config.set(p.getName()+".level",level);
@@ -231,8 +231,8 @@ public class Ghoststone implements Listener {
         Player p = event.getPlayer();
         ItemStack item = event.getItemDrop().getItemStack();
         if (item == null) return;
-        if (Stone.whatStone(item).equalsIgnoreCase("Ghost")){
-            int level = Stone.getStoneLevelFromItem(item);
+        if (StoneHandler.whatStone(item).equalsIgnoreCase("Ghost")){
+            int level = StoneHandler.getStoneLevelFromItem(item);
             if (level == 20 || level == 21){
                 if (p.isSneaking() && Bukkit.getServer().getServerTickManager().isRunningNormally()) {
                     if (!(cooldown2.getOrDefault(p.getUniqueId(),0L) > System.currentTimeMillis())){
@@ -260,12 +260,12 @@ public class Ghoststone implements Listener {
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            String attacking = Stone.getAttacking(player);
+            String attacking = StoneHandler.getAttacking(player);
             if (event.getCause() == EntityDamageEvent.DamageCause.FALL && teleportedPlayers.contains(player.getUniqueId())) {
                 player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ITEM_BREAK,1,1);
                 event.setCancelled(true);
 
-                int level = Stone.getStoneLevel(player);
+                int level = StoneHandler.getStoneLevel(player);
                 if (level == 20) {
                     activateDarkNight(player, 15);
                 }else if (level == 21) {
@@ -425,10 +425,10 @@ public class Ghoststone implements Listener {
     public void onPlayerHit(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
             Player damager = (Player) event.getDamager();
-            if (Stone.getStoneName(damager).equalsIgnoreCase("ghost")) {
+            if (StoneHandler.getStoneName(damager).equalsIgnoreCase("ghost")) {
                 if (playerHitted.containsKey(damager.getName())) {
                     int hits = playerHitted.get(damager.getName()) + 1;
-                    int level = Stone.getStoneLevel(damager);
+                    int level = StoneHandler.getStoneLevel(damager);
                     double damageMultiplier = 1;
                     if (level == 10) {
                         damageMultiplier = 1.0 + (hits * 0.1);
