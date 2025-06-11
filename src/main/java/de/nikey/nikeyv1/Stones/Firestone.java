@@ -196,8 +196,7 @@ public class Firestone implements Listener {
             String stone = NikeyV1.getPlugin().getConfig().getString(player.getName() + ".stone");
             World world = player.getWorld();
 
-            // Check if the player is in the Nether
-            if (stone.equalsIgnoreCase("Fire")&&world.getEnvironment() == World.Environment.NETHER) {
+            if (stone.equalsIgnoreCase("Fire") && world.getEnvironment() == World.Environment.NETHER) {
                 if (level == 5) {
                     double originalDamage = event.getDamage();
                     double boostedDamage = originalDamage * 1.075; // Increase damage by 7.5%

@@ -35,7 +35,6 @@ public class Airstone implements Listener {
     public static HashMap<UUID, Long> ability = new HashMap<>();
     public static HashMap<UUID, Long> cooldown2 = new HashMap<>();
 
-    public static HashMap<Player, Integer> timer = new HashMap<>();
     public static HashMap<String , Integer> flyingtimer = new HashMap<>();
     public static HashMap<String , Integer> used = new HashMap<>();
     public static HashMap<Player, Boolean> playerBoostCooldown = new HashMap<>();
@@ -251,13 +250,6 @@ public class Airstone implements Listener {
                         ability.put(player.getUniqueId(), System.currentTimeMillis() + (180 * 1000));
                         used.remove(player.getName());
 
-                        if (level == 15) {
-                            timer.put(player,10);
-                        }else if (level == 16 || level == 17 || level == 18) {
-                            timer.put(player,12);
-                        }else {
-                            timer.put(player,14);
-                        }
                         castKillerWail(player);
                     }
                 }
@@ -574,9 +566,9 @@ public class Airstone implements Listener {
         Location startLocation = player.getEyeLocation().clone().add(direction.multiply(1.5));
 
         int beamLength = (StoneHandler.getStoneLevel(player) >= 18) ? 30 : 20;
-        double beamRadius = 2;
+        double beamRadius = (StoneHandler.getStoneLevel(player) >= 16) ? 2.5 : 2;
         double pullStrength = 2.5;
-        double damage = (StoneHandler.getStoneLevel(player) >= 17) ? 20 : 25;
+        double damage = (StoneHandler.getStoneLevel(player) >= 17) ? 25 : 20;
         int particlesPerCircle = 20;
         double beamAttackRange = 3.5;
 
