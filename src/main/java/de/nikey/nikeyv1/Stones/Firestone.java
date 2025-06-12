@@ -111,7 +111,6 @@ public class Firestone implements Listener {
                                     }
                                 }
                                 if (timer == 0) {
-                                    entities.forEach(entity1 -> entity1.setVisualFire(false));
                                     entities.clear();
                                     cancel();
                                     return;
@@ -181,9 +180,9 @@ public class Firestone implements Listener {
     }
 
     private void setEntityOnFire(LivingEntity entity, double damage) {
-        entity.setVisualFire(true);
-        entity.setFireTicks(20);
+        entity.setFireTicks(100);
         entity.damage(damage);
+        entity.setNoDamageTicks(0);
     }
 
     @EventHandler
@@ -224,6 +223,7 @@ public class Firestone implements Listener {
                         double damage = event.getDamage();
                         event.setDamage(damage*0.80);
                         damager.damage(damage*0.2,entity);
+                        damager.setNoDamageTicks(0);
                     }
                 }else if (i ==16 ){
                     long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
@@ -232,6 +232,7 @@ public class Firestone implements Listener {
                         double damage = event.getDamage();
                         event.setDamage(damage*0.7);
                         damager.damage(damage*0.2,entity);
+                        damager.setNoDamageTicks(0);
                     }
                 }else if (i == 17){
                     long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
@@ -240,6 +241,7 @@ public class Firestone implements Listener {
                         double damage = event.getDamage();
                         event.setDamage(damage*0.7);
                         damager.damage(damage*0.3,entity);
+                        damager.setNoDamageTicks(0);
                     }
                 }else if (i == 18){
                     long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
@@ -248,6 +250,7 @@ public class Firestone implements Listener {
                         double damage = event.getDamage();
                         event.setDamage(damage*0.6);
                         damager.damage(damage*0.4,entity);
+                        damager.setNoDamageTicks(0);
                     }
                 }else if (i >= 19){
                     long remain = Firestone.ability.get(p.getUniqueId()) - System.currentTimeMillis();
@@ -256,6 +259,7 @@ public class Firestone implements Listener {
                         double damage = event.getDamage();
                         event.setDamage(damage*0.5);
                         damager.damage(damage*0.5,entity);
+                        damager.setNoDamageTicks(0);
                     }
                 }
             }

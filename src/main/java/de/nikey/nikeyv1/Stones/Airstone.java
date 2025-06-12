@@ -217,7 +217,7 @@ public class Airstone implements Listener {
                         if (HelpUtil.isLookingDown(player) && level >= 17 && event.getAction() == Action.LEFT_CLICK_BLOCK) {
                             int max;
                             if (level >= 19) {
-                                max = 7;
+                                max = 8;
                             }else {
                                 max = 5;
                             }
@@ -481,7 +481,7 @@ public class Airstone implements Listener {
             @Override
             public void run() {
                 Vector normalize = player.getLocation().toVector().subtract(location.toVector()).normalize();
-                Vector multiplied = normalize.multiply(1.3);
+                Vector multiplied = normalize.multiply(1.6);
 
                 player.getWorld().spawnParticle(Particle.GUST, player.getLocation(), 0);
                 player.playSound(location,Sound.ENTITY_WIND_CHARGE_WIND_BURST,1,1);

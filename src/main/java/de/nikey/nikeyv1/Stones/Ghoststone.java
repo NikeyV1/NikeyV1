@@ -191,7 +191,7 @@ public class Ghoststone implements Listener {
                         effect.setLocation(p.getLocation());
                         effect.particles = 35;
                         effect.particle = Particle.CAMPFIRE_COSY_SMOKE;
-                        effect.grow = 0.1F;
+                        effect.period = 1;
                         effect.start();
                         makePlayerInvisible(p);
 
